@@ -1,0 +1,56 @@
+.carousel {
+    position: relative;
+    width:100%;
+    height:40rem;
+}
+
+/* Fading animation */
+.carousel_fade {
+    -webkit-animation: fadeinout 2.75s linear forwards;
+    animation: fadeinout 2.75s linear forwards;
+}
+
+.carousel_slides {
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
+}
+.carousel_slides div a:link, .carousel_slides div a:visited {
+    color:#eee;
+}
+.carousel_slides div {
+    background:rgba(70,70,70, 0.5);
+    color:#eee;
+    font-size: 1.6rem;
+    text-align: right;
+    position: absolute;
+    right: 1rem;
+    top:1rem;
+    padding:.7rem 1.5rem;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+.carousel_slides div span {
+    font-size: 1.4rem;
+    font-style: italic;
+}
+@-webkit-keyframes fadeinout {
+    0%,100% { opacity: 1; }
+    0%,20% { opacity: 0; }
+}
+  
+@keyframes fadeinout {
+    0%,100% { opacity: 1; }
+    0%,20% { opacity: 0; }
+}
+  
+@-webkit-keyframes fade {
+    from {opacity: .2} 
+    to {opacity: 1}
+}
+  
+@keyframes fade {
+    from {opacity: .2} 
+    to {opacity: 1}
+}

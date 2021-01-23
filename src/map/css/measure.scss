@@ -1,0 +1,113 @@
+.measureResults {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: #CCC;
+    color: #222;
+}
+.measureResults li {
+    position:relative;
+    height: 3rem;
+    border-bottom:0.1rem solid #999;
+}
+.measureResultItem {
+    position: absolute;
+    top:0.5rem;
+    left: 1rem;
+    border-radius: 1rem;
+    background: #dc7339;
+    padding: 0 0.7rem;
+    color: #FFF;
+}
+#bb_measure_units_mi {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+#bb_measure_units_km {
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+#measure_results {
+    max-height: 35vh;
+    overflow: auto;    
+    margin-top: 1rem;
+}
+#measure_results .navGCContainer {
+    margin:0 0 0.5rem 0;
+}
+#navGC_measureArea .navGCHeader, #navGC_measureDistance .navGCHeader {
+    text-align: left;
+}
+#bb_measure_units_btn {
+    width: 27%;
+    font-size: 1.4rem;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 1rem;
+    margin-top: .2rem;
+    background: none;
+}
+#bb_measure_units_btn:hover {
+    background:none;
+}
+#bb_measure_units_btn div {
+    padding:.3rem;
+    color: #ec6112;
+}
+#bb_measure_units_btn select {
+    width:100%;
+    background: #434343;
+    border: none;
+    color: #aaa;
+    outline: none;
+}
+.measureResultValue {
+    position: absolute;
+    top: 0.5rem;
+    right: 5rem;
+}
+.measureTotalLbl {
+    position: absolute;
+    right: 5rem;
+    top:0.5rem;
+    line-height: 2rem;
+}
+.measureTotalLblArea {
+    line-height: 1rem;
+}
+.measureResultMapItem {
+    top: 0.5rem;
+    left: 1rem;
+    margin-right: 0.5rem;
+    border-radius: 1rem;
+    background: #dc7339;
+    padding: 0.2rem 0.5rem;
+    color: #FFF;
+}
+.measureResultItemArea {
+    background: #418fc0;
+    color:#FFF;
+}
+.measureResultDelete {
+    position:absolute;
+    right:0.5rem;
+    top: 0.5rem;
+    font-size:1.8rem;
+    color:#222;
+}
+
+#lmvControls_measure {
+	top:4rem;
+}
+
+#lmvControls_measure_Content .navGCLbl, #lmvControls_measure_Content .navGCWrap {
+    font-size: 1.4rem;
+}
+#lmvControls_measure_Content .navGCCtrl {
+    font-size: 1.4rem;
+    top: 0.2rem;
+}
+#lmvControls_measure .lmvControlsWindowLabel {
+    border-radius: 1rem 1rem 0 0;
+}
+#lmv_measure_CloseBtn {
+    top: 0;
+    color:#EEE;
+}

@@ -1,0 +1,42 @@
+.lloGroupElement {
+	width:100%;
+	height:15rem;
+	background-repeat: no-repeat;
+	background-position: center;
+/*  	background-size: 300px 150px;*/
+  	margin-bottom:1.5rem;
+  	cursor:pointer;
+  	border:.2rem solid #AAA;
+  	color:#333;
+}
+.lloGroupElement:hover {
+	border: .2rem solid #FFF;
+	color:#222;
+}
+.lloGroupElementLbl {
+    background:rgba(0, 0, 0, 0.7);
+	font-size:1.7rem;
+	padding:.5rem 1rem;
+	font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #fffdfd;
+}
+.lloGroupElement:hover  .lloGroupElementLbl {
+    opacity: 1;
+}
+.llm_landSelected > div, .llm_atmosphereSelected > div {
+	background: #0adb09;
+	color:#000;
+}
+.lloGroupElementMainLbl {
+	font-size:2.2rem;
+	padding:.7rem 1.6rem;
+	font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background:#0adb09;
+	color:#222;
+}
+.lloGroupElementContent {
+	padding:1rem 2.2rem;
+	background:#EEE;
+	font-size:1.4rem;
+	margin-bottom:1.5rem;
+}

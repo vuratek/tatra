@@ -1,0 +1,135 @@
+.fdMaxWindow {
+    max-width: 100rem;
+    max-height: 100rem;
+    width:90%;
+    height:90%
+}
+.fdHeaderMax {
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(#333,#000);
+    color: lime;
+    font: bold 1.8rem "Titillium Web", sans-serif;
+    border-radius: 0.3rem 0.3rem 0 0;
+    text-transform: uppercase;
+}
+.fdFileListHeader {
+    padding: 1.5rem 1rem;
+    background: #CCC;
+}
+.fdBtnSpacer {
+    margin-left:20rem;
+}
+.fdFileSummary .bold {
+    font-weight: 600;
+}
+
+.fdBtn {
+    border: .1rem solid #777;
+    border-radius: .5rem;
+    padding: 0.5rem 2rem;
+    font-size: 1.2rem;
+    background: linear-gradient(#f6f4f4, #999);
+    opacity:0.75;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 0 1rem;
+}
+.fdBtn:hover {
+    opacity:1;
+}
+.fdBtnPause {
+    background: linear-gradient(#df450b, #8f0505);
+    color:#eee;
+}
+.fdBtnPlay {
+    background: linear-gradient(#33cb31, #1a6e0c);
+    color:#eee;
+}
+.fdStateReady {
+    color:#1a6e0c;
+}
+.fdStatePaused {
+    color:#8f0505;
+}
+.fdInfoColorPlay {
+    color:lime;
+}
+.fdInfoColorPaused {
+    color:#ff2727;
+}
+.fdBtnDisabled {
+    background: #999;
+    color: #CCC;
+    opacity:1;
+    cursor: default;
+}
+.fdClearAll {
+    font-weight: 600;
+    cursor:pointer;
+}
+.fdNoFiles {
+    text-align: center;
+    margin: 10% 0;
+}
+.fdFileList {
+    overflow: auto;
+    position: absolute;
+    top: 9rem;
+    bottom: 5rem;
+    left: 1rem;
+    right: 1rem;
+}
+.fdFileList table {
+    width:100%;
+    border-spacing: 0;
+}
+.fdFileList table td, .fdFileList table th {
+    text-align: center;
+    padding: 0.5rem .5rem;
+}
+.fdFileList table td:nth-child(3) {
+    font-style: italic;
+}
+.fdFileList table tr:nth-child(2n+2) {
+    background:#e0e0e0;
+}
+.fdFileList table tr:hover {
+    background: #ccc;
+}
+.fdFileList table tr:first-child:hover {
+    background: none;
+}
+
+.fdFileList table td:nth-child(1), .fdFileList table td:nth-child(2), .fdFileList table th:nth-child(1) {
+    text-align: left;
+}
+.fdFileSummary {
+    background: linear-gradient(#333,#000);
+    color: lime;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.5rem;
+    border-radius: 0 0 0.4rem 0.4rem;
+}
+#fd_CloseBtn {
+    padding: 1rem;
+}
+.modalWindow{
+    border:0.1rem solid #777;
+}
+@media screen and (max-width: 1100px) {
+    .fdBtnSpacer {
+        margin:5rem;
+    }
+}
+@media screen and (max-width: 900px) {
+    .fdBtnSpacer {
+        margin:1rem;
+    }
+    .fdBtn {
+        padding: 0.5rem 1rem;
+        margin: 0 .5rem;
+    }
+}

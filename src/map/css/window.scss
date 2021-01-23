@@ -1,0 +1,474 @@
+#lmvControls_support_layers {
+	left:40vw;
+	z-index:1900;
+	border-radius: 0.5rem;
+}
+#lmvControls_support_layers .lmvControlsWindowContent {
+	max-height: 60vh;
+	overflow-y: auto;
+}
+.lmvControlsWindow #lmvControls_screenshot_Content {
+    font-size: 1.4rem;
+    padding: 0 1rem 1.5rem 1rem;
+}
+#lmvControls_support_layers{
+	width:33rem;
+}
+#lmvControls_screenshot_Content p {
+	margin: 0.5rem;
+}
+#lmvControls_screenshot_Content table {
+    width: 100%;
+}
+#lmvControls_screenshot_Content button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: #ec6112;
+    color: #EEE;
+    border: 0.1rem solid #AAA;
+    outline: none;
+}
+.lmvControlsLayer {
+	text-align:left;
+	padding:0;
+	min-height:5.7rem;
+	cursor:pointer;
+	border-top: 0.1rem solid #AAA;
+	font-size:1.5rem;
+	position:relative;
+	opacity:0.9;
+	background:#575757;
+	color:#f0f0f0;
+}
+.lmvControlsLayerLegend {
+	margin-top: 6rem;
+}
+
+.lmvControlsLayer:hover {
+	/*background: #041b2e;*/
+	color:#FFF;
+	opacity:1;
+}
+.lmvControlsLayerSelected {
+	color:#ddd;
+	opacity:0.9;
+	background:#102638;
+}
+.lmvControlsLayerSelected:hover {
+	background:#102638;
+	opacity: 0.9;
+}
+.lmvControlsIconLabel {
+    position: absolute;
+    left: 1.5rem;
+    font-size: 1.4rem;
+    color: #EEE;
+    top: 3rem;
+    text-shadow: 0.1rem 0.1rem #2c2929;
+    opacity:0.5;
+}
+.lmvControlsLayer img, .lmControlsIconDiv {
+	float:left;
+	width:4.5rem;
+	height:4.5rem;
+	border:0;
+	margin:0.5rem 2.5rem 0 0.5rem;
+	padding:0;
+	border-radius:3.2rem;
+	border:0.1rem solid #CCC;
+	opacity: 0.5;
+}
+.lmvControlsLayer .text {
+	float: left;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 0;
+    margin: 1rem 1.5rem 0 1rem;
+    padding: 0;
+    opacity: 0.7;
+    text-align: center;
+    font-size: 3rem;
+}
+.lmvControlsLayer:hover img, .lmvControlsLayer:hover .lmControlsIconDiv {
+	border:0.1rem solid #EEE;
+	opacity: 0.8;
+}
+.lmvControlsLayerSelected img, .lmvControlsLayerSelected .lmControlsIconDiv {
+	opacity: 1;
+	border:0.1rem solid #EEE;
+}
+.lmvControlsLayer:hover .lmvControlsIconLabel {
+	opacity: 0.8;
+	color:#FFF;
+}
+.lmvControlsLayerSelected .lmvControlsIconLabel{
+	opacity:1;
+	color:#DDD;
+}
+.lmvControlsIconLabelLong {
+	left:.5rem;
+	font-size: 0.9em;
+}
+
+.lmvControlsLayerSelected:hover img, .lmvControlsLayerSelected:hover .lmControlsIconDiv {
+	opacity: 1;
+}
+#lmvControls_support_layers_Content .navGCContainer {
+	margin :0;
+}
+/*#lmvControls_support_layers_Content .navGCHeader {
+	background: rgba(187, 187, 187, 0.9);
+	border-top: 1px solid #777;
+}
+#lmvControls_support_layers_Content .navGCCtrl {
+	color:#333;
+}*/
+.lmvSupportLayersContent {
+	background: #767676;
+}
+#lmvControls_opacity_Display {
+    width:2.55rem;
+    height:2.5rem;
+    border-radius:2.5rem;
+    top:0;
+    margin-top:-0.8rem;
+    padding-top:0.3rem;
+    font-size:1.2rem;
+    text-align:center;
+    cursor:pointer;
+}
+#lmvControls_opacity_Display:focus {
+	outline: 0;
+}
+.lmvControlsLayerInfo  {
+	position:absolute;
+	top:1.8rem;
+	right: 1rem;
+	font-size:1.8rem;
+}
+.lmvControlsLayerLegendIcon {
+	position:absolute;
+	top:1.8rem;
+	right: 4rem;
+	font-size:1.8rem;
+}
+.lmvControlsLayerDisabled {
+	position: absolute;
+	height: 100%;
+	background: rgba(119, 119, 119, 0.85);
+	width: 100%;
+	color: yellow;
+	text-align: center;
+	padding-top: 1rem;
+	display:none;
+	cursor:default;
+	font-size:1.6rem;
+}
+#lmvControls_screenshot_Content button:hover {
+    background: #c1500f;
+}
+#lmvControls_identify, #lmvControls_alwaysIdentify {
+	position:absolute;
+	top:10rem;
+	max-width:85rem;
+	width:100%;
+	min-height:15rem;
+	background:#222;
+	left:10rem;
+	border-radius:0.7rem;
+	border:0.1rem solid #999;
+	color:#333;
+	overflow: auto;
+}
+.limTimeZone {
+	text-align: center;
+    background: #2f556e;
+    color: #eee;
+    font-size: 1.4rem;
+}
+.limContent {
+	margin-top:4rem;
+	width:100%;
+}
+#lmvControls_identify .lmvControlsWindowLabel, #lmvControls_alwaysIdentify .lmvControlsWindowLabel {
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 3rem;
+	height: 3rem;
+	color:transparent;
+}
+table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting {
+	background-image: none; 
+}
+.limSelectTab {
+	width: 16rem;
+    font-size: 1.3rem;
+    font-family: Arial,Verdana,Helvetica,sans-serif;
+    position: absolute;
+    color: #c0bfbf;
+    height: 3.9rem;
+    background: #696a68;
+    padding: .7rem .3rem;
+    line-height: 1.4rem;
+    border-left: .1rem solid #555;
+    text-align: center;
+    cursor: pointer;
+}
+.limSelectTabSelected {
+	background:#cbcbcb;
+}
+.limSelectTabResult {
+	font-size:1.2rem;
+	position: absolute;
+	top: 0.4rem;
+	right:0.7rem;
+}
+.limSelectTabFirst {
+	border-radius:0.7rem 0 0 0;
+	border-left: none;
+}
+#limTable th {
+	text-transform: uppercase;
+}
+#limTable th, #limTable td {
+	border:none;
+	padding: 0.2rem 0.3rem;
+}
+.limHeader {
+	text-align:center;
+	font-size:1.4rem; 
+	color:white;
+	font-weight:500;
+	cursor:default;
+	position:absolute;
+	left:0;
+	right: 3rem;
+	top:0;
+}
+.lmvControlsWindow {
+	position:absolute;
+	width:32rem;
+	top: 5rem;
+	left:0;
+	color:#BBB;
+    left: 0;
+    border: 0.1rem solid #878787;
+    background: #222;
+    border-radius: 0.5rem;
+    z-index: 200;
+	display:none;
+}
+.lmvControlsWindow ul {
+	padding: 0;
+	margin: 0;
+}
+.lmvControlsWindowLabel {
+	font-size:1.9rem;
+	color:#fc6814;
+	padding:0.6rem 3rem 0.3rem 1rem;
+	border-radius: 0.4rem 0.4rem 0 0;
+	width:100%;
+	font-family: 'Titillium Web','Helvetica Neue',Helvetica,Arial,sans-serif;
+	cursor:default;
+}
+.lmvControlsWindowCloseBtn {
+	font-size:1em;
+	position:absolute;
+	top:0rem;
+	color:#DDD;
+	cursor:pointer;
+	right:0.5rem;
+	padding: 0.3rem 0.5rem;
+}
+#lmv_identify_CloseBtn {
+	top:0.5rem;
+}
+.identifyTable {
+	border-spacing: 0;
+	border:none;
+	width:100%;
+	font-size:1.1rem;
+	background:white;
+}
+.lmvControlsWindow ul {
+	list-style: none;
+	padding: 0;
+}
+.transparentWindow {
+	position: absolute;
+	max-width:38rem;
+	width: 100%;
+	left:20rem;
+	z-index:1001;
+	background:#262626;
+	box-shadow: rgba(20, 20, 20, 0.4) 0.2rem 0.2rem 0.2rem;
+	border: 0.1rem solid #999;
+	border-radius: 1rem;
+	font-size: 1.4rem;
+}
+.transparentWindow .lmvControlsWindowContent {
+	overflow: hidden;
+	padding: 1rem 0 0.5rem 0;
+	line-height: 1.5rem;
+}
+.transparentWindow .lmvControlsWindowCloseBtn {
+    position: absolute;
+    color: #555;
+    font-size: 1.7rem;
+    top: 0.4rem;
+    right: 1rem;
+	cursor: pointer;
+}
+.colorPickerWindow {
+	width:auto;
+	max-width:350px;
+}
+.colorPickerContent {
+	max-height: 80vh;
+	overflow: auto;
+}
+.colorPickerWrap {
+	padding:1.5rem 1rem;
+}
+.transparentWindowColor {
+	max-width:44rem;
+}
+.transparentWindowLabel {
+	cursor:pointer;
+	padding-left: 1.5rem;
+	padding-right: 4rem;
+	color:#eee;
+}
+.transparentWindow #lmvControls_opacity_Slider_slider {
+	outline: none;
+	border: 0.1rem solid #AAA;
+	background: linear-gradient(90deg, rgba(40, 174, 255,0), rgb(40, 174, 255));
+}
+#lmvControls_opacity_Value {
+	float:right;
+	font-weight: 600;
+}
+
+.opacitySlider {
+	margin: 1.5rem 1rem;
+	position:relative;
+	height: 1.5rem;
+}
+.windowToolbar {
+    display: inline-flex;
+    list-style: none;
+    margin: 0;
+    padding: 0 0.5rem;    
+    cursor:pointer;
+    line-height: 1.2rem;
+	width:100%;
+	background:#434343;
+}
+.windowToolbar li {
+    width: 18%;
+    text-align: center;
+    display:block;
+}
+.windowToolbar li:hover {
+    background: #111;
+}
+.windowExtraToolbar {
+	display: none;
+	width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    background: #434343;
+    color: #ccc;
+    text-align: center;
+}
+.window_infobar {
+    margin: 1rem;
+    font-size: 1.2rem;
+	color:#eee;
+}
+.window_infobar span {
+	font-weight: 600;
+	text-transform: uppercase;
+}
+.windowRR {
+    padding: 0.8rem 1rem;
+	font-size: 1.5rem;
+	color: #222;
+	background: #e0e0e0;
+	position: relative;
+}
+.windowRRShort {
+	font-weight: 600;
+}
+.windowRRContent {
+	max-height: 30vh;
+    overflow-y: auto;
+}
+.windowRRContent > div:nth-child(2n+1) {
+	background: #f0f0f0;
+}
+.windowRRContent > div:hover:nth-child(2n+1), .windowRR:hover {
+	background: #c4c4c4;
+}
+.windowRRClose {
+	color: #aa4c4c;
+	position: absolute;
+	right: 1rem;
+	top: 0;
+    padding: .6rem .5rem;
+	text-align: center;
+	font-size: 1.6rem;
+}
+.windowRRClose:hover {
+	color:red;
+	font-size: 1.8rem;
+	padding: .5rem .4rem;
+}
+@media screen and (max-width: 700px) {
+	#lmvControls_support_layers {
+		left: 1rem;
+	}
+	#lmvControls_measure, #lmvControls_select {
+		left: 3rem;
+	}
+	.transparentWindow {
+		left: 0rem;
+	}
+}
+@media screen and (max-height: 600px) {
+	#lmvControls_identify, #lmvControls_alwaysIdentify {
+		top:0;
+	}
+	#lmvControls_measure, #lmvControls_select {
+		top:2rem;
+	}	
+}
+@media screen and (max-width: 500px) {
+	#lmvControls_select {
+		left: 0;
+		width: 100%;
+	}
+}	
+
+@media screen and (max-width: 350px) {
+	#lmvControls_support_layers, #lmvControls_measure {
+		left: 0;
+		width: 100%;
+	}
+	.colorPickerWrap {
+		padding:1.5rem 0.3rem;
+	}	
+}
+
+@media screen and (max-height: 600px), screen and (max-width: 1200px) {
+    .windowToolbar li {
+        width: 6.0rem;
+	}	
+	.mapToolBtn {
+		padding:0;
+	}
+	.mapToolBtn div {
+		line-height: 1.7rem;
+	}
+}

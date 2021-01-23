@@ -1,0 +1,423 @@
+.topNavBar {
+    margin: 0;
+    padding: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    position: absolute;
+    top:0;
+    right:2rem;
+    display: table-cell;
+
+}
+.isMinMenu .topNavBar {
+    right: 0;
+    width:30rem;
+    overflow: auto;
+}
+.topNavBar ul {
+    margin: -0.2rem 0 0 0;
+    padding: 0;
+    list-style: none;
+    float: right;
+    font-size:1.6rem;
+}
+.isMap .topNavBar{
+    top: 0;
+    max-height: 90vh;
+    min-height:5.5rem;
+}
+.isMinMenu .topNavBar ul {
+    width:100%;
+    background:#222;
+}
+.isMinMenu #navBarList {
+    display:none;
+}
+.topNavBar li {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    display: table-cell;
+    white-space: nowrap;
+    border-top: 0.5rem solid transparent;
+    line-height:1.4rem;
+    padding:2.2rem 1rem 0;
+    cursor:pointer;
+    height:6rem;
+}
+.isMap .topNavBar li {
+    height: 5.3rem;
+    padding: 1.5rem 1rem 0;
+}
+.isMinMenu .topNavBar li {
+    height:auto;
+    display: block;
+    min-height: 4.5rem;
+}
+#topbar__min {
+    position: absolute;
+    right: 0;
+    width: 5rem;
+    text-align: center;
+    height: 5rem;
+    padding: 1.5rem 0 0;
+    display:none;
+}
+.isMinMenu #topbar__min {
+    display:block;
+}
+.topNavBar li:hover {
+    /*border-top: 5px solid #6cb4e2;*/
+    /*border-top: 5px solid #CCC;*/
+    border-top: 0.5rem solid #00ffff;
+    background:rgba(0,0,0,.9);
+}
+.topNavBar li a {
+    font-size: 1.5rem;
+    padding:0 1rem;
+}
+#navBar > ul > li > a {
+    line-height: 2.5rem;
+    font: normal 1.7rem "Titillium Web", sans-serif;
+}
+.isMap #navBar > ul > li > a {
+    font: normal 1.6rem "Titillium Web", sans-serif;
+}
+.isMinMenu .topNavBar li a {
+    font-size: 1.8rem;
+    padding: 0;
+    text-transform: uppercase;
+    margin: 1rem 0;
+}
+.isMinMenu .topNavBar li ul li a {
+    text-transform: initial;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.topNavBar ul>li>ul {
+    font-weight: 600;
+    margin-left: -1rem;
+    width: 25rem;
+    top: 5.9rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding: 1rem;
+    background: rgba(0,0,0,.95);
+    box-shadow: 0 0.2rem 0.2rem 0 rgba(50,50,50,.25);
+    display: none;
+    position: absolute;
+    z-index: 100;
+    border-radius: 0.3rem;
+}
+.isMap .topNavBar ul>li>ul {
+    top:5.3rem;
+    max-height: 80vh;
+    overflow: auto;
+}
+.topNavBar ul > li > ul > li > a {
+    display: flex;
+    padding: 0.5rem 0;
+}
+.isMap .topNavBar ul > li > ul > li {
+    height: auto;
+}
+.topNavBar ul>li:hover>ul {
+    display: block;
+}
+.isMinMenu .topNavBar ul > li:hover > ul {
+    display: contents;
+}
+.topNavBar ul>li>ul>li {
+    display:block;
+    padding: 0;
+    height:auto;
+    border-top:none;    
+    white-space: normal;
+    line-height: 2.5rem;
+}
+
+.topNavBar ul>li>ul>li:hover {
+    border-top:none;
+}
+.topNavBar ul>li>ul>li:hover a {
+    color:#AAA;
+}
+.topNavBar ul>li>ul>li:hover .topMenuNotificationsCount{
+    opacity:0.7;
+}
+.topNavBar ul > li:last-child > ul {
+    margin-left: -17rem;
+}
+.topNavBar ul > li:nth-last-child(2) > ul {
+    margin-left: -17rem;
+}
+/*.topNavBar ul > li:nth-last-child(3) > ul {
+    margin-left: -12rem;
+}*/
+.isMap .topNavBar ul > li > ul > li {
+    padding: 1.5rem 0 0 2rem;
+}
+.topNavBar .ext svg {
+    margin-top:0.3rem;
+}
+.topNavBar .article {
+    line-height: 1.5rem;
+    padding: 0.3rem 0;
+}
+.topNavBar .article a {
+    font-size: 1.25rem;
+    font-weight: 300;
+    padding: 0 0 0 2rem;
+}
+.topMenu-icon {
+    font-size:2.2rem;
+}
+.topNavBar .topMenuSelected {
+	border-top: 0.5rem solid #EEE;
+}
+
+.topMenu-li:hover .topMenuCaret {
+	display:block;
+}
+
+.topMenu-li .fa-comments-o {
+    font-size:2.0rem;
+}
+.topMenuCaret {
+	width:100%;
+	display:none;
+	text-align:center;
+}
+.noSearch {
+    display:none;
+}
+#topbar_profile {
+    font-size:2.4rem;
+    padding-top:1.2rem;
+}
+#topbar_search {
+    font-size:2rem;
+    padding-top:1.4rem;
+}
+#topbar_feedback, #topbar_notifications {
+    padding-top:1.7rem;
+}
+#topbar_notifications {
+    display:none;
+}
+#topbar_download-ui {
+    padding: .6rem 1rem 0;
+}
+#topMenu-icon_download-ui {
+    font-size: 2.6rem;
+    margin-top: 0;
+}
+#topbar_lbl_download-ui {
+    font-size: 1.9rem;
+}
+#topbar_home {
+    font-size: 2rem;
+    padding-top: 1.5rem;
+}
+.isMap #topbar_home {
+    padding-top: 1rem;
+}
+#topMenuContentWrap {
+	position:absolute;
+	top:5.5rem;
+	left:0;
+	right:0;
+	min-height:42rem;
+	height:80%;
+	max-height:70rem;
+	border-bottom:0.1rem solid #777;
+	background:#111c26;
+	display:none;
+    font-size:1.2em;
+    cursor: default;
+}
+.topMenuCloak {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFF;
+    z-index: 999;
+    display: none;
+    opacity: 0.4;
+}
+.topMenuContentIconClose {
+	position:absolute;
+	top:2rem;
+	right:2rem;
+	font-size:2rem;
+	color:#777;
+	cursor:pointer;
+}
+#topMenuContent {
+	color:#CCC;
+}
+#topMenuContent ul {
+	list-style:none;
+	line-height:2.2em;
+}
+#topMenuContent ul > li > a {
+	color:#62c2ff
+}
+.topMenuNotificationsCount {
+    margin-left: 2rem;
+    background: #ffd800;
+    color: black;
+    border-radius: 2rem;
+    padding: 0 .8rem;
+    font-size: 0.8em;
+    font-weight: 600;
+    display:none;
+}
+.topMenuNotificationActive {
+    color: #ffd800;
+}
+.notif-item {
+	position: absolute;
+	z-index:3000;
+	top: 0.7rem;
+	width:60%;
+    left:20%;
+    box-shadow: .3rem .2rem .2rem #333;
+    background: rgba(17, 50, 89, 0.9);
+    color: #FFF;
+    line-height: 2.8rem;
+    border-radius: .8rem;
+    font-family: "Titillium Web", sans-serif;
+    font-size: 1.8rem;
+    text-shadow: 0 0 .1rem #123359;
+    padding-bottom: 3rem;
+}
+.notif-banner {
+    padding: 3rem 3rem 2rem;
+    border-bottom: 1px solid #ccc;
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+.notif-item-content {
+    position: relative;
+    left: 0; 
+    width:100%;
+    padding: 2rem 2rem 1rem 3rem;
+    max-height: 80vh;
+    overflow: auto;
+}
+#notifications_notifications-info .notif-item-content {
+    padding: 2rem 7rem 1rem 3rem;
+}
+.notif-item-content li {
+    margin-bottom:2rem;
+}
+
+.notif-item-content a {
+    color: yellow;
+    font-weight: 700;
+    font-size: 1.9rem;
+}
+
+.notif-item-close {
+	position:absolute;
+	right: 2rem;
+	top:2rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 3rem;
+    cursor: pointer;
+}
+.notif-item-content img {
+	width: 6.7rem;
+    bottom: .6rem;
+    right: .6rem;
+    position: absolute;
+}
+#topMenuLColumn {
+	position:absolute;
+	left:0px;
+	height:100%;	
+	border-right:1px solid #333;
+	padding:0.5em;
+	width:33%;
+	max-width:550px;
+}
+#topMenuLColumn div {
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: .5rem;
+    opacity: 0.8;
+    text-align: center;
+    color: #EEE;
+    background: #222;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.topMenuEmptyLabel {
+    color:#ddd;
+}
+#topMenuRColumn {
+	position:absolute;
+	left:33%;
+	height:100%;
+	width:67%;
+	padding:2.5rem 5rem;
+}
+.topMenuContentLabel {
+	font-size: 3rem;
+    padding-left: 3rem;
+    padding-bottom: 2rem;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: -.5rem;
+    border-bottom: solid .1rem #EEE6;
+    color: #cccc;
+}
+@media screen and (max-width:1000px) {
+	.notif-item {
+		top: 0.7rem;
+		width:90%;
+		left:5%;
+    }
+    .notif-item-content {
+        padding: 1rem 2rem;
+    }
+    #notifications_notifications-info .notif-item-content {
+        padding: 1rem 7rem 1rem 2rem;
+    }
+    
+    .notif-item-content > ul {
+        padding: 1rem;
+    }
+}
+@media screen and (max-width: 600px) {
+    #topbar_lbl_feedback, #topbar_lbl_notifications {
+        display:none;
+    }
+    #topMenu-icon_feedback, #topMenu-icon_notifications {
+        font-size:2.2rem;
+   }   
+   .topNavBar li a {
+       padding:0;
+   }
+   #topbar_notifications>ul {
+	    margin-left:-10rem;
+    }
+    .notif-banner {
+        font-size: 2rem;
+        padding: 1.5rem;
+    }
+    .notif-item-close {
+        top:1rem;
+    }
+}
+@media screen and (max-height: 500px) {
+    .notif-item-content {
+        max-height: 60vh;
+    }
+}
+

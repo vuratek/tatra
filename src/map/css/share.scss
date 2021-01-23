@@ -1,0 +1,100 @@
+#lmvControls_share {
+	position:absolute;
+	width:30rem;
+	height:14rem;
+	left:0;
+	right:0;
+	top:0;
+	display:none;
+}
+#lmvControls_shareLabel {
+	font-size:1.8rem;
+	color:#555;
+	font-weight:bold;
+	padding:0.3rem 1rem;
+	background:#BBB;
+	border-radius:0.6rem 0.6rem 0 0;
+	width:100%;
+	font-family: 'Titillium Web','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+#lmvControls_shareCloseBtn {
+	font-size:1.6rem;
+	position:absolute;
+	top:0.4rem;
+	color:#555;
+	cursor:pointer;
+	right:1rem;
+}
+#lmvControls_shareLink {
+	position:absolute;
+	width:23rem;
+	left:0.8rem;
+	top: 4rem;
+	height:3rem;
+	font-size:1.2rem;
+	margin:0;
+	padding:0.5rem;
+}
+#lmvControls_shareCopy {
+	position:absolute;
+	width:5rem;
+	right:0.8rem;
+	top: 4rem;
+	padding:0.5rem 0;
+	background:#777;
+	height:3rem;
+	font-size:1.2rem;
+	color:#F0F0F0;
+	text-align:center;
+	cursor:pointer;
+}
+#lmvControls_shareCopy:hover {
+	background:#555;
+}
+#lmvControls_shareShorten {
+	position:absolute;
+	top:7.7rem;
+	font-size:1.4rem;
+	left:1rem;
+	width:28rem;
+	padding: 0 2rem 0.5rem;
+	border-bottom:0.1rem solid #AAA;
+}
+#lmvControls_shareContent {
+	position:absolute;
+	width:28rem;
+	top:8.5rem;
+	text-align:center;
+	font-size:2.2rem;
+	color:#F0F0F0;
+	left:1rem;
+}
+.lmvControls_shareContentBtn {
+	border-radius:2.5rem;
+	position: absolute;
+	width: 4.5rem;
+	height:4.5rem;
+	border:0.1rem solid #EEE;
+	cursor:pointer;
+	font-size: 3rem;
+    padding: 0.7rem 0 0 0;
+}
+#lmvCtrlShare_facebook {
+	left: 1rem;
+	background:#3b5998;
+}
+#lmvCtrlShare_twitter {
+	left: 8rem;
+	background:#00aced;
+}
+#lmvCtrlShare_reddit {
+	left: 15rem;
+	background:#ff5700;
+}
+#lmvCtrlShare_email {
+	left: 22rem;
+	background:#555;
+}
+.lmvControls_shareContentBtn:hover {
+	border:0.1rem solid #AAA;
+}

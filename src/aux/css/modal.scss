@@ -1,0 +1,154 @@
+.modalWrap {
+    display:none;
+    z-index:5000;
+    width:100%;
+    height:100%;
+    position: fixed;
+    overflow: hidden;
+}
+.modal {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+.white {
+    background: rgba(220,220,220, 0.7);
+}
+.black {
+    background: rgba(20,20,20, 0.8);
+}
+.modalWindow {
+    top: 3rem;
+    bottom: 4.2rem;
+    left: 1rem;
+    right: 1rem;
+    background: #f0f0eb;
+    position: absolute;
+    margin: auto;
+    border-radius: 0.5rem;
+    border: 0.1rem solid #888;
+}
+.modalClick {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.modalHeader {
+    font-size: 2.4rem;
+    font-weight: 500;
+    width:100%;
+    cursor: default;
+    padding: 1.5rem 2rem;
+    background: #222;
+    color:white;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-family: 'Titillium Web',sans-serif;
+}
+.modalContent {
+    position: absolute;
+    left: 2rem;
+    top: 7rem;
+    bottom: 1rem;
+    right: 2rem;
+    overflow-y: auto;
+    line-height: 2.5rem;
+}
+.modalCloseIcon {
+    /*    float:left;*/
+    font-size:2rem;
+    position: absolute;
+    top: 0.5rem;
+    right:1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color:#EEE;
+}
+.modalCloseIcon:hover, .modalCloseIcon:focus {
+    opacity:0.7;
+}
+.modalST {
+    width: 25%;
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    font-family: 'Titillium Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    position: absolute;
+    color: #777;
+    height: 3.5rem;
+    background: #AAA;
+    padding: 0.4rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    border-left: 0.1rem solid #777;
+}
+
+.mliContent {
+    width: 100%;
+    margin-top: 3.5rem;
+    min-height: 20rem;
+    border-radius: 0.1rem;
+    background: #EEE;
+    border-radius: 0 0.7rem 0.7rem 0.7rem;
+    padding: 2rem;
+}
+.modalSTSelected {
+    background: #EEE;
+    color: #222;
+
+}
+.mliContainer {
+    width: 100%;
+    background: #2276ac;
+    color: #F0F0F0;
+    cursor: pointer;
+    margin-top: 1em;
+    font-size: 1.5rem;
+    position:relative;
+}
+.mliHeader {
+    padding: 0.5rem 1rem;
+}
+.mliClose {
+    position: absolute;
+    right: 2rem;
+    top:0.7rem;
+}
+
+.mliTabContent {
+    width: 100%;
+    display: none;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    background: #DDD;
+    border: 1px solid #CCC;
+    font-size: 1.4rem;
+    color:#222;
+}
+
+.mliImg {
+    float: left;
+    margin: 0 3rem 1rem 0;
+    width:6.4rem;
+    height:6.4rem;
+    border-radius: 3.2rem;
+    border: 0.1rem solid #777;
+}
+
+.modal-close2 {
+    font-size: 2.4rem;
+    margin-top: 1rem;
+}
+@media screen and (max-width: 600px) {
+    .modalContent {
+        right: 1rem;
+        left: 1rem;
+    }
+}
+@media screen and (max-height: 600px) {
+    .modalWindow {
+        top: 0;
+        bottom: 0;
+    }
+}

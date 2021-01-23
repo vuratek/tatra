@@ -1,0 +1,144 @@
+[{
+	"id": 1,
+	"name": "Level-0 \/ Level-1",
+	"subgroup": [{
+		"id": 2,
+		"name": "MODIS Terra, Aqua"
+	}, {
+		"id": 3,
+		"name": "VIIRS Suomi NPP"
+	}, {
+		"id": 4,
+		"name": "OLCI ESA Copernicus Sentinel3"
+	}, {
+		"id": 5,
+		"name": "SLSTR ESA Copernicus Sentinel3"
+	}, {
+		"id": 6,
+		"name": "MERIS Envisat"
+	}]
+}, {
+	"id": 7,
+	"name": "Atmosphere",
+	"subgroup": [{
+		"id": 8,
+		"name": "Aerosol",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_aerosol.jpg",
+		"text": "The MODIS Aerosol Product monitors the ambient aerosol optical thickness over the oceans globally and over the continents. Furthermore, the aerosol size distribution is derived over the oceans, and the aerosol type is derived over the continents. The aerosol product includes the \"deep-blue\" algorithm recently developed to get aerosol optical thickness over bright land areas."
+	}, {
+		"id": 9,
+		"name": "Water Vapor",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_waterVapor.jpg",
+		"text": "The MODIS Precipitable Water product consists of column water-vapor amounts. During the daytime, a near-infrared algorithm is applied over clear land areas of the globe and above clouds over both land and ocean. An infrared algorithm for deriving atmospheric profiles is also applied both day and night for Level-2."
+	}, {
+		"id": 10,
+		"name": "Cloud Properties",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_cloud.jpg",
+		"text": "The MODIS Cloud Product combines infrared and visible techniques to determine both physical and radiative cloud properties. Daily global Level-2 data are provided. Cloud-particle phase (ice vs. water, clouds vs. snow), effective cloud-particle radius, and cloud optical thickness are derived using the MODIS visible and near-infrared channel radiances."
+	}, {
+		"id": 11,
+		"name": "Atmosphere Profiles",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_atmosphericProfiles.jpg",
+		"text": "The MODIS Atmospheric Profile product consists of several parameters: they are total-ozone burden, atmospheric stability, temperature and moisture profiles, and atmospheric water vapor. All of these parameters are produced day and night for Level-2 at 5x5 1-km pixel resolution when at least 9 FOVs are cloud free. "
+	}, {
+		"id": 12,
+		"name": "Cloud Mask",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_cloudMask.jpg",
+		"text": "The MODIS Cloud Mask product is a Level-2 product generated at 1-km and 250-m (at nadir) spatial resolutions. The algorithm employs a series of visible and infrared threshold and consistency tests to specify confidence that an unobstructed view of the Earth's surface is observed."
+	}, {
+		"id": 13,
+		"name": "Joint L2 Atmosphere Product",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_L2JointAtmosphere.jpg",
+		"text": "The post-launch MODIS Atmosphere Level-2 Joint Product contains a spectrum of key parameters gleaned from the complete set of standard at-launch Level-2 products: Aerosol, Water Vapor, Cloud, Profile, and Cloud Mask. The new Joint Atmosphere product was designed to be small enough to minimize data transfer and storage requirements, yet robust enough to be useful to MODIS data users."
+	}, {
+		"id": 14,
+		"name": "L3 Atmosphere Product",
+		"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/atmosphere/tile_L3Atmosphere.jpg",
+		"text": "The Level-3 MODIS Atmosphere Daily Global Product contains roughly 600 statistical datasets that are derived from approximately 80 scientific parameters from four Level-2 MODIS Atmosphere Products: Aerosol, Water Vapor, Cloud, and Atmosphere Profile."
+	}]
+}, {
+	"id": 15,
+	"name": "Land",
+	"subgroup": [{
+		"id": 16,
+		"name": "Radiation Budget Variables",
+		"subgroup": [{
+			"id": 17,
+			"name": "Land Surface Reflectance",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_land_surface_reflectance.jpg",
+			"text": "The MODIS Surface Reflectance products provide an estimate of the surface spectral reflectance as it would be measured at ground level in the absence of atmospheric scattering or absorption. Low-level data are corrected for atmospheric gases and aerosols, yielding a level-2 basis for several higher-order gridded products."
+		}, {
+			"id": 18,
+			"name": "Land Surface Temperature & Emissivity",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_land_surface_temperature_and_emissivity.jpg",
+			"text": "The Land Surface Temperature (LST) and Emissivity daily data are retrieved at 1km pixels by the generalized split-window algorithm and at 6km grids by the day/night algorithm. The product is comprised of LSTs, quality assessment, observation time, view angles, and emissivities."
+		}, {
+			"id": 19,
+			"name": "BRDF & Albedo",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_BRDF_albedo_NBAR.jpg",
+			"text": "The Bidirectional Reflectance Distribution Function/Albedo parameters provide coefficients for mathematical functions that describe the BRDF of each pixel in the seven MODIS 'Land' bands, and albedo measurements derived simultaneously from the BRDF for bands 1-7 as well as three broad bands."
+		}]
+	}, {
+		"id": 20,
+		"name": "Ecosystem Variables",
+		"subgroup": [{
+			"id": 21,
+			"name": "Vegetation Indices",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_vegetation_indices.png",
+			"text": "MODIS vegetation indices, produced on 16-day intervals and at multiple spatial resolutions, provide consistent spatial and temporal comparisons of vegetation canopy greenness, a composite property of leaf area, chlorophyll and canopy structure. Two vegetation indices are derived from atmospherically-corrected reflectance in the red, near-infrared, and blue wavebands."
+		}, {
+			"id": 22,
+			"name": "LAI & fPAR",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_LAI&fPAR.jpg",
+			"text": "LAI is defined as the one-sided green leaf area per unit ground area in broadleaf canopies and as half the total needle surface area per unit ground area in coniferous canopies. FPAR is the fraction of photosynthetically active radiation (400-700 nm) absorbed by green vegetation."			
+		}, {
+			"id": 23,
+			"name": "GPP & NPP",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_GPP&NPP.png",
+			"text": "The Primary Production products are designed to provide an accurate regular measure of the growth of the terrestrial vegetation. The product is a cumulative composite of GPP values based on the radiation use efficiency concept that may be used as inputs to data models for calculating terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation."			
+		}]
+	}, {
+		"id": 24,
+		"name": "Land Cover Characteristics",
+		"subgroup": [{
+			"id": 25,
+			"name": "Thermal Anomalies & Fire",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_thermal_anomalies.jpg",
+			"text": "MODIS Thermal Anomalies/Fire products are primarily derived from MODIS 4- and 11-micrometer radiances. The fire detection strategy is based on absolute detection of a fire (when the fire strength is sufficient to detect), and on detection relative to its background (to account for variability of the surface temperature and reflection by sunlight)."			
+		}, {
+			"id": 26,
+			"name": "Burned Area",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_burned_area.jpg",
+			"text": "The Burned Area product contains burning and quality information on a per-pixel basis. Produced from both the Terra and Aqua MODIS-derived daily surface reflectance inputs, the algorithm analyzes the daily surface reflectance dynamics to locate rapid changes, and uses that information to detect the approximate date of burning, mapping the spatial extent of recent fires only."
+		}, {
+			"id": 27,
+			"name": "Land Cover",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_land_cover.jpg",
+			"text": "The MODIS Terra+Aqua Combined Land Cover product incorporates five different land cover classification schemes, derived through a supervised decision-tree classification method. The primary land cover scheme identifies 17 classes defined by the IGBP, including 11 natural vegetation classes, three human-altered classes, and three non-vegetated classes."
+		}, {
+			"id": 28,
+			"name": "Vegetation Continuous Fields",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_vegetation_continuous_fields.jpg",
+			"text": "Proportional estimates of cover are developed from global training data derived using high-resolution imagery. The training data and phenological metrics are used with a regression tree to derive percent cover globally. The model is then used to estimate areal proportions of life form, leaf type, and leaf longevity. "
+		}]
+	}, {
+		"id": 29,
+		"name": "NACP Gap Filled Smoothed",
+		"subgroup": [{
+			"id": 30,
+			"name": "LAI &amp; fPAR",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_photosynthetically_active_radiation.jpg",
+			"text": "Incident Photosynthetically Active Radiation (PAR) on the Earth’s surface represents a part of the solar radiation spectrum from 0.4 µm to 0.7 µm that is absorbed, transferred and stored within ecosystems. PAR constitutes a crucial input parameter that is used in several terrestrial and aquatic ecosystem productivity models to support climate change studies, both on regional and global scales."
+		}, {
+			"id": 31,
+			"name": "! Enhanced Vegetation Index (EVI)",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_evapotranspiration.jpg",
+			"text": "This project is part of NASA/EOS project to estimate global terrestrial evapotranspiration from earth land surface by using satellite remote sensing data. MOD16 global evapotranspiration product can be used to calculate regional water and energy balance, soil water status; hence, it provides key information for water resource management."
+		}, {
+			"id": 32,
+			"name": "!Normalized Difference Vegetation Index (NDVI)",
+			"image": "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/app/build/images/land/tile_MAIAC.jpg",
+			"text": "Multi-Angle Implementation of Atmospheric Correction (MAIAC) accomplishes atmospheric correction via a new method that is encoded in a generic algorithm designed to work with MODIS data to facilitate deriving both aerosol and land surface reflectance products."
+		}]
+	}]
+}]

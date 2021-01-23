@@ -1,0 +1,206 @@
+#modal_laads-layers_window {
+    max-width: 100rem;
+    max-height: 100rem;
+    margin:auto;
+}
+#modal_laads-layers_content {
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    border-radius:0.5rem;
+    background:#222;
+}
+#modal_laads-layers_close {
+    top: 1.2rem;
+    right: 1.4rem;
+    font-size: 2.5rem;
+}
+.llmTabWrap {
+	position:absolute;
+	left:1.5rem;
+	right:1.5rem;
+	border-bottom:1px solid #AAA;
+	top:1.5rem;
+	line-height: 2.5rem;
+    height: 4rem;
+}
+.llm_main {
+    display:inline-block;
+    width: 15%;
+    padding: 0.5rem 1.5rem;
+    font-size: 1.8rem;
+    color: white;
+    cursor:pointer;
+    background:#8e9093;;
+    color:#CCC;
+    margin: 0 0.5% 0 0;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#llm_main_search {
+    width: 50%;
+}
+#llm_main_search input {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.6rem;
+    margin-left: 1rem;
+    width: 80%;
+    outline:none;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.llm_mainSelected {
+    background: #0da308;
+    color: #EEE;
+}
+#llmTabContent {
+    position: absolute;
+    top: 7.5rem;
+    bottom:1.5rem;
+    left: 1.5rem;
+    right:1.5rem;
+}
+.llmLColumn {
+	width:32rem;
+  position:absolute;
+  height:100%;
+  overflow: auto;
+}
+.llmRColumn {
+	left:35rem;
+	right:0;
+	top:0;
+	bottom:0;
+	position:absolute;
+	overflow-y:auto;
+}
+.llm_missions {
+	padding: .3rem 0 .3rem 1rem;
+    border-left: 1rem solid #777;
+		color: #555;
+		font-size: 2rem;
+	background: #CCC; 
+	cursor:pointer;
+	margin: 0 0 1rem 0;
+	font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.llm_missions:hover {
+	background:#AAA;
+}
+.llm_missionsSelected {
+   border-left: 1rem solid #0adb09;
+   background: #EEE;
+   color:#222;
+ }
+ .llm_missionsSelected:hover {
+ 	background:white;
+ }
+ .llmLayerItem {
+	background: #EEE;
+    color: #222;
+    padding: .3rem 1rem;
+    margin:.1rem 0;
+    font-size:1.6rem;
+    cursor:pointer;
+ }
+ .llmLayerItem:nth-child(2n+2) {
+	background: #e1e1e1;
+}
+ .llmLayerItem:hover {
+ 	background:#C0C0C0;
+ }
+ .llmLayerItem span {
+ 	color:#555;
+ }
+
+ .llmItemUnits {
+ 	float: right;
+ 	padding-right:1em;	
+ }
+ .llmItemRes {
+ 	font-weight:600;
+ }
+ .llmItemLbl {
+ 	font-weight:600;
+ 	font-size:1.7rem;
+ }
+ .llmGroupElement {
+ 	min-height:7rem;
+ }
+ .llmItemDetails {
+ 	font-size:1.4rem;
+ }
+ 
+ /* The container */
+.llCheckbox {
+  display: block;
+  position: relative;
+  padding-left: 6.5rem;
+/*  margin-bottom: 12px;*/
+  margin-top:.5rem;
+  cursor: pointer;
+  font-size: 1.6rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.llCheckbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  margin-top:.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3rem;
+  width: 3rem;
+  background-color: #eee;
+/*  border:3px solid #2b678d;*/
+  border:.2rem solid #AAA;
+}
+
+/* On mouse-over, add a grey background color */
+.llCheckbox input ~ .checkmark {
+/*  background-color: #ccc;*/
+  background-color: #EEE;
+}
+
+/* When the checkbox is checked, add a blue background */
+.llCheckbox input:checked ~ .checkmark {
+  background-color: #0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.llCheckbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.llCheckbox .checkmark:after {
+  left: .8rem;
+  top: .2rem;
+  width: 1rem;
+  height: 1.8rem;
+  border: solid #2b678d;
+  border-width: 0 .3rem .3rem 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

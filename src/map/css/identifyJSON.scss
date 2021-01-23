@@ -1,0 +1,75 @@
+.identifyJSONLabel table {
+    min-width: 28rem;
+    margin: 1rem 0;
+}
+.identifyJSONLabel table tr, .identifyJSONLabel table tr:nth-child(2n+2) {
+    background:#244153;
+    color:#EEE;
+}
+.identifyJSONLabel table td {
+    width:50%;
+    text-align: center;
+}
+.identifyJSONLabel .faLbl, .identifyJSONLabel .faNoaaLbl {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+.identifyJSONLabel .faNoaaLbl {
+    padding:.8rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+.identifyJSONLabel .faLbl img {
+    height: 1.8rem;
+    margin-right: 1rem;
+}
+.identifyJSONLabel .fa-noaa-logo {
+    position: absolute;
+    bottom: 0;
+    right: 0.7rem;
+}
+.identifyJSONLabel .fa-noaa-logo img {
+    height: 4.5rem;
+    width: 4.5rem;
+}
+.identifyJSONLabel .faNoaaTbl tr:first-child {
+    background: #2da3db;
+    color: #000;
+}
+.faNoaaTbl {
+    padding-top:.2rem;
+}
+.identifyJSONLabel .faNoaaTbl tr:last-child {
+    background: #ccc;
+    color: #000;
+}
+.identifyJSONLabel .faNoaaTbl td:first-child {
+    width:27%;
+    font-weight: 600;
+    font-size: 1.5rem
+}
+.identifyJSONLabel .faNoaaTbl td:last-child {
+    width:73%;
+    font-style: italic;
+    font-size: 1.4rem;
+    padding:.5rem 1rem;
+}
+.identifyJSONLabel .faNoaaDetails {
+    padding: 1rem 0 0.5rem 0;
+    text-align: center;
+}
+.identifyJSONLabel .faDate {
+    font-style: italic;
+    font-size: 1.4rem;
+}
+.ol-identify {
+    color:#222;
+    position: relative;
+    background: #FFF;
+    border-radius: 0.4rem;
+    padding: 1rem 0.5rem;
+    opacity: 0.9;
+    white-space: nowrap;
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+}

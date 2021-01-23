@@ -1,0 +1,64 @@
+.rightNavBar {
+    position: absolute;
+    right:0;
+    z-index: 3000;
+    top: 0;
+    height: 6.5rem;
+    width: 5.6rem;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    overflow: hidden;
+    font-family: "Open Sans", sans-serif;
+    border-radius: 1.2rem 0 0 1.2rem;
+}
+#rightNavBarMenuWrap {
+    margin-top:6.6rem;
+}
+.rightNavBarHomeBtn {
+    position: absolute;
+    left: 0rem;
+    width: 5rem;
+    padding: 2.2rem 0 0 3rem;
+    top: 0rem;
+    font-size: 2rem;
+    color: #CCC;
+    cursor: pointer;
+}
+#rightNavBarShell {
+    position: absolute;
+    top: 0;
+    right:0;
+}
+.rightNavBarShellOpened .rightNavBar {
+    position: relative;
+    width: 40rem;
+    background: black;
+    height: auto;
+}
+.isMap .rightNavBar {
+    z-index:1000;
+}
+.isMap .rightNavBarHomeBtn {
+    padding: 1.8rem 0 0 1.8rem;
+}
+.isMap #rightNavBarMenuWrap {
+    margin-top: 5.5rem;
+} 
+.isMap #rightNavBarShell {
+    bottom:0;
+}
+.isMap .rightNavBarShellOpened .rightNavBar {
+    height: 100%;
+    overflow-y: auto;
+    z-index:3000;
+}
+
+@media screen and (max-width: 400px) {
+    .rightNavBarShellOpened {
+        width: 100%;
+    }
+    .rightNavBarShellOpened .rightNavBar {
+        width:100%;
+    }
+}
+

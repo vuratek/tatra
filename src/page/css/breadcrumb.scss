@@ -1,0 +1,37 @@
+.breadcrumbs {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #555;
+    color:white;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-bottom: 0.1rem solid #ccc;
+}
+.breadcrumbs a, .breadcrumbs a:link, .breadcrumbs a:visited {
+    color: white;
+}
+.breadcrumbs ol {
+    margin: 0;
+    padding: 0;
+}
+.next svg {
+    margin-left:1.5rem;
+}
+.breadcrumbs li {
+    display: inline;
+    padding-right: .8rem;
+    font-weight: lighter;
+}
+.breadcrumbs li:last-child {
+    font-weight: 700;
+}
+.breadcrumbs li.next::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f105";
+    display:none;
+    font-weight: 900;
+    padding-left: 1.5rem;
+    font-size: 1.4rem;
+}
+.breadcrumbs li:last-child:after {
+    content: "";
+}

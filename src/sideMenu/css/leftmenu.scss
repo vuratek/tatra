@@ -1,0 +1,290 @@
+.sideNavBarWrap {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #000;
+    z-index: 2999;
+    display:none;
+    opacity:0.4;
+}
+.leftNavBar {
+    position: fixed;
+    z-index: 3000;
+    top: 0;
+    bottom: 0;
+    width: 5.6rem;
+    cursor: pointer;
+    color: #DDD;
+    overflow: hidden;
+    font-family: "Open Sans", sans-serif;
+    border-radius: 0 1.2rem 1.2rem 0;
+}
+.leftNavBarSmall {
+    bottom: auto;
+    height: 6.5rem;
+}
+.isMap .leftNavBarSmall {
+    height: 5.4rem;
+}
+.leftNavBarActive {
+    width:100%;
+    height: 100%;
+    max-width:40rem;    
+    opacity:1;
+/*    bottom: 0rem;*/
+    border-right: 0.1rem solid #777;
+}
+.leftNavBarActive .leftNavBarMenu {
+    color:#CCC;
+}
+.leftNavBar .leftNavBarSubIcon {
+    left: 1.8rem;
+}
+.leftNavBarActive .leftNavBarSubIcon {
+    left: 4.4rem;
+}
+.leftNavBarLabel {
+    font-size: 2.7rem;
+    color: #DDD;
+    position: absolute;
+    left: 6.5rem;
+    right:0;
+    top: 1.5rem;
+}
+.isMap .leftNavBarLabel {
+    top: 1rem;
+}
+
+.leftNavBarLabel img {
+    margin-left: -.8rem;
+    margin-top: -.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#leftNavBarLogo2 {
+    left: 4.5rem;
+    position:absolute;
+}
+.leftNavBarLogoWrapper {
+    width: 6rem;
+    height: 3rem;
+    margin: 0;
+    float: left;
+    background:none;
+}
+.leftNavBarLabel span {
+    position: absolute;
+    left: 5rem;
+    top: 0.8rem;
+    width:20rem;
+}
+
+.leftNavBarChild {
+    padding: 1.28rem 0 1.28rem 3.2rem;
+    list-style-type:none;
+    width:100%;
+    height:100%;
+    text-align:left;
+    white-space:nowrap;
+    overflow:hidden;
+    position:relative;
+}
+.leftNavBarActive .leftNavBarChild {
+    padding: 1.28rem 0 1.28rem 3.2rem;
+    border-top:0.1rem solid #555;
+}
+
+.leftNavBarMenuWrap {
+    background: #222;
+    border-right: 0.1rem solid #777;
+    border-radius: 0 0 1.2rem 0;
+    border-bottom: .1rem solid #777;
+    overflow: hidden;
+    position: absolute; 
+    bottom: 0rem;
+/*    top:6.6rem;*/
+    width: 100%;
+}
+.isMap .leftNavBarMenuWrap {
+    top:5.5rem;
+} 
+.leftNavBarActive .leftNavBarMenuWrap {
+    overflow-y: auto;
+    border-top: 0.1rem solid #777;
+}
+.leftNavBarActive .leftNavBarMenuWrap {
+    border-right: none;
+}
+.leftNavBarMenu {
+    display: block;
+    padding: 0rem;
+    margin: -0.1rem 0 0 0;
+}
+.leftNavBar .leftNavBarMain, .rightNavBarMain {
+    list-style-type: none;
+    width: 100%;
+    height: 100%;
+    padding: 1.6rem 0;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    border-top: 0.1rem solid rgba(255,255,250, 0);
+}
+.leftNavBarActive .leftNavBarMain, .rightNavBarMain {
+    border-top: 0.1rem solid #555;
+}
+.leftNavBarIcon {
+    left:1.8rem;
+    top:1.6rem;
+    position:absolute;
+    font-size:1.8rem;
+}
+.leftNavBarSubIcon {
+    top:1.05em;
+    position:absolute;
+}
+.leftNavBarClickHandler {
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    background:none;
+}
+.leftNavBarMenu li:hover {
+    background: #630202;
+    font-size: 1.05em;
+    color: rgba(256,256,256,0.95);
+    font-weight: bold;
+}
+.leftNavBarMenu a {
+    color:#ccc;
+}
+.leftNavBarMenu a > li > span, .leftNavBarMenu li > span {
+    margin-left: 6.5rem;
+    font-size: 1.28rem;
+    text-transform: uppercase;
+}
+#rightNavBarMenu a > li > span, #rightNavBarMenu li > span {
+    margin-left: 2.5rem;
+}
+
+.leftNavBarMenu li.active {
+    background:#7b0101;
+} 
+.leftNavBarMenu li.active i {
+    left: 1.3rem;
+}
+/*.leftNavBarSub {
+    margin:0.8em 0 0 0;
+    padding: 0;
+}
+.leftSpacing {
+    margin-left:0.7em;
+    font-size:1.2rem;
+}*/
+.leftNavBarInactive {
+    background:none;
+    border:none;
+    height:5.5rem;
+}
+.leftNavBarInactive .leftNavBarMenu li.active {
+    background:none;
+    color:#eee;
+    border-top: 0.1rem solid rgba(200,200,200,0);
+}
+
+.leftNavBarHomeBtn {
+    position: absolute;
+    left: 0rem;
+    width: 5.0rem;
+    padding: 2.2rem 0 0 1.8rem;
+    top: 0rem;
+    font-size: 2.0rem;
+    color: #CCC;
+    cursor: pointer;
+}
+.isMap .leftNavBarHomeBtn {
+    padding: 1.7rem 0 0 1.8rem;
+}
+.leftNavBarTop {
+    position: absolute;
+    left:0rem;
+    right:0rem;
+}
+.isMap .leftNavBarTop {
+    height:5.5rem;
+    border-bottom: 1px solid #777;
+}
+.leftNavBarActive .leftNavBarTop {
+    border-bottom: none;
+}
+#leftNavBarClose {
+    display: none;
+}
+
+.leftNavBarActive #leftNavBarClose {
+    position: absolute;
+    right: 2rem;
+    top: 2.2rem;
+    font-size: 2.0rem;
+    display: block;
+}
+.isMap .leftNavBarActive #leftNavBarClose {
+    top: 1.5rem;
+}
+
+.mapActive .leftNavBar {
+    bottom: 8.2rem;
+}
+.sidebarCaret {
+    display: none;
+}
+.leftNavBarActive .sidebarCaret, #rightNavBarMenu .sidebarCaret {
+    float:right;
+    margin-right: 3.2rem;
+    display: block;
+}
+#rightNavBarMenu .sidebarCaret {
+    display:block;
+}
+.sidebarCaret svg {
+    transform: rotate(-90deg);
+}
+.sidebarCaretRotate svg {
+    transform: rotate(180deg);
+}
+
+@media screen and (max-height: 600px), screen and (max-width: 1200px) {
+    .mapActive .leftNavBar {
+        bottom: 4.2rem;
+    }    
+}
+@media screen and (max-width: 400px) {
+    .leftNavBarActive {
+        max-width: auto;
+    }
+}
+
+@media screen and (max-width: 700px), screen and (max-height: 500px) {
+    .leftNavBarActive #leftNavBarClose {
+        display : none;
+    }
+    .leftNavBarMenuWrap {
+        display: none;        
+    }
+    .leftNavBarActive .leftNavBarMenuWrap {
+        display: block;
+    }
+    .leftNavBarMenuWrap {
+        background: rgb(34, 34, 34);
+    }
+    .leftNavBarActive {
+        width:100%;
+    }
+}
