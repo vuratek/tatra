@@ -35,7 +35,7 @@ export abstract class TopMenuItem {
         let link = '';
         if (Navigation.settings.app.navigationMode == NavigationModes.RICH) {
             link = `<a href="${url}" title="${obj.label}">${icon}<span id="${this.prefix}_lbl_${obj.id}">${title}</span></a>`;
-            if (!isJScall { 
+            if (!isJScall) { 
                 utils.setClick(`${this.prefix}_${obj.id}`, () => TopMenu.openMenu(obj.id));
             }
         } else {

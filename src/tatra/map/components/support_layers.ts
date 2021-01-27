@@ -1,6 +1,6 @@
 import { props } from "../props";
 import { events } from "../events";
-import { events as menuEvents } from "../../laadsLayerMenu/events";
+//import { events as menuEvents } from "../../laadsLayerMenu/events";
 import { Layer } from "../obj/Layer";
 import { baseComponent } from "./baseComponent";
 import { utils } from "../../utils";
@@ -22,7 +22,7 @@ export class support_layers extends baseComponent{
 		document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
-		document.addEventListener(menuEvents.EVENT_LAYERS_UPDATE, () => this.updateWindow());
+//		document.addEventListener(menuEvents.EVENT_LAYERS_UPDATE, () => this.updateWindow());
 	}
         
 	public static open () {

@@ -20,18 +20,18 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-regular-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@jaames/iro": "^5.2.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@jaames/iro": "^5.3.1",
     "@types/ol": "^6.3.1",
-    "flatpickr": "^4.6.6",
-    "ol": "^6.1.1"
+    "flatpickr": "^4.6.9",
+    "ol": "^6.5.0"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",
-    "sass": "^1.27.0",
+    "sass": "^1.32.5",
     "typescript": "^3.9.7"
   }
 }
