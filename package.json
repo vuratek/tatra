@@ -1,7 +1,7 @@
 {
-  "name": "navigation",
+  "name": "tatra",
   "version": "1.0.0",
-  "description": "Navigation framework for LAADS projects",
+  "description": "Transcending Application Tool for Research and Analysis",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.modaps.eosdis.nasa.gov/otmar.olsina/ui-navigation.git"
+    "url": "https://github.com/vuratek/tatra.git"
   },
   "keywords": [
     "navigation",
