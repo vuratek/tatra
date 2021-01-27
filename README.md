@@ -7,4 +7,3 @@ Transcending Application Tool for Research and Analysis (TATRA)
 > vi .gitignore
 
 /node_modules/
-TEST
