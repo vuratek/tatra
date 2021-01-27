@@ -297,6 +297,7 @@ export class layer {
               width: 2,
               lineDash: [0.5, 4],
             }),
+            intervals: [90, 45, 30, 20, 10, 5, 2, 1, 0.5, 0.25, 0.166667, 0.03333, 0.01667, 0.0083333, 0.00416667, 0.002, 0.001],
             lonLabelPosition : 0.92,
             latLabelPosition: 0.07,
             showLabels: true,

@@ -14,7 +14,7 @@ import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBa
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
+        faDrawPolygon, faBullhorn } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
         config.searchPseudoElements = true;
@@ -23,7 +23,7 @@ export class fontAwesome {
         //main
         library.add(faTimes, faExternalLinkAlt, faPlusCircle, faMinusCircle, faInfoCircle, faMinus, faPlus, faFile, faDatabase, faDownload);
         // top menu
-        library.add(faComments, faHome, faUserCircle, faSearch, faAngleRight, faAngleLeft, faChevronCircleRight, faEllipsisV);
+        library.add(faComments, faHome, faUserCircle, faSearch, faAngleRight, faAngleLeft, faChevronCircleRight, faEllipsisV, faBullhorn);
         // left menu
         library.add(faBars, faCaretLeft, faCaretUp);
         // map control bar

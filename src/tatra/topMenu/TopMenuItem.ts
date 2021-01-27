@@ -131,7 +131,7 @@ export abstract class TopMenuItem {
                 icon = 'far fa-comments';
                 break;
             case "notifications":
-                icon = 'far fa-envelope-open';
+                icon = 'fa fa-bullhorn';
                 break;
             case "profile":
                 icon = 'fa fa-user-circle-o';
