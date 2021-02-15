@@ -246,6 +246,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	right: 3rem;
 	top:0;
 }
+.limHeaderSelect {
+    max-width: 20rem;
+    margin: 0 auto;
+}
 .lmvControlsWindow {
 	position:absolute;
 	width:32rem;
@@ -463,7 +467,8 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 
 @media screen and (max-height: 600px), screen and (max-width: 1200px) {
     .windowToolbar li {
-        width: 6.0rem;
+		width: 6.0rem;
+		padding: 0;
 	}	
 	.mapToolBtn {
 		padding:0;

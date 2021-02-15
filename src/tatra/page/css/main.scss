@@ -55,11 +55,14 @@ main {
     flex: 1;
     display: block;
 }
-body header, body .leftNavBarHomeBtn, body .leftNavBarTop {
-    height: 6.6rem;    
+body header, body .leftNavBarTop {
+    height: 6.5rem;    
+}
+body .leftNavBarHomeBtn {
+    height:6.4rem;
 }
 body .leftNavBarMenuWrap {
-    top: 6.5rem;
+    top: 6.4rem;
 }
 
 .isMap main {

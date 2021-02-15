@@ -209,6 +209,33 @@
 	                                ]	
 					}
 	}, {
+		"id"		: "imagery_template_2km",
+		"title"		: "Imagery Template 2km",
+		"altTitle1"	: "Title 1",
+		"altTitle2"	: "Title 2",
+		"type"		: "wmts",
+		"category" 	: "basemap",
+		"handler"	: "imagery",
+		"replace"	: ["layer", "?"],
+		"clandestine": false,
+		"maxLevel"	: 8.5,
+		"props"		: {
+				"url"			: "//map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"layer"			: "#layer#",
+				"format"		: "image/png",
+				"matrixSet"		: "EPSG4326_2km",
+				"tileGrid"		: {
+							"origin": [-180, 90],
+							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125],
+							"matrixIds": [0, 1, 2, 3, 4, 5],
+							"tileSize": 512
+		       				}, 
+				"tileLoadFunction"	: [	
+									"function(imageTile, src) {",
+									"imageTile.getImage().src = setWMTSTime(imageTile, src, 'Y-m-d', '#id#');}"
+	                                ]	
+					}
+	}, {
 		"id"		: "orbit_template",
 		"title"		: "Orbit Template",
 		"type"		: "xyz",

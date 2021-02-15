@@ -23,7 +23,7 @@ export class measure extends baseComponent {
     public static id		    : string = 'measure';
     public static toolArea      : MeasureArea = new MeasureArea();
     public static toolDistance  : MeasureDistance = new MeasureDistance();
-    public static label		    : string = 'MEASURE TOOL';
+    public static label		    : string = 'Measure Tool';
 	public static draggable     : boolean = true;
     public static className     : string = 'transparentWindow';
     public static tools : Array <string> = [TOOLS.AREA, TOOLS.DISTANCE, TOOLS.PAN, TOOLS.CLEAR];

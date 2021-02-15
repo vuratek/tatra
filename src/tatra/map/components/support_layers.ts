@@ -62,13 +62,13 @@ export class support_layers extends baseComponent{
 			if ( lo.category == "basemap" && ! lo.parent ) { basemap ++; }
 		}
 		if (orbits > 0) {
-			this.generateLayers(el, 'orbits', 'supp_lyrs', 'Orbits', false);
+			this.generateLayers(el, 'orbits', 'supp_lyrs', 'Orbit Tracks and Overpass Times', false);
 		}
 		if (overlay > 0) {
 			this.generateLayers(el, 'overlay', 'supp_lyrs', 'Overlays');
 		}
 		if (imagery > 0) {
-			this.generateLayers(el, 'imagery', 'supp_lyrs', 'Imagery', true);
+			this.generateLayers(el, 'imagery', 'supp_lyrs', 'Data Layers', true);
 		}
 		if (basemap > 0) {
 			this.generateLayers(el, 'basemap', 'supp_lyrs', 'Backgrounds');

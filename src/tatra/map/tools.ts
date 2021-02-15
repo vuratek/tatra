@@ -14,7 +14,7 @@ export class tools {
             label: "CLASSIC",
             icon : "edit",
             text : "Draw Custom Box",
-            info : "Draw box on the map. Panning is disabled"
+            info : "Define search-space by drawing a box. Panning is disabled"
         }, 
         clear : {
             label: "CLEAR",
@@ -26,7 +26,7 @@ export class tools {
             label : "COUNTRY",
             icon : "flag",
             text : "Country Selection",
-            info : "Click on the map to select countries"
+            info : "Define search-space by selecting countries"
         },
         draw : {
             label: "RECTANGLE",
@@ -56,31 +56,31 @@ export class tools {
             label: "PAN",
             icon : "hand-paper",
             text : "Pan",
-            info : "Continue showing selection but allow panning"
+            info : ": Continue showing selection but allow panning"
         }, 
         polygon : {
             label: "POLYGON",
             icon : "draw-polygon",
             text : "Draw Polygon",
-            info : "Draw polygon on the map"
+            info : "Define search-space by drawing a polygon"
         },
         site : {
             label: "SITE",
             icon : "circle",
             text : "Validation Sites Selection",
-            info : "Click on the map to select sites"
+            info : "Define search-space by selecting validation sites"
         }, 
         tile : {
             label: "TILE",
             icon : "th",
             text : "Tile Selection",
-            info : "Click on the map to select tiles"
+            info : "Define search-space by selecting tiles"
         }, 
         world : {
             label: "WORLD",
             icon : "globe",
             text : "World",
-            info : "Default if nothing else is selected"
+            info : "Search-space defaults to world if nothing else is selected"
         }
     };
 

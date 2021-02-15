@@ -73,15 +73,16 @@
     background:rgba(0,0,0,.9);
 }
 .topNavBar li a {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 500;
     padding:0 1rem;
 }
 #navBar > ul > li > a {
     line-height: 2.5rem;
-    font: normal 1.7rem "Titillium Web", sans-serif;
+    font: bold 1.7rem "Titillium Web", sans-serif;
 }
 .isMap #navBar > ul > li > a {
-    font: normal 1.6rem "Titillium Web", sans-serif;
+    font: bold 1.6rem "Titillium Web", sans-serif;
 }
 .isMinMenu .topNavBar li a {
     font-size: 1.8rem;
@@ -117,7 +118,7 @@
 }
 .topNavBar ul > li > ul > li > a {
     display: flex;
-    padding: 0.5rem 0;
+    padding: .2rem 0rem 0.5rem 1.3rem;
 }
 .isMap .topNavBar ul > li > ul > li {
     height: auto;

@@ -23,7 +23,7 @@
 }
 .leftNavBarSmall {
     bottom: auto;
-    height: 6.5rem;
+    height: 6.4rem;
 }
 .isMap .leftNavBarSmall {
     height: 5.4rem;
@@ -101,6 +101,7 @@
 .leftNavBarMenuWrap {
     background: #222;
     border-right: 0.1rem solid #777;
+    border-top: 0.1rem solid #777;
     border-radius: 0 0 1.2rem 0;
     border-bottom: .1rem solid #777;
     overflow: hidden;
@@ -109,12 +110,15 @@
 /*    top:6.6rem;*/
     width: 100%;
 }
+.leftNavBarSmall .leftNavBarMenuWrap {
+    border-top: none;
+    border-bottom: none;
+}
 .isMap .leftNavBarMenuWrap {
-    top:5.5rem;
+    top:5.4rem;
 } 
 .leftNavBarActive .leftNavBarMenuWrap {
     overflow-y: auto;
-    border-top: 0.1rem solid #777;
 }
 .leftNavBarActive .leftNavBarMenuWrap {
     border-right: none;

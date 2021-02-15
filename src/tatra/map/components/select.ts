@@ -29,7 +29,7 @@ export enum TOOLS {
 export class select extends baseComponent {
 
     public static id		    : string = 'select';
-    public static label		    : string = 'SELECT TOOL';
+    public static label		    : string = 'Select Tool';
 	public static draggable     : boolean = true;
     public static className     : string = 'transparentWindow';
     public static showInfoBar   : boolean = true;

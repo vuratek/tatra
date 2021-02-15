@@ -110,7 +110,7 @@ export class baseComponent {
         (document.getElementById(`lmvCtrlHeaderLbl_${this.id}`) as HTMLDivElement).innerHTML = label;
         if (this.showInfoBar) {
             (document.getElementById(`${this.id}_infoBar`) as HTMLDivElement).innerHTML = `
-                <span>${t.definitions[id].text}</span> ${t.definitions[id].info}
+                <span>${t.definitions[id].text}</span>: ${t.definitions[id].info}
             `;
         }
     }

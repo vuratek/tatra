@@ -15,11 +15,15 @@ import { IConfigDef } from "./defs/ConfigDef";
 import { components } from "./support/components";
 import { layerStyle } from './handlers/layerStyle';
 import { menu } from './menu';
+import 'elm-pep';
+import noUiSlider from "nouislider";
 
 interface Window {
     [key:string]: any; // Add index signature
 }
 export class map {
+
+    public static noUiSlider = noUiSlider;
 
     public static init (id: string, config : IConfigDef, layers : Array <string>) {
         props.server = window.location.hostname.split('.')[0];
