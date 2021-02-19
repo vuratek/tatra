@@ -1,5 +1,6 @@
 import './css/*.scss';
 import { utils } from '../utils';
+import { events } from '../map/events';
 
 export interface IGroupContentItem {
     [key: string]: boolean;
@@ -50,6 +51,7 @@ export class GroupContent {
     public static update(id : string) {
         GroupContent.list[id] =  ! GroupContent.list[id];
         GroupContent.setCtrl(id);
+        events.dispatch(events.EVENT_GROUP_CONTENT_CHANGE);
     }
 
     private static setCtrl (id : string) {

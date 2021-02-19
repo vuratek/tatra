@@ -6,8 +6,11 @@ import { tools } from "./tools";
 import { Coord } from "./obj/Coord";
 import { configProps } from "./support/configProps";
 import { Map } from 'ol';
-import flatpickr from "flatpickr";
+import { flatpickr } from "../aux/flatpickr";
 import { events } from "./events";
+import { ajax } from "../ajax";
+import { Layer } from "./obj/Layer";
+import { ColorPalette } from "./obj/ColorPalette";
 
 //utils
 export class mapUtils {
@@ -386,6 +389,65 @@ export class mapUtils {
             str = result;
         }
         return str;
+    }
+
+    public static readColorMap (lo : Layer) {
+        if (lo.paletteUrl) {
+            ajax.get(lo.paletteUrl as string, null, (data:any) => this.processColorMap(lo, data));
+        }
+	}
+
+	private static processColorMap (lo : Layer, data : any) {
+        let cp = new ColorPalette();
+        cp.ingest(data);
+        if (!props.colorPalettes[cp.id]) {
+            props.colorPalettes[cp.id] = cp;
+        }
+        lo.colorPaletteId = cp.id;
+        this.prepareColors(lo);
+        events.dispatch(events.EVENT_COLOR_PALETTE_LOADED);
+    }
+    
+    public static prepareColors (lo : Layer) {
+        if (! lo.colorPaletteId) { return; }
+        props.colorLookup[lo.id] = {};
+        let cp = props.colorPalettes[lo.colorPaletteId];
+        let start = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : 1;
+        let end = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values.length;
+        for (let i=0; i < cp.values.length; i++) {
+
+            if (cp.values[i].ref >= start && cp.values[i].ref <= end) {
+                let c1 = parseInt(cp.values[i].color.substring(0,2), 16);
+                let c2 = parseInt(cp.values[i].color.substring(2,4), 16);
+                let c3 = parseInt(cp.values[i].color.substring(4,6), 16);
+                let c4 = parseInt(cp.values[i].color.substring(6,8), 16);
+                let val = `${c1},${c2},${c3},${c4}`;
+                if (i >= start && i <=end) {
+                // c2 = val;            // this will need to reference alternate color
+                }
+                props.colorLookup[lo.id][val] = cp.values[i].ref;
+            }
+        }
+    }
+
+    public static generateColorPaletteLegend(divId: string, cp : ColorPalette, width : number, height:number, min:number, max:number) {
+        let c = document.getElementById(divId) as HTMLCanvasElement;
+		if (c) {
+			let ctx = c.getContext("2d");
+			if (ctx && cp.values.length > 0) {
+                let step = width / cp.values.length;
+				for (let i=0; i<cp.values.length; i++) {
+					if (cp.values[i].ref >= min && cp.values[i].ref <= max) {
+						let c1 = parseInt(cp.values[i].color.substring(0,2), 16);
+						let c2 = parseInt(cp.values[i].color.substring(2,4), 16);
+						let c3 = parseInt(cp.values[i].color.substring(4,6), 16);
+						ctx.beginPath();
+						ctx.fillStyle = `rgb(${c1},${c2},${c3})`;
+						ctx.fillRect(i*step, 0, step+1, height);
+                    }
+				}
+			}
+		}
     }
 
     public static analyticsTrack (val : string) {}

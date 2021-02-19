@@ -63,12 +63,14 @@ export class LeftMenuBar {
     public static show () {
         utils.show('leftNavBarMenuWrap');
         utils.removeClass("leftNavBar", "leftNavBarSmall");
+        utils.addClass("body", "leftMenuActive", false);
         utils.hide('leftNavBarClickHandler');
     }
 
     public static hide () {
         utils.hide('leftNavBarMenuWrap');
         utils.addClass("leftNavBar", "leftNavBarSmall");
+        utils.removeClass("body", "leftMenuActive", false);
         utils.show('leftNavBarClickHandler');
     }
 }

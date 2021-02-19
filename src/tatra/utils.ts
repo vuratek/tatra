@@ -246,6 +246,15 @@ export class utils {
         return JSON.stringify(obj) === JSON.stringify({});
     }
 
+    public static isJson(str : string) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     public static cloneCanvas(oldCanvas : HTMLCanvasElement) : HTMLCanvasElement {
 
         let newCanvas = document.createElement('canvas');

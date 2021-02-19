@@ -54,7 +54,7 @@ export class map {
         mapEvent.init();
 
         if (! (window as Window)["setWMTSTime"]) { (window as Window)["setWMTSTime"] = layerStyle.setWMTSTime; }
-        if (! (window as Window)["updateOrbitUr"]) { (window as Window)["updateOrbitUrl"] = layerStyle.updateOrbitUrl;}
+        if (! (window as Window)["updateOrbitUrl"]) { (window as Window)["updateOrbitUrl"] = layerStyle.updateOrbitUrl;}
 
         for (var i=0; i<layers.length; i++) {
             coreUtils.loadConfigFile("layers", layers[i]);

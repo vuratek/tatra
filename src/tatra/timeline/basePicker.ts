@@ -1,6 +1,6 @@
 import { utils } from "../utils";
 import { Timeline, TimelineAdjustType } from "./Timeline";
-import flatpickr from "flatpickr";
+import { flatpickr } from "../aux/flatpickr";
 import { Instance } from "flatpickr/dist/types/instance";
 
 export class basePicker {

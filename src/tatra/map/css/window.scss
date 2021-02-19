@@ -72,7 +72,7 @@
 	width:4.5rem;
 	height:4.5rem;
 	border:0;
-	margin:0.5rem 2.5rem 0 0.5rem;
+	margin:0.5rem 2rem 0 0.5rem;
 	padding:0;
 	border-radius:3.2rem;
 	border:0.1rem solid #CCC;
@@ -140,16 +140,57 @@
 #lmvControls_opacity_Display:focus {
 	outline: 0;
 }
-.lmvControlsLayerInfo  {
+.lmvControlsLayerInfoBtns {
 	position:absolute;
 	top:1.8rem;
-	right: 1rem;
+	right: 0;
 	font-size:1.8rem;
+}
+.lmvControlsLayerInfo  {
+	right: 1rem;
+}
+.lmvControlsLayerMenu  {
+	right:3.5rem;
+}
+.lmvLayerMenu {
+	position: relative;
+	margin-top:5rem;
+	padding: 0;
+	display:none;
+}
+.lmvLayerMenu .opacityMenuVariableLegendLbl {
+	top: 0.3rem;
+}
+.layerMenuLegend {
+	width:100%;
+	position:relative;
+	height:1.8rem;
+/*	padding:0.2rem 1rem;*/ 
+	font-size:1.1rem;
+	color:#FFF;
+	margin-top: 0.7rem;
+}
+.layerMenuVariableLegendBar {
+	width:100%;
+	height:100%;
+	display: -webkit-box;
+}
+.layerMenuVariableLegendLbl {
+	position:absolute; 
+	top:.2rem; 
+	left:1.5rem;
+	width:100%;
+}
+.ui-widget-header {
+	background:#777;
+}
+.layerValueRangeSlider .ui-widget-header {
+	background:#777;
 }
 .lmvControlsLayerLegendIcon {
 	position:absolute;
 	top:1.8rem;
-	right: 4rem;
+	right: 6rem;
 	font-size:1.8rem;
 }
 .lmvControlsLayerDisabled {
@@ -318,7 +359,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 }
 .transparentWindow .lmvControlsWindowCloseBtn {
     position: absolute;
-    color: #555;
+    color: #AAA;
     font-size: 1.7rem;
     top: 0.4rem;
     right: 1rem;
@@ -340,7 +381,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 }
 .transparentWindowLabel {
 	cursor:pointer;
-	padding-left: 1.5rem;
+	padding-left: 1rem;
 	padding-right: 4rem;
 	color:#eee;
 }
@@ -352,12 +393,6 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 #lmvControls_opacity_Value {
 	float:right;
 	font-weight: 600;
-}
-
-.opacitySlider {
-	margin: 1.5rem 1rem;
-	position:relative;
-	height: 1.5rem;
 }
 .windowToolbar {
     display: inline-flex;

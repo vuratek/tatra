@@ -2,6 +2,7 @@ import { Map } from 'ol';
 import { Layer } from './obj/Layer';
 import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
+import { ColorPalette } from './obj/ColorPalette';
 
 export class props  {
     
@@ -29,4 +30,17 @@ export class props  {
     public static windowIsOpened            : boolean = false;
     public static window                    : boolean = false;
 
+    public static colorPalettes         : IColorPalettes = {};
+    public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
+}
+
+export interface IColorPalettes {
+    [colorPaletteId : string] : ColorPalette;
+}
+
+export interface IColorLookup {
+    [layer_id : string] : IColorLookupItem;
+}
+export interface IColorLookupItem {
+    [color : string] : number;
 }

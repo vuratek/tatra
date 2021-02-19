@@ -61,15 +61,15 @@
 }
 
 .mapMenuBtns {
-	margin: 0 -0.3rem;
-    width: 5.0rem;
-    height: 5.0rem;
-    background: rgba(140, 140, 140, 0.3);
-    border: 0.1rem solid #CCCCCC80;
-    color: rgba(255, 255, 255, 0.6);
+	margin: 0 -.3rem;
+    width: 5rem;
+    height: 5rem;
+    background: hsla(0,0%,54.9%,.3);
+    border: .1rem solid hsla(0,0%,80%,.5019607843137255);
+    color: hsla(0,0%,100%,.8);
     border-radius: 2.5rem;
-    font-size: 4.0rem;
-    padding-top: 0.4rem;
+    font-size: 4rem;
+    padding-top: .4rem;
     display: none;
 }
 .mapMenuBtns:hover {

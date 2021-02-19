@@ -34,9 +34,13 @@ export class LeftMenu {
         utils.show(LeftMenu.div);
         LeftMenu.isActive = true;
         utils.addClass(LeftMenu.div,'leftNavBarActive');
+//        utils.addClass("body", "leftMenuOpened", false);
         utils.hide('headerTitle');
         if (window.location.pathname == '/') {
             utils.removeClass(LeftMenu.div,'leftNavBarInactive');
+            utils.removeClass("body", "leftMenuActive", false);
+        } else  {
+            utils.addClass("body", "leftMenuActive", false);
         }
         LeftMenu.setNavBarWrap(true);
         utils.hide('rightNavBar');
@@ -84,6 +88,7 @@ export class LeftMenu {
         LeftMenu.isActive = false;
         LeftMenuBar.deactivate();
         utils.removeClass(LeftMenu.div,'leftNavBarActive');
+//        utils.removeClass("body", "leftMenuOpened", false);
 //        $(`#${LeftMenu.div}`).removeClass("leftNavBarActive");
         if (window.location.pathname == '/') {
 //            $(`#${LeftMenu.div}`).addClass("leftNavBarInactive");

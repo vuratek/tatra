@@ -15,6 +15,7 @@ export class baseComponent {
     public static tools : Array <string> = [];
     public static currentTool   : string = '';
     public static showInfoBar   : boolean = false;
+    public static isOpened      : boolean = false;
         
     public static init () {
         document.addEventListener(events.EVENT_CONTROL_BTN, (evt : Event) => this.onClick (evt as CustomEvent));
@@ -85,11 +86,13 @@ export class baseComponent {
 	public static close () {
         utils.hide("lmvControls_" + this.id);
         controls.closeWindow(this.id);
+        this.isOpened = false;
 	}
     
     public static open () {
         utils.show("lmvControls_" + this.id);
         controls.openWindow(this.id);
+        this.isOpened = true;
         //controls.setItem(this.id, true);
 //        utils.analyticsTrack(this.id);
     }

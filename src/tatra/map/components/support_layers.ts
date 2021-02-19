@@ -5,8 +5,10 @@ import { Layer } from "../obj/Layer";
 import { baseComponent } from "./baseComponent";
 import { utils } from "../../utils";
 import { GroupContent } from "../../aux/GroupContent";
-import flatpickr from "flatpickr";
+import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
+import { noUiSlider } from "../../aux/nouislider";
+import { opacity } from "./opacity";
 
 export interface ISLMenus {
 	[key:string]	: boolean;
@@ -21,6 +23,9 @@ export class support_layers extends baseComponent{
 		super.init();	
 		document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.updateLayers());
+		document.addEventListener(events.EVENT_COLOR_PALETTE_LOADED, () => this.updateLayers());
+		document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, () => this.updateLayers());
+		document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
 //		document.addEventListener(menuEvents.EVENT_LAYERS_UPDATE, () => this.updateWindow());
 	}
@@ -120,7 +125,14 @@ export class support_layers extends baseComponent{
 			let y = lo.iconMatrix[1] * 70 + 9;
 			icon = `<div class="lmControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
 		}
-		let legIcon = (lo.needsLegendIcon) ? 'supp_lyrs_lyr_click_legend' : '';
+		let legIcon = '';
+		if (lo.category != "basemap") {
+			if (lo.needsLegendIcon) {
+				legIcon = 'supp_lyrs_lyr_click_legend';
+			} else {
+				legIcon = 'supp_lyrs_lyr_click_extra';
+			}
+		}
 		let disTxt = '';
 		if (lo.minDate || lo.maxDate) {
 			let start = (lo.minDate) ? lo.minDate : '...';
@@ -132,6 +144,17 @@ export class support_layers extends baseComponent{
 				</div>
 			`;
 		}
+		let expandMenu = '';
+		if (lo.paletteUrl) {
+			expandMenu = `<div id="layerMenu_${baseId}_${lo.id}" class="lmvLayerMenu"></div>`;
+		}
+		let extraBtn = '';
+		if (lo.category != "basemap") {
+			extraBtn = `
+				<div id="layerExtra_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerMenu">					
+				</div>`;
+		}
+
 		let str = `
 			<div id="${baseId}_${lo.id}" class="supp_lyrs_lyr_click ${legIcon}">
 				${icon}
@@ -140,8 +163,10 @@ export class support_layers extends baseComponent{
 					${lo.title}
 				</div>
 			</div>
-			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfo"></div>
+			${extraBtn}
+			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
 			${disTxt}
+			${expandMenu}
 		`;
 		if (lo.needsLegendIcon) { 
 			str +=`<div id="layerLegend_${baseId}_${lo.id}" class="lmvControlsLayerLegendIcon"></div>`;
@@ -161,9 +186,32 @@ export class support_layers extends baseComponent{
 		li.innerHTML = str;
 		utils.setClick(`${baseId}_${lo.id}`, () => this.selectLayer(lo.id));
 		this.setLayerInfoField(`layerInfo_${baseId}_${lo.id}`, lo);
+		utils.setClick(`layerExtra_${baseId}_${lo.id}`, () => this.showExtraOption(lo.id));
+
 		if (lo.needsLegendIcon) { 
 			this.setLayerLegendField(`layerLegend_${baseId}_${lo.id}`, lo);
 		}
+	}
+
+	private static setExtraBtn (menu : string, lo : Layer) {
+		let el = document.getElementById(`layerExtra_${menu}_${lo.id}`) as HTMLDivElement;
+		if (!el) { return; }
+		let type = 'plus';
+		if (opacity.isOpened && opacity.currentLayer && opacity.currentLayer.id == lo.id) {
+			type = 'minus';
+		}
+		el.innerHTML = `<i class="fa fa-${type}-circle" aria-hidden="true"></i>`;
+	}
+
+	private static showExtraOption(id : string) {
+		let lo = mapUtils.getLayerById(id);
+		if (!lo) { return; }
+		if (lo.visible && opacity.isOpened && opacity.currentLayer && opacity.currentLayer.id == lo.id) {
+			opacity.close();
+			return;
+		}
+		if (! lo.visible) { lo.visible=true;}
+		opacity.setLayer(lo.id, lo.title);
 	}
 	
 	private static selectLayer (id : string) {
@@ -201,6 +249,43 @@ export class support_layers extends baseComponent{
 		utils.setClick(parentId, () => events.legendClicked(info));
 	}
 
+	private static renderLayerLegend (menu : string, lo : Layer) {
+		let el = document.getElementById(`layerMenu_${menu}_${lo.id}`);
+		if (!el || !lo.colorPaletteId) {
+			return;
+		}
+		if (! lo.visible) {
+			utils.hide(`layerMenu_${menu}_${lo.id}`);
+			return;
+		}
+		let cp = props.colorPalettes[lo.colorPaletteId as string];
+		utils.show(`layerMenu_${menu}_${lo.id}`);
+		let val1 = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : cp.values[0].ref;
+		let val2 = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values[cp.values.length-1].ref;
+
+		let leg1 = (val1 == 1) ? cp.minLabel : cp.values[val1-1].min.toString();		
+		let leg2 = (val2 == cp.values.length) ? cp.maxLabel : cp.values[val2-1].max.toString();	
+		 	
+		el.innerHTML = `
+			<div id="lmvControls_${menu}_${lo.id}_SliderClickable" style="display:-webkit-inline-box;" class="opacityMenuLegend">
+					<div class="opacityMenuVariableLegendBar">
+						<div id="lmvControls_${menu}_${lo.id}_SliderMenuLegendBar" style="width:100%;">
+					</div>
+				</div>
+				<div class="opacityMenuVariableLegendLbl">
+					${leg1}<span style="float:right;margin-right:30px">${leg2}</span>
+				</div>
+			</div>
+		`;
+		let cEl = document.getElementById(`lmvControls_${menu}_${lo.id}_SliderMenuLegendBar`) as HTMLDivElement;
+		let width = cEl.offsetWidth;
+		cEl.innerHTML = `<canvas id="lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas" width="${width}" height="20"></canvas>`;
+
+		mapUtils.generateColorPaletteLegend(`lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas`, cp, width, 20, val1, val2);
+		utils.setClick(`lmvControls_${menu}_${lo.id}_SliderClickable`, ()=>this.showExtraOption(lo.id));
+
+	}
+
 	public static updateLayers () {
 		for (let menu in this.menus) {
             for (let i=0; i<props.layers.length; i++) {
@@ -211,11 +296,14 @@ export class support_layers extends baseComponent{
 				if (lo.hasLegend) {
 					el2 = document.getElementById(`legend_${lo.id}`) as HTMLDivElement;
 				}
+				this.renderLayerLegend(menu, lo);
+				this.setExtraBtn(menu, lo);
                 if (lo.visible) {
 					utils.addClass(el.id, 'lmvControlsLayerSelected');
 					if (el2) {
 						el2.style.display = "block";
 					}
+					
                 } else {
 					utils.removeClass(el.id, 'lmvControlsLayerSelected');
 					if (el2) {

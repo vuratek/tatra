@@ -1,0 +1,59 @@
+.opacityLabel {
+	padding: 1.5rem 1rem 0 1rem;
+	color:#ddd;
+}
+.opacityTitleLbl {
+	font-weight: 600;
+}
+.opacitySlider {
+	margin: 1rem 1rem;
+	position:relative;
+	height: 1.5rem;
+}
+.opacitySliderWrap {
+	display:-webkit-inline-box;
+	padding: 1rem 0 2rem 1rem;
+}
+.opacityMenuVariableLegendBar {
+	width:100%;
+	height:100%;
+	display: -webkit-box;
+	padding:0 1rem;
+}
+.opacityMenuVariableLegendBar canvas {
+    border:.1rem solid #AAA;
+    border-radius: .7rem;
+}
+
+.opacityMenuVariableLegendLbl {
+    position: absolute;
+    top: 0.7rem;
+    font-size: 1.4rem;
+    left: 1.5rem;
+	width: 100%;
+	text-shadow: 0 0 .5rem black;
+}
+.opacityValueRangeSlider {
+	width: 24rem;
+    margin-right: 1.5rem;
+    margin-left: 1.5rem;
+    display: inline-block;
+}
+.opacityMenuLegend {
+    width: 100%;
+    position: relative;
+    font-size: 1.1rem;
+    color: #FFF;
+    margin-top: 0.7rem;
+    display:-webkit-inline-box;
+}
+.opacityValueRangeLbl {
+	width:4rem;
+	background:none;
+	border:0; 
+	color:#ddd;
+	font-size:1.4rem; 
+	font-weight:bold;
+	display:inline-block;
+	text-align:center;
+}

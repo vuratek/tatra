@@ -82,7 +82,10 @@ export class screenshot extends baseComponent {
         if (showTimestamp) { this.addTimestamp(image, (new Date().toString()));}
         if (showHeader) { this.addLogo(image); }
 
-        let dates = hash.datesToString().replace('d:', '').replace('..', '_');
+        let dates = '';
+        if (hash.datesToString()) {
+            dates = (hash.datesToString() as string).replace('d:', '').replace('..', '_');
+        }
         let location = hash.locationToString();
         let name = `${props.config.properties.applicationName}_${dates}[${location}].jpg`;
         

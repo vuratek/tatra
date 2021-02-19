@@ -1,4 +1,4 @@
-import { baseComponent } from "./BaseComponent";
+import { baseComponent } from "./baseComponent";
 import { tools } from "../tools";
 import { map } from "..";
 import { GroupContent } from "../../aux/GroupContent";

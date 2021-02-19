@@ -20,6 +20,8 @@ import {get as getProjection} from 'ol/proj';
 import { Feature, Graticule } from "ol";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
+import { mapUtils } from "../mapUtils";
+import RasterSource from "ol/source/Raster";
 
 export class layer {
         
@@ -133,15 +135,46 @@ export class layer {
             	let all = value.join("");
             	all = all.replace ("#id#", lo.id);
                 input[key] = eval("(" + all + ")"); // needs () around the function definition
-//                input[key] = eval("(" + value.join("") + ")");
             } else {
                 input[key] = value;
             }
         }
         input["crossOrigin"] = "anonymous";
-        lo._layer = new TileLayer({
-            source: new WMTSSrc(input)
-        });
+        input["imageSmoothing"] = false;
+        if (lo.paletteUrl) {
+            let lyr = new RasterSource({
+                sources: [
+                    new TileLayer({
+                        source: new WMTSSrc(input),
+                    }) ],
+                operation: function (pixels, data) {
+                  let pixel = pixels[0];
+                  if (data["colors"]) {
+                      let lookup = `${pixel[0]},${pixel[1]},${pixel[2]},${pixel[3]}`;
+                      if (data["colors"][lookup]) {
+                        return pixel;
+                    } else {
+                        pixel[3]=0;
+                    }
+                  }
+                  return pixel;
+                },
+                lib: {
+                },
+              });
+            lo._layer = new ImageLayer({
+                source: lyr,
+            });
+            lyr.on('beforeoperations', function (event) {
+                var data = event.data;
+                data["colors"] = props.colorLookup[lo.id];
+            });
+            mapUtils.readColorMap(lo);
+        } else {
+            lo._layer = new TileLayer({
+                source: new WMTSSrc(input)
+            });
+        }
     }
     
     public static addTile_WMSLayer (lo : Layer) {

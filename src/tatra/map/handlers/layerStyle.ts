@@ -6,7 +6,7 @@ import { Coord } from "../obj/Coord";
 import { props } from "../props";
 import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
-import flatpickr from "flatpickr";
+import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
 
 class AreaLabels {

@@ -4,6 +4,9 @@ import { map } from "..";
 import { controls } from "./controls";
 import { Layer } from "../obj/Layer";
 import { Slider } from "../../aux/Slider";
+import { props } from "../props";
+import { noUiSlider } from "../../aux/nouislider";
+import { mapUtils } from "../mapUtils";
 
 export class opacity extends baseComponent {
 	public static id		: string = 'opacity';
@@ -12,14 +15,15 @@ export class opacity extends baseComponent {
 	public static className : string = 'transparentWindow';
 	public static showHeader : boolean = false;
 
-	private static currentLayer : Layer | null = null; // lmv LayerObject 
+	public static currentLayer : Layer | null = null; // lmv LayerObject 
 	private static currentLayerTitle : string = '';
 	private static slider	: Slider | null = null;
 
 	public static onClick (evt:Event) {
 		if (! this.initialized) {
 			//			document.addEventListener(events.EVENT_LAYER_VISIBLE, opacity.layerUpdate);
-			document.addEventListener(events.EVENT_LAYER_HIDDEN, (evt) => this.layerUpdate(evt));			
+			document.addEventListener(events.EVENT_LAYER_HIDDEN, (evt) => this.layerUpdate(evt));
+			document.addEventListener(events.EVENT_COLOR_PALETTE_LOADED, () => this.renderLayerMenu());
 		}
 		super.onClick(evt as CustomEvent);
 		this.render();
@@ -34,6 +38,11 @@ export class opacity extends baseComponent {
 		}
 	}
 
+	public static close() {
+		super.close();
+		events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
+	}
+
 	public static setLayer (id : string, title : string | null = null) {
 		this.currentLayer = map.getLayerById(id);
 		if (! this.currentLayer) { return; }
@@ -44,6 +53,7 @@ export class opacity extends baseComponent {
 		}
 		controls.activateControlItem('opacity');
 		opacity.open();
+		this.renderLayerMenu();
 	}
 
 	public static createWindow () {
@@ -53,12 +63,16 @@ export class opacity extends baseComponent {
 		if (! el) { return; }
 		el.innerHTML = `
 			<div id="lmvDragLbl_${this.id}" class="transparentWindowLabel">
-				<b>Opacity: </b>
-				<span id="lmvControls_${this.id}_Layer"></span>
-				<span id="lmvControls_${this.id}_Value"></span>
+				<span id="lmvControls_${this.id}_Layer" class="opacityTitleLbl"></span>
 			</div>
 			<div style="width:100%;">
+				<div class="opacityLabel">
+					Opacity
+					<span id="lmvControls_${this.id}_Value"></span>
+				</div>
 				<div id="lmvControls_${this.id}_Slider" class="opacitySlider" >
+				</div>
+				<div id="lmvControls_${this.id}_SliderMenu">
 				</div>
 			</div>	
 		`;
@@ -112,5 +126,80 @@ export class opacity extends baseComponent {
 			posx = mw - 750;
 		}		
 		this.position(posx, posy);
+		events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
+	}
+
+	private static renderLayerMenu () {
+		let el = document.getElementById(`lmvControls_${this.id}_SliderMenu`) as HTMLDivElement;
+		let lo = this.currentLayer as Layer;
+		if (!lo || !lo.colorPaletteId) { 
+			el.innerHTML = '';
+			return; 
+		}
+		
+		let cp = props.colorPalettes[lo.colorPaletteId as string];
+		el.innerHTML = `
+			<div class="opacityLabel">
+				Threshold
+			</div>
+
+			<div id="lmvControls_${this.id}_SliderMenuLegend" class="opacityMenuLegend">
+				<div class="opacityMenuVariableLegendBar">
+					<div id="lmvControls_${this.id}_SliderMenuLegendBar" style="width:100%;">
+					</div>
+				</div>
+				<div id="lmvControls_${this.id}_SliderMenuLegendLbl" class="opacityMenuVariableLegendLbl">
+					${cp.minLabel}<span style="float:right;margin-right:30px">${cp.maxLabel}</span>
+				</div>
+			</div>
+			<div class="opacitySliderWrap">
+				<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange1">${cp.minLabel}</div>
+				<div class="opacityValueRangeSlider" id="lmvControls_${this.id}_SliderMenuRange"></div>
+				<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel}</div>
+			</div>
+		`;
+		let vals = [1, cp.values.length];
+		if (lo.variableRange && lo.variableRange["coloring"]) { vals = lo.variableRange["coloring"];}
+		let slider = document.getElementById(`lmvControls_${this.id}_SliderMenuRange`) as any;
+		noUiSlider.create(slider, {
+			start: [vals[0], vals[1]],
+			connect: true,
+			range: {
+				'min': 1,
+				'max': cp.values.length
+			}
+		});
+		slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
+		slider.noUiSlider.on("end", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
+		this.formatVROutput(lo.id, vals, false);
+	}
+
+	private static formatVROutput (id : string, values : Array <number> | undefined, update : boolean) {
+		if (values === undefined) { return; }
+		let cEl = document.getElementById(`lmvControls_${this.id}_SliderMenuLegendBar`) as HTMLDivElement;
+		let width = cEl.offsetWidth;
+		cEl.innerHTML = `<canvas id="lmvControls_${this.id}_SliderMenuLegendCanvas" width="${width}" height="25"></canvas>`;
+		let lo = mapUtils.getLayerById(id);
+		if (! lo || ! lo.colorPaletteId) { return; }
+		let cp = props.colorPalettes[lo.colorPaletteId as string];
+	 	let val1 = Math.round(values[0]);
+		let val2 = Math.round(values[1]);
+		if (val2 >= cp.values.length) { val2 = cp.values.length; }
+		mapUtils.generateColorPaletteLegend(`lmvControls_${this.id}_SliderMenuLegendCanvas`, cp, width, 25, val1, val2);
+		if (update) {
+		    if (!lo.variableRange) { lo.variableRange = {}; }
+			lo.variableRange["coloring"] = [val1, val2];
+			mapUtils.prepareColors(lo);
+			if (lo._layer) {
+				lo._layer.getSource().refresh(); 				    
+			}
+			events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
+		}
+	 	let leg1 = (val1 == 1) ? cp.minLabel : cp.values[val1-1].min.toString();		
+		let leg2 = (val2 == cp.values.length) ? cp.maxLabel : cp.values[val2-1].max.toString();	
+		 	
+		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange1`) as HTMLDivElement).innerHTML=leg1;
+		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange2`) as HTMLDivElement).innerHTML=leg2;
+//		menuCommon.updateHash();
 	}
 }

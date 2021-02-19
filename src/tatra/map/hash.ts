@@ -6,7 +6,7 @@ import { coreUtils } from "./support/coreUtils";
 import { Layer } from "./obj/Layer";
 import { map } from ".";
 import { utils } from "../utils";
-import flatpickr from "flatpickr";
+import { flatpickr } from "../aux/flatpickr";
 
 export interface IHashLayer {
     layerId     : string;
