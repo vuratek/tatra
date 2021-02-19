@@ -34,7 +34,7 @@
 	text-shadow: 0 0 .5rem black;
 }
 .opacityValueRangeSlider {
-	width: 24rem;
+	width: 33rem;
     margin-right: 1.5rem;
     margin-left: 1.5rem;
     display: inline-block;
@@ -56,4 +56,8 @@
 	font-weight:bold;
 	display:inline-block;
 	text-align:center;
+}
+.opacityValueRangeLblRight {
+	float: right;
+    margin-right: 4rem;
 }

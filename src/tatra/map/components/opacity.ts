@@ -149,13 +149,13 @@ export class opacity extends baseComponent {
 					</div>
 				</div>
 				<div id="lmvControls_${this.id}_SliderMenuLegendLbl" class="opacityMenuVariableLegendLbl">
-					${cp.minLabel}<span style="float:right;margin-right:30px">${cp.maxLabel}</span>
+					<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange1">${cp.minLabel}</div>
+					<div class="opacityValueRangeLbl opacityValueRangeLblRight" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel}</div>					
 				</div>
 			</div>
 			<div class="opacitySliderWrap">
-				<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange1">${cp.minLabel}</div>
+				
 				<div class="opacityValueRangeSlider" id="lmvControls_${this.id}_SliderMenuRange"></div>
-				<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel}</div>
 			</div>
 		`;
 		let vals = [1, cp.values.length];
