@@ -323,7 +323,7 @@ export class layer {
     public static refreshGeoJsonLayer (lo:Layer) {
         if (!lo._layer) { return;}
         this._GeoJsonRefresh(lo);
-        lo._layer.getSource().refresh();
+        lo.refresh();
     }
 
     private static _GeoJsonRefresh(lo : Layer) {

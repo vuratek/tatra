@@ -7,6 +7,7 @@ import { map } from '../../map';
 import { layer } from '../handlers/layer';
 import { events } from '../events';
 import { mapboxStyle } from "../handlers/mapboxStyle";
+import RasterSource from 'ol/source/Raster';
 //import { applyStyle } from 'ol-mapbox-style';
 
 enum layerCategories {
@@ -222,8 +223,21 @@ export class Layer {
             this.visible = false;
         }
     }
+
+    public refresh() {
+        if (this._layer) {
+            let src = this._layer.getSource();
+            if (src instanceof RasterSource) {
+                for (let i=0; i< (src as RasterSource)["layers_"].length; i++) {
+                    (src as RasterSource)["layers_"][i].getSource().refresh();
+                }                
+            } else {
+                src.refresh();
+            }
+        }
+    }
     
-    public refresh () {
+    public timeRefresh () {
         if (this._refreshRate > 0 && this._layer && this.visible) {
             let nw = this.getCurrentTime();
             if (nw > (this.lastRefresh + this.refreshRate)) {
@@ -240,7 +254,7 @@ export class Layer {
                         this.source.url += '&_cch=' + this.lastRefresh;
                     }
                                 
-                    this._layer.getSource().refresh();
+                    this.refresh();
                 }
             }
         }

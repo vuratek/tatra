@@ -265,6 +265,7 @@ export class support_layers extends baseComponent{
 
 		let leg1 = (val1 == 1) ? cp.minLabel : cp.values[val1-1].min.toString();		
 		let leg2 = (val2 == cp.values.length) ? cp.maxLabel : cp.values[val2-1].max.toString();	
+		let units = (cp.units) ? `${cp.units}` : '';
 		 	
 		el.innerHTML = `
 			<div id="lmvControls_${menu}_${lo.id}_SliderClickable" style="display:-webkit-inline-box;" class="opacityMenuLegend">
@@ -273,7 +274,7 @@ export class support_layers extends baseComponent{
 					</div>
 				</div>
 				<div class="opacityMenuVariableLegendLbl">
-					${leg1}<span style="float:right;margin-right:30px">${leg2}</span>
+					<span style="float:left;">${leg1} ${units}</span><span style="float:right;margin-right:30px">${leg2} ${units}</span>
 				</div>
 			</div>
 		`;

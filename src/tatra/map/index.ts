@@ -17,6 +17,7 @@ import { layerStyle } from './handlers/layerStyle';
 import { menu } from './menu';
 import 'elm-pep';
 import noUiSlider from "nouislider";
+import { hash } from './hash';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -69,6 +70,7 @@ export class map {
         controls.setTool('pan');
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
+        hash.init();
         this.clearLoader();
     }
 

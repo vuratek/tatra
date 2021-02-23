@@ -61,7 +61,7 @@ export class Timeline {
     private static initialized          : boolean = false;
     private static rendered             : boolean = false;
 
-    public static minDate               : Date = new Date(2000, 10, 11, 0, 0, 0);
+    public static minDate               : Date = utils.getGMTTime(new Date(2000, 10, 11, 0, 0, 0));
     public static maxDate               : Date = utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date())), true);
 
     public static singleSliderVisible   : boolean = false;

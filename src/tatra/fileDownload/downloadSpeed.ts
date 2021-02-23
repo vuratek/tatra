@@ -23,7 +23,7 @@ export class downloadSpeed {
             if (diff < 100) { diff = 100; }
 
             let factor = 1.5; // adjust speed for larger files
-            let speed = factor * fileSize / (diff / 1000) / (1000 * 1000);  // MB/s
+            let speed = factor * fileSize / (diff / 1000) / (1000);  // MB/s
             speed = Math.round(speed * 1000) / 1000.0;
             downloadSpeed.speed = speed;
             document.dispatchEvent(new CustomEvent(downloadSpeed.EVENT_SPEED_UPDATE, {}));

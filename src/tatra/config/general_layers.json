@@ -166,7 +166,7 @@
 		"clandestine": false,
 		"maxLevel"	: 9.5,
 		"props"		: {
-				"url"			: "//map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/jpeg",
 				"matrixSet"		: "EPSG4326_250m",
@@ -193,7 +193,7 @@
 		"clandestine": false,
 		"maxLevel"	: 8.5,
 		"props"		: {
-				"url"			: "//map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/jpeg",
 				"matrixSet"		: "EPSG4326_500m",
@@ -220,7 +220,7 @@
 		"clandestine": false,
 		"maxLevel"	: 8.5,
 		"props"		: {
-				"url"			: "//map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/png",
 				"matrixSet"		: "EPSG4326_2km",
@@ -245,7 +245,7 @@
 		"props" 	: {
 				"maxZoom"			: 12,
 				"projection"		: "EPSG:4326",
-				"url"				: "//gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&VERSION=1.1.1&SRS=EPSG%3A4326&SERVICE=WMS&LAYERS=#layer#",
+				"url"				: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&VERSION=1.1.1&SRS=EPSG%3A4326&SERVICE=WMS&LAYERS=#layer#",
 		        "tileSize"			: 256,
 		        "tileUrlFunction"	: [	
  						"function(tileCoord) {",

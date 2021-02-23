@@ -15,6 +15,7 @@ export class ColorPalette {
     public values : Array <ColorPaletteValues> = [];
     public minLabel : string = "";
     public maxLabel : string = "";
+    public units    : string | null = null;
 
     public ingest(data : string) {
         if (utils.isJson(data)) {
@@ -24,7 +25,10 @@ export class ColorPalette {
 //            this.refs = json["maps"][0]["entries"]["refs"];
             this.minLabel = json["maps"][0]["legend"]["minLabel"];
             this.maxLabel = json["maps"][0]["legend"]["maxLabel"];
-            let arr = json["maps"][0]["entries"]["values"];
+            if (json["maps"][0]["legend"]["units"]) {
+                this.units = json["maps"][0]["legend"]["units"];
+            }
+            /* let arr = json["maps"][0]["entries"]["values"];
             for (let i=0; i < arr.length; i++) {
                 if (arr[i].length == 2) {
                     let cpv = new ColorPaletteValues();
@@ -34,6 +38,21 @@ export class ColorPalette {
                     cpv.color = json["maps"][0]["entries"]["colors"][i];
                     this.values.push(cpv);
                 }
+            } */
+            let arr = json["maps"][0]["legend"]["tooltips"];
+            for (let i=0; i < arr.length; i++) {
+                let arr2 = arr[i].split(' - ');
+                let cpv = new ColorPaletteValues();
+                if (arr2.length == 2) {
+                    cpv.min = arr2[0];
+                    cpv.max = arr2[1];
+                } else {
+                    cpv.min = arr2[0];
+                    cpv.max = arr2[0];
+                }
+                cpv.ref = Number(json["maps"][0]["entries"]["refs"][i]);
+                cpv.color = json["maps"][0]["entries"]["colors"][i];
+                this.values.push(cpv);
             }
         } else {
             console.error("Invalid Color Palette JSON file.");

@@ -129,11 +129,8 @@ export class colors extends baseComponent {
 				lo.color[index+1] = lo.defaultColor[index+1];
 				lo.color[index+2] = lo.defaultColor[index+2];         
 				this.colorPicker.color.rgb = {r : lo.defaultColor[index+0], g : lo.defaultColor[index+1], b : lo.defaultColor[index+2]};
-			}
-		
-	        if (lo._layer) {
-				lo._layer.getSource().refresh();			        
-			}
+			}		
+	        lo.refresh();			        
 		}
 
 		events.dispatchLayer(events.EVENT_COLOR_UPDATE, this.currentLayer.id);

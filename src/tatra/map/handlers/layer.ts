@@ -1,6 +1,6 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
@@ -141,7 +141,8 @@ export class layer {
         }
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
-        if (lo.paletteUrl) {
+        
+        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl) {
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
@@ -192,6 +193,7 @@ export class layer {
             }
         }
         input["crossOrigin"] = "anonymous";
+        
         lo._layer = new TileLayer({
             source: new TileWMS(input),
         });
@@ -249,7 +251,7 @@ export class layer {
     public static refreshGeoJsonLayer (lo:Layer) {
         if (!lo._layer) { return;}
         this._GeoJsonRefresh(lo);
-        lo._layer.getSource().refresh();
+        lo.refresh();
     }
 
     private static _GeoJsonRefresh(lo : Layer) {

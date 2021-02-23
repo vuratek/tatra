@@ -5,12 +5,14 @@ import { MousePosition } from 'ol/control';
 import { tools } from "./tools";
 import { Coord } from "./obj/Coord";
 import { configProps } from "./support/configProps";
-import { Map } from 'ol';
+import { Map, Feature } from 'ol';
 import { flatpickr } from "../aux/flatpickr";
 import { events } from "./events";
 import { ajax } from "../ajax";
 import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
+import RasterSource from "ol/source/Raster";
+import { WKT } from "ol/format";
 
 //utils
 export class mapUtils {
@@ -32,9 +34,7 @@ export class mapUtils {
             if (!lo) { continue; }
             lo.time = date;
             if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits")) {
-                if (lo._layer) {
-                    lo._layer.getSource().refresh();	
-                }    
+                lo.refresh();
             }
         }
         events.dispatch(events.EVENT_LAYER_DATE_UPDATE);
@@ -141,6 +141,11 @@ export class mapUtils {
                 }
             }
         }
+    }
+
+    public static formatPolygon (f:Feature) : string {
+        let format = new WKT();
+        return format.writeFeature(f);
     }
 
     public static getCoordinates (type : string) {
@@ -393,7 +398,18 @@ export class mapUtils {
 
     public static readColorMap (lo : Layer) {
         if (lo.paletteUrl) {
-            ajax.get(lo.paletteUrl as string, null, (data:any) => this.processColorMap(lo, data));
+//            ajax.get(lo.paletteUrl as string, null, (data:any) => this.processColorMap(lo, data));
+            fetch(lo.paletteUrl)
+            .then(response => {
+                if (response.status == 404) {
+                    throw new TypeError("No palette.");
+                }
+                return response.text();
+            })
+            .then (data => {
+                mapUtils.processColorMap(lo, data);                
+            })
+            .catch(error => {});
         }
 	}
 

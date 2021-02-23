@@ -138,9 +138,10 @@ export class opacity extends baseComponent {
 		}
 		
 		let cp = props.colorPalettes[lo.colorPaletteId as string];
+		let units = (cp.units) ? `${cp.units}` : '';
 		el.innerHTML = `
 			<div class="opacityLabel">
-				Threshold
+				Threshold				
 			</div>
 
 			<div id="lmvControls_${this.id}_SliderMenuLegend" class="opacityMenuLegend">
@@ -149,12 +150,11 @@ export class opacity extends baseComponent {
 					</div>
 				</div>
 				<div id="lmvControls_${this.id}_SliderMenuLegendLbl" class="opacityMenuVariableLegendLbl">
-					<div class="opacityValueRangeLbl" id="lmvControls_${this.id}_SliderMenuRange1">${cp.minLabel}</div>
-					<div class="opacityValueRangeLbl opacityValueRangeLblRight" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel}</div>					
+					<div class="opacityValueRangeLbl opacityValueRangeLblLeft" id="lmvControls_${this.id}_SliderMenuRange1">${cp.minLabel} ${units}</div>
+					<div class="opacityValueRangeLbl opacityValueRangeLblRight" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel} ${units}</div>					
 				</div>
 			</div>
 			<div class="opacitySliderWrap">
-				
 				<div class="opacityValueRangeSlider" id="lmvControls_${this.id}_SliderMenuRange"></div>
 			</div>
 		`;
@@ -170,7 +170,7 @@ export class opacity extends baseComponent {
 			}
 		});
 		slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
-		slider.noUiSlider.on("end", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
+		slider.noUiSlider.on("set", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
 		this.formatVROutput(lo.id, vals, false);
 	}
 
@@ -190,13 +190,17 @@ export class opacity extends baseComponent {
 		    if (!lo.variableRange) { lo.variableRange = {}; }
 			lo.variableRange["coloring"] = [val1, val2];
 			mapUtils.prepareColors(lo);
-			if (lo._layer) {
-				lo._layer.getSource().refresh(); 				    
-			}
+			lo.refresh(); 				    
 			events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
 		}
 	 	let leg1 = (val1 == 1) ? cp.minLabel : cp.values[val1-1].min.toString();		
 		let leg2 = (val2 == cp.values.length) ? cp.maxLabel : cp.values[val2-1].max.toString();	
+		let units = '';
+		if (cp.units) {
+			leg1 += ' ' + cp.units;
+			leg2 += ' ' + cp.units;
+		}
+
 		 	
 		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange1`) as HTMLDivElement).innerHTML=leg1;
 		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange2`) as HTMLDivElement).innerHTML=leg2;
