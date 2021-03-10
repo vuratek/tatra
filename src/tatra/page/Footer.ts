@@ -38,6 +38,7 @@ export class Footer {
         let txt = '';
         for (let i=0; i<items.subMenu.length; i++) {
             let item = items.subMenu[i];
+            if (!item.label || !item.url) { continue; }
             let external = (item.external) ? 'target="_blank" rel="noopener" class="ext"' : '';
             let title = item.label.replace(/\&/g, "&amp;");
             if (item.subMenu) {

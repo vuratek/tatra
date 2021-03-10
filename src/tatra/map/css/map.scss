@@ -116,13 +116,16 @@
 }
 .ol-zoom {
 	top: 3.5rem;
-	left: 8.5rem;
+	left: 1.5rem;
 	width:3.5rem;
     background: none;
     border: 0.1rem solid #CCC;
     position:absolute;
     border-radius:0.4rem;
     padding:0.2rem;
+}
+.leftMenuActive .ol-zoom {
+    left: 8.5rem;
 }
 .ol-zoomClosed {
     top: 2.5rem;
@@ -145,11 +148,14 @@
 }
 .ol-scale-line {
   position:absolute;
-  left:8.5rem;
+  left:1.5rem;
   bottom:8.5rem;
   background:rgba(120,120,120,0.5);
   border-radius: 0;
   padding:0;
+}
+.leftMenuActive .ol-scale-line {
+	left: 8.5rem;
 }
 .ol-scale-lineMax {
 	left:1.5rem;
@@ -311,7 +317,10 @@
 }
 .bottomBarLabelCont {
 	position:absolute;
-	left:8.5rem;
+	left:1.5rem;
+}
+.leftMenuActive .bottomBarLabelCont {
+	left: 8.5rem;
 }
 .bottomBarIcon {
 	color:#ec6111;
@@ -400,9 +409,9 @@
     display: block;
     font-size: 1rem;
 }
-.mapShowNoLeftBar {
+/*.mapShowNoLeftBar {
 	left : 1.5rem;
-}
+}*/
 .lmvCtrlBtn {
 	width: 33%;
 	text-align:center;

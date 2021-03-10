@@ -14,7 +14,7 @@ import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBa
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faDrawPolygon, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+        faDrawPolygon, faBullhorn, faImage } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
         config.searchPseudoElements = true;
@@ -29,7 +29,7 @@ export class fontAwesome {
         // map control bar
         library.add(faHandPaper, faCrosshairs, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
             faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft,
-            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon );
+            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage );
         // corporate icons    
         library.add(faRedditAlien, faTwitter, faFacebook);
         // timeline 

@@ -158,7 +158,12 @@ export abstract class TopMenuItem {
         let txt = '<ul>';
         for (let i = 0; i<obj.subMenu.length; i++) {
             let item = obj.subMenu[i];
+
             if (item.isBreak === true) { continue; }
+            if (!item.url) {
+                txt += `<li class="header" id="${this.prefix}_${item.id}">${item.label}</li>`;
+                continue;
+            }
             let ext = (item.ext && item.ext == true) ? 'class="ext" target="_blank" rel="noopener"' : '';
             let article = (item.article === true) ? 'class="article"' : '';
             let url = (item.url && obj.id != "notifications") ? item.url : 'javascript:void(0);';

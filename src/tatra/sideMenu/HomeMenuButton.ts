@@ -24,11 +24,13 @@ export class HomeMenuButton {
 
     public static setState () {
         if (model.state == LEFTBAR_STATE.OPENED) {
-            model.state = LEFTBAR_STATE.CLOSED;
+            //model.state = LEFTBAR_STATE.CLOSED;
+            model.close();
             LeftMenuBar.hide();
             LeftMenu.minimize();
         } else {
-            model.state = LEFTBAR_STATE.OPENED;
+            //model.state = LEFTBAR_STATE.OPENED;
+            model.open();
             LeftMenuBar.show();
             LeftMenu.activate();
         }

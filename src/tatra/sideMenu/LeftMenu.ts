@@ -21,26 +21,30 @@ export class LeftMenu {
         model.init();
         if (Navigation.settings.app.useMap === true) {
             this.hasMap = true;
-            document.addEventListener(events.EVENT_MAPVIEWER_READY,  () => this.setMapItems());
         }
         window.addEventListener("resize", () => this.resize());
         let wrap = document.getElementById('leftNavBarWrap') as HTMLDivElement;
         wrap.addEventListener("click", () => this.closeWrap());
-        this.resize();
+        //this.resize();
+        let path =  window.location.pathname;
+        if (path == "/" || (Navigation.settings.app.alternateHome && Navigation.settings.app.alternateHome == path)) {
+            model.close();
+            LeftMenuBar.hide();
+            LeftMenu.minimize();    
+        } else {
+            model.open();
+        }
     }
 
     public static activate () {
         if (LeftMenu.isActive) { return; }
         utils.show(LeftMenu.div);
         LeftMenu.isActive = true;
+
         utils.addClass(LeftMenu.div,'leftNavBarActive');
-//        utils.addClass("body", "leftMenuOpened", false);
         utils.hide('headerTitle');
         if (window.location.pathname == '/') {
             utils.removeClass(LeftMenu.div,'leftNavBarInactive');
-            utils.removeClass("body", "leftMenuActive", false);
-        } else  {
-            utils.addClass("body", "leftMenuActive", false);
         }
         LeftMenu.setNavBarWrap(true);
         utils.hide('rightNavBar');
@@ -52,26 +56,18 @@ export class LeftMenu {
 
     private static resize() {
         let el = document.querySelector('main') as HTMLDivElement;
-        let map = el.clientWidth;
-        let minWidth = ( Navigation.settings.sideMenu.minWidth ) ? Navigation.settings.sideMenu.minWidth : 700;
-        model.state = (map < minWidth) ? LEFTBAR_STATE.CLOSED : LEFTBAR_STATE.OPENED;
-        let path =  window.location.pathname;
-        if (path == "/" || (Navigation.settings.app.alternateHome && Navigation.settings.app.alternateHome == path)) {
-            model.state = LEFTBAR_STATE.CLOSED;
-            map = 600;
-        }
-        if (map < minWidth) {
-            model.state = LEFTBAR_STATE.CLOSED;
+        //let map = el.clientWidth;
+        if (model.state == LEFTBAR_STATE.OPENED) {
+            model.close();
             LeftMenuBar.hide();
-            LeftMenu.minimize();    
+            LeftMenu.minimize();
         }
-        LeftMenu.setMapItems();
     }
 
     private static closeWrap() {
         let map = (document.querySelector('main') as HTMLDivElement).clientWidth;
         if (map < 700) {
-            model.state = LEFTBAR_STATE.CLOSED;
+            model.close();
             LeftMenuBar.hide();
         }
         LeftMenu.minimize();
@@ -93,27 +89,11 @@ export class LeftMenu {
         if (window.location.pathname == '/') {
 //            $(`#${LeftMenu.div}`).addClass("leftNavBarInactive");
         }
-        LeftMenu.setMapItems();
         utils.show('headerTitle');
         LeftMenu.setNavBarWrap(false);
         utils.show('rightNavBar');
         utils.show('leftNavBarClickHandler');
     }
-
-    private static setMapItems () {
-        if (! this.hasMap) { return; }
-
-        if (model.state == LEFTBAR_STATE.CLOSED) {
-            utils.addClass(".ol-scale-line",'mapShowNoLeftBar');
-            utils.addClass(".ol-zoom",'mapShowNoLeftBar');
-            utils.addClass(".bottomBarLabelCont",'mapShowNoLeftBar');
-        } else {
-            utils.removeClass(".ol-scale-line",'mapShowNoLeftBar');
-            utils.removeClass(".ol-zoom",'mapShowNoLeftBar');
-            utils.removeClass(".bottomBarLabelCont",'mapShowNoLeftBar');
-        }
-    }
-
 
     public static render () {
 
@@ -137,7 +117,6 @@ export class LeftMenu {
 
 
         SideMenuCommon.update(true);
-        this.setMapItems();
     }
 
     private static setLabel (parent : string) {
