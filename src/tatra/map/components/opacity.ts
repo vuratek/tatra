@@ -139,6 +139,16 @@ export class opacity extends baseComponent {
 		
 		let cp = props.colorPalettes[lo.colorPaletteId as string];
 		let units = (cp.units) ? `${cp.units}` : '';
+		let ff_hide = '';
+		let ff_error = '';
+		if (navigator.userAgent.indexOf("Firefox") >=0) {
+			ff_error = `
+				<div style="color: white;text-align: center;margin: .5rem auto;">
+					Threshold feature currently not available in Firefox
+				</div>
+			`;
+			ff_hide = `style="display:none;"`;
+		}
 		el.innerHTML = `
 			<div class="opacityLabel">
 				Threshold				
@@ -154,24 +164,28 @@ export class opacity extends baseComponent {
 					<div class="opacityValueRangeLbl opacityValueRangeLblRight" id="lmvControls_${this.id}_SliderMenuRange2">${cp.maxLabel} ${units}</div>					
 				</div>
 			</div>
-			<div class="opacitySliderWrap">
+			<div class="opacitySliderWrap" ${ff_hide}>
 				<div class="opacityValueRangeSlider" id="lmvControls_${this.id}_SliderMenuRange"></div>
 			</div>
+			${ff_error}
 		`;
 		let vals = [1, cp.values.length];
 		if (lo.variableRange && lo.variableRange["coloring"]) { vals = lo.variableRange["coloring"];}
-		let slider = document.getElementById(`lmvControls_${this.id}_SliderMenuRange`) as any;
-		noUiSlider.create(slider, {
-			start: [vals[0], vals[1]],
-			connect: true,
-			range: {
-				'min': 1,
-				'max': cp.values.length
-			}
-		});
-		slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
-		slider.noUiSlider.on("set", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
+		if (navigator.userAgent.indexOf("Firefox") == -1) {
+			let slider = document.getElementById(`lmvControls_${this.id}_SliderMenuRange`) as any;
+			noUiSlider.create(slider, {
+				start: [vals[0], vals[1]],
+				connect: true,
+				range: {
+					'min': 1,
+					'max': cp.values.length
+				}
+			});
+			slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
+			slider.noUiSlider.on("set", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
+		}
 		this.formatVROutput(lo.id, vals, false);
+		
 	}
 
 	private static formatVROutput (id : string, values : Array <number> | undefined, update : boolean) {

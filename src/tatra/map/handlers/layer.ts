@@ -141,8 +141,8 @@ export class layer {
         }
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
-        
-        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl) {
+
+        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl) {        
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
@@ -169,12 +169,22 @@ export class layer {
             lyr.on('beforeoperations', function (event) {
                 var data = event.data;
                 data["colors"] = props.colorLookup[lo.id];
+/*                let canvases = document.querySelectorAll('.ol-layer canvas');
+                for (let i=0; i<canvases.length; i++) {
+                    let canvas = canvases[i] as HTMLCanvasElement;
+                    let context = canvas.getContext('2d');
+                    if (context) {
+                        context.imageSmoothingEnabled = false;
+                    }
+                }*/
             });
-            mapUtils.readColorMap(lo);
         } else {
             lo._layer = new TileLayer({
                 source: new WMTSSrc(input)
             });
+        }
+        if (lo.paletteUrl) {
+            mapUtils.readColorMap(lo);
         }
     }
     

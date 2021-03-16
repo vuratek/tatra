@@ -210,7 +210,7 @@ export class hash {
         let zoom = props.map.getView().getZoom();
         if (zoom) {
             let c = props.map.getView().getCenter();
-            if (isNaN(c[0]) || isNaN(c[1])) { return; }
+            if (c == undefined || isNaN(c[0]) || isNaN(c[1])) { return ''; }
             return `@${c[0].toFixed(1)},${c[1].toFixed(1)},${zoom.toFixed(0)}z`;
         }
         return '@0,0,2';

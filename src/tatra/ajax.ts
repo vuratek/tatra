@@ -41,8 +41,8 @@ export class ajax {
                 callback(x.responseText);
             }
         };
+        //x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         if (method == 'POST') {
-            //x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         }
         x.send(data);

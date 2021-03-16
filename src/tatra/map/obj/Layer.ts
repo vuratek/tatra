@@ -10,7 +10,7 @@ import { mapboxStyle } from "../handlers/mapboxStyle";
 import RasterSource from 'ol/source/Raster';
 //import { applyStyle } from 'ol-mapbox-style';
 
-enum layerCategories {
+export enum layerCategories {
     LAYER = "layer",
     BASEMAP = "basemap",
     OVERLAY = "overlay"
@@ -73,6 +73,7 @@ export class Layer {
     public title            : string = "";
     public _visible         : boolean = false;
     public initVisibility   : boolean = false;
+    public initData         : string | null = null;
     public type             : string = "wmts"; // WMTS, WMS, XYZ
     public _layer           : olLayer | null = null; // holds the actual layer once defined
     public source           : LayerSource | null = null;
