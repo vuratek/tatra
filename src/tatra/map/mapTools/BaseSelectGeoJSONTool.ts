@@ -1,4 +1,4 @@
-import { BaseTool } from "./baseTool";
+import { BaseTool } from "./BaseTool";
 import { map } from "..";
 import { Select } from "ol/interaction";
 import { props } from "../props";
