@@ -2,13 +2,16 @@
 	position: fixed;
     bottom: 8.6rem;
     height:5.6rem;
-    left:6.5rem;
+    left:.7rem;
 	right: 0.7rem;
 	padding: 0.3rem;
 	display:none;
 	box-shadow: 0 0 0.5rem 0.4rem #748ca1;
     background: #222;
     z-index:500;
+}
+.leftMenuActive .timeline {
+    left:6.5rem;
 }
 .timeline-display {
 	height:8.1rem;

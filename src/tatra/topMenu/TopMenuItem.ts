@@ -8,6 +8,7 @@ export interface ITopMenuItemObj {
     id              : string;
     label           : string;
     icon            : string;
+    color?          : string;
     isBreak?        : boolean;
     iconOnly?       : boolean;
     showOnLoad?     : boolean;
@@ -167,11 +168,17 @@ export abstract class TopMenuItem {
             let ext = (item.ext && item.ext == true) ? 'class="ext" target="_blank" rel="noopener"' : '';
             let article = (item.article === true) ? 'class="article"' : '';
             let url = (item.url && obj.id != "notifications") ? item.url : 'javascript:void(0);';
+            let icon = '';
+            if (item.icon) {
+                let color = (item.color) ? `style="color:${item.color};"` : '';
+                icon = `<div ${color}><i class="fa ${item.icon} icon"></i></div>`;
+            }
+            
             let count = '';
             if (obj.id == "notifications") {
                 count= `<span id="${this.prefix}_counter_${item.id}" class="topMenuNotificationsCount"></span>`;
             }
-            txt += `<li ${article} id="${this.prefix}_${item.id}"><a href="${url}" ${ext} title="${item.label}">${item.label} ${count}</a></li>`;
+            txt += `<li ${article} id="${this.prefix}_${item.id}"><a href="${url}" ${ext} title="${item.label}">${icon}${item.label} ${count}</a></li>`;
         }
         txt += '</ul>';
         return txt;

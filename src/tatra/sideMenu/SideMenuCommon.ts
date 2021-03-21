@@ -55,6 +55,9 @@ export class SideMenuCommon {
                         break;
                     }
                 }
+                if (element.isOpened) {
+                    element.collapsed = false;
+                }
             } else {
                 if (element.url == url ) {
                     element.active = true;

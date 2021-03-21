@@ -36,6 +36,9 @@
 /*    bottom: 0rem;*/
     border-right: 0.1rem solid #777;
 }
+.leftMenuOpened .leftNavBarActive {
+    border-right: none;
+}
 .leftNavBarActive .leftNavBarMenu {
     color:#CCC;
 }
@@ -99,7 +102,7 @@
 }
 
 .leftNavBarMenuWrap {
-    background: #222;
+    background: #111;
     border-right: 0.1rem solid #777;
     border-top: 0.1rem solid #777;
     border-radius: 0 0 1.2rem 0;
@@ -109,6 +112,11 @@
     bottom: 0rem;
 /*    top:6.6rem;*/
     width: 100%;
+}
+.leftMenuOpened .leftNavBarMenuWrap {
+    border-right: none;
+    border-right: .1rem solid #000;
+    border-bottom: .1rem solid #000;
 }
 .leftNavBarSmall .leftNavBarMenuWrap {
     border-top: none;
@@ -149,7 +157,8 @@
     font-size:1.8rem;
 }
 .leftNavBarSubIcon {
-    top:1.05em;
+/*    top:1.05em;*/
+    font-size:1.8rem;
     position:absolute;
 }
 .leftNavBarClickHandler {
@@ -171,7 +180,7 @@
 }
 .leftNavBarMenu a > li > span, .leftNavBarMenu li > span {
     margin-left: 6.5rem;
-    font-size: 1.28rem;
+    font-size: 1.4rem;
     text-transform: uppercase;
 }
 #rightNavBarMenu a > li > span, #rightNavBarMenu li > span {

@@ -15,6 +15,7 @@ export class closeable {
 
 
         let el = document.getElementById(container);
+        console.log(container);
         if (! el) { return; }
         let area : null | HTMLDivElement = null;
         if (containment) {
@@ -55,6 +56,9 @@ export class closeable {
 
         function processPosition (pos1 : number, pos3 : number, isTouch : boolean) {
             if (el) {
+                if (! el.classList.contains('menuAnimOpen')) {
+                    return;
+                }
                 let left = el.offsetLeft - pos1;
 
                 if (area) {

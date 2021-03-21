@@ -83,7 +83,7 @@ export class menu {
         div.appendChild(btns);
         btns.innerHTML = `
             <div id="mapMenuClosed" class="mapMenuBtns">
-                <i class="fa fa fa-arrow-circle-left" aria-hidden="true"></i>
+                <i class="fa fa fa-th-list" aria-hidden="true"></i>
             </div>
         `;
         utils.setClick('mapMenuClosed', () => this.setMenu());

@@ -33,6 +33,10 @@
 .isMinMenu #navBarList {
     display:none;
 }
+#navBarList .icon {
+    margin-right:1rem;
+    font-size: 1.6rem;
+}
 .topNavBar li {
     margin: 0;
     padding: 0;
@@ -73,26 +77,26 @@
     background:rgba(0,0,0,.9);
 }
 .topNavBar li a {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     font-weight: 500;
     padding:0 1rem;
 }
 #navBar > ul > li > a {
     line-height: 2.5rem;
-    font: bold 1.7rem "Titillium Web", sans-serif;
+    font: bold 1.8rem "Titillium Web", sans-serif;
 }
 .isMap #navBar > ul > li > a {
-    font: bold 1.6rem "Titillium Web", sans-serif;
+    font: bold 1.8rem "Titillium Web", sans-serif;
 }
 .isMinMenu .topNavBar li a {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     padding: 0;
     text-transform: uppercase;
     margin: 1rem 0;
 }
 .isMinMenu .topNavBar li ul li a {
     text-transform: initial;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     margin: 0;
 }
 

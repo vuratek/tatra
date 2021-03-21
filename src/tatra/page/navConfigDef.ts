@@ -46,6 +46,7 @@ export interface INavConfigMenuItems {
     color?      : string;               // icon can have optional color
     subMenu?    : Array <INavConfigMenuItems>;
     type?       : string;
+    isOpened?   : boolean;
     icon?       : string;               // fontAwesome icon label
     active?     : boolean;              // internal; whether the item us active (browser url matches the item's url)
     collapsed?  : boolean;              // if the item contains submenu, is the menu expended / collapsed

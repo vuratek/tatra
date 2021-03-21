@@ -59,22 +59,20 @@
     background: none;
     cursor: pointer;
 }
-
 .mapMenuBtns {
-	margin: 0 -.3rem;
+    margin: -.9rem;
     width: 5rem;
     height: 5rem;
-    background: hsla(0,0%,54.9%,.3);
-    border: .1rem solid hsla(0,0%,80%,.5019607843137255);
-    color: hsla(0,0%,100%,.8);
+    background: hsla(0,0%,54.9%,.7);
+    color: hsl(0, 1.5%, 87.3%);
     border-radius: 2.5rem;
-    font-size: 4rem;
-    padding-top: .4rem;
+    font-size: 3rem;
+    padding-top: .9rem;
     display: none;
 }
 .mapMenuBtns:hover {
 	background: #999;
-    border: 0.1rem solid #ccc;
+//    border: 0.1rem solid #ccc;
     color: #e3e3e3;
 }
 .mapMenu .navGCHeader {
@@ -100,8 +98,8 @@
 		width: 4rem;
 		height: 4rem;
 		border-radius: 2rem;
-		font-size: 3rem;
-		padding-top: 0.4rem;
+		font-size: 2.5rem;
+    	padding-top: .8rem;
 	}
 }
 @media screen and (max-width: 700px) {
@@ -114,6 +112,9 @@
 	.mapMenu {
 		top:-5.5rem;
 	}		
+	.mapMenuBtns {
+		margin: 0 -.3rem;
+	}
 	.mapMenuCloseHolder {
 		top: 6rem;
 	}
