@@ -19,11 +19,12 @@
 .content_main {
     margin-top:3.2rem;
 }
-.content {
+.leftMenuActive .content {
     padding: 0 0 0 6rem;
 }
 @media screen and (max-width: 700px) {
     .content {
-        padding: 0 1rem;
+        /*padding: 0 1rem;*/
+        padding: 0;
     }
 }

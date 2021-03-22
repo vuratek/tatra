@@ -48,11 +48,13 @@ export class Modal {
     }
 
     private createModalWindow () {
-		let el = document.createElement("div");
-        el.setAttribute("id", "modal_"+ this.id);
-        el.setAttribute("class", `modal ${this.color}`);
-        this.holder.appendChild(el);
-        this.window = el;    
+        if (!  document.getElementById("modal_"+ this.id)) {
+            let el = document.createElement("div");
+            el.setAttribute("id", "modal_"+ this.id);
+            el.setAttribute("class", `modal ${this.color}`);
+            this.holder.appendChild(el);
+            this.window = el;    
+        }
     }
 
     public render () {
