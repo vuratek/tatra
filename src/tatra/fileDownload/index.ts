@@ -254,7 +254,7 @@ export class FileDownload {
             table += `
                 <tr id="${this.APP_ID}_fl_row_${rec.id}">
                     <td><input type="checkbox"id="${this.APP_ID}_fl_chk-${rec.id}"></td>
-                    <td><a href="${rec.url}">${rec.name}</a></td>
+                    <td><a target="_blank" href="${rec.url}">${rec.name}</a></td>
                     <td class="${cls}">${rec.state}</td>
                     <td>${utils.formatSize(rec.size)}</td>
                 </tr>`;
