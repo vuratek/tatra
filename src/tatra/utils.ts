@@ -267,4 +267,12 @@ export class utils {
             context.drawImage(oldCanvas, 0, 0);
         return newCanvas;
     }
+
+
+    public static clearLoader() {
+        let spinner = document.getElementById('spinner');
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
+    }
 }

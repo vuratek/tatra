@@ -18,6 +18,7 @@ import { menu } from './menu';
 import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
+import { utils } from '../utils';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -71,14 +72,8 @@ export class map {
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
-        this.clearLoader();
-    }
 
-    private static clearLoader() {
-        let spinner = document.getElementById('spinner');
-        if (spinner) {
-            spinner.style.display = 'none';
-        }
+        utils.clearLoader();
     }
 
     public static getLayerById (id : string) {

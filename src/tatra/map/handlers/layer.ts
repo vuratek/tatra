@@ -245,7 +245,9 @@ export class layer {
             if (lo.source) {
                 let value = (lo.source as any)[key];
                 if (key == "imageLoadFunction") {
-                    input[key] = eval("(" + value.join("") + ")");
+                    let all = value.join("");
+                    all = all.replace ("#id#", lo.id);
+                    input[key] = eval("(" + all + ")");
                 } else {
                     input[key] = value;
                 }

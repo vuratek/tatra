@@ -8,7 +8,6 @@ import { configProps } from "./support/configProps";
 import { Map, Feature } from 'ol';
 import { flatpickr } from "../aux/flatpickr";
 import { events } from "./events";
-import { ajax } from "../ajax";
 import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import RasterSource from "ol/source/Raster";

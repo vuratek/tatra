@@ -5,7 +5,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'*/
 
 import { faComments, faBookmark, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { faRedditAlien, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBackward, faStepForward, 
+import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBackward, faStepForward, faUpload,
         faCaretLeft, faCaretUp, faExternalLinkAlt, faBars, faTimes, faPlusCircle, faMinusCircle, faInfoCircle, faHandPaper,
         faCrosshairs, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust,
         faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash,
@@ -14,7 +14,7 @@ import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBa
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faDrawPolygon, faBullhorn, faImage, faSquare } from '@fortawesome/free-solid-svg-icons';
+        faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
         config.searchPseudoElements = true;
@@ -43,6 +43,8 @@ export class fontAwesome {
         library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause);
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare );
+        // moon
+        library.add(faUpload, faLock, faLockOpen);
         this.refresh();
         config.searchPseudoElements = false;    // turn off to prevent performance issues. Used only for initial loading
         dom.watch();
