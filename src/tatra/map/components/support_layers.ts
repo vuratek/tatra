@@ -101,7 +101,6 @@ export class support_layers extends baseComponent{
 			this.createLayer(lo, ul, baseId);
         }
 		this.updateLayers();
-		this.updateDisabled();
     }
     
 	/**
@@ -317,7 +316,8 @@ export class support_layers extends baseComponent{
 					}
 				}
             }
-        }
+		}
+		this.updateDisabled();
 	}
 	public static updateDisabled() {
 		let update = false;

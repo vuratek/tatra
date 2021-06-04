@@ -14,7 +14,7 @@ import { faHome, faUserCircle, faSearch, faFastBackward, faFastForward, faStepBa
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+        faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
         config.searchPseudoElements = true;
@@ -42,7 +42,7 @@ export class fontAwesome {
         // laads
         library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause);
         // ozone
-        library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare );
+        library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap );
         // moon
         library.add(faUpload, faLock, faLockOpen);
         this.refresh();
