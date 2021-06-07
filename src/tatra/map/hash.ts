@@ -3,7 +3,6 @@ import { events } from "./events";
 import { props } from "./props";
 import { configProps } from "./support/configProps";
 import { coreUtils } from "./support/coreUtils";
-import { Layer } from "./obj/Layer";
 import { map } from ".";
 import { utils } from "../utils";
 import { flatpickr } from "../aux/flatpickr";
@@ -179,14 +178,14 @@ export class hash {
         let arr2 = arr[0].split('..');
         let start = arr2[0];
         let end = (arr2.length == 2) ? arr2[1] : start;
-        if (start == "today" || start == "24hrs" || start == "48hrs" || start == "72hrs" || start == "week") {
+        if (start == "today" || start == "24hrs" || start == "48hrs" || start == "72hrs" || start == "7days") {
             if (start == "24hrs") {
                 start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -1), 'Y-m-d');
             } else if (start =="48hrs") {
                 start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -2), 'Y-m-d');
             } else if (start =="72hrs") {
                 start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -3), 'Y-m-d');
-            } else if (start =="week") {
+            } else if (start =="7days") {
                 start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -6), 'Y-m-d');
             } else {
                 start = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
@@ -247,7 +246,7 @@ export class hash {
         }
         let arr = str.substr(1).split('@');
         let zoomSet = false;
-        let cExt = [0, 0];
+        let cExt = configProps.center;
         let cZoom = configProps.minZoom;
         if (arr.length == 2) {
             let points = arr[1].split(',');

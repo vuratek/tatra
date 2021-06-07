@@ -15,7 +15,6 @@ export class closeable {
 
 
         let el = document.getElementById(container);
-        console.log(container);
         if (! el) { return; }
         let area : null | HTMLDivElement = null;
         if (containment) {
