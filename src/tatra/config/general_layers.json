@@ -288,23 +288,18 @@
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
 		"props" 	: {
-				"maxZoom"			: 16,
-				"projection"		: "EPSG:4326",
-		         "tileSize"			: 512,
-		         "tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return '/layers/pa_global/{z}/{y}/{x}.png'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', (tileCoord[2]).toString());}"
-		                                ],
-				"wrapX"				: true
-		    	},
-		"identify"	: {
-				"url"			: "/php/get_db_pas.php?",
-				"readHandler"	: "firmsLayers.pasRead",
-				"submitHandler"	: "firmsLayers.pasSubmit"
-				}
+			"maxZoom"			: 16,
+			"projection"		: "EPSG:4326",
+				"tileSize"			: 512,
+				"tileUrlFunction"	: [	
+									"function(tileCoord) {",
+									"return updateBasicTileUrl('#id#', tileCoord);}"
+									],
+			"wrapX"				: true
+		},
+		"isBasicIdentify" : true,
+		"identifyUrl" 		: "/php/get_db_pas.php?",
+		"identifyHandler"	: "pas"
 	}, {
 		"id"		: "protected_areas_regional",
 		"type"		: "xyz",
@@ -313,18 +308,18 @@
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
 		"props" 	: {
-				"maxZoom"			: 16,
-				"projection"		: "EPSG:4326",
-		         "tileSize"			: 512,
-		         "tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return '/layers/pa_regional/{z}/{y}/{x}.png'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', (tileCoord[2]).toString());}"
-		                                ],
-				"wrapX"				: true
-		    	}
+			"maxZoom"			: 16,
+			"projection"		: "EPSG:4326",
+				"tileSize"			: 512,
+				"tileUrlFunction"	: [	
+									"function(tileCoord) {",
+									"return updateBasicTileUrl('#id#', tileCoord);}"
+									],
+			"wrapX"				: true
+		},
+		"isBasicIdentify" : true,
+		"identifyUrl" 		: "/php/get_db_pas.php?",
+		"identifyHandler"	: "pas"
 	},{
 		"id"		: "modis_static",
 		"type"		: "xyz",

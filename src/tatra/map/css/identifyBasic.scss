@@ -1,0 +1,46 @@
+.identifyBasicLabel {
+    min-width: 30rem;
+    max-width: 45rem;
+    max-height: 25rem;
+    overflow-y: auto;
+    margin-top: .5rem;
+}
+.identifyBasicLabel .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #426c2c;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    background: white;
+    text-align: center;
+    padding: .5rem 0;
+    border-radius: 3rem;
+    cursor:pointer;
+}
+.identifyBasicLabel .header {
+    font-weight: 600;
+    font-size: 1.8rem;
+    background: #426c2c;
+    font-family: 'Titillium Web';
+    color: #FFF;
+    padding: .3rem 1rem;
+}
+.identifyBasicLabel .parkRecord {
+    padding: .5rem 1rem;
+}
+.identifyBasicLabel .parkName {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.identifyBasicLabel .parkDesignation {
+    font-size: 1.5rem;
+    color:#333;
+}
+.identifyBasicLabel .parkType {
+    font-size: 1.4rem;
+}
+.identifyBasicLabel .parkId {
+    font-size: 1.4rem;
+}

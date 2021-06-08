@@ -99,6 +99,7 @@ export class Layer {
     public jsonHandler      : Function | null = null;
     public isSelect         : boolean = false;
     public isJSONIdentify   : boolean = false;
+    public isBasicIdentify  : boolean = false;
     public limitExtent      : [number, number, number, number] | null = null;
     public icon             : string | null = null;
     public iconLabel        : string | null = null;
@@ -115,6 +116,8 @@ export class Layer {
     public extent           : Array <number> = [-180, -90, 180, 90];
     public identifyUrl      : string | null = null;
     public identifyHandler  : string | null = null;
+    public _identifyRead    : Function | null = null;
+    public _identifySubmit  : Function | null = null;
     public _refreshRate     : number = 0;       // value in mins
     public _lastRefresh     : number = 0;
     public styleJSON        : JSON | null = null;
