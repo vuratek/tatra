@@ -12,6 +12,7 @@ import Feature from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
 import OverlayPositioning from 'ol/OverlayPositioning';
+import { identifyUtils } from '../identifyUtils';
 
 
 export interface ILayers {
@@ -76,9 +77,19 @@ export class identifyGeoJSON {
         }
     }
 
-    private static setToolTip(text: string){
-        (identifyGeoJSON.identifyTooltipElement as HTMLDivElement).innerHTML = `<div class="identifyJSONLabel">${text}</div>`;
+    private static setToolTip(text: string, top:boolean){
+        let direction = (top) ? "top" : "bottom";
+        (identifyGeoJSON.identifyTooltipElement as HTMLDivElement).innerHTML = `
+            <div class="wrapper ${direction}">
+                <div class="arrow"></div>
+            </div>
+            <div class="identifyJSONLabel">
+                ${text}
+                <div class="close" id="identifyJSONClose"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
+            </div>
+        `;
         identifyGeoJSON.show();
+        utils.setClick("identifyJSONClose", ()=>this.hide());
     }
 
     public static hide() {
@@ -145,33 +156,10 @@ export class identifyGeoJSON {
                 let geom = feature.getGeometry(); 
                 let coord = geom.getExtent();
                 feature.setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
-                identifyGeoJSON.setToolTip(layerStyle[info](feature));
+                let top = (e.mapBrowserEvent.pixel[1] < 170) ? true : false;
+                identifyGeoJSON.setToolTip(layerStyle[info](feature), top);
                 identifyGeoJSON.setPosition(coord);
-                let mc = e.mapBrowserEvent.pixel;
-                let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
-                if (mc[1] < 170) {
-                    if (mc[0] < 150) {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_LEFT);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([-20, 10]);    
-                    } else if (mc[0] > mw - 200) {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_RIGHT);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([20, 10]);    
-                    } else {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_CENTER);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([0, 10]);    
-                    }
-                } else {
-                    if (mc[0] < 150) {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_LEFT);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([-20, -10]);    
-                    } else if (mc[0] > mw - 200) {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_RIGHT);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([20, -10]);    
-                    } else {
-                        (identifyGeoJSON.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_CENTER);
-                        (identifyGeoJSON.identifyTooltip as Overlay).setOffset([0, -10]);
-                    }
-                }
+                identifyUtils.setWindow(e.mapBrowserEvent, identifyGeoJSON.identifyTooltip as Overlay, 170);
 //                console.log(e.mapBrowserEvent.pixel);
             });
         });

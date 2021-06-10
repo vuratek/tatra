@@ -12,7 +12,8 @@ import Feature from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
 import OverlayPositioning from 'ol/OverlayPositioning';
-import { MapEvent, MapBrowserEvent } from 'ol';
+import { MapBrowserEvent } from 'ol';
+import { identifyUtils } from "../identifyUtils";
 
 
 export interface ILayers {
@@ -107,13 +108,16 @@ export class identifyBasic {
         }
     }
 
-    private static setToolTip(text: string){
+    private static setToolTip(text: string, top:boolean ){
+        let direction = (top) ? "top" : "bottom";
         (identifyBasic.identifyTooltipElement as HTMLDivElement).innerHTML = `
+            <div class="wrapper ${direction}">
+                <div class="arrow"></div>
+            </div>
             <div class="identifyBasicLabel">
                 ${text}
                 <div class="close" id="identifyBasicClose"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
             </div>
-
         `;
         identifyBasic.show();
         utils.setClick("identifyBasicClose", ()=>this.hide());
@@ -142,34 +146,12 @@ export class identifyBasic {
             this.close();
             return;
         }
-        identifyBasic.setToolTip(text);
+        let top = (evt.pixel[1] < 270) ? true : false;
+        identifyBasic.setToolTip(text, top);
         identifyBasic.setPosition(coord);
 
-        let mc = evt.pixel;
-        let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
-        if (mc[1] < 270) {
-            if (mc[0] < 150) {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_LEFT);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([-20, 10]);    
-            } else if (mc[0] > mw - 200) {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_RIGHT);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([20, 10]);    
-            } else {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.TOP_CENTER);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([0, 10]);    
-            }
-        } else {
-            if (mc[0] < 150) {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_LEFT);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([-20, -10]);    
-            } else if (mc[0] > mw - 200) {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_RIGHT);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([20, -10]);    
-            } else {
-                (identifyBasic.identifyTooltip as Overlay).setPositioning(OverlayPositioning.BOTTOM_CENTER);
-                (identifyBasic.identifyTooltip as Overlay).setOffset([0, -10]);
-            }
-        }
+        identifyUtils.setWindow(evt, identifyBasic.identifyTooltip as Overlay, 270);
+        
     }
 
     public static identify( evt : MapBrowserEvent ) {
