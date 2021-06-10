@@ -290,6 +290,7 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
+			"url"				: "/layers/pa_global/",
 				"tileSize"			: 512,
 				"tileUrlFunction"	: [	
 									"function(tileCoord) {",
@@ -310,6 +311,7 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
+			"url"				: "/layers/pa_regional/",
 				"tileSize"			: 512,
 				"tileUrlFunction"	: [	
 									"function(tileCoord) {",
@@ -330,7 +332,7 @@
 		"props" 	: {
 				"maxZoom"			: 14,
 				"projection"		: "EPSG:4326",
-		         "tileSize"			: 512,
+				 "tileSize"			: 512,
 		         "tileUrlFunction"	: [	
 		         						"function(tileCoord) {",
 		              					"return '/layers/#id#/{z}/{y}/{x}.png'",
