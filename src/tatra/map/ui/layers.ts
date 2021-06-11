@@ -192,5 +192,6 @@ export class layers {
     private updateViewAll() {
         this.supportLayersShowAll = ! this.supportLayersShowAll;
         this.updateBaseLayerView();
+        localStorage.setItem(`${this.appId}-showAllLayers`, (this.supportLayersShowAll) ? "on" : "off");
     }
 }

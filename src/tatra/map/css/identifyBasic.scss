@@ -1,6 +1,5 @@
 .identifyBasicLabel {
-    min-width: 30rem;
-    max-width: 45rem;
+    width: 40rem;
     max-height: 25rem;
     overflow-y: auto;
     margin-top: .5rem;
@@ -60,13 +59,16 @@
 .identifyBasicLabel .parkName {
     font-size: 1.6rem;
     font-weight: 600;
+    white-space: break-spaces;
 }
 .identifyBasicLabel .parkDesignation {
     font-size: 1.5rem;
     color:#333;
+    white-space: break-spaces;
 }
 .identifyBasicLabel .parkType {
     font-size: 1.4rem;
+    white-space: break-spaces;
 }
 .identifyBasicLabel .parkId {
     font-size: 1.4rem;
