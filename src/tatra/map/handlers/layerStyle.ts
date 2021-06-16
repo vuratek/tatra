@@ -393,8 +393,7 @@ export class layerStyle {
     public static _fireAlertCanada_info(feature : Feature) : string {
         let areas = layerStyle.getAreas(feature.get("hectares"), true);
         let ds = layerStyle.formatDate(new Date(feature.get("startdate")));
-        let icon = (feature.get("agency") == "ak") ? '/images/US-flag.jpg' : '/images/CA-flag.jpg';
-        return layerStyle.fireAlertTemplate(feature.get("firename"), icon, ds, areas);
+        return layerStyle.fireAlertTemplate(feature.get("firename"), '/images/CA-flag.jpg', ds, areas);
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style {
