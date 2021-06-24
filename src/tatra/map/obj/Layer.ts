@@ -107,6 +107,7 @@ export class Layer {
     public iconHasBorder    : boolean = true;
     public boxSource        : Vector | null = null;
     public paletteUrl       : string | null = null;
+    public paletteColorDef  : string | null = null;
     public colorPaletteId   : string | null = null;
     public hasMenuExpanded  : boolean = false;
     public parent           : string | null = null;

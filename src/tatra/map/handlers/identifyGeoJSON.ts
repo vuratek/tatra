@@ -117,7 +117,6 @@ export class identifyGeoJSON {
                 }
             }
         }
-
         if (!update) {
             return;
         }
@@ -153,13 +152,14 @@ export class identifyGeoJSON {
                 identifyGeoJSON.activeLayer = lo;
                 let style = '_' + ((lo as Layer).source as LayerSource).style + '_select';
                 let info = '_' + ((lo as Layer).source as LayerSource).style + '_info';
-                let geom = feature.getGeometry(); 
-                let coord = geom.getExtent();
+//                let geom = feature.getGeometry(); 
+//                let coord = geom.getExtent();
+                let coord = e.mapBrowserEvent.coordinate;
                 feature.setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
                 let top = (e.mapBrowserEvent.pixel[1] < 170) ? true : false;
                 identifyGeoJSON.setToolTip(layerStyle[info](feature), top);
                 identifyGeoJSON.setPosition(coord);
-                identifyUtils.setWindow(e.mapBrowserEvent, identifyGeoJSON.identifyTooltip as Overlay, 170);
+                identifyUtils.setWindow(e.mapBrowserEvent, identifyGeoJSON.identifyTooltip as Overlay, 210);
 //                console.log(e.mapBrowserEvent.pixel);
             });
         });

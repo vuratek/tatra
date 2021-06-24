@@ -8,6 +8,7 @@ import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
+import { UrlTile } from "ol/source";
 
 class AreaLabels {
     public km       : string = '';
@@ -374,10 +375,10 @@ export class layerStyle {
         let date = new Date();
         date.setTime(Number(feature.get("FireDiscoveryDateTime")));
         let areas = layerStyle.getAreas(feature.get("DailyAcres"), false);
-        return layerStyle.fireAlertTemplate(feature.get("IncidentName"), '/images/US-flag.jpg', layerStyle.formatDate(date), areas);
+        return layerStyle.fireAlertTemplate(feature.get("IncidentName"), '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
     }
 
-    private static fireAlertTemplate(name : string, flagUrl: string, dateString : string, areas:AreaLabels) {
+    private static fireAlertTemplate(name : string, flagUrl: string, dateString : string, areas:AreaLabels, reportUrl:string) {
         return `
             <span class="faLbl"><img src="${flagUrl}">${name}</span><br/>
             <div class="faSize">
@@ -387,13 +388,16 @@ export class layerStyle {
                 </table>
             </div>
             <span class="faDate">Discovery Date: <br/>${dateString}</span>
+            <div class="faSituation">
+                <a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a>
+            </div>
         `;
     }
 
     public static _fireAlertCanada_info(feature : Feature) : string {
         let areas = layerStyle.getAreas(feature.get("hectares"), true);
         let ds = layerStyle.formatDate(new Date(feature.get("startdate")));
-        return layerStyle.fireAlertTemplate(feature.get("firename"), '/images/CA-flag.jpg', ds, areas);
+        return layerStyle.fireAlertTemplate(feature.get("firename"), '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/en/ciffc/public/sitrep");
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style {
@@ -432,6 +436,94 @@ export class layerStyle {
             });
         }
         return layerStyle.symbols[key].cache[flag];
+    }
+
+    public static _geographicAreasUSA ( feature : Feature, resolution: number) : Style | null {
+        let key = "borders-usa";
+        let flag = "default";
+        if (!layerStyle.symbols[key]) {
+            layerStyle.symbols[key] = new Object();
+            layerStyle.symbols[key].cache = [] as Array<Style>;
+        }
+        if (!layerStyle.symbols[key].cache[flag]) {
+            let lightStroke = new Style({
+                stroke: new Stroke({
+                  color: [255, 255, 255, 0.8],
+                  width: 3,
+                  lineCap: "square",
+                  lineDash: [6,12],
+                  lineDashOffset: 6
+                })
+              });
+              
+              let darkStroke = new Style({
+                stroke: new Stroke({
+                  color: [0, 0, 0, 0.8],
+                  width: 3,
+                  lineCap: "square",
+                  lineDash: [6,12]
+                })
+              });
+
+            layerStyle.symbols[key].cache[flag] = [lightStroke, darkStroke];
+        }
+        return layerStyle.symbols[key].cache[flag];
+    }
+
+    public static _geographicAreasUSA_info (feature : Feature) : string {
+        console.log("HERE", feature);
+        let name = feature.get("GACCName");
+        return `
+            <div>${name}</div>
+        `;
+/*        let issue = layerStyle.formatDate(new Date(Date.parse(feature.get("issuance"))));
+        let expiry = layerStyle.formatDate(new Date(Date.parse(feature.get("expiration"))));
+        let url = feature.get("url");
+        let iconColor = this.noaaWeatherAlertsLegend(prod, 1.0);
+        return `
+            <div class="faNoaaLbl" style="background:${iconColor}">${prod}</div>
+            <div class="faNoaaTbl">
+                <table>
+                    <tr><td>Issuance:</td><td>${issue}</td></tr>
+                    <tr><td>Expiration:</td><td>${expiry}</td></tr>
+                </table>
+            </div>
+            <div class="faNoaaDetails">
+                <a href="${url}" target="_blank" rel="noopener" class="ext">View detailed information</a>
+            </div>
+            <div class="fa-noaa-logo">
+                <img src="/images/noaa-logo.svg">
+            </div>
+        `;    */
+    }
+
+    public static _geographicAreasUSA_select (feature : Feature) : Array<Style> | null {
+        console.log("HERE");
+        return null;
+/*        let flag = feature.get("prod_type");
+        if (!flag) { return null; }
+        let key = "noaa-alerts-select";
+        if (!layerStyle.symbols[key]) {
+            layerStyle.symbols[key] = new Object();
+            layerStyle.symbols[key].cache = [] as Array<Style>;
+        }
+        
+        if (!layerStyle.symbols[key].cache[flag]) {
+            let color = layerStyle.noaaWeatherAlertsLegend(flag,1.0);
+            layerStyle.symbols[key].cache[flag] = new Style({
+                fill: new Fill({
+                    color: color
+                }),
+                stroke: new Stroke({
+                    color: "#3e3e3e",
+                    width: 2,
+                }),
+                zIndex: 1,
+            });
+        }*/
+        // at this point, the style for the current network is in the cache
+        // so return it (as an array!)
+        //return [layerStyle.symbols[key].cache[flag]];
     }
 
 /*    public static _fireAlertCanada (feature : Feature) : Style | null {

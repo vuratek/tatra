@@ -263,7 +263,7 @@ export class FileDownload {
             table = `
                 <table id="${this.APP_ID}_fd_table">
                     <tr>
-                        <th style="width:5%;"><input type="checkbox"id="${this.APP_ID}_fl_all"></th>
+                        <th style="width:5%;"><input type="checkbox" id="${this.APP_ID}_fl_all"></th>
                         <th style="width:60%;">Filename</th>
                         <th style="width:20%;">Status</th>
                         <th style="width:15%;">Size</th>

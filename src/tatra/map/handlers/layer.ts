@@ -142,23 +142,35 @@ export class layer {
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
 
-        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl) {        
+        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
                         source: new WMTSSrc(input),
                     }) ],
                 operation: function (pixels, data) {
-                  let pixel = pixels[0];
-                  if (data["colors"]) {
-                      let lookup = `${pixel[0]},${pixel[1]},${pixel[2]},${pixel[3]}`;
-                      if (data["colors"][lookup]) {
-                        return pixel;
-                    } else {
-                        pixel[3]=0;
+                    let pixel = pixels[0];
+                    if (data["colors"]) {
+                        let lookup = `${pixel[0]},${pixel[1]},${pixel[2]},${pixel[3]}`;
+                        if (data["colors"][lookup]) {
+                            return pixel;
+                        } else {
+                            pixel[3]=0;
+                        }
+                    } else if (data["bypass"]) {
+                        if (data["bypass"] == "orange") {
+                            // the if statement color relates to GIBS original coloring with values: 217, 95, 2
+                            // color is changes due to close match with TSD and MODIS
+                            if (pixel[0] > pixel[1]+70 && pixel[0]>pixel[2]+100 && pixel[0] >= 150) {
+                                pixel[0] = 255;
+                                pixel[1] = 184;
+                                pixel[2] = 184;
+                            } else {
+                                pixel[3] = 0;
+                            }
+                        }
                     }
-                  }
-                  return pixel;
+                    return pixel;
                 },
                 lib: {
                 },
@@ -168,7 +180,12 @@ export class layer {
             });
             lyr.on('beforeoperations', function (event) {
                 var data = event.data;
-                data["colors"] = props.colorLookup[lo.id];
+                if (lo.paletteColorDef) {
+                    // hack to deal with firefox
+                    data["bypass"] = lo.paletteColorDef;
+                } else {
+                    data["colors"] = props.colorLookup[lo.id];
+                }
 /*                let canvases = document.querySelectorAll('.ol-layer canvas');
                 for (let i=0; i<canvases.length; i++) {
                     let canvas = canvases[i] as HTMLCanvasElement;
@@ -268,7 +285,7 @@ export class layer {
 
     private static _GeoJsonRefresh(lo : Layer) {
         if (!lo._layer) { return; }
-        let source = lo._layer.getSource();
+        let source = lo._layer.getSource();        
         let listenerKey = source.on("change", function(e) {
             e;
             if (source.getState() == "ready") {
