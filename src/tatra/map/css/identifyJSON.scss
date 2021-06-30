@@ -1,6 +1,6 @@
 .identifyJSONLabel table {
     min-width: 28rem;
-    margin: 1rem 0;
+    margin: 1rem 0 .7rem 0
 }
 .identifyJSONLabel table tr, .identifyJSONLabel table tr:nth-child(2n+2) {
     background:#244153;
@@ -9,6 +9,19 @@
 .identifyJSONLabel table td {
     width:50%;
     text-align: center;
+}
+.identifyJSONLabel .zoomto {
+    font-size: 1.3rem;
+    color: #273f4d;
+    text-align: center;
+    cursor: pointer;
+    border: .1rem solid #999;
+    background: #97d9ff;
+    padding: .3rem;
+    width: 99%;
+    margin-left: .1rem;
+    text-transform: uppercase;
+    margin-bottom: .7rem;
 }
 .identifyJSONLabel .faLbl, .identifyJSONLabel .faNoaaLbl {
     font-size: 1.8rem;

@@ -90,33 +90,4 @@ export class map {
         }
         return str;
     }
-
-    public static addDynamicLayer(date, band) {
-        if (props.layers.length == 4) {
-            let lo = new Layer();
-
-            lo.id = "DynamicLayer";
-            // if (lo.id == "") {
-            //     lo.id = band + date;
-            // }
-            lo.title = "";
-            lo._visible = false;
-            lo.type = "tile_wms";
-            lo._layer = null; // holds the actual layer once defined
-            lo.source = new LayerSource();
-            lo.source.url = "http://localhost:7080/cgi-bin/mapserv?map=/usr/local/apache2/htdocs/test/"+band+".map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS="+band+"&SRS=EPSG:4326&BBOX=-125,30,-75,50&WIDTH=1024&HEIGHT=512&FORMAT=image/png&map.layer["+band+"]=data+"+band+"_"+date+".tif";
-            lo.source.wrapX = true;
-            lo._category = "overlay"; // basemap, layer or overlay
-            lo.visible = true;
-
-            props.layers.push(lo);
-            layer.addLayer(lo);
-        } else {
-            let lo = map.getLayerById("DynamicLayer");
-            // lo.source.url = "http://localhost:7080/cgi-bin/mapserv?map=/usr/local/apache2/htdocs/test/"+band+".map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS="+band+"&SRS=EPSG:4326&BBOX=-125,30,-75,50&WIDTH=1024&HEIGHT=512&FORMAT=image/png&map.layer["+band+"]=data+merged_" + date + "_"+band+".tif";
-            let url = "http://localhost:7080/cgi-bin/mapserv?map=/usr/local/apache2/htdocs/test/"+band+".map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS="+band+"&SRS=EPSG:4326&BBOX=-125,30,-75,50&WIDTH=1024&HEIGHT=512&FORMAT=image/png&map.layer["+band+"]=data+"+band+"_"+date+".tif";
-            lo._layer.getSource().setUrl(url);
-            // lo._layer.getSource().setProperties("url","http://localhost:7080/cgi-bin/mapserv?map=/usr/local/apache2/htdocs/test/"+band+".map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS="+band+"&SRS=EPSG:4326&BBOX=-125,30,-75,50&WIDTH=1024&HEIGHT=512&FORMAT=image/png&map.layer["+band+"]=data+merged_" + date + "_"+band+".tif");
-        }
-    }
 }

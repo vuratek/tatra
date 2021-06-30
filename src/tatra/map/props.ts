@@ -32,6 +32,7 @@ export class props  {
 
     public static colorPalettes         : IColorPalettes = {};
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
+    public static defaultBasemap        : string = 'earth';
 }
 
 export interface IColorPalettes {

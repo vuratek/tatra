@@ -387,6 +387,7 @@ export class layerStyle {
                     <tr><td>${areas.sqmi} miles<sup>2</sup></td><td>${areas.km} km<sup>2</sup></td></tr>
                 </table>
             </div>
+            <div class="zoomto" id="geojson_info"><span><i class="fa fa-search-plus" aria-hidden="true"></i></span> zoom to location</div>
             <span class="faDate">Discovery Date: <br/>${dateString}</span>
             <div class="faSituation">
                 <a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a>
@@ -471,7 +472,7 @@ export class layerStyle {
     }
 
     public static _geographicAreasUSA_info (feature : Feature) : string {
-        console.log("HERE", feature);
+        //console.log("HERE", feature);
         let name = feature.get("GACCName");
         return `
             <div>${name}</div>
@@ -498,7 +499,7 @@ export class layerStyle {
     }
 
     public static _geographicAreasUSA_select (feature : Feature) : Array<Style> | null {
-        console.log("HERE");
+        //console.log("HERE");
         return null;
 /*        let flag = feature.get("prod_type");
         if (!flag) { return null; }

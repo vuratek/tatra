@@ -5,13 +5,14 @@ import { MousePosition } from 'ol/control';
 import { tools } from "./tools";
 import { Coord } from "./obj/Coord";
 import { configProps } from "./support/configProps";
-import { Map, Feature } from 'ol';
+import { Map, Feature, View } from 'ol';
 import { flatpickr } from "../aux/flatpickr";
 import { events } from "./events";
 import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import RasterSource from "ol/source/Raster";
 import { WKT } from "ol/format";
+import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
 
 //utils
 export class mapUtils {
@@ -57,14 +58,22 @@ export class mapUtils {
                 continue;
             }
             if (layer.visible) {
-                props.currentBasemap = id;
-            }
-            if (!layer.visible && (id == layer.id || (id == layer.parent && ! layer.isLabel))) {
-                layer.visible = true;
-                props.currentBasemap = id;
-                update = true;
-                if (layer.id == id) {
-                    (document.getElementById('map') as HTMLDivElement).style.background = layer.styleBackground;
+                // switch basemap to 'earth' - hide current basemap
+                if (id != props.defaultBasemap) {
+                    layer.visible = false;
+                    update = true;
+                    let sub = mapUtils.getLayerById(props.defaultBasemap) as Layer;
+                    sub.visible = true;
+                }
+                props.currentBasemap = props.defaultBasemap;
+            } else {
+                if (id == layer.id || (id == layer.parent && ! layer.isLabel)) {
+                    layer.visible = true;
+                    props.currentBasemap = id;
+                    update = true;
+                    if (layer.id == id) {
+                        (document.getElementById('map') as HTMLDivElement).style.background = layer.styleBackground;
+                    }
                 }
             }
         }
@@ -365,6 +374,14 @@ export class mapUtils {
         } else { //It is not IE
             return 0;
         }
+    }
+
+    public static zoomTo(x : number, y: number, level : number) {
+        if (level < 2 || level > 14) { return; }
+        let view = props.map.getView();
+        view.setCenter([x,y]);
+        view.setZoom(level);
+        identifyGeoJSON.hide();
     }
 
     public static tile2coord (x : number, y : number, z : number) : string {

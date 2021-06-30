@@ -13,6 +13,7 @@ import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
 import OverlayPositioning from 'ol/OverlayPositioning';
 import { identifyUtils } from '../identifyUtils';
+import { Point } from 'ol/geom';
 
 
 export interface ILayers {
@@ -60,12 +61,6 @@ export class identifyGeoJSON {
     private static hideLayer(evt : CustomEvent) {
         if (this.activeLayer && this.activeLayer.id == evt.detail.id) {
             this.activeLayer = null;
-            if (this.interaction) {
-                let selectedFeatures = (this.interaction as Select).getFeatures();
-                selectedFeatures.forEach(function(feature : Feature) {   
-                    (identifyGeoJSON.interaction as Select).getFeatures().remove(feature);
-                });
-            }
             this.hide();
         }
     }
@@ -96,6 +91,12 @@ export class identifyGeoJSON {
         if (this.identifyTooltipElement) {
             this.identifyTooltipElement.style.display = "none";
             this.active = false;
+        }
+        if (this.interaction) {
+            let selectedFeatures = (this.interaction as Select).getFeatures();
+            selectedFeatures.forEach(function(feature : Feature) {   
+                (identifyGeoJSON.interaction as Select).getFeatures().remove(feature);
+            });
         }
     }
 
@@ -158,12 +159,18 @@ export class identifyGeoJSON {
                 feature.setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
                 let top = (e.mapBrowserEvent.pixel[1] < 170) ? true : false;
                 identifyGeoJSON.setToolTip(layerStyle[info](feature), top);
+                identifyGeoJSON.setInfoZoomto(feature);
                 identifyGeoJSON.setPosition(coord);
                 identifyUtils.setWindow(e.mapBrowserEvent, identifyGeoJSON.identifyTooltip as Overlay, 210);
 //                console.log(e.mapBrowserEvent.pixel);
             });
         });
         props.map.addInteraction(this.interaction);
+    }
+
+    private static setInfoZoomto (f : Feature) {
+        let coord = (f.getGeometry() as Point).getCoordinates();
+        utils.setClick('geojson_info', ()=> mapUtils.zoomTo(coord[0], coord[1], 10));
     }
     /* junk, for reference
 
