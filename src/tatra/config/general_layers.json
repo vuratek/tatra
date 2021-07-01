@@ -154,6 +154,34 @@
 		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
 				"wrapX"				: true
 		    	}
+	}, {
+		"id"		: "imagery_template_no_time_15.625m",
+		"title"		: "Imagery Template No Time 15.625m",
+		"altTitle1"	: "Title 1",
+		"altTitle2"	: "Title 2",
+		"type"		: "wmts",
+		"category" 	: "basemap",
+		"handler"	: "imagery",
+		"replace"	: ["layer", "?"],
+		"clandestine": false,
+		"maxLevel"	: 12.5,
+		"props"		: {
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
+				"layer"			: "#layer#",
+				"format"		: "image/png",
+				"matrixSet"		: "15.625m",
+				"tileGrid"		: {
+							"origin": [-180, 90],
+							"extent"		: [-180, -90, 180, 90],
+							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313, 0.000137329101563],
+							"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+							"tileSize": 512
+		       				}, 
+				"tileLoadFunction"	: [	
+									"function(imageTile, src) {",
+									"imageTile.getImage().src = setWMTSTime(imageTile, src, 'Y-m-d', '#id#');}"
+	                                ]	
+					}
 	},{
 		"id"		: "imagery_template_31.25m",
 		"title"		: "Imagery Template 31.25m",
@@ -166,7 +194,7 @@
 		"clandestine": false,
 		"maxLevel"	: 11.5,
 		"props"		: {
-				"url"			: "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/png",
 				"matrixSet"		: "31.25m",
@@ -193,12 +221,13 @@
 		"clandestine": false,
 		"maxLevel"	: 11.5,
 		"props"		: {
-				"url"			: "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
 				"layer"			: "#layer#",
 				"format"		: "image/png",
 				"matrixSet"		: "31.25m",
 				"tileGrid"		: {
 							"origin": [-180, 90],
+							"extent"		: [-180, -90, 180, 90],
 							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313],
 							"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 							"tileSize": 512
@@ -220,12 +249,13 @@
 		"clandestine": false,
 		"maxLevel"	: 9.5,
 		"props"		: {
-				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/jpeg",
-				"matrixSet"		: "EPSG4326_250m",
+				"matrixSet"		: "250m",
 				"tileGrid"		: {
 							"origin": [-180, 90],
+							"extent"		: [-180, -90, 180, 90],
 							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625],
 							"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7, 8],
 							"tileSize": 512
@@ -247,12 +277,13 @@
 		"clandestine": false,
 		"maxLevel"	: 8.5,
 		"props"		: {
-				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/jpeg",
-				"matrixSet"		: "EPSG4326_500m",
+				"matrixSet"		: "500m",
 				"tileGrid"		: {
 							"origin": [-180, 90],
+							"extent"		: [-180, -90, 180, 90],
 							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125],
 							"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7],
 							"tileSize": 512
@@ -274,12 +305,13 @@
 		"clandestine": false,
 		"maxLevel"	: 8.5,
 		"props"		: {
-				"url"			: "https://map1{a-c}.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?TIME=*TIME*",
+				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?TIME=*TIME*",
 				"layer"			: "#layer#",
 				"format"		: "image/png",
-				"matrixSet"		: "EPSG4326_2km",
+				"matrixSet"		: "2km",
 				"tileGrid"		: {
 							"origin": [-180, 90],
+							"extent"		: [-180, -90, 180, 90],
 							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125],
 							"matrixIds": [0, 1, 2, 3, 4, 5],
 							"tileSize": 512

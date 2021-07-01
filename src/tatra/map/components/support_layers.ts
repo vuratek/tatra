@@ -73,7 +73,7 @@ export class support_layers extends baseComponent{
 			this.generateLayers(el, 'overlay', 'supp_lyrs', 'Overlays');
 		}
 		if (imagery > 0) {
-			this.generateLayers(el, 'imagery', 'supp_lyrs', 'Data Layers', true);
+//			this.generateLayers(el, 'imagery', 'supp_lyrs', 'Data Layers', true);
 		}
 		if (basemap > 0) {
 			this.generateLayers(el, 'basemap', 'supp_lyrs', 'Backgrounds');
