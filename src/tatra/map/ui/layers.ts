@@ -76,12 +76,12 @@ export class layers {
         }        
     }
 
-    public generateAuxLayers (type: string, label : string | null = null, opened : boolean = true) {
+    public generateAuxLayers (type: string, label : string | null = null, opened : boolean = true, showAll : boolean = true) {
         //        GroupContent.create("fmm_lyrs_"+ type, type, '', menu, false);
-        support_layers.generateLayers(this.menu, type, this.appId, label, opened);
+        support_layers.generateLayers(this.menu, type, this.appId, label, opened, showAll);
     }
 
-    public generateSupportLayers (opened : boolean = true) {
+    public generateSupportLayers (opened : boolean = true, generateAll : boolean = true) {
         if (!props.config) { return; }
         GroupContent.create({ id: "bgLyrs", label : "Backgrounds", parent: this.menu, opened : opened} );
         let base = GroupContent.getContainer('bgLyrs');
@@ -97,21 +97,23 @@ export class layers {
            //this.generateSupportLayer(ul, this.ids[i]);
         }
 
-        this.generateShowAll(ul, this.appId + '_lyr_show_all', 'tatraCtrlLyr tatraLyrShowAll');
+        if (generateAll) {
+            this.generateShowAll(ul, this.appId + '_lyr_show_all', 'tatraCtrlLyr tatraLyrShowAll');
 
-        for (let i = props.layers.length - 1; i >= 0; i--) {
-            let lo = props.layers[i];
-            if (lo.category != "basemap" || lo.parent) { continue;}
-            let run = true;
-            if (lo.category == "basemap") {
-                for (let j=0; j < this.mainLayers.length; j++) {
-                    if (lo.id == this.mainLayers[j]) { run = false;}
+            for (let i = props.layers.length - 1; i >= 0; i--) {
+                let lo = props.layers[i];
+                if (lo.category != "basemap" || lo.parent) { continue;}
+                let run = true;
+                if (lo.category == "basemap") {
+                    for (let j=0; j < this.mainLayers.length; j++) {
+                        if (lo.id == this.mainLayers[j]) { run = false;}
+                    }
                 }
-            }
-            if (run) { 
-                support_layers.createLayer(lo, ul, this.appId);
-    
-                //this.generateSupportLayer(ul, lo.id);
+                if (run) { 
+                    support_layers.createLayer(lo, ul, this.appId);
+        
+                    //this.generateSupportLayer(ul, lo.id);
+                }
             }
         }
 
@@ -122,8 +124,9 @@ export class layers {
             }
         }
 
-
-        utils.setClick(`${this.appId}_lyr_show_all`, () => this.updateViewAll());
+        if (generateAll) {
+            utils.setClick(`${this.appId}_lyr_show_all`, () => this.updateViewAll());
+        }
         this.updateBaseLayerView();
         document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateBaseLayerView());
     }

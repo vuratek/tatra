@@ -4,11 +4,8 @@ import { configProps } from "./support/configProps";
 import { coreUtils } from "./support/coreUtils";
 import { mapEvent } from "./handlers/mapEvent";
 import { mapUtils } from "./mapUtils";
-import './css/*.scss';
 import { events } from "./events";
 import { controls } from "./components/controls";
-import { Layer, LayerSource } from "./obj/Layer";
-import { layer } from "./handlers/layer";
 import { get as projGet } from "ol/proj";
 import { Map, View } from "ol";
 import { IConfigDef } from "./defs/ConfigDef";
@@ -19,6 +16,7 @@ import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
+import './css/*.scss';
 
 interface Window {
     [key:string]: any; // Add index signature

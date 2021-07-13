@@ -114,8 +114,8 @@
 	background-color: rgba(0,60,136,.7);
 	outline:none;
 }
-.ol-zoom {
-	top: 3.5rem;
+.ol-zoom, .ol-locator {
+	top: 2.5rem;
 	left: 1.5rem;
 	width:3.5rem;
     background: none;
@@ -124,17 +124,20 @@
     border-radius:0.4rem;
     padding:0.2rem;
 }
-.leftMenuActive .ol-zoom {
+.ol-locator {
+	top: 9rem;
+}
+.leftMenuActive .ol-zoom, .leftMenuActive .ol-locator {
     left: 8.5rem;
 }
 .ol-zoomClosed {
     top: 2.5rem;
     left: 0.5rem;	
 }
-.ol-zoom:hover {
+.ol-zoom:hover, .ol-locator:hover {
 	background-color: rgba(255,255,255,.6);
 }
-.ol-zoom:focus {
+.ol-zoom:focus, ol-locator:focus {
 	background:default;
 	outline:none;
 }
@@ -142,7 +145,6 @@
 	top : 7rem;
 	left:1.5rem;
 }
-
 .ol-attribution {
 	display:none;
 }
@@ -556,7 +558,11 @@
 	}	
 	
 	.ol-zoom {
-		display:none;
+		top:4.5rem;
+		/*display:none;*/
+	}
+	.ol-locator {
+		top: 11rem;
 	}
 	.ol-scale-line {
 		font-size:1rem;
@@ -629,5 +635,8 @@
 	}
 	.isTimeline .ol-scale-lineMI {
 		bottom: 17.5rem;
+	}
+	#bb_locator_btn {
+		display:none;
 	}
 }

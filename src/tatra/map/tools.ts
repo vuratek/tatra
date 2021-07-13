@@ -33,7 +33,7 @@ export class tools {
             icon : "object-ungroup",
             text : "Draw Multiple Boxes",
             info : "Draw mulitple boxes on the map"
-        }, 
+        },
         manual : {
             label: "MANUAL",
             icon : "pencil-alt",

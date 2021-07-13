@@ -80,7 +80,7 @@ export class support_layers extends baseComponent{
 		}
     }
     
-	public static generateLayers (menu : HTMLDivElement, type : string, baseId : string, label : string | null = null, opened : boolean = true) {
+	public static generateLayers (menu : HTMLDivElement, type : string, baseId : string, label : string | null = null, opened : boolean = true, showAll : boolean = true) {
         this.menus[baseId] = true;
         let id = baseId +'_' + type;
         let lbl = (label) ? label : type;
@@ -93,6 +93,7 @@ export class support_layers extends baseComponent{
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
+			if (! showAll && ! lo.isBasicLayer) { continue; }
 			let go = false;
 			if ((type == "imagery" || type == "orbits") && lo.handler && lo.handler == type && ! lo.clandestine) { go = true;}
 			if (lo.tag && lo.tag == type) { go = true; }

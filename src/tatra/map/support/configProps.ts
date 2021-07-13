@@ -8,6 +8,7 @@ export class configProps {
     public static center                : Array <number> = [0, 0];
     public static dates                 : string | null = null;
     public static extent                : [number, number, number, number] | null = null;
+    public static hasLocation           : boolean = true;
     public static icons                 : string | null = null;
     public static initURL               : string = '';
     public static layerInfoURL          : string = '';

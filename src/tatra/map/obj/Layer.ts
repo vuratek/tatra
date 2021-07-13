@@ -105,6 +105,7 @@ export class Layer {
     public iconLabel        : string | null = null;
     public iconMatrix       : Array <number> | null = null;
     public iconHasBorder    : boolean = true;
+    public isBasicLayer     : boolean = false;
     public boxSource        : Vector | null = null;
     public paletteUrl       : string | null = null;
     public paletteColorDef  : string | null = null;
@@ -119,6 +120,7 @@ export class Layer {
     public identifyHandler  : string | null = null;
     public _identifyRead    : Function | null = null;
     public _identifySubmit  : Function | null = null;
+    public noDateRefresh    : boolean = false;
     public _refreshRate     : number = 0;       // value in mins
     public _lastRefresh     : number = 0;
     public styleJSON        : JSON | null = null;

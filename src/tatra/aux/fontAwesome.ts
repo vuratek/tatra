@@ -7,14 +7,14 @@ import { faComments, faBookmark, faEnvelopeOpen } from '@fortawesome/free-regula
 import { faRedditAlien, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastForward, faStepBackward, faStepForward, faUpload,
         faCaretLeft, faCaretUp, faExternalLinkAlt, faBars, faTimes, faPlusCircle, faMinusCircle, faInfoCircle, faHandPaper,
-        faCrosshairs, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust,
-        faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash,
+        faMapMarkerAlt, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust,
+        faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash, faCrosshairs,
         faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus,
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap } from '@fortawesome/free-solid-svg-icons';
+        faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
         config.searchPseudoElements = true;
@@ -27,16 +27,16 @@ export class fontAwesome {
         // left menu
         library.add(faBars, faCaretLeft, faCaretUp);
         // map control bar
-        library.add(faHandPaper, faCrosshairs, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
-            faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft,
-            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage );
+        library.add(faHandPaper, faMapMarkedAlt, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
+            faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft, faMapMarkerAlt, 
+            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage, faCrosshairs );
         // corporate icons    
         library.add(faRedditAlien, faTwitter, faFacebook);
         // timeline 
         library.add(faFastBackward, faFastForward, faStepBackward, faStepForward);
         // firms
         library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, 
-            faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt);
+            faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff);
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight);
         // laads

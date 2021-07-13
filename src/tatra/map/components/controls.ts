@@ -13,6 +13,7 @@ import { pan } from "./pan";
 import { help } from "./help";
 import { measure } from "./measure";
 import { select } from "./select";
+import { locator } from "./locator";
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
 
 export interface IControlsItem {
@@ -111,6 +112,12 @@ export class controls  {
                     if (! item.icon) { item.icon = "fa-ruler"; }
                     if (! item.type) { item.type = ControlTypes.TOOL; }
                     if (! item.handler) { item.handler = measure;}
+                    break;
+                case "locator" :
+                    if (! item.label) { item.label = "LOCATION"; }
+                    if (! item.icon) { item.icon = "fa-map-marker-alt"; }
+                    if (! item.type) { item.type = ControlTypes.TOOL; }
+                    if (! item.handler) { item.handler = locator;}
                     break;
                 case "select": 
                     if (! item.label) { item.label = "SELECT"; }

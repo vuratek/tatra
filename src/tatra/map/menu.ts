@@ -44,6 +44,11 @@ export class menu {
         utils.setClick(this.id + "Close", () => this.setMenu());
 
         let content = document.createElement("div");
+        content.setAttribute("id", this.id + "TopContent");
+        content.setAttribute("class",  "mapMenuTopContent");        
+        div.appendChild(content);
+
+        content = document.createElement("div");
         content.setAttribute("id", this.id + "Content");
         content.setAttribute("class",  "mapMenuContent");        
         div.appendChild(content);
@@ -128,15 +133,16 @@ export class menu {
 		let footer = (document.querySelector('footer') as HTMLDivElement).clientHeight;
         let header2 = (document.getElementById(this.id + 'Header') as HTMLDivElement).clientHeight;
         let timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
+        let topcontent = (document.getElementById(this.id + 'TopContent') as HTMLDivElement).clientHeight;
         let map = (document.getElementById('map') as HTMLDivElement).clientHeight;
         if (window.innerHeight > 600) { header += 30;}
         if (window.innerHeight <= 600) {
-            el.style.maxHeight = (map + header - header2 - 2 ) + "px";	
+            el.style.maxHeight = (map + header - header2 - topcontent - 2 ) + "px";	
         }
 		else if (window.innerWidth <= 700 ) {
-			el.style.maxHeight = (map - header2 -2 ) + "px";	
+			el.style.maxHeight = (map - header2 - topcontent - 2 ) + "px";	
 		} else {
-			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - footer - 7) + "px";	
+			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 7) + "px";	
         }
 
 		
