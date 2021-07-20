@@ -26,6 +26,7 @@
 .identifyJSONLabel .faLbl, .identifyJSONLabel .faNoaaLbl {
     font-size: 1.8rem;
     font-weight: 600;
+    overflow: hidden;
 }
 .identifyJSONLabel .faNoaaLbl {
     padding:.8rem;

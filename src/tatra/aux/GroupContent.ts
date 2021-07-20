@@ -50,6 +50,18 @@ export class GroupContent {
     
     public static update(id : string) {
         GroupContent.list[id] =  ! GroupContent.list[id];
+        this._update(id);
+    }
+
+    public static open(id:string) {
+        GroupContent.list[id] = true;
+        this._update(id);
+    }
+    public static close(id:string) {
+        GroupContent.list[id] = false;
+        this._update(id);
+    }
+    private static _update(id:string) {
         GroupContent.setCtrl(id);
         events.dispatch(events.EVENT_GROUP_CONTENT_CHANGE);
     }

@@ -57,28 +57,25 @@ export class mapUtils {
             if (layer.category != "basemap") {
                 continue;
             }
-            if (layer.visible) {
-                // switch basemap to 'earth' - hide current basemap
-                if (id != props.defaultBasemap) {
-                    layer.visible = false;
-                    update = true;
-                    let sub = mapUtils.getLayerById(props.defaultBasemap) as Layer;
-                    sub.visible = true;
-                }
-                props.currentBasemap = props.defaultBasemap;
-            } else {
-                if (id == layer.id || (id == layer.parent && ! layer.isLabel)) {
-                    layer.visible = true;
-                    props.currentBasemap = id;
-                    update = true;
-                    if (layer.id == id) {
-                        (document.getElementById('map') as HTMLDivElement).style.background = layer.styleBackground;
-                    }
+            if (id == layer.id || (id == layer.parent && ! layer.isLabel)) {
+                layer.visible = true;
+                props.currentBasemap = id;
+                update = true;
+                if (layer.id == id) {
+                    (document.getElementById('map') as HTMLDivElement).style.background = layer.styleBackground;
                 }
             }
         }
         this.setCountryLabel();
         if (update) { events.dispatch(events.EVENT_BASEMAP_CHANGE); }
+    }
+
+    public static setMapCursor(type?:string | null) {
+        let el = document.getElementById('map') as HTMLDivElement;
+        if (el) {
+            let _type = (type) ? type : 'default';
+            el.style.cursor = _type;
+        }
     }
 
     public static setOverlay (id : string) {

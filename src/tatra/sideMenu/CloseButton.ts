@@ -18,7 +18,6 @@ export class CloseButton {
     }
 
     public static close () {
-        console.log(model.state);
         LeftMenuBar.show();
         LeftMenu.minimize();
     }

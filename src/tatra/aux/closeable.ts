@@ -10,7 +10,7 @@ export class closeable {
     public static create (container : string, dragHandler : string | null, containment : string | null) {
 
         let pos1 = 0, pos3 = 0;
-        let buffer = 15;
+        let buffer = 45;
         let threshold = 75;
 
 

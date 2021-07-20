@@ -34,6 +34,7 @@ export class LeftMenu {
         } else {
             model.open();
         }
+        this.resize();
     }
 
     public static activate () {

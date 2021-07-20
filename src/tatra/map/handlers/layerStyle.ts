@@ -299,8 +299,6 @@ export class layerStyle {
             scale = 0.1;
         }
         return new Icon({
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'pixels',
             scale: scale,
             opacity: opacity,
             anchor: [0.5, 0.5],

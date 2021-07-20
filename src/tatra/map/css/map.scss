@@ -125,7 +125,7 @@
     padding:0.2rem;
 }
 .ol-locator {
-	top: 9rem;
+	top: 9.5rem;
 }
 .leftMenuActive .ol-zoom, .leftMenuActive .ol-locator {
     left: 8.5rem;
@@ -545,9 +545,6 @@
 	#mapControlBar {
 		padding-right:0;
 	}
-	.map,  #lmvMenus, #lmvTools{
-/*		top: 3rem;*/
-	}
 	#lmvMenus {
 		z-index: 2800;
 	}
@@ -562,7 +559,7 @@
 		/*display:none;*/
 	}
 	.ol-locator {
-		top: 11rem;
+		top: 11.5rem;
 	}
 	.ol-scale-line {
 		font-size:1rem;

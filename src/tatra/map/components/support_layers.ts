@@ -225,7 +225,12 @@ export class support_layers extends baseComponent{
 			if (lo.category == 'overlay') {
 				mapUtils.setOverlay(id);
 			} else if (lo.category == 'basemap') {
-				mapUtils.setBasemap(id);
+				if (lo.visible && lo.id != props.defaultBasemap) {
+					lo.visible = false;
+					mapUtils.setBasemap(props.defaultBasemap);	
+				} else {
+					mapUtils.setBasemap(id);
+				}
 			} else {
 				if (lo.handler && (lo.handler == "orbits" || lo.handler == "imagery" || lo.tag != "")) {
 					lo.visible = ! lo.visible;
