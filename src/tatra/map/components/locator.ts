@@ -5,9 +5,7 @@ import { controls } from "./controls";
 import { props } from "../props";
 import { utils } from "../../utils";
 import { Vector } from "ol/layer";
-import { Vector as VectorSrc } from "ol/source";
 import { MapBrowserEvent } from "ol";
-import { Coord } from "../obj/Coord";
 import { mapUtils } from "../mapUtils";
 import { GeoLocation } from "../obj/GeoLocation";
 
@@ -39,6 +37,8 @@ export class locator extends baseComponent {
         tools.register(this.tool);
         super.init();
         props.map.addControl(this.tool.control);
+        document.addEventListener(GeoLocation.EVENT_GEOLOCATION_UPDATE, (evt) => this.refreshSaved (evt as any));
+        GeoLocation.retrieveLocalStorage();
     }
 
     public static open() {
@@ -53,7 +53,6 @@ export class locator extends baseComponent {
         this.position(mw, mh);
         this.setTab(this.currentTab);
         this.mouseClickListener = (evt) => this.mapClick(evt as unknown as MapBrowserEvent);
-        this.updateClearAll();
     }
 
 
@@ -126,10 +125,56 @@ export class locator extends baseComponent {
         if (el2) {
             el2.checked = GeoLocation.allowMultipleLocations;
         }
+        this.updateClearAll();
     }
     private static clearAll() {
         GeoLocation.clearAll();
         this.updateClearAll();
+    }
+    private static refreshSaved() {
+        if (this.currentTab == 3) {
+            let el = document.getElementById('locator-content') as HTMLDivElement;
+            if (! el) { return; }
+            if (GeoLocation.savedLocations.length == 0) {
+                el.innerHTML = 'No locations currenty saved.';
+                return;
+            }
+            el.innerHTML = '<div id="locator-content-list"></div>';
+            let el2 = document.getElementById('locator-content-list') as HTMLDivElement;
+            if (!el2) { return;}
+            for (let i=0; i<GeoLocation.savedLocations.length; i++) {
+                let gs = GeoLocation.savedLocations[i];
+                let div = document.createElement("div");
+                div.id = `locator-saved-${i}`;
+                div.className = 'locator-saved-item';
+                el2.appendChild(div);
+                let str = `<div id="locator-item-click-${i}">`;
+                if (gs.address) {
+                    str += `<span class="locator-address">${gs.address}</span><br/>`;
+                }
+                if (gs.coord) {
+                    let coord = mapUtils.setCoordPrecision(gs.coord[0], gs.coord[1], 4);
+                    str += `<span class="locator-latlon">Lat: ${coord[1]}, Lon: ${coord[0]}</span>`;
+                }
+                str += '</div>'
+                str += `
+                    <div id="locator-item-remove-${i}" class="locator-save-item-close"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                `;
+                div.innerHTML = str;
+                utils.setClick(`locator-item-click-${i}`, ()=>this.zoomToSaved(i));
+                utils.setClick(`locator-item-remove-${i}`, ()=>this.removeSaved(i));
+            }
+        }
+    }
+    private static zoomToSaved(id : number) {
+/*        console.log("ZOOM to", id);
+        let geo = new GeoLocation();
+        geo.setCoords(evt.coordinate);
+        geo.reposition = false;
+        this.reverseGeocode(geo);*/
+    }
+    private static removeSaved(id:number) {
+        GeoLocation.removeSaved(id);
     }
     private static setMultiSelection() {
         if (document.getElementById('locator-allow-multi') && (document.getElementById('locator-allow-multi')as HTMLInputElement).checked) {
@@ -169,7 +214,7 @@ export class locator extends baseComponent {
             utils.setUIAction("keyup", "locator-search", () => this.search());
             utils.setClick('locator-search-clear', ()=>this.clearSearch());
         } else {
-            el.innerHTML = '';
+            this.refreshSaved();
         }
         this.createMutliple();
     }
@@ -309,19 +354,15 @@ export class locator extends baseComponent {
     }
 
     private static zoomTo(geo : GeoLocation) {
-        if (! geo.coord) { return; }
+        if (! geo.coord || ! geo.active) { return; }
         if (geo.reposition) {
             props.map.getView().setCenter( geo.coord );
-            props.map.getView().setZoom(10);
+            if (props.map.getView().getZoom() < 10) {
+                props.map.getView().setZoom(10);
+            }
         }
 
-        if (!this.layer) {
-            this.layer = new Vector({
-                source: new VectorSrc({})
-            });
-            props.map.addLayer(this.layer);
-        }
-        geo.render(this.layer);
+        geo.render();
         this.updateClearAll();
     }
     public static close() {

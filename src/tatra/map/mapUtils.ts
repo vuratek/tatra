@@ -237,6 +237,13 @@ export class mapUtils {
         coord.east = arr[2];
         coord.south = arr[3];
     }
+    public static setCoordPrecision (longitude:number, latitude:number, precision: number) : Array <number> {
+        let _coord = new Coord();
+        _coord.west = longitude;
+        _coord.north = latitude;
+        mapUtils.setPrecision(_coord, precision);
+        return[_coord.west,_coord.north];
+    }
     public static useDragPan( enabled: boolean) {
         let dragPan;
         props.map.getInteractions().forEach(function(interaction) {
