@@ -324,13 +324,14 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	margin: 0;
 }
 .lmvControlsWindowLabel {
+	font-family: 'Titillium Web','Helvetica Neue',Helvetica,Arial,sans-serif;
 	font-size:1.9rem;
 	color:#fc6814;
-	padding:0.6rem 3rem 0.3rem 1rem;
 	border-radius: 0.4rem 0.4rem 0 0;
+	padding:0.8rem 3rem 0.7rem 1rem;
 	width:100%;
-	font-family: 'Titillium Web','Helvetica Neue',Helvetica,Arial,sans-serif;
 	cursor:default;
+	text-transform: uppercase;
 }
 .lmvControlsWindowCloseBtn {
 	font-size:1em;

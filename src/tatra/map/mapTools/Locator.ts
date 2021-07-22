@@ -1,4 +1,4 @@
-import Control from 'ol/control/Control';
+import  Control from 'ol/control/Control';
 import { props } from '../props';
 import { BaseTool } from './BaseTool';
 import { controls } from '../components/controls';

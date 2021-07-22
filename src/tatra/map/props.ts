@@ -10,7 +10,7 @@ export class props  {
     public static data                  = {};
     public static isIE                  : boolean = false;
     public static server                : string = '';
-    
+    public static defaultStartTool      : string = 'pan';
     public static map                   : Map;
     public static currentBasemap        : string = '';
     

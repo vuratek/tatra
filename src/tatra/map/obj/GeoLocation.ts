@@ -1,12 +1,12 @@
-import { Coord } from "./Coord";
 import { mapUtils } from "../mapUtils";
-import { Feature, Overlay } from "ol";
+import { default as Feature } from "ol/Feature";
+import { default as Overlay } from "ol/Overlay";
 import { Vector as VectorSrc } from "ol/source";
-import OverlayPositioning from "ol/OverlayPositioning";
+import { default as OverlayPositioning } from "ol/OverlayPositioning";
 import { props } from "../props";
 import { Style, Icon } from "ol/style";
 import { Point } from "ol/geom";
-import { Vector } from "ol/layer";
+import { default as Vector } from "ol/layer/Vector";
 import { utils } from "../../utils";
 
 
@@ -187,7 +187,6 @@ export class GeoLocation {
             }
             this.refreshGeoLocations();
         }
-        console.log("LOAD", this.savedLocations);
     }
 
     private static setLayer() {
@@ -199,8 +198,9 @@ export class GeoLocation {
         }
     }
 
-    private hide() {
+    public hide() {
         GeoLocation.remove(this.id);
+        GeoLocation.refreshGeoLocations();
     }
 
     public static add(geo : GeoLocation) {
@@ -276,6 +276,22 @@ export class GeoLocation {
         }
         let geo = new GeoLocation();
         geo.isMyLocation = true;
+        return geo;
+    }
+    public static setSavedLocation(sg : GeoLocationSave):GeoLocation {
+        for (let i=0; i<this.list.length; i++) {
+            let geo = this.list[i];
+            if ((sg.coord && geo.coord && sg.coord[0] == geo.coord[0] && sg.coord[1] == geo.coord[1]) || 
+                (sg.magicKey && geo.magicKey && sg.magicKey == geo.magicKey)) {
+                return geo;
+            }
+        }
+        let geo = new GeoLocation();
+        geo.setCoords(sg.coord);
+        geo.magicKey = sg.magicKey;
+        geo.region = sg.region;
+        geo.address = sg.address;
+        geo.city = sg.city;
         return geo;
     }
     public static hasMagicLocation(magickey:string) : GeoLocation | null {

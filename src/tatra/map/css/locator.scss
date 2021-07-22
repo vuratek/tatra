@@ -2,24 +2,31 @@
     max-width: 40rem;
 }
 .locator-tab-wrap {
-    padding: 0 .5rem;
+    padding: 0 .5rem 0 0;
 }
 .locator-tab-wrap .locator-tab:first-child {
-    border-radius: .5rem 0 0 0;
-    border-left: .1rem solid #AAA;
+    border-radius: 0 0 0 0;
+    /*border-left: .1rem solid #AAA;*/
+    border-left: none;
 }
 .locator-tab-wrap .locator-tab:last-child {
     border-radius: 0 .5rem 0 0;
     border-right: .1rem solid #AAA;
 }
+.locator-tab-wrap svg {
+    font-size:3.5rem;
+    float:left;
+    padding-right:1rem;
+}
 .locator-tab {
+    font-family: 'Titillium Web';
+    font-size: 1.7rem;
+    line-height: 2rem;
+    opacity: 0.7;
     display: table-cell;
     background: #434343;
     color:#CCC;
-    padding: .5rem 1rem;
-    font-family: 'Titillium Web';
-    font-size: 1.4rem;
-    opacity: 0.7;
+    padding: .5rem .5rem .5rem 1rem;
     cursor: pointer;
     border-top: .1rem solid #AAA;
 }
@@ -30,38 +37,49 @@
     opacity:1;
     color:#eee;
     background:#222;
+    background: #041b2e;
     border-left: .1rem solid #AAA;
     border-right: .1rem solid #AAA;
 }
 #locator-content {
-    margin: 0 0.5rem 1rem 0;
-    padding: 2rem 1rem 1rem 1rem;
-    border-radius: 0 0 .5rem .5rem;
+    font-size: 1.7rem;
+    background: #041b2e;
+    margin: 0;
+    padding: 2.5rem 2rem 3rem 2rem;
+    /*border-radius: 0 0 .5rem .5rem;*/
     color:#eee;
 }
 #locator-locate-btn {
-    border-radius: 1rem;
-    margin: 0 20%;
-    width: 60%;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight:600;
     text-align: center;
-    padding: 0.5rem 1rem;
-    background: linear-gradient(180deg, #4acb62, #0d3d16);
-    color: white;
+    border-radius: 0.5rem;
+    margin: 0;
+    width: 100%;
+    padding: 0.5rem 0rem;
+    /*background: linear-gradient(180deg, #299bf9, #041b2e);*/
+    background: linear-gradient(180deg, #fc6814, #bb4b0c);
+    color: #041b2e;
     cursor: pointer;
-    font-size: 1.6rem;
+    
+}
+#locator-locate-btn span {
+    font-size: 2rem;
+    padding-right: 0.2rem;
 }
 #locator-or {
-    text-align: center;
-    margin: 1rem;
+    margin: 1rem .5rem;
+    font-size: 1.4rem;
 }
 #locator-click-option {
-    text-align: center;
-    background: #2d546e;
-    width: 70%;
-    margin: 1rem auto;
-    padding: 1rem;
-    font-size: 1.6rem;
-    line-height: 2.5rem;
+    font-family: 'Titillium Web';
+    font-size: 1.7rem;
+    line-height: 2rem;
+    /*background: #345970;*/
+    width: 100%;
+    margin: 0rem auto;
+    padding: 1.5rem 0rem 0rem 0rem;  
 }
 #locator-options {
     position:relative;
@@ -87,7 +105,7 @@
 }
 .locator-multi-lbl {
     margin: .3rem 0 0 3.5rem;
-    font-size: 1.4rem;
+    font-size: 1.7rem;
 }
 #locator-locate-btn:hover {
     opacity:0.8;
@@ -96,21 +114,23 @@
     position:relative;
 }
 .locator-search-wrap input[type=text]{
+    font-size: 1.6rem;
     border: none;
     width: 100%;
     outline: none;
-    font-size: 1.7rem;
-    padding: .3rem .5rem;
+    padding: .5rem 0rem .5rem 1rem;
 }
 .closebtn {
     position: absolute;
     right: 0;
     top: 0;
     background: #336d91;
+    background:#bf4c0c;
+    color: #041b2e;
     width: 3rem;
     height: 100%;
     font-size: 2.2rem;
-    padding: .2rem .7rem;
+    padding: .3rem 0rem .5rem 0.8rem;
 }
 #locator-search-results ul {
     list-style: none;
@@ -138,19 +158,35 @@
 }
 .identifyJSONLabel .locator-text {
     width: 30rem;
+    padding: 0.5rem 0rem 0rem 0.8rem;
 }
 #locator-content-list {
     max-height: 20rem;
     overflow-y:scroll;
 }
+#locator-content-list .selected {
+    background:#3a5e76;
+}
 .locator-address {
-    margin: 1rem .5rem 0 0.5rem;
+    line-height: 2rem;
+    font-weight: 300;
+    margin: 1rem .5rem 0 0.7rem;
     white-space: normal;
 }
 .locator-latlon {
     font-size: 1.4rem;
     font-style: italic;
     padding: 0 .5rem;
+    /*color:#555;*/
+    color:#fc6814;
+}
+#locator-content .locator-latlon {
+    color:#CCC;
+    padding:0;
+}
+#locator-content .locator-address {
+    margin: 0;
+    width: 85%;
 }
 .locator-saved-item {
     position: relative;
@@ -177,4 +213,9 @@
 }
 .locator-saved-item:hover {
     opacity:0.8;
+}
+.locator-page-start {
+    height:3rem;
+    color: #aaa;
+    font-family: 'Titillium Web';
 }

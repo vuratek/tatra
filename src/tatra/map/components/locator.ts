@@ -7,7 +7,7 @@ import { utils } from "../../utils";
 import { Vector } from "ol/layer";
 import { MapBrowserEvent } from "ol";
 import { mapUtils } from "../mapUtils";
-import { GeoLocation } from "../obj/GeoLocation";
+import { GeoLocation, GeoLocationSave } from "../obj/GeoLocation";
 
 interface ISearchRecord {
     data? : any;
@@ -39,6 +39,8 @@ export class locator extends baseComponent {
         props.map.addControl(this.tool.control);
         document.addEventListener(GeoLocation.EVENT_GEOLOCATION_UPDATE, (evt) => this.refreshSaved (evt as any));
         GeoLocation.retrieveLocalStorage();
+        this.determineStart();
+        this.mouseClickListener = (evt) => this.mapClick(evt as unknown as MapBrowserEvent);
     }
 
     public static open() {
@@ -52,7 +54,6 @@ export class locator extends baseComponent {
         else { mw = 150; }
         this.position(mw, mh);
         this.setTab(this.currentTab);
-        this.mouseClickListener = (evt) => this.mapClick(evt as unknown as MapBrowserEvent);
     }
 
 
@@ -63,9 +64,9 @@ export class locator extends baseComponent {
         if (! el) { return; }
         el.innerHTML = `
             <div class="locator-tab-wrap">
-                <div id="locator-tab-1" class="locator-tab"><i class="fas fa-crosshairs bottomBarIcon"></i> Current location</div>
-                <div id="locator-tab-2" class="locator-tab"><i class="fas fa-search bottomBarIcon"></i> Locate place</div>
-                <div id="locator-tab-3" class="locator-tab"><i class="fas fa-flag bottomBarIcon"></i> Saved locations</div>
+                <div id="locator-tab-1" class="locator-tab"><i class="fas fa-crosshairs bottomBarIcon"></i> Current Location</div>
+                <div id="locator-tab-2" class="locator-tab"><i class="fas fa-search bottomBarIcon"></i> Find Location</div>
+                <div id="locator-tab-3" class="locator-tab"><i class="fas fa-flag bottomBarIcon"></i> Saved Locations</div>
             </div>
             <div id="locator-content"></div>
             <div id="locator-options"></div>
@@ -76,6 +77,7 @@ export class locator extends baseComponent {
         utils.setClick("locator-tab-3", ()=>this.setTab(3));
     }
     public static resize() {
+        this.disableMapClick();
         controls.onClick("pan");
     }
     public static mapClick(evt:MapBrowserEvent) {
@@ -103,6 +105,7 @@ export class locator extends baseComponent {
     }
     private static disableMapClick () {
         if (this.isClickListenerActive) {
+
             this.isClickListenerActive = false;
             props.map.un('click', this.mouseClickListener);
             mapUtils.setMapCursor();
@@ -116,7 +119,7 @@ export class locator extends baseComponent {
                 <input type="checkbox" id="locator-allow-multi">
                 <span class="checkmark" id="locator-allow-multi-lbl"></span>
             </label>
-            <div class="locator-multi-lbl">Allow multiple selection</div>
+            <div class="locator-multi-lbl">Allow multiple location selection</div>
             <div id="locator-remove-all"><span><i class="fa fa-trash"></i></span> Clear All</div>
         `;
         utils.setClick('locator-remove-all', ()=>this.clearAll());
@@ -136,10 +139,21 @@ export class locator extends baseComponent {
             let el = document.getElementById('locator-content') as HTMLDivElement;
             if (! el) { return; }
             if (GeoLocation.savedLocations.length == 0) {
-                el.innerHTML = 'No locations currenty saved.';
+                el.innerHTML = 'No locations are currenty saved.';
                 return;
             }
-            el.innerHTML = '<div id="locator-content-list"></div>';
+            el.innerHTML = `
+                <div class="locator-page-start">
+                    <label class="llCheckbox">
+                        <input type="checkbox" id="locator-allow-start">
+                        <span class="checkmark" id="locator-allow-start-lbl"></span>
+                    </label>
+                    <div class="locator-multi-lbl">Show at page start</div>
+                </div>
+                <div id="locator-content-list"></div>
+            `;
+            utils.setChange(`locator-allow-start`, ()=>this.setDefaultStart());
+            this.initDefaultStart();
             let el2 = document.getElementById('locator-content-list') as HTMLDivElement;
             if (!el2) { return;}
             for (let i=0; i<GeoLocation.savedLocations.length; i++) {
@@ -150,11 +164,11 @@ export class locator extends baseComponent {
                 el2.appendChild(div);
                 let str = `<div id="locator-item-click-${i}">`;
                 if (gs.address) {
-                    str += `<span class="locator-address">${gs.address}</span><br/>`;
+                    str += `<div class="locator-address">${gs.address}</div>`;
                 }
                 if (gs.coord) {
                     let coord = mapUtils.setCoordPrecision(gs.coord[0], gs.coord[1], 4);
-                    str += `<span class="locator-latlon">Lat: ${coord[1]}, Lon: ${coord[0]}</span>`;
+                    str += `<div class="locator-latlon">Lat: ${coord[1]}, Lon: ${coord[0]}</div>`;
                 }
                 str += '</div>'
                 str += `
@@ -164,15 +178,60 @@ export class locator extends baseComponent {
                 utils.setClick(`locator-item-click-${i}`, ()=>this.zoomToSaved(i));
                 utils.setClick(`locator-item-remove-${i}`, ()=>this.removeSaved(i));
             }
+            this.updateSavedItems();
+        }
+    }
+    private static initDefaultStart() {
+        let el = document.getElementById('locator-allow-start') as HTMLInputElement;
+        if (el) {
+            let val = localStorage.getItem('show-locator');
+            if (val && val == 'true') {
+                el.checked = true;
+            }
+        }
+    }
+    private static determineStart () {
+        let val = localStorage.getItem('show-locator');
+        if (val && val == 'true') {
+            props.defaultStartTool = 'locator';
+            this.currentTab = 3;
+        }
+    }
+    private static setDefaultStart() {
+        let el = document.getElementById('locator-allow-start') as HTMLInputElement;
+        if (el) {
+            let val = (el.checked) ? 'true' : 'false';
+            localStorage.setItem('show-locator', val);
+        }
+    }
+    private static updateSavedItems() {
+        for (let j=0; j<GeoLocation.savedLocations.length; j++) {
+            let sg = GeoLocation.savedLocations[j];
+            let found = false;
+            for (let i=0; i<GeoLocation.list.length; i++) {
+                let geo = GeoLocation.list[i];
+                if ((sg.coord && geo.coord && sg.coord[0] == geo.coord[0] && sg.coord[1] == geo.coord[1]) || (sg.magicKey && sg.magicKey == geo.magicKey)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) { utils.addClass(`locator-saved-${j}`, 'selected'); }
+            else { utils.removeClass(`locator-saved-${j}`, 'selected'); }
         }
     }
     private static zoomToSaved(id : number) {
-/*        console.log("ZOOM to", id);
-        let geo = new GeoLocation();
-        geo.setCoords(evt.coordinate);
-        geo.reposition = false;
-        this.reverseGeocode(geo);*/
+        let sg = GeoLocation.savedLocations[id];
+        for (let i=0; i<GeoLocation.list.length; i++) {
+            let geo = GeoLocation.list[i];
+            if ((sg.coord && geo.coord && sg.coord[0] == geo.coord[0] && sg.coord[1] == geo.coord[1]) || (sg.magicKey && sg.magicKey == geo.magicKey)) {
+                geo.hide();
+                return;
+            }
+        }
+        let geo = GeoLocation.setSavedLocation(sg);        
+        this.reverseGeocode(geo);
     }
+
     private static removeSaved(id:number) {
         GeoLocation.removeSaved(id);
     }
@@ -189,24 +248,24 @@ export class locator extends baseComponent {
         } else {
             utils.hide('locator-remove-all');
         }
+        this.updateSavedItems();
     }
     private static populateTabContent() {
         let el = document.getElementById('locator-content') as HTMLDivElement;
         if (!el) { return; }
         if (this.currentTab == 1 ) { 
             el.innerHTML = `
-                <div id="locator-locate-btn"><span><i class="fa fa-map-marker-alt"></i></span> Find me on the map</div>
-                <div id="locator-or">OR</div>
+                <div id="locator-locate-btn"><span><i class="fa fa-map-marker-alt"></i></span> Click to auto detect your location</div>
+                <!-- <div id="locator-or">OR</div> -->
                 <div id="locator-click-option">
-                    Click on the Map<br/>
-                    to get location information
+                    You can also manually find your location by directly clicking on the map.
                 </div>
             `;
             utils.setClick('locator-locate-btn', ()=> this.getGeoLocation());
         } else if (this.currentTab == 2) {
             el.innerHTML = `
                 <div class="locator-search-wrap">
-                    <input type="text" placeHolder="Search for places or enter coordinates" id="locator-search" autocomplete="off">
+                    <input type="text" placeHolder="Search for location or enter coordinates" id="locator-search" autocomplete="off">
                     <div class="closebtn" id="locator-search-clear"><span><i class="fas fa-times"></i></span></div>
                 </div>
                 <div id="locator-search-results"></div>
@@ -363,6 +422,7 @@ export class locator extends baseComponent {
         }
 
         geo.render();
+        this.updateSavedItems();
         this.updateClearAll();
     }
     public static close() {

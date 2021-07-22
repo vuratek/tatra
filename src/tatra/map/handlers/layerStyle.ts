@@ -564,7 +564,7 @@ export class layerStyle {
 
     public static noaaWeatherAlertsLegend (id:string, opacity: Number)  : string {
         switch (id) {
-            case "Fire Weather Watch" : return `rgba(255, 222, 173,${opacity})`; // "#ffdead";
+            case "Fire Weather Watch" : return `rgba(255, 222, 173,${opacity});`; // "#ffdead";
             case "Red Flag Warning" : return `rgba(255, 20, 147, ${opacity})`; //"#ff1493";
         }
         return "#FFFFFF";
