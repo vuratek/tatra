@@ -2,6 +2,7 @@ import  Control from 'ol/control/Control';
 import { props } from '../props';
 import { BaseTool } from './BaseTool';
 import { controls } from '../components/controls';
+import { locator } from '../components/locator';
 export class Locator extends BaseTool {
 
     public control : Control;
@@ -22,7 +23,16 @@ export class Locator extends BaseTool {
     }
 
     private onClick() {
+        let changeTab = false;
+        if (locator.currentTab == -1 || locator.currentTab == 2) {
+            changeTab = true;
+        }
+
         controls.setTool('locator');
+        if (changeTab) {
+            locator.setTab(1);
+        }
+        
     }
 	
 }

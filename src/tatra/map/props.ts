@@ -6,7 +6,7 @@ import { ColorPalette } from './obj/ColorPalette';
 
 export class props  {
     
-    public static config                : IConfigDef;
+    public static config                : IConfigDef | any = {};
     public static data                  = {};
     public static isIE                  : boolean = false;
     public static server                : string = '';
@@ -33,6 +33,11 @@ export class props  {
     public static colorPalettes         : IColorPalettes = {};
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
     public static defaultBasemap        : string = 'earth';
+    public static locatorSubset         : string | null = null;
+
+    public static getApplicationName () : string {
+        return props.config.properties.applicationName;
+    }
 }
 
 export interface IColorPalettes {

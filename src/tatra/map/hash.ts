@@ -26,11 +26,13 @@ export class hash {
     private static values : IHash = {};
     private static readonly delimiter : string = ';';
     private static currentHash : string = '';
+    private static previousHash : string = '';
 
     public static EVENT_HASH_CHANGE : string = 'hash_changed';
 
     public static init() {
         window.addEventListener("hashchange", (evt)=> this.updateHash(evt));
+        setInterval(this.hashUpdate, 1500);
     }
 
     public static tab (id : string | null, update : boolean = true) {
@@ -47,6 +49,15 @@ export class hash {
             this.parse();
             events.dispatch(events.EVENT_EXTERNAL_HASH_UPDATE);
         }
+    }
+
+    private static hashUpdate() {
+        if (hash.previousHash != hash.currentHash) {
+            hash.previousHash = hash.currentHash;
+            location.replace("#" + hash.currentHash.replace('#', '')); 
+            events.updateHash();
+        }
+        
     }
 
     public static getTab() : string {
@@ -229,9 +240,9 @@ export class hash {
 
         if (arr.length > 0) {
             this.currentHash = "#" + arr.join(this.delimiter);
-            location.replace("#" + arr.join(this.delimiter)); 
+//            location.replace("#" + arr.join(this.delimiter)); 
         }  
-        events.updateHash();
+        //events.updateHash();
     }
 
     public static getCurrentHash() : string {

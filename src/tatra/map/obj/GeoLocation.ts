@@ -10,6 +10,13 @@ import { default as Vector } from "ol/layer/Vector";
 import { utils } from "../../utils";
 
 
+export interface IGeoLocationSave {
+    magicKey         : string;
+    coord            : string;
+    address          : string;
+    city             : string;
+    region           : string;
+}
 export class GeoLocationSave {
     public magicKey         : string | null = null;
     public coord            : Array <number> | null = null;
@@ -150,42 +157,41 @@ export class GeoLocation {
     }
 
     public static updateLocalStorage() {
-        let str = '';
         let arr = [];
         for (let i=0; i<GeoLocation.savedLocations.length; i++) {
             let gs = GeoLocation.savedLocations[i];
-            let aTxt = [];
-            aTxt[0] = (gs.coord) ? gs.coord[0] + ',' + gs.coord[1] : 'x';
-            aTxt[1] = (gs.address) ? gs.address : 'x';
-            aTxt[2] = (gs.city) ? gs.city : 'x';
-            aTxt[3] = (gs.region) ? gs.region : 'x';
-            aTxt[4] = (gs.magicKey) ? gs.magicKey : 'x';
-            arr.push(aTxt.join('###'));
+            let aTxt = {} as IGeoLocationSave;
+            aTxt.coord = (gs.coord) ? gs.coord[0] + ',' + gs.coord[1] : '';
+            aTxt.address = (gs.address) ? gs.address : '';
+            aTxt.city = (gs.city) ? gs.city : '';
+            aTxt.region = (gs.region) ? gs.region : '';
+            aTxt.magicKey= (gs.magicKey) ? gs.magicKey : '';
+            arr.push(aTxt);
         }
-        str += arr.join(';;;');
-        localStorage.setItem('locator-saved', str);
+        
+        localStorage.setItem(`locator-saved-${props.getApplicationName()}`, JSON.stringify(arr));
     }
 
     public static retrieveLocalStorage() {
-        let str = localStorage.getItem('locator-saved');
+        let str = localStorage.getItem(`locator-saved-${props.getApplicationName()}`);
         if (str && str != '') {
-            let arr = str.split(';;;');
-            for (let i=0; i<arr.length; i++) {
-                let aTxt = arr[i].split('###');
-                if (aTxt.length == 5) {
+            try {
+                let arr = JSON.parse(str);
+                for (let i=0; i<arr.length; i++) {
+                    let aTxt = arr[i] as IGeoLocationSave;
                     let gs = new GeoLocationSave();
-                    if (aTxt[0] != 'x') {
-                        let coord = aTxt[0].split(',');
+                    if (aTxt.coord != '') {
+                        let coord = aTxt.coord.split(',');
                         gs.coord = [Number(coord[0]), Number(coord[1])];
                     }
-                    if (aTxt[1] != 'x') { gs.address = aTxt[1];}
-                    if (aTxt[2] != 'x') { gs.city = aTxt[2];}
-                    if (aTxt[3] != 'x') { gs.region = aTxt[3];}
-                    if (aTxt[4] != 'x') { gs.magicKey = aTxt[4];}
+                    if (aTxt.address != '') { gs.address = aTxt.address;}
+                    if (aTxt.city != '') { gs.city = aTxt.city;}
+                    if (aTxt.region != 'x') { gs.region = aTxt.region;}
+                    if (aTxt.magicKey != 'x') { gs.magicKey = aTxt.magicKey;}
                     this.savedLocations.push(gs);
                 }
-            }
-            this.refreshGeoLocations();
+                this.refreshGeoLocations();
+            } catch (error) {}
         }
     }
 

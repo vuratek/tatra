@@ -7,7 +7,7 @@ import { utils } from "../../utils";
 import { Vector } from "ol/layer";
 import { MapBrowserEvent } from "ol";
 import { mapUtils } from "../mapUtils";
-import { GeoLocation, GeoLocationSave } from "../obj/GeoLocation";
+import { GeoLocation } from "../obj/GeoLocation";
 
 interface ISearchRecord {
     data? : any;
@@ -24,7 +24,7 @@ export class locator extends baseComponent {
     public static tool          : Locator = new Locator(locator.id);
     public static className     : string = 'transparentWindow';
     public static draggable     : boolean = true;
-    private static currentTab   : number  = 2;
+    public static currentTab   : number  = -1;
     private static layer        : Vector | null = null;
     private static results      : ISearchData = {};
     private static ESRI_GEO_URL : string = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&langCode=en&text=#SEARCH#&category=Address%2CStreet%20Address%2CPopulated%20Place%2CEducation%2CLand%20Features%2CWater%20Features%2CMuseum%2CTourist%20Attraction%2CScientific%20Research%2CGovernment%20Office%2CBusiness%20Facility%2CPrimary%20Postal%2CAirport'
@@ -53,7 +53,8 @@ export class locator extends baseComponent {
         if (mw < 0) { mw = 0;}
         else { mw = 150; }
         this.position(mw, mh);
-        this.setTab(this.currentTab);
+        let tab  = (locator.currentTab == -1 || locator.currentTab == 1) ? 2 : locator.currentTab;
+        this.setTab(tab);
     }
 
 
@@ -86,7 +87,8 @@ export class locator extends baseComponent {
         geo.reposition = false;
         this.reverseGeocode(geo);
     }
-    private static setTab (id:number) {
+    public static setTab (id:number) {
+        if (id == -1) { id = 2; }
         this.currentTab = id;
         for (let i=1; i<=3; i++) {
             utils.removeClass(`locator-tab-${i}`, "selected");
@@ -258,7 +260,7 @@ export class locator extends baseComponent {
                 <div id="locator-locate-btn"><span><i class="fa fa-map-marker-alt"></i></span> Click to auto detect your location</div>
                 <!-- <div id="locator-or">OR</div> -->
                 <div id="locator-click-option">
-                    You can also manually find your location by directly clicking on the map.
+                    You can also determine location by directly clicking on the map.
                 </div>
             `;
             utils.setClick('locator-locate-btn', ()=> this.getGeoLocation());
@@ -300,6 +302,9 @@ export class locator extends baseComponent {
 
     private static loadData(search : string) {
         let url = this.ESRI_GEO_URL.replace("#SEARCH#", search);
+        if (props.locatorSubset) {
+            url += '&' + props.locatorSubset;
+        }
         fetch(url)
         .then(response => {
             return response.json();
@@ -399,17 +404,15 @@ export class locator extends baseComponent {
 			navigator.geolocation.getCurrentPosition((position) => locator.showPosition(position));
         } 
         // COMMENT OUT - only for testing
-        let geo = GeoLocation.setNewMyLocation();
+/*        let geo = GeoLocation.setNewMyLocation();
         geo.setCoords([-120, 40]);
-        this.reverseGeocode(geo);
-//        this.zoomTo(coord, `Latitude: ${coord[1]}<br>Longitude: ${coord[0]}`);
+        this.reverseGeocode(geo);*/
     }
 
     private static showPosition(position : Position) {
         let geo = GeoLocation.setNewMyLocation();
         geo.setCoords([position.coords.longitude, position.coords.latitude]);
         this.reverseGeocode(geo);
-//        this.zoomTo(coord, `Latitude: ${coord[1]}<br>Longitude: ${coord[0]}`);
     }
 
     private static zoomTo(geo : GeoLocation) {
