@@ -4,7 +4,7 @@
     overflow-y: auto;
     margin-top: .5rem;
 }
-.ol-identify .close {
+/*.ol-identify .close {
     position: absolute;
     top: 0;
     right: 0;
@@ -16,7 +16,21 @@
     padding: .5rem 0;
     border-radius: 3rem;
     cursor:pointer;
+}*/
+.ol-identify .close {
+    position: absolute;
+    top: -0.8rem;
+    right: -0.8rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    background: white;
+    text-align: center;
+    padding: .5rem 0;
+    border-radius: 3rem;
+    cursor:pointer;
 }
+
 .identifyBasicLabel .close {
     color: #426c2c;
 }

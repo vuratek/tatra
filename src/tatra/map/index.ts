@@ -12,7 +12,7 @@ import { IConfigDef } from "./defs/ConfigDef";
 import { components } from "./support/components";
 import { layerStyle } from './handlers/layerStyle';
 import { menu } from './menu';
-//import 'elm-pep';
+import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';

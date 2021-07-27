@@ -16,6 +16,7 @@ export class baseComponent {
     public static currentTool   : string = '';
     public static showInfoBar   : boolean = false;
     public static isOpened      : boolean = false;
+    public static ignoreResize : boolean = false;
         
     public static init () {
         document.addEventListener(events.EVENT_CONTROL_BTN, (evt : Event) => this.onClick (evt as CustomEvent));
@@ -97,6 +98,11 @@ export class baseComponent {
 //        utils.analyticsTrack(this.id);
     }
 
+    public static setIgnoreResize(ignore : boolean) {
+        this.ignoreResize = ignore;
+        controls.ignoreResize = ignore;
+    }
+
     public static position (x: number, y: number) {
         let el = document.getElementById(`lmvControls_${this.id}`);
 		if (el) {
@@ -105,6 +111,9 @@ export class baseComponent {
 		}
     }
     public static resize() {
+        if (controls.ignoreResize || this.ignoreResize) { 
+            return; 
+        }
         this.onClose();
     }
 

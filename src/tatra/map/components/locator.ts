@@ -44,14 +44,15 @@ export class locator extends baseComponent {
     }
 
     public static open() {
+        this.setIgnoreResize(false);
         super.open();
         tools.activate(this.id);
-        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight - 350;
+        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight - 400;
         let mw = ((document.getElementById('map') as HTMLDivElement).clientWidth - 400) / 2 - 40;
         if (mh < 0) { mh = 0;}
-        else { mh = 50;}
+        else { mh = 25;} // mh=50
         if (mw < 0) { mw = 0;}
-        else { mw = 150; }
+        else { mw = 60; } // mw=150
         this.position(mw, mh);
         let tab  = (locator.currentTab == -1 || locator.currentTab == 1) ? 2 : locator.currentTab;
         this.setTab(tab);
@@ -78,6 +79,9 @@ export class locator extends baseComponent {
         utils.setClick("locator-tab-3", ()=>this.setTab(3));
     }
     public static resize() {
+        if (this.ignoreResize) { 
+            return; 
+        }
         this.disableMapClick();
         controls.onClick("pan");
     }
@@ -141,7 +145,7 @@ export class locator extends baseComponent {
             let el = document.getElementById('locator-content') as HTMLDivElement;
             if (! el) { return; }
             if (GeoLocation.savedLocations.length == 0) {
-                el.innerHTML = 'No locations are currenty saved.';
+                el.innerHTML = '*** No locations are currenty saved ***';
                 return;
             }
             el.innerHTML = `
@@ -150,9 +154,11 @@ export class locator extends baseComponent {
                         <input type="checkbox" id="locator-allow-start">
                         <span class="checkmark" id="locator-allow-start-lbl"></span>
                     </label>
-                    <div class="locator-multi-lbl">Show at page start</div>
+                    <div class="locator-multi-lbl">Show saved locations at page start</div>
                 </div>
-                <div id="locator-content-list"></div>
+                <div class="locator-content-list-instruct">Zoom as needed to view multiple locations</div>
+                <div id="locator-content-list">
+                </div>
             `;
             utils.setChange(`locator-allow-start`, ()=>this.setDefaultStart());
             this.initDefaultStart();
@@ -255,9 +261,10 @@ export class locator extends baseComponent {
     private static populateTabContent() {
         let el = document.getElementById('locator-content') as HTMLDivElement;
         if (!el) { return; }
+        this.setIgnoreResize(false);
         if (this.currentTab == 1 ) { 
             el.innerHTML = `
-                <div id="locator-locate-btn"><span><i class="fa fa-map-marker-alt"></i></span> Click to auto detect your location</div>
+                <div id="locator-locate-btn"><span><i class="fa fa-map-marker-alt"></i></span> Auto detect your location</div>
                 <!-- <div id="locator-or">OR</div> -->
                 <div id="locator-click-option">
                     You can also determine location by directly clicking on the map.
@@ -265,6 +272,7 @@ export class locator extends baseComponent {
             `;
             utils.setClick('locator-locate-btn', ()=> this.getGeoLocation());
         } else if (this.currentTab == 2) {
+            this.setIgnoreResize(true);
             el.innerHTML = `
                 <div class="locator-search-wrap">
                     <input type="text" placeHolder="Search for location or enter coordinates" id="locator-search" autocomplete="off">
@@ -291,6 +299,7 @@ export class locator extends baseComponent {
     }
 
     private static search() {
+
         let val = this.getSearchVal();
         if (this.results[val]) {
             this.populateResults();
@@ -427,8 +436,17 @@ export class locator extends baseComponent {
         geo.render();
         this.updateSavedItems();
         this.updateClearAll();
+        if (this.isSmallScreen()) {
+            this.setIgnoreResize(false);
+            this.resize();
+        }
+    }
+    private static isSmallScreen() : boolean {
+        if (window.innerWidth < 1180 || window.innerHeight < 540) return true;
+        return false;
     }
     public static close() {
+        this.setIgnoreResize(false);
         super.close();
         this.disableMapClick();
     }

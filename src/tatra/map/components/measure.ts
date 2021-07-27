@@ -273,7 +273,9 @@ export class measure extends baseComponent {
 
     public static resize() {
 //        super.resize();
-        controls.onClick("pan");
+        if (controls.currentTool == this.id) {
+            controls.onClick("pan");
+        }
     }
 
 }

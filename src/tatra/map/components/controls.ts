@@ -7,7 +7,7 @@ import { events } from "../events";
 import { support_layers } from "./support_layers";
 import { timeline } from "./timeline";
 import { share } from "./share";
-import { resize } from "./resize";
+//import { resize } from "./resize";
 import { screenshot } from "./screenshot";
 import { pan } from "./pan";
 import { help } from "./help";
@@ -43,6 +43,7 @@ export class controls  {
     public static zIndexBase        : number = 200;
     public static DEFAULT_TOOL      : string = "pan";
     public static alwaysIdentify    : AlwaysIdentify | null;
+    public static ignoreResize      : boolean = false;
 
     public static init () {
         if (! ((props.config as IConfigDef).mapControls && document.getElementById("lmvControls"))) {
@@ -157,7 +158,7 @@ export class controls  {
                     break;
                 case "resize": 
                     if (! item.type) { item.type = ControlTypes.FLAG;} 
-                    if (! item.handler) { item.handler = resize;} 
+//                    if (! item.handler) { item.handler = resize;} 
                     break;
             }
         }
