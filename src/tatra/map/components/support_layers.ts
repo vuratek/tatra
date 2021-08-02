@@ -307,6 +307,9 @@ export class support_layers extends baseComponent{
 				if (lo.hasLegend) {
 					el2 = document.getElementById(`legend_${lo.id}`) as HTMLDivElement;
 				}
+				if (lo.listItemHandler) {
+					lo.listItemHandler(lo.id);
+				}
 				this.renderLayerLegend(menu, lo);
 				this.setExtraBtn(menu, lo);
                 if (lo.visible) {

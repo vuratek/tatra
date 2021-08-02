@@ -279,8 +279,30 @@ export class layer {
 
     public static refreshGeoJsonLayer (lo:Layer) {
         if (!lo._layer) { return;}
-        this._GeoJsonRefresh(lo);
-        lo.refresh();
+//        this._GeoJsonRefresh(lo);
+//        lo.refresh();
+        let source = lo._layer.getSource();
+        if (source) { 
+            layer.setJsonFeatures(lo, source.getFeatures());
+        }
+    }
+
+    private static setJsonFeatures(lo:Layer, f : Array <Feature>) {
+        if (f.length == 0) {
+            return;
+        }
+        let counter = 0;
+        for (let feature in f) {
+            if (! f[feature].get("__id")) {
+                f[feature].setProperties({"__id" : f[feature].getId()});
+            }
+            if (lo.jsonSubsetHandler) {
+                lo.jsonSubsetHandler(lo, f[feature]);
+            }
+
+            f[feature].setId(lo.id + '--' + counter);
+            counter ++;
+        }
     }
 
     private static _GeoJsonRefresh(lo : Layer) {
@@ -294,15 +316,7 @@ export class layer {
                     return;
                 }
                 unByKey(listenerKey);
-                let counter = 0;
-                for (let feature in f) {
-                    if (! f[feature].get("__id")) {
-                        f[feature].setProperties({"__id" : f[feature].getId()});
-                    }                    
-
-                    f[feature].setId(lo.id + '--' + counter);
-                    counter ++;
-                }
+                layer.setJsonFeatures(lo, f);
                 events.dispatchLayer(events.EVENT_GEOJSON_LOADED, lo.id);
             }
         });

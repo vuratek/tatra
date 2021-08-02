@@ -282,15 +282,6 @@ export class layerStyle {
         return obj;
     }
 
-    public static fireAlertCanadaLegend () {
-        return  {
-            "UC"    : "#02a2ff",    // blue
-            "BH"    : "#fff300",    // yellow
-            "OC"    : "#f03b21",    // red
-            "Other" : "#fbb04c"    // orange
-        };
-    }
-
     private static getFireIcon(isSelect : boolean) {
         let opacity = 0.8;
         let scale = 0.08;
@@ -315,8 +306,13 @@ export class layerStyle {
         return 14;
     }
 
-    private static getFireAlertSymbol(feature : Feature, resolution: number, type:string, isSelect : boolean) : Style {
+    private static getFireAlertSymbol(feature : Feature, resolution: number, type:string, isSelect : boolean) : Style | null {
         let res = 1/resolution;
+
+        let display = feature.get("_display");
+        if (display === false) {
+            return null;
+        }
                 
         if (!isSelect && res < layerStyle.minFireResolutionLabel) {
             return new Style({
@@ -399,19 +395,19 @@ export class layerStyle {
         return layerStyle.fireAlertTemplate(feature.get("firename"), '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/en/ciffc/public/sitrep");
     }
 
-    public static _fireAlertCanada (feature : Feature, resolution: number) : Style {
+    public static _fireAlertCanada (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getFireAlertSymbol(feature, resolution, "canada", false);
     }
 
-    public static _fireAlertCanada_select (feature : Feature, resolution: number) : Style {
+    public static _fireAlertCanada_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getFireAlertSymbol(feature, resolution, "canada", true);
     }
 
-    public static _fireAlertUSA (feature : Feature, resolution: number) : Style {
+    public static _fireAlertUSA (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getFireAlertSymbol(feature, resolution, "usa", false);
     }
 
-    public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style {
+    public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
     }
 
@@ -475,92 +471,11 @@ export class layerStyle {
         return `
             <div>${name}</div>
         `;
-/*        let issue = layerStyle.formatDate(new Date(Date.parse(feature.get("issuance"))));
-        let expiry = layerStyle.formatDate(new Date(Date.parse(feature.get("expiration"))));
-        let url = feature.get("url");
-        let iconColor = this.noaaWeatherAlertsLegend(prod, 1.0);
-        return `
-            <div class="faNoaaLbl" style="background:${iconColor}">${prod}</div>
-            <div class="faNoaaTbl">
-                <table>
-                    <tr><td>Issuance:</td><td>${issue}</td></tr>
-                    <tr><td>Expiration:</td><td>${expiry}</td></tr>
-                </table>
-            </div>
-            <div class="faNoaaDetails">
-                <a href="${url}" target="_blank" rel="noopener" class="ext">View detailed information</a>
-            </div>
-            <div class="fa-noaa-logo">
-                <img src="/images/noaa-logo.svg">
-            </div>
-        `;    */
     }
 
     public static _geographicAreasUSA_select (feature : Feature) : Array<Style> | null {
-        //console.log("HERE");
         return null;
-/*        let flag = feature.get("prod_type");
-        if (!flag) { return null; }
-        let key = "noaa-alerts-select";
-        if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
-        }
-        
-        if (!layerStyle.symbols[key].cache[flag]) {
-            let color = layerStyle.noaaWeatherAlertsLegend(flag,1.0);
-            layerStyle.symbols[key].cache[flag] = new Style({
-                fill: new Fill({
-                    color: color
-                }),
-                stroke: new Stroke({
-                    color: "#3e3e3e",
-                    width: 2,
-                }),
-                zIndex: 1,
-            });
-        }*/
-        // at this point, the style for the current network is in the cache
-        // so return it (as an array!)
-        //return [layerStyle.symbols[key].cache[flag]];
     }
-
-/*    public static _fireAlertCanada (feature : Feature) : Style | null {
-        let hectares = feature.get("hectares");
-        let state = feature.get("stage_of_control");
-        let key = "fireAlertCanada";
-        if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [];
-        }
-        if (! hectares || hectares < 1) { return null; }
-        let size = "1";
-        if (hectares > 100) { size = "2"; }
-        if (hectares > 1000) { size = "3";}
-        let leg = (state == "BH" || state == "UC" || state == "OC") ? state : "Other";
-        let cacheId = leg + '-' + size;
-        
-        if (!layerStyle.symbols[key].cache[cacheId]) {
-            let legend = layerStyle.fireAlertCanadaLegend();
-            layerStyle.symbols[key].cache[cacheId] = new Style({
-                image: new Circle({
-                    radius: 4 * Number(size),
-                    fill: new Fill({
-                        color: legend[leg],
-                    }),
-                    stroke: new Stroke({
-                        color: "#0f0f0f",
-                        width: 0.5,
-                    }),
-                }),
-                zIndex: 1,
-            });
-        }
-        // at this point, the style for the current network is in the cache
-        // so return it (as an array!)
-        return [layerStyle.symbols[key].cache[cacheId]];
-    }
-*/
 
     public static noaaWeatherAlertsLegend (id:string, opacity: Number)  : string {
         switch (id) {
@@ -646,41 +561,8 @@ export class layerStyle {
         return [layerStyle.symbols[key].cache[flag]];
     }
     
-    public static _fireSymbol () : Style {
-        if (!layerStyle.symbols["fire"]) {
-            layerStyle.populateSymbols("fire");
-        }
-        let sym = layerStyle.symbols["fire"];
-        layerStyle.scale = sym.size / 10;
-        let style = sym.cache[sym.size];
-        if (!style) {
-            let canvas = document.createElement("canvas");
-            let vectorContext = ol.render.toContext(canvas.getContext("2d"), {
-                size: [sym.size, sym.size,],
-                pixelRatio: 1,
-            });
-            vectorContext.setStyle(new Style({
-                fill: new Fill({
-                    color: sym.color,
-                }),
-                stroke: new Stroke({
-                    color: sym.lineColor,
-                    width: 2,
-                }),
-            }));
-            vectorContext.drawGeometry(new ol.geom.Polygon([sym.symbol.map(layerStyle.scaleFunction),]));
-            style = new Style({
-                image: new Icon({
-                    img: canvas,
-                    imgSize: [sym.size, sym.size,],
-                }),
-            });
-            sym.cache[sym.size] = style;
-        }
-        return style;
-    }
     
-    public static scaleFunction (coord:Coord) {
+    public static scaleFunction (coord:Array<number>) {
         return [coord[0] * layerStyle.scale, coord[1] * layerStyle.scale];
     }
     

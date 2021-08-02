@@ -65,6 +65,7 @@ export interface ILayerData {
     night?      : boolean;
     day?        : boolean;
     queryId?    : number;
+    value?      : string;
 }
 
 export class Layer {
@@ -97,6 +98,7 @@ export class Layer {
     public style            : string | null = null;
     public _tile            = null;
     public jsonHandler      : Function | null = null;
+    public jsonSubsetHandler: Function | null = null;
     public isSelect         : boolean = false;
     public isJSONIdentify   : boolean = false;
     public isBasicIdentify  : boolean = false;
@@ -110,6 +112,7 @@ export class Layer {
     public paletteUrl       : string | null = null;
     public paletteColorDef  : string | null = null;
     public colorPaletteId   : string | null = null;
+    public listItemHandler  : Function | null = null;
     public hasMenuExpanded  : boolean = false;
     public parent           : string | null = null;
     public parser           : Function | null = null;

@@ -156,7 +156,7 @@ export class locator extends baseComponent {
                     </label>
                     <div class="locator-multi-lbl">Show saved locations at page start</div>
                 </div>
-                <div class="locator-content-list-instruct">Zoom as needed to view multiple locations</div>
+                <div class="locator-content-list-instruct">Zoom map to view multiple locations</div>
                 <div id="locator-content-list">
                 </div>
             `;

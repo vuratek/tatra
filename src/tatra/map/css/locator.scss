@@ -167,7 +167,7 @@
 }
 #locator-content-list {
     max-height: 20rem;
-    overflow-y:scroll;
+    overflow-y:auto;
 }
 #locator-content-list .selected {
     background:#c6510d;
