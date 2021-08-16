@@ -82,9 +82,6 @@ export class layers {
             }
         }
 
-        if (generateAll) {
-            utils.setClick(`${this.appId}_lyr_show_all`, () => this.updateViewAll());
-        }
         this.updateBaseLayerView();
         document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateBaseLayerView());
     }
