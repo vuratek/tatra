@@ -466,7 +466,6 @@ export class layerStyle {
     }
 
     public static _geographicAreasUSA_info (feature : Feature) : string {
-        //console.log("HERE", feature);
         let name = feature.get("GACCName");
         return `
             <div>${name}</div>
@@ -479,7 +478,7 @@ export class layerStyle {
 
     public static noaaWeatherAlertsLegend (id:string, opacity: Number)  : string {
         switch (id) {
-            case "Fire Weather Watch" : return `rgba(255, 222, 173,${opacity});`; // "#ffdead";
+            case "Fire Weather Watch" : return `rgba(255, 222, 173,${opacity})`; // "#ffdead";
             case "Red Flag Warning" : return `rgba(255, 20, 147, ${opacity})`; //"#ff1493";
         }
         return "#FFFFFF";
@@ -490,8 +489,9 @@ export class layerStyle {
         let expiry = layerStyle.formatDate(new Date(Date.parse(feature.get("expiration"))));
         let url = feature.get("url");
         let iconColor = this.noaaWeatherAlertsLegend(prod, 1.0);
+        let labelColor = (prod == "Fire Weather Watch") ? ';color:#222;' : '';
         return `
-            <div class="faNoaaLbl" style="background:${iconColor}">${prod}</div>
+            <div class="faNoaaLbl" style="background:${iconColor} ${labelColor}">${prod}</div>
             <div class="faNoaaTbl">
                 <table>
                     <tr><td>Issuance:</td><td>${issue}</td></tr>
