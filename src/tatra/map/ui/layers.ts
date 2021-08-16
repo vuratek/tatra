@@ -12,8 +12,6 @@ export class layers {
     private appId : string;
     private menu : HTMLDivElement;
     private mainLayers : Array <string> = ['earth', 'street', 'viirs_crtc']; // always show these layers
-    public supportLayersShowAll : boolean = false;
-
 
     public constructor (appId : string, menu : HTMLDivElement, initialBackground : string | null = null) {
         this.appId = appId;
@@ -38,44 +36,6 @@ export class layers {
         this.mainLayers = layers;
     }
 
-    public outline () {
-        let outline = document.createElement("div");
-        outline.setAttribute("class", "tatraLyrOutline");
-        this.menu.appendChild(outline);
-        let lo = map.getLayerById('countries');
-        if (! lo) { return; }
-        outline.innerHTML = `
-            <div class="tatraLyrWrap">
-                <label class="llCheckbox llCheckbox2">
-                    <input type="checkbox" id="${this.appId}Lyr_${lo.id}">
-                    <span class="checkmark" id="${this.appId}LyrBtn_${lo.id}"></span>
-                    <span>Country / Region labels and borders</span>
-                </label>
-            </div>
-        `;
-        utils.setChange(`${this.appId}Lyr_${lo.id}`, () => this.setOutlineLayer());
-        document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateOutlineLayer());
-        document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.updateOutlineLayer());
-    }
-
-    public setOutlineLayer () {
-        let lo = map.getLayerById('countries');
-        if (! lo) { return; }
-        let el = document.getElementById(`${this.appId}Lyr_${lo.id}`) as HTMLInputElement;
-        if (el) {
-            lo.visible = el.checked;
-        }
-    }
-
-    public updateOutlineLayer () {
-        let lo = map.getLayerById('countries');
-        if (! lo) { return; }
-        let el = document.getElementById(`${this.appId}Lyr_${lo.id}`) as HTMLInputElement;
-        if (el) {
-             el.checked = lo.visible;
-        }        
-    }
-
     public generateAuxLayers (type: string, label : string | null = null, opened : boolean = true, showAll : boolean = true) {
         //        GroupContent.create("fmm_lyrs_"+ type, type, '', menu, false);
         support_layers.generateLayers(this.menu, type, this.appId, label, opened, showAll);
@@ -83,7 +43,7 @@ export class layers {
 
     public generateSupportLayers (opened : boolean = true, generateAll : boolean = true) {
         if (!props.config) { return; }
-        GroupContent.create({ id: "bgLyrs", label : "Backgrounds", parent: this.menu, opened : opened} );
+        GroupContent.create({ id: "bgLyrs", label : "Static Backgrounds", parent: this.menu, opened : opened} );
         let base = GroupContent.getContainer('bgLyrs');
 
         let ul = document.createElement("ul");
@@ -98,8 +58,6 @@ export class layers {
         }
 
         if (generateAll) {
-            this.generateShowAll(ul, this.appId + '_lyr_show_all', 'tatraCtrlLyr tatraLyrShowAll');
-
             for (let i = props.layers.length - 1; i >= 0; i--) {
                 let lo = props.layers[i];
                 if (lo.category != "basemap" || lo.parent) { continue;}
@@ -167,13 +125,7 @@ export class layers {
                         }
                     }
                 }
-            }
-            let label = (this.supportLayersShowAll) ? '- hide below' : '+ show all';
-            let el = document.getElementById(`${this.appId}_lyr_show_all`);
-            if (el) {
-                el.innerHTML = label;
-            }
-            
+            }            
             for (let i=0; i < props.layers.length; i++) {
                 let lo = map.getLayerById(props.layers[i].id);
                 if (! lo || lo.parent) { continue; }
@@ -184,17 +136,15 @@ export class layers {
                             found = true;
                         }
                     }
-                    if (! found) {
+/*                    if (! found) {
                         utils.setVisibility(`bb_${this.appId}_${lo.id}`, this.supportLayersShowAll);
-                    }
+                    }*/
                 }
             }
         } 
     }
 
     private updateViewAll() {
-        this.supportLayersShowAll = ! this.supportLayersShowAll;
         this.updateBaseLayerView();
-        localStorage.setItem(`${this.appId}-showAllLayers`, (this.supportLayersShowAll) ? "on" : "off");
     }
 }

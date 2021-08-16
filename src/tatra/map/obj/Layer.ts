@@ -314,7 +314,7 @@ export class Layer {
     }
     
     public set category (cat) {
-        if (cat == 'basemap' || cat == 'overlay' || cat == 'layer' || cat == 'label') {
+        if (cat == 'basemap' || cat == 'overlay' || cat == 'layer' || cat == 'label' || cat == 'dynamic') {
             this._category = cat;
         } else {
             console.log("Invalid category provided for lmv.obj.Layer: " + cat);

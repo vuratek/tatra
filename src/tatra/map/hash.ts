@@ -20,6 +20,7 @@ interface IHash {
     tab?            : string;
     layers?         : Array <IHashLayer>;
     dates?          : IHashDates;
+    mode?           : string;
 }
 export class hash {
 
@@ -67,6 +68,26 @@ export class hash {
     private static tabToString () : string | null {
         if (this.values.tab) {
             return `t:${this.values.tab}`;
+        }
+        return null;
+    }
+
+    public static mode (id : string | null, update : boolean = true) {
+        if (!id) {
+            delete this.values.mode;
+        } else {
+            this.values.mode = id;
+        }
+        if (update) { this.update(); }
+    }
+
+    public static getMode() : string {
+        return (this.values.mode) ? this.values.mode : '';
+    }
+
+    private static modeToString () : string | null {
+        if (this.values.mode) {
+            return `m:${this.values.mode}`;
         }
         return null;
     }
@@ -230,10 +251,12 @@ export class hash {
         let arr = [];
 
         let tab = this.tabToString();
+        let mode = this.modeToString();
         let dates = this.datesToString();
         let lyrs = this.layersToString();
         let loc = this.locationToString();
         if (tab) { arr.push(tab); }
+        if (mode) { arr.push(mode); }
         if (dates) { arr.push(dates); }
         if (lyrs) { arr.push(lyrs); }
         if (loc) { arr.push(loc); }
@@ -290,6 +313,9 @@ export class hash {
                     case 't':
                         this.values.tab = PAR;
 //                        configProps.tab = PAR;
+                        break;
+                    case 'm':
+                        this.values.mode = PAR;
                         break;
                     // date / dates
                     case 'd':

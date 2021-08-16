@@ -366,6 +366,7 @@
 .bottomBarSubMenuItemLabel {
 	padding-top:1.5rem;
 	line-height: 1.8rem;
+	display:flex;
 }
 .bottomBarSubMenuItemLabel2 {
 	padding-top:1rem;
@@ -446,11 +447,9 @@
 	font-size:1.4rem;
 }
 .supp_lyrs_lyr_click {
-	position: absolute;
-	top:0;
-	left:0;
-	/*height:100%;*/
+	width:26rem;
 	right:3rem;
+	min-height: 5.5rem;
 }
 .supp_lyrs_lyr_click_extra {
 	right:6rem;
