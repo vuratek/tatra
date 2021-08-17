@@ -67,10 +67,20 @@ export interface ILayerData {
     queryId?    : number;
     value?      : string;
 }
-
+/* Zoom levels and their resolution
+        13  - 15.125m
+        12  - 31.25m
+        9   - 250m
+        8   - 500m
+        7   - 1km
+        6   - 2km
+*/
 export class Layer {
     public id               : string = "";
     public cloneId          : string = "";  // used for duplicate layers
+    public cloneLevel       : number = 9;  // 6-13  -- only applies to imagery_template
+    public cloneHasTime     : boolean = true;
+    public cloneFormat      : string = "image/png";
     public title            : string = "";
     public _visible         : boolean = false;
     public initVisibility   : boolean = false;

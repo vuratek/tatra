@@ -11,7 +11,7 @@ export class layers {
 
     private appId : string;
     private menu : HTMLDivElement;
-    private mainLayers : Array <string> = ['earth', 'street', 'viirs_crtc']; // always show these layers
+    private mainLayers : Array <string> = ['earth', 'street', 'topo']; // always show these layers
 
     public constructor (appId : string, menu : HTMLDivElement, initialBackground : string | null = null) {
         this.appId = appId;

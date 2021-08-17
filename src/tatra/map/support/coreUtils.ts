@@ -26,7 +26,7 @@ export class coreUtils {
         }
     }
 
-    public static loadConfigFile (file : string, data) {
+    public static loadConfigFile (file : string, data : any) {
         if (props.data[file]) {
             for (var i=0; i< data.layers.length; i++) {
                 props.data[file].layers.push(data.layers[i]);
@@ -59,8 +59,7 @@ export class coreUtils {
                                 layer[key] = value;
                             }
                         }*/
-                        Layer.duplicateProperties(_l, layer);
-
+                        Layer.duplicateProperties(_l, layer);                        
                         break;
                     }
                 }                
@@ -78,8 +77,20 @@ export class coreUtils {
                     case "props" :
                         lo.source = new LayerSource();
                         for (let key2 in layer.props) {
-                            lo.source[key2] = layer.props[key2];
-                        }                        
+                            lo.source[key2] = {};
+                            if (layer.props[key2] === Object(layer.props[key2]) && !Array.isArray(layer.props[key2])) {
+                                let props2 = layer.props[key2];                                
+                                for (let key3 in props2) {
+                                    if (typeof props2[key3] === 'object') {
+                                        lo.source[key2][key3] = props2[key3].slice(0);
+                                    } else {
+                                        lo.source[key2][key3] = props2[key3];
+                                    }
+                                }
+                            } else {
+                                lo.source[key2] = layer.props[key2];
+                            }
+                        }
                         break;
                     case "parser" :
                         try {           
@@ -99,6 +110,7 @@ export class coreUtils {
                         lo[key] = value;
                 }
             }
+            this.adjustImageryTemplate(lo);
             if (url != "") { 
                 if (! lo.source) { lo.source = new LayerSource();}
                 lo.source.url = url.slice(0);
@@ -133,6 +145,28 @@ export class coreUtils {
         }
         this.setLayerInitialVisibility();
 
+    }
+
+    private static adjustImageryTemplate (lo : Layer) {
+        if (lo.cloneId != 'imagery_template') {
+            return;
+        }
+        let ms = ['2km', '1km', '500m', '250m', '125m', '62.5m','31.25m','15.625m'];
+        if (lo.cloneLevel >=6 && lo.cloneLevel<=13 && lo.source && lo.source.tileGrid) {
+            let start = lo.cloneLevel;
+            let end = (13 - lo.cloneLevel);
+            (lo.source.tileGrid["resolutions"] as Array <number>).splice(start, end);    
+            (lo.source.tileGrid["matrixIds"] as Array <number>).splice(start, end);    
+            lo.source.matrixSet = ms[lo.cloneLevel - 6];
+            lo.maxLevel = lo.cloneLevel + .5;
+            lo.source.format = lo.cloneFormat;
+            if (lo.cloneHasTime) {
+                lo.source.url += 'TIME=*TIME*';
+            } else {
+                lo.noDateRefresh = true;
+            }
+        }
+        
     }
 
     private static setLayerInitialVisibility() {
