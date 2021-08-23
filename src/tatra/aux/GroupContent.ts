@@ -74,6 +74,10 @@ export class GroupContent {
         }
         utils.setVisibility(`navGCContent_${id}`, GroupContent.list[id]);
     }
+
+    public static isOpened (id : string) : boolean {
+        return GroupContent.list[id];
+    }
     
     public static getContainer (id : string) : HTMLDivElement {
         return document.getElementById("navGCContent_" + id) as HTMLDivElement;

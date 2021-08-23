@@ -94,6 +94,7 @@ export class Layer {
     public clandestine      : boolean = false;
     public minDate          : string | null = null;
     public maxDate          : string | null = null;
+    public timeStep         : String | null = null;
     public minLevel         : number = -1;
     public maxLevel         : number = -1;
     public handler          : string = "";
