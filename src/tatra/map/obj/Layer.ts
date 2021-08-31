@@ -288,25 +288,40 @@ export class Layer {
     public applyStyle () {
     	if (this.type == "vector_tile" && this.styleJSON) {
             mapboxStyle.apply(this);
-//        	applyStyle(this._layer, this.styleJSON, "esri", null, (this._layer as VectorTile).getSource().getTileGrid().getResolutions());
         }	
     }
 
     public set visible(vis) {
         //loader.start();
-    	let current = this._visible;
+        let current = this._visible;
         if (this._layer) {
-            this._layer.setVisible(vis); // set actual layer in open layers
-            this.applyStyle();
+            if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+                this._layer.setVisible(false);
+            } else {
+                this._layer.setVisible(vis); // set actual layer in open layers
+                if (vis) { this.applyStyle();}
+            }
         } else {
             if (vis) {
                 layer.addLayer(this);
+                if (this.type == "vector_tile" && ! this.styleJSON) {
+                    this._layer.setVisible(false);
+                }
             }
         }
         this._visible = vis;
-        if (vis && !current) { events.dispatchLayer(events.EVENT_LAYER_VISIBLE, this.id); }
-        if (!vis && current) { events.dispatchLayer(events.EVENT_LAYER_HIDDEN, this.id); }
-        this.lastRefresh = this.getCurrentTime();
+        if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+            this._layer.setVisible(false);
+        } else {
+            if (vis && ! current) { this.notify(true); }
+            else if (!vis && current) { this.notify(false); }
+            this.lastRefresh = this.getCurrentTime();
+        }
+    }
+
+    public notify(vis:boolean) {
+        let evt = (vis) ? events.EVENT_LAYER_VISIBLE : events.EVENT_LAYER_HIDDEN;
+        events.dispatchLayer(evt, this.id);   
     }
 
     public get visible() {

@@ -19,7 +19,7 @@
 				"wrapX"				: true
 		    	}
 	},{
-		"id"		: "street",
+		"id"		: "street_old",
 		"type"		: "xyz",
 		"category"	: "basemap",
 		"title"		: "Streets",
@@ -38,11 +38,11 @@
 				"wrapX"				: true
 		    	}
 	},{
-		"id"		: "street_new",
+		"id"		: "street",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
 		"title"		: "Streets",
-		"isLabel"	: true,
+		"iconMatrix": [0,1],
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/cc8072363d614d96b08b2361a09979a5/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#1c2325",
 		"props" 	: {

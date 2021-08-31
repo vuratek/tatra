@@ -57,6 +57,7 @@ export class support_layers extends baseComponent{
 		let imagery = 0;
 		let overlay = 0;
 		let basemap = 0;
+		let dynamic = 0;
 		for (let i=0; i< props.layers.length; i++) {
 			let lo = props.layers[i];
 			if ( lo.category == "layer" ) {
@@ -65,12 +66,16 @@ export class support_layers extends baseComponent{
 			}
 			if ( lo.category == "overlay" && ! lo.parent ) { overlay ++; }
 			if ( lo.category == "basemap" && ! lo.parent ) { basemap ++; }
+			if ( lo.category == "dynamic" && ! lo.parent ) { dynamic ++; }
 		}
 		if (orbits > 0) {
 			this.generateLayers(el, 'orbits', 'supp_lyrs', 'Orbit Tracks and Overpass Times', false);
 		}
 		if (overlay > 0) {
 			this.generateLayers(el, 'overlay', 'supp_lyrs', 'Overlays');
+		}
+		if (dynamic > 0) {
+			this.generateLayers(el, 'dynamic', 'supp_lyrs', 'Dynamic Layers');
 		}
 		if (imagery > 0) {
 //			this.generateLayers(el, 'imagery', 'supp_lyrs', 'Data Layers', true);
@@ -90,6 +95,7 @@ export class support_layers extends baseComponent{
 		ul.id = id + '_content';
 		ul.className = 'lmvSupportLayersContent';
 		base.appendChild(ul);
+//		if (type == "dynamic") { this.appendDynamicLayerSelector(ul, baseId); }
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
@@ -102,7 +108,17 @@ export class support_layers extends baseComponent{
 			this.createLayer(lo, ul, baseId);
         }
 		this.updateLayers();
-    }
+	}
+	
+	private static appendDynamicLayerSelector(ul : HTMLUListElement, baseId:string) {
+		if (props.allowMultipleDynamicLayers) {
+			let li = document.createElement("li");
+			li.setAttribute("id", `bb_dynamic_layer_multi`);
+			li.setAttribute("class", "lmvControlsLayer");
+			ul.appendChild(li);
+			li.innerHTML = "TEST";
+		}
+	}
     
 	/**
 	 * 

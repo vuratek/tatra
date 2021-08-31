@@ -66,8 +66,9 @@ export class mapboxStyle {
 
     private static loadStyle (lo : Layer) {
         olms.applyStyle(lo._layer, lo.styleJSON, "esri", null, (lo._layer as VectorTile).getSource().getTileGrid().getResolutions());
+        lo._layer.setVisible(true);
+        lo.notify(true);
     }
-
     private static callBack () {
         this.loaded = true;
         for (let i=0; i < props.layers.length; i++ ) {

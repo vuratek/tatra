@@ -35,6 +35,8 @@ export class props  {
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
 
+    public static allowMultipleDynamicLayers    : boolean = true;
+
     public static getApplicationName () : string {
         return props.config.properties.applicationName;
     }

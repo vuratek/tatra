@@ -243,13 +243,18 @@ export class layer {
         });
 
         if (lo.style) {
-            ajax.get(lo.style, null, (data : any) => this.setLayerStyle(data, lo));
+            fetch(lo.style)
+            .then(response => {
+                return response.json();
+            })
+            .then (data => {
+                lo.styleJSON = data;
+                lo.applyStyle();
+            })
+            .catch(error => {
+                console.error("Error processing ", lo.style);
+            });
         }
-    }
-
-    public static setLayerStyle (data : any, lo : Layer) {
-        lo.styleJSON = data;
-        lo.applyStyle();
     }
     
     public static addWMSLayer(lo : Layer) {        

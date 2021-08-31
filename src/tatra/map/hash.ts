@@ -19,8 +19,9 @@ export interface IHashDates {
 interface IHash {
     tab?            : string;
     layers?         : Array <IHashLayer>;
+    initLayers?     : Array <IHashLayer> | null;
     dates?          : IHashDates;
-    mode?           : string;
+    mode?           : Array<string>;
 }
 export class hash {
 
@@ -72,22 +73,44 @@ export class hash {
         return null;
     }
 
-    public static mode (id : string | null, update : boolean = true) {
-        if (!id) {
-            delete this.values.mode;
-        } else {
-            this.values.mode = id;
+    public static mode (id : string, update : boolean = true) {
+        if (! this.values.mode) {
+            this.values.mode = [];
+        }
+        let isNew = true;
+        for (let i=0; i<(this.values.mode as Array<string>).length; i++) {
+            if (this.values.mode[i] == id) {
+                isNew = false;
+                break;
+            }
+        }
+        if (isNew) {
+            this.values.mode.push(id);
         }
         if (update) { this.update(); }
     }
 
-    public static getMode() : string {
-        return (this.values.mode) ? this.values.mode : '';
+    public static deleteMode(id:string, update : boolean = true) {
+        if (! this.values.mode) { return;}
+        for (let i=0; i<(this.values.mode as Array<string>).length; i++) {
+            if (this.values.mode[i] == id) {
+                this.values.mode.splice(i,1);
+                break;
+            }
+        }
+        if (this.values.mode.length == 0) {
+            delete this.values.mode;
+        }
+        if (update) { this.update(); }
+    }
+
+    public static getMode() : Array<string> | null {
+        return (this.values.mode) ? this.values.mode : null;
     }
 
     private static modeToString () : string | null {
         if (this.values.mode) {
-            return `m:${this.values.mode}`;
+            return `m:${this.values.mode.join(',')}`;
         }
         return null;
     }
@@ -132,15 +155,22 @@ export class hash {
 
     private static parseLayers ( par : string ) {
         let arr = par.split(',');
-        this.values["layers"] = [];
+        let isInit = false;
+        if (!this.values.initLayers) {
+            isInit = true;
+            this.values.initLayers = [];
+        }
+        this.values.layers = [];
         for (let i=0; i < arr.length; i++) {
             let lo = map.getLayerById(arr[i]);
             if (! lo || lo.tag != '') {
                 let subs = arr[i].split('=');
                 if (subs.length == 2) {
                     this.values.layers.push({ layerId: subs[0], classifier: subs[1]});
+                    if (isInit) { this.values.initLayers.push({ layerId: subs[0], classifier: subs[1]});}
                 } else {
                     this.values.layers.push({ layerId: arr[i]});
+                    if (isInit) { this.values.initLayers.push({ layerId: arr[i]});}
                 }
             } else {
                 if (lo.category == "basemap") {
@@ -164,6 +194,10 @@ export class hash {
 
     public static getLayers() : Array<IHashLayer> | null {
         return (this.values.layers) ? this.values.layers : null;
+    }
+
+    public static getInitialLayers() : Array<IHashLayer> | null {
+        return (! this.values.initLayers || this.values.initLayers.length == 0) ? null : this.values.initLayers;
     }
 
     public static dates (dates : IHashDates | null, update : boolean = true) {
@@ -315,7 +349,7 @@ export class hash {
 //                        configProps.tab = PAR;
                         break;
                     case 'm':
-                        this.values.mode = PAR;
+                        this.values.mode = PAR.split(',');
                         break;
                     // date / dates
                     case 'd':

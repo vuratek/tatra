@@ -346,38 +346,6 @@ export class controls  {
             <img src="${(props.config as IConfigDef).mapControls.rightInfo.image}" alt="logo" class="bottomBarLogo">
         `;
     }
-    
-    public static setLabel (id : string, active : boolean) {
-        controls.ignoreEvent = true;
-        let lo = map.getLayerById(id);
-        if (! lo) { return; }
-        if (active) {
-            lo.showLabel();
-            let parent = map.getLayerById(lo.parent as string);
-            if (! parent) { return; }
-            if (!parent.visible) {
-                controls.ignoreEvent = false;
-            }
-        } else {
-            lo.hideLabel();
-        }
-        let div = document.getElementById('bbLabel_' + id);
-        if (div) { div.innerHTML = controls.setLabelField(lo);}
-    }
-
-/*    public static showLayerInfoMenu () {
-        utils.show('modal_layer_info');
-//        $('#modal_layer_info').show();
-    }
-
-    public static layerInfo (id : string) {
-        controls.ignoreEvent = true;
-        let lo = map.getLayerById(id);
-        controls.showLayerInfoMenu();
-        if (modal_mli) {
-            modal_mli.showLayer(lo.id, lo.category);
-        }
-    }*/
         
     private static clearTools () {
         for (let i = 0; i < controls.tools.length; i++ ) {

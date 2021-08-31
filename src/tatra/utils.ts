@@ -174,6 +174,10 @@ export class utils {
         return new Date(d.getTime() + 86400000 * days);
     }
 
+    public static addMinutes(d:Date, mins: number) : Date {
+        return new Date(d.getTime() + 60000 * mins);
+    }
+
     /**
      * Get integer value of day difference between @s and @e. Uses Math.floor() for rounding 
      * 
@@ -197,6 +201,18 @@ export class utils {
         let day = (isUTC) ? d.getUTCDate() : d.getDate();
         return new Date(y, m, day, 0, 0, 0, 0);
     }
+
+/*    public static sanitizeTime ( d : Date , _mins:number, isUTC : boolean = false) : Date {
+        let y = (isUTC) ? d.getUTCFullYear() : d.getFullYear();
+        let m = (isUTC) ? d.getUTCMonth() : d.getMonth();
+        let day = (isUTC) ? d.getUTCDate() : d.getDate();
+        let hour = (isUTC) ? d.getUTCHours() : d.getDate();
+        let min = (isUTC) ? d.getUTCMinutes() : d.getDate();
+        let a = Math.floor(min / _mins) * _mins;
+        console.log(d, hour, a);
+        return new Date(y, m, day, hour, a, 0, 0);
+    }
+*/
 
     public static maximizeDate ( d : Date , isUTC : boolean = false) : Date {
         let y = (isUTC) ? d.getUTCFullYear() : d.getFullYear();
