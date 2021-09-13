@@ -1,5 +1,5 @@
 import { utils } from "../utils";
-import { Timeline, TimelineAdjustType } from "./Timeline";
+import { Timeline, TimelineAdjustType, TimelineType } from "./Timeline";
 import { flatpickr } from "../aux/flatpickr";
 import { Instance } from "flatpickr/dist/types/instance";
 
@@ -65,8 +65,10 @@ export class basePicker {
             this.calendar.destroy();
         }
         let handler = () => this.setDates();
+        let format = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) ? 'M d Y H:i' : 'M d Y';
         this.calendar = flatpickr(`#${this.id}_date`, {
-            dateFormat : 'M d Y',
+            enableTime: true,
+            dateFormat : format,
             defaultDate : d,
             minDate : new Date(2000,11-1, 11),
             maxDate : utils.getGMTTime(new Date()),
@@ -91,7 +93,6 @@ export class basePicker {
             else if (i == 27) { label = '4 WEEKS'; }            
             select += `<option value="${i}">${label}</option>`;
         }
-//        select += `<option value="31">- 1 MONTH</option>`;
         return select;
     }
 
@@ -101,7 +102,11 @@ export class basePicker {
 //        $(`#${this.id}_DR`).val(Timeline.advancedRange);
         if (obj && this.calendar) {
             let type = (this.isSingle) ? 'single' : 'range';
-            this.calendar.setDate(utils.addDay(obj[type].end,-1));
+            if (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) {
+                this.calendar.setDate(obj['single'].start);
+            } else {
+                this.calendar.setDate(utils.addDay(obj[type].end,-1));
+            }
         }
         this.setCtrlBtns();
     }

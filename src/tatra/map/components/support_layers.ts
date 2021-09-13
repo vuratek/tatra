@@ -28,6 +28,17 @@ export class support_layers extends baseComponent{
 		document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
 //		document.addEventListener(menuEvents.EVENT_LAYERS_UPDATE, () => this.updateWindow());
+
+		let counter = 0;
+		for (let i=0; i<props.layers.length; i++) {
+			let lo = props.layers[i];
+			if (lo.category == 'dynamic' && lo.visible) {
+				counter ++;
+			}
+		}
+		if (counter > 1) {
+			props.allowMultipleDynamicLayers = true;
+		}
 	}
         
 	public static open () {
@@ -95,7 +106,7 @@ export class support_layers extends baseComponent{
 		ul.id = id + '_content';
 		ul.className = 'lmvSupportLayersContent';
 		base.appendChild(ul);
-//		if (type == "dynamic") { this.appendDynamicLayerSelector(ul, baseId); }
+		if (type == "dynamic") { this.appendDynamicLayerSelector(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
@@ -108,16 +119,70 @@ export class support_layers extends baseComponent{
 			this.createLayer(lo, ul, baseId);
         }
 		this.updateLayers();
+		this.setMultiDynamicLayer();
 	}
 	
-	private static appendDynamicLayerSelector(ul : HTMLUListElement, baseId:string) {
-		if (props.allowMultipleDynamicLayers) {
-			let li = document.createElement("li");
-			li.setAttribute("id", `bb_dynamic_layer_multi`);
-			li.setAttribute("class", "lmvControlsLayer");
-			ul.appendChild(li);
-			li.innerHTML = "TEST";
+	private static appendDynamicLayerSelector(ul : HTMLUListElement) {
+		let li = document.createElement("li");
+		li.setAttribute("id", `bb_dynamic_layer_multi`);
+		li.setAttribute("class", "lmvControlsLayer lmvControlsMultiLayer");
+		ul.appendChild(li);
+		li.innerHTML = `
+			<label class="llCheckbox">
+				<input type="checkbox" id="ll_dynamic_multi">
+				<span class="checkmark"></span>
+			</label>
+			<div>
+				Allow multi layer selection
+			</div>
+		`;
+		utils.setChange('ll_dynamic_multi', ()=> this.updateMultiDynamicLayer());
+	}
+
+	private static updateMultiDynamicLayer() {
+		let el = document.getElementById('ll_dynamic_multi') as HTMLInputElement;
+		if (el) {
+			props.allowMultipleDynamicLayers = el.checked;
+			this.resetDynamicLayers();
 		}
+	}
+
+	public static resetDynamicLayers() {
+		if (!props.allowMultipleDynamicLayers) {
+			let counter = 0;
+			for (let i=props.layers.length-1; i>=0; i--) {
+				let lo = props.layers[i];
+				if (lo.category == 'dynamic' && lo.visible) {
+					if (counter > 0) {
+						lo.visible = false;
+					}
+					counter++;
+				}
+			}
+			if (counter > 0) {
+				events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+			}
+		}
+	}
+
+	private static setMultiDynamicLayer() {
+		let el = document.getElementById('ll_dynamic_multi') as HTMLInputElement;
+		if (el) {
+			el.checked = props.allowMultipleDynamicLayers;
+		}
+	}
+
+	public static showMultiLayerDynamicSelector() {
+		props.allowMultipleDynamicLayersSelection = true;
+		utils.show('bb_dynamic_layer_multi');
+	}
+
+	public static hideMultiLayerDynamicSelector() {
+		props.allowMultipleDynamicLayersSelection = false;
+		props.allowMultipleDynamicLayers = false;
+		this.setMultiDynamicLayer();
+		utils.hide('bb_dynamic_layer_multi');
+		this.resetDynamicLayers();
 	}
     
 	/**
@@ -247,7 +312,23 @@ export class support_layers extends baseComponent{
 				} else {
 					mapUtils.setBasemap(id);
 				}
-			} else {
+			} else if (lo.category == 'dynamic') {
+				if (lo.visible || props.allowMultipleDynamicLayers) {
+					lo.visible = ! lo.visible;
+					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
+				} else {
+					// current layer not visible. Disable other dynamic layer
+					for (let i=0; i<props.layers.length; i++) {
+						let lo2 = props.layers[i];
+						if (lo2.category == 'dynamic' && lo2.visible) {
+							lo2.visible = false;
+						}
+					}
+					lo.visible = true;
+					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
+				}
+			}
+			else {
 				if (lo.handler && (lo.handler == "orbits" || lo.handler == "imagery" || lo.tag != "")) {
 					lo.visible = ! lo.visible;
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);

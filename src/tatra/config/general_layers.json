@@ -197,7 +197,7 @@
 		       				}, 
 				"tileLoadFunction"	: [	
 									"function(imageTile, src) {",
-									"imageTile.getImage().src = setWMTSTime(imageTile, src, 'Y-m-d', '#id#');}"
+									"imageTile.getImage().src = setWMTSTime(imageTile, src, '#id#');}"
 	                                ]	
 					}
 	}, {

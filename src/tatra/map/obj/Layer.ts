@@ -123,6 +123,7 @@ export class Layer {
     public paletteUrl       : string | null = null;
     public paletteColorDef  : string | null = null;
     public colorPaletteId   : string | null = null;
+    public dateFormat       : string = 'Y-m-d';
     public listItemHandler  : Function | null = null;
     public hasMenuExpanded  : boolean = false;
     public parent           : string | null = null;

@@ -28,8 +28,12 @@ export class layerStyle {
 
     private static minFireResolutionLabel : number = 100;
     
-    public static setWMTSTime(imageTile : any, src : string, format : string, id : string) {
-        let dt = flatpickr.formatDate(mapUtils.getLayerById(id).time, format);
+    public static setWMTSTime(imageTile : any, src : string, id : string) {
+        let lo = mapUtils.getLayerById(id) as Layer;
+        let dt = flatpickr.formatDate(lo.time, lo.dateFormat);
+        if (lo.dateFormat.indexOf('H:i')>=0) {
+            dt = dt.replace(' ', 'T') + 'Z';
+        }
         return src.replace("*TIME*", dt);
     }
 

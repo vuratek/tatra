@@ -5,6 +5,7 @@ import { props } from '../map/props';
 import { rangePicker } from './rangePicker';
 import { singleDate } from './singleDate';
 import { loadHandler } from "./loadHandler";
+import { targetNotEditable } from 'ol/events/condition';
 
 export enum TimelineType {
     SINGLE      = "single",
@@ -57,6 +58,7 @@ export class Timeline {
     public static MAX_DAYS             : number = 31;
     public static advancedRange         : number = 2;
     public static singleDate            : Date = utils.getGMTTime(new Date());
+    public static singleTime            : Date = utils.getGMTTime(new Date());
 
     public static isActive              : boolean = false;
     private static initialized          : boolean = false;
@@ -87,9 +89,59 @@ export class Timeline {
         this.rendered = false;
     }
 
+    private static changeTimelineRangeMode() {
+        let hourly = false;
+        for (let i=0; i < props.layers.length; i++) {
+            let lo = props.layers[i];
+            if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits') && lo.visible && lo.timeStep) {
+                hourly = true;
+            }
+        }
+        if (this.type == TimelineType.RANGE_TIED && hourly) {
+            this.type = TimelineType.RANGE_HOUR_MIN_TIED;
+            let maxdate = utils.getGMTTime(new Date());
+            maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0 - 30);
+            maxdate.setSeconds(0);
+            Timeline.maxDate = maxdate;
+            let mindate = new Date(Timeline.maxDate.getTime());
+            rangePicker.initDatePicker(mindate);
+            mindate.setMinutes(mindate.getMinutes() - 10);
+            if (this.timeKeeper) {
+                this.timeKeeper["single"].start == mindate;
+            }
+            Timeline.items.update({id: 'single', start:  mindate, end: Timeline.maxDate});
+            let zoomDate = new Date(mindate.getTime());
+            zoomDate.setMinutes(-120);
+            this._finalizeRangeLoading(zoomDate);
+            //rangePicker.timelineUpdate();
+        } else if (this.type == TimelineType.RANGE_HOUR_MIN_TIED && ! hourly) {
+            this.type = TimelineType.RANGE_TIED;
+            Timeline.maxDate = utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date())), true);
+            rangePicker.initDatePicker(utils.getGMTTime(new Date()));
+            this.setSingleTimeKeeper();
+            this.timeKeeper["range"] = { start: utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date()), this.advancedRange), true), end : utils.maximizeDate(utils.addDay(utils.getGMTTime(new Date())), true)};
+            if (this.timeKeeper) {
+                Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end});
+                Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
+                console.log(this.timeKeeper['range']);
+            }
+            this._finalizeRangeLoading(utils.addDay(Timeline.maxDate, -2));
+            //rangePicker.timelineUpdate();
+            console.log( Timeline.items.get('range'));
+        }
+        
+    }
+
+    private static _finalizeRangeLoading(date : Date) {
+        this.resize();
+        if (this.timeline) {
+            this.timeline.zoomOut(1);
+            this.timeline.moveTo(date);
+        }
+    }
+
     private static initTimeline () {
         // Create a DataSet (allows two way data-binding)
-
         let arr = [];
         //use this.timeKeeper
         if (!this.timeKeeper) { return; }
@@ -109,16 +161,17 @@ export class Timeline {
         let tl = document.getElementById('timeline') as HTMLDivElement;
         let _scale2 = 'day';
         let _step = 1;
+        let editable = true;
         if (this.type == TimelineType.RANGE_HOUR_MIN_TIED) {
             _scale2 = 'minute';
             _step = 10;
+            editable = false;
         }
-        console.log(_scale2, this.currentZoomMaxLevel);
         this.options = {
             min: this.minDate,
             max: this.maxDate,
             zoomable : true,
-            editable: true,
+            editable: editable,
             margin: {
                 axis: 0            
             },
@@ -134,11 +187,16 @@ export class Timeline {
             
             snap: function (date : Date, scale : string, step : number) {
                 let d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-                if (date.getHours() > 12) {
-                    d = utils.addDay(d);
+                if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                    d.setHours(date.getHours());
+                    let min = Math.floor(date.getMinutes() / 10.0);
+                    d.setMinutes(min * 10);
+                } else {
+                    if (date.getHours() > 12) {
+                        d = utils.addDay(d);
+                    }
                 }
-                return d;
-                
+                return d;                
             },
 
             itemsAlwaysDraggable: {
@@ -165,11 +223,21 @@ export class Timeline {
     public static resize() {
         this.setZoomLevel();
         if (this.timeline) {
-            console.log(this.currentZoomMinLevel, this.currentZoomMaxLevel);
+            let _scale2 = 'day';
+            let _step = 1;
+            let editable = true;
+            if (this.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                _scale2 = 'minute';
+                _step = 10;
+                editable = false;
+            }
+    
             this.timeline.setOptions(
                 {
+                    editable : editable,
                     zoomMax : (1000 * 60 * 60 * 24 * this.currentZoomMaxLevel),
-                    zoomMin : (1000 * 60 * 60 * 24 * this.currentZoomMinLevel)
+                    zoomMin : (1000 * 60 * 60 * 24 * this.currentZoomMinLevel),
+                    timeAxis: {scale: _scale2, step: _step}
                 }
             );
             //this.timeline.zoomOut(1);
@@ -179,9 +247,15 @@ export class Timeline {
         }
     }
 
+    private static setSingleTimeKeeper() {
+        if (this.timeKeeper) {
+            this.timeKeeper["single"] = { start: utils.sanitizeDate(this.singleDate, true), end : utils.sanitizeDate(utils.addDay(this.singleDate), true)};
+        }
+    }
+
     private static render() {
         this.timeKeeper = {};
-        this.timeKeeper["single"] = { start: utils.sanitizeDate(this.singleDate, true), end : utils.sanitizeDate(utils.addDay(this.singleDate), true)};
+        this.setSingleTimeKeeper();
         if (this.type == TimelineType.RANGE_TIED || this.type == TimelineType.RANGE_HOUR_MIN_TIED) {
             this.timeKeeper["range"] = { start: utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date()), this.advancedRange), true), end : utils.maximizeDate(utils.addDay(utils.getGMTTime(new Date())), true)};
             rangePicker.render(this.id)
@@ -202,21 +276,22 @@ export class Timeline {
         let w = window.innerWidth;
         if (this.type == TimelineType.RANGE_HOUR_MIN_TIED) {
             if (w < 700) { 
-                this.currentZoomMinLevel = 0.001; 
-                this.currentZoomMaxLevel = 0.001; 
+                this.currentZoomMinLevel = 0.003; 
+                this.currentZoomMaxLevel = 0.003; 
             }
             else if (w < 900) { 
-                this.currentZoomMinLevel = 0.001; 
-                this.currentZoomMaxLevel = 0.0025; 
+                this.currentZoomMinLevel = 0.003; 
+                this.currentZoomMaxLevel = 0.0075; 
             }
             else if ( w < 1200) { 
-                this.currentZoomMinLevel = 0.001;
-                this.currentZoomMaxLevel = 0.005;
+                this.currentZoomMinLevel = 0.2;
+                this.currentZoomMaxLevel = 1;
             }
             else { 
-                this.currentZoomMinLevel = 0.1; 
-                this.currentZoomMaxLevel = 0.2; 
+                this.currentZoomMinLevel = 0.2; 
+                this.currentZoomMaxLevel = 1; 
             }
+            console.log(this.currentZoomMinLevel, this.currentZoomMaxLevel);
         } else {
             if (w < 700) { 
                 this.currentZoomMinLevel = 10; 
@@ -271,9 +346,17 @@ export class Timeline {
             if (range.start > utils.addDay(Timeline.maxDate, -1)) {
                 Timeline.items.update({id: 'range', start:  utils.addDay(Timeline.maxDate,-Timeline.advancedRange -1), end: Timeline.maxDate});
             } 
-            if (single.start > utils.addDay(Timeline.maxDate, -1)) {
-                Timeline.items.update({id: 'single', start:  utils.addDay(Timeline.maxDate,-1), end: Timeline.maxDate});
-            } 
+            if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+//                console.log("FIX");
+                // this should be new DateUTC?
+//                if (single.start > utils.addDay(Timeline.maxDate, -1)) {
+//                    Timeline.items.update({id: 'single', start:  utils.addDay(Timeline.maxDate,-1), end: Timeline.maxDate});
+//                }     
+            } else {
+                if (single.start > utils.addDay(Timeline.maxDate, -1)) {
+                    Timeline.items.update({id: 'single', start:  utils.addDay(Timeline.maxDate,-1), end: Timeline.maxDate});
+                }     
+            }
 
             range = Timeline.items.get('range');
             single = Timeline.items.get('single');
@@ -294,26 +377,41 @@ export class Timeline {
                 if (Timeline.draggedId == 'single') {
                     Timeline.items.update({id: 'range', start: single.start, end: utils.addDay(single.start, diff)});
                 } else {
-                    Timeline.items.update({id: 'single', start: range.start, end: utils.addDay(range.start)});
+                    if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                        Timeline.items.update({id: 'single', start: range.start, end: utils.addMinutes(range.start, 10)});
+                    } else {
+                        Timeline.items.update({id: 'single', start: range.start, end: utils.addDay(range.start)});
+                    }
                 }
             }
             else if (range.end < single.end) { 
                 if (Timeline.draggedId == 'single') {
                     Timeline.items.update({id: 'range', start: utils.addDay(single.end, -diff), end: single.end});
                 } else {
-                    Timeline.items.update({id: 'single', start: utils.addDay(range.end, -1), end: range.end});
+                    if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+//                        console.log("MAY need fixing to current date");
+                        Timeline.items.update({id: 'single', start: utils.addMinutes(range.end, -10), end: range.end});
+                    } else {
+                        Timeline.items.update({id: 'single', start: utils.addDay(range.end, -1), end: range.end});
+                    }
                 }
             }
             let range = Timeline.items.get('range');
             if (range.end > Timeline.maxDate) {
                 Timeline.items.update({id: 'range', start: utils.addDay(Timeline.maxDate, -Timeline.advancedRange-1), end: Timeline.maxDate});
-                Timeline.items.update({id: 'single', start: utils.addDay(Timeline.maxDate, -1), end: Timeline.maxDate});
+                if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+//                    console.log("MAY need fixing to current date");
+                    Timeline.items.update({id: 'single', start: utils.addMinutes(Timeline.maxDate, -10), end: Timeline.maxDate});
+                } else {
+                    Timeline.items.update({id: 'single', start: utils.addDay(Timeline.maxDate, -1), end: Timeline.maxDate});
+                }
             }
         }
         let obj = Timeline.getDates();
         if (obj) {
             let diff = utils.getDayDiff(obj["range"].start, obj["range"].end) - 1;
             Timeline.singleDate = obj["single"].start;
+//            console.log("Timeline single date", Timeline.singleDate);
             Timeline.advancedRange = diff;
             Timeline.eventTimelineUpdate();
         }
@@ -353,12 +451,16 @@ export class Timeline {
         }
 
         if (Timeline.actionType == ActionType.CLICK || adjust) {
-            Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
+            if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                let sanTime = event.snappedTime;
+                Timeline.items.update({id: 'single', start: sanTime, end: utils.addMinutes(sanTime,10)});
+            } else {
+                Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
+            }
         }
 
         single = Timeline.items.get('single');
         Timeline.singleDate = single.start;
-
     }
 
     public static setTimeline() {
@@ -392,13 +494,14 @@ export class Timeline {
         this.singleSliderVisible = visible;
         if (this.type == TimelineType.RANGE_TIED || this.type == TimelineType.RANGE_HOUR_MIN_TIED) {
             Timeline.setSingleDateSlider(visible);
+            this.changeTimelineRangeMode();
         } else if (this.type == TimelineType.SINGLE) {
             if (visible) {
                 events.setControlState("timeline", true);
             } else {
                 events.setControlState("timeline", false);
             }
-           events.dispatch(events.EVENT_MENU_RESIZE);
+            events.dispatch(events.EVENT_MENU_RESIZE);
         }
     }
 
@@ -539,6 +642,10 @@ export class Timeline {
             singleDate.delete();
         }
         this.rendered = false;
+    }
+
+    public static getTimelineType():TimelineType {
+        return this.type;
     }
 
 }

@@ -1213,7 +1213,7 @@ div.vis-tooltip {
 }
 .vis-january div, .vis-february div, .vis-march div, .vis-april div, .vis-may div, .vis-june div, 
 .vis-july div, .vis-august div, .vis-september div, .vis-october div, .vis-november div, 
-.vis-december div {
+.vis-december div, .vis-text.vis-major.vis-even, .vis-text.vis-major.vis-odd {
     font-weight: 500;   
     font-size: 1.6rem;
     color: #EEE;

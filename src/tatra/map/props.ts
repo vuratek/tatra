@@ -35,7 +35,8 @@ export class props  {
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
 
-    public static allowMultipleDynamicLayers    : boolean = true;
+    public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
+    public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
 
     public static getApplicationName () : string {
         return props.config.properties.applicationName;
