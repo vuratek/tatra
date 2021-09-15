@@ -3,7 +3,7 @@ import { utils } from "../../utils";
 import { props } from "../props";
 import { Navigation } from "../../page/Navigation";
 import { hash } from "../hash";
-
+import GIFEncoder from 'gifencoder';
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
 	public static label		: string = 'Screenshot';
@@ -25,11 +25,11 @@ export class screenshot extends baseComponent {
         if (! el) { return; }
         el.innerHTML = `
             <p>
-                Download current map view into jpg file.
+                Download current map view into image file.
             </p>
             <table style="width:100%;">
                 <tr>
-                    <td>
+                    <td style="width:40%;">
                         <input type="checkbox" checked id="lmvCtrlBtns_${this.id}_header"> Header
                         <br>
                         <input type="checkbox" checked id="lmvCtrlBtns_${this.id}_timestamp"> Timestamp
@@ -37,15 +37,22 @@ export class screenshot extends baseComponent {
                         <input type="checkbox" checked id="lmvCtrlBtns_${this.id}_scalebar"> Scalebar
                     </td>
                     <td>
+                        <select id="lmvCtrlImgFormat">
+                            <option value="png">PNG</option>
+                            <option value="jpeg" selected>JPG</option>
+                            <option value="gif">GIF</option>
+                        </select>
+
                         <button id="lmvControlsBtn_${this.id}_whole"><i class="fa fa-download fa-lg"></i> Download image</button>
                     </td>
                 </tr>
             </table>
-            <a id="lmvControlsBtn_${this.id}_a" href="" style="color:#eee;" download="screenshot.png"></a>
+            <a id="lmvControlsBtn_${this.id}_a" href="" style="color:#eee;" download="screenshot.jpg"></a>
         `;
 //        utils.setClick(`lmvControlsBtn_${this.id}_whole`, () => this.saveImage());
         utils.setClick(`lmvControlsBtn_${this.id}_whole`, () => this.saveImage());
     }
+
 
     public static saveImage () {
         let showHeader = (document.getElementById(`lmvCtrlBtns_${this.id}_header`) as HTMLInputElement).checked;
@@ -87,18 +94,45 @@ export class screenshot extends baseComponent {
             dates = (hash.datesToString() as string).replace('d:', '').replace('..', '_');
         }
         let location = hash.locationToString();
-        let name = `${props.config.properties.applicationName}_${dates}[${location}].jpg`;
-        
-        if (navigator.msSaveBlob) {
-            // link download attribuute does not work on MS browsers
-            navigator.msSaveBlob(image.msToBlob(), name);
-        } else {
+        let ext = utils.getSelectText('lmvCtrlImgFormat').toLowerCase();
+        let type = utils.getSelectValue('lmvCtrlImgFormat');
+        let name = `${props.config.properties.applicationName}_${dates}[${location}].${ext}`;
+
+        if (ext == 'gif') {
+            let encoder = new GIFEncoder(image.width, image.height);
+            encoder.start();
+            encoder.setRepeat(-1);   // 0 for repeat, -1 for no-repeat
+//            encoder.setDelay(500);  // frame delay in ms
+            encoder.setQuality(10); // image quality. 10 is default.
+            encoder.addFrame(context);
+            encoder.finish();
+            let blob = new Blob([encoder.out.getData()], {type: "octet/stream"});
             let link = document.getElementById(`lmvControlsBtn_${this.id}_a`) as HTMLAnchorElement;
             link.download = name;
-            link.href = image.toDataURL("image/jpeg");
+            let url = window.URL.createObjectURL(blob);
+            link.href = url
             link.click();
+            setTimeout(function() {
+                window.URL.revokeObjectURL(url);
+            }, 1000);            
+        } else {        
+            if (navigator.msSaveBlob) {
+                // link download attribute does not work on MS browsers
+                navigator.msSaveBlob(image.msToBlob(), name);
+            } else {
+                let link = document.getElementById(`lmvControlsBtn_${this.id}_a`) as HTMLAnchorElement;
+                link.download = name;
+
+                link.href = image.toDataURL(`image/${type}`);
+                link.click();
+            }
         }
     }
+
+    private static onGifComplete(obj, width, height) {
+        console.log("OBJ", obj);
+    }
+
 
     public static addTimestamp (canvas : HTMLCanvasElement, text : string) {
         let ctx = canvas.getContext('2d');
