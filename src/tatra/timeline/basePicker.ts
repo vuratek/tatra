@@ -67,8 +67,9 @@ export class basePicker {
         }
         let handler = () => this.setDates();
         let format = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) ? 'M d Y H:i' : 'M d Y';
+        let hasTime = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) ? true : false;
         this.calendar = flatpickr(`#${this.id}_date`, {
-            enableTime: true,
+            enableTime: hasTime,
             dateFormat : format,
             defaultDate : d,
             minDate : new Date(2000,11-1, 11),
