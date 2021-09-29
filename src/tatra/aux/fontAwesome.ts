@@ -10,9 +10,9 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faMapMarkerAlt, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust, faCheck,
         faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash, faCrosshairs,
         faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faCheckSquare,
-        faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog
+        faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
-        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay,
+        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
@@ -35,8 +35,8 @@ export class fontAwesome {
         // timeline 
         library.add(faFastBackward, faFastForward, faStepBackward, faStepForward);
         // firms
-        library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog,
-            faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff);
+        library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog, faQuoteRight,
+            faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff, faCloud);
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight);
         // laads
