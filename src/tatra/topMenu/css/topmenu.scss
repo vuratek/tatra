@@ -319,6 +319,11 @@
     max-height: 80vh;
     overflow: auto;
 }
+.notif-item-content .title{
+    font-size: 2.2rem;
+    color: #ffd800;
+    font-weight: 600;
+}
 #notifications_notifications-info .notif-item-content {
     padding: 2rem 7rem 1rem 3rem;
 }
@@ -341,7 +346,7 @@
     font-size: 3rem;
     cursor: pointer;
 }
-.notif-item-content img {
+.notif-item img {
 	width: 6.7rem;
     bottom: .6rem;
     right: .6rem;

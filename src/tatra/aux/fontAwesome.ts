@@ -3,7 +3,7 @@ import { dom, library, config } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'*/
 
-import { faComments, faBookmark, faEnvelopeOpen, faSquare as faSquareEmpty } from '@fortawesome/free-regular-svg-icons';
+import { faComments, faBookmark, faEnvelopeOpen, faSquare as faSquareEmpty, faEye } from '@fortawesome/free-regular-svg-icons';
 import { faRedditAlien, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastForward, faStepBackward, faStepForward, faUpload,
         faCaretLeft, faCaretUp, faExternalLinkAlt, faBars, faTimes, faPlusCircle, faMinusCircle, faInfoCircle, faHandPaper,
@@ -11,8 +11,9 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash, faCrosshairs,
         faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faCheckSquare,
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
-        faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, 
-        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud,
+        faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, faLayerGroup,
+        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
+        faAngleDoubleUp, faEyeSlash, faCaretDown,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
@@ -38,9 +39,9 @@ export class fontAwesome {
         library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog, faQuoteRight,
             faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff, faCloud);
         // swaths
-        library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight);
+        library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faCaretDown);
         // laads
-        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause);
+        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash);
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap, faCheckSquare, faSquareEmpty );
         // moon

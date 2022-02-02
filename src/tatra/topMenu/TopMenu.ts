@@ -12,6 +12,7 @@ export enum STATE {
 export class TopMenu {
 
     private static isOpened = false;
+    private static timelineState : string | null = null;
 
     public static render () {
         let el = document.getElementById('navBar') as HTMLDivElement;
@@ -52,6 +53,11 @@ export class TopMenu {
         this.isOpened = true;
         utils.hide('leftNavBar');
         utils.hide("lmvWrapper");
+        let timeline = document.getElementById('timeline') as HTMLDivElement;
+        if (timeline && ! this.timelineState) {
+            this.timelineState = timeline.style.display;
+            utils.hide('timeline');
+        }
         utils.show("topMenuContentWrap");
         utils.show("topMenuCloak");
         TopMenuItem.setTopButton(id);
@@ -66,6 +72,10 @@ export class TopMenu {
         utils.show("lmvWrapper");
         utils.hide("topMenuContentWrap");
         utils.hide("topMenuCloak");
+        if (this.timelineState) {
+            utils.showCustom('timeline', this.timelineState);
+            this.timelineState = null;
+        }
 
         TopMenuItem.setTopButton(null);
     } 

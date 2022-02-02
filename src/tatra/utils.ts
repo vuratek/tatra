@@ -39,6 +39,10 @@ export class utils {
         }
     }
 
+    public static showCustom (divId : string, style : string) {
+        this.setVisibility(divId, true, style);
+    }
+
     public static show (divId : string) {
         this.setVisibility(divId, true);
     }
@@ -47,10 +51,10 @@ export class utils {
         this.setVisibility(divId, false);
     }
 
-    public static setVisibility (divId: string, visible : boolean) {
+    public static setVisibility (divId: string, visible : boolean, type = 'block') {
         let el = document.getElementById(divId) as HTMLDivElement;
         if (el) {
-            el.style.display= (visible) ? "block" : "none";
+            el.style.display= (visible) ? type : "none";
         }
     }
 
@@ -290,5 +294,22 @@ export class utils {
         if (spinner) {
             spinner.style.display = 'none';
         }
+    }
+
+    public static tile2coord (x : number, y : number, z : number) : string {
+        return this.tile2long(x,z) + ',' + this.tile2lat(y+1,z) + ',' + this.tile2long(x+1,z) + ',' + this.tile2lat(y,z);
+    }
+
+    public static tile2long (x : number, z : number) : number {
+        return (x/Math.pow(2,z+1)*360-180);
+    }
+
+    public static tile2lat (y : number, z : number) : number {
+        return ((Math.pow(2,z) - y)/Math.pow(2,z)*180-90);
+    }
+
+    public static padNum (num : number, size : number) : string {
+        let s = "000000000" + num.toString();
+        return s.substr(s.length-size);
     }
 }
