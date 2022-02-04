@@ -405,7 +405,7 @@ export class Timeline {
                     {id: 'single', start: iSingle.start, end: iSingle.end},
                     {id: 'range', start: iRange.start, end: iRange.end}
                 );
-\            }
+            }
             if (helper.isDiff(iRange, origRange as ITimelineRanges)) {
                 let diff = utils.getDayDiff(iRange.start, iRange.end) - 1;
                 if (this.isPartialDate(iRange.end)) {
