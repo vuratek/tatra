@@ -7,13 +7,12 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
 import { Feature, MapBrowserEvent } from "ol";
 import { props } from "../props";
 import { Coordinate } from "ol/coordinate";
-import { map } from "..";
 import { utils as mapToolsUtils } from "./utils";
 import { utils } from "../../utils";
 import { events } from "../events";
 import { Layer, LayerSource } from "../obj/Layer";
 import OverlayPositioning from "ol/OverlayPositioning";
-import GeometryType from "ol/geom/GeometryType";
+import { mapUtils } from "../mapUtils";
 
 export interface IMeasure {
     [id : string] : number;
@@ -46,7 +45,7 @@ export class Measure extends BaseTool  {
 
     public activate() {
         super.activate();
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (!lo) { 
             lo = new Layer();
             lo.type = "manualLayer";
@@ -159,7 +158,7 @@ export class Measure extends BaseTool  {
             console.log('measure type not defined.');
             return;
         }
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (!lo || !lo.boxSource) { return; } 
         let source = lo.boxSource;
         this.draw = new Draw({

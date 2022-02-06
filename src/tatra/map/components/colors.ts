@@ -1,10 +1,10 @@
 import { baseComponent } from "./baseComponent";
 import { Layer } from "../obj/Layer";
 import { events } from "../events";
-import { map } from "..";
 import { controls } from "./controls";
 import { utils } from "../../utils";
 import iro from '@jaames/iro';
+import { mapUtils } from "../mapUtils";
 
 export class Color {
 	
@@ -44,7 +44,7 @@ export class colors extends baseComponent {
 	}
 
 	public static setLayer (id : string, target : number, title : string | null = null) {
-		this.currentLayer = map.getLayerById(id);
+		this.currentLayer = mapUtils.getLayerById(id);
 		this.currentLayerTarget = target;
 		if (! this.currentLayer) { return; }
 		if (title) {

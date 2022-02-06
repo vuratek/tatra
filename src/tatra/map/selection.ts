@@ -5,7 +5,6 @@ import { Coord } from "./obj/Coord";
 import { Select } from "ol/interaction";
 import { platformModifierKeyOnly } from "ol/events/condition";
 //import { selectionUtils} from "./support/selectionUtils";
-import { map } from ".";
 import { mapUtils } from "./mapUtils";
 import { events } from "./events";
 import { tools } from "./tools";

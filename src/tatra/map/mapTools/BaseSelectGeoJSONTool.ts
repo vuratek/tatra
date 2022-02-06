@@ -1,5 +1,4 @@
 import { BaseTool } from "./BaseTool";
-import { map } from "..";
 import { Select } from "ol/interaction";
 import { props } from "../props";
 import { platformModifierKeyOnly } from "ol/events/condition";
@@ -10,6 +9,7 @@ import { Selection } from "../obj/Selection";
 import VectorSource from "ol/source/Vector";
 import { DataHandler } from "./dataHandler";
 import { utils } from "../../utils";
+import { mapUtils } from "../mapUtils";
 
 export class BaseSelectGeoJSONTool extends BaseTool {
 
@@ -36,7 +36,7 @@ export class BaseSelectGeoJSONTool extends BaseTool {
 
     public setLayer (layer : string) {
         this.layer = layer;
-        this.lo = map.getLayerById(this.layer);
+        this.lo = mapUtils.getLayerById(this.layer);
         if (!this.lo) {
             console.log(`Tool ${this.id} has no associated layer [${this.layer}]`);
         }

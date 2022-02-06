@@ -1,6 +1,6 @@
 import { BaseTool } from "./BaseTool";
-import { map } from "../index";
 import { props } from "../props";
+import { mapUtils } from "../mapUtils";
 
 export class Identify extends BaseTool  {
 
@@ -15,7 +15,7 @@ export class Identify extends BaseTool  {
             this.listenerHandler = (evt : Event) => this.identify(evt);
             el.addEventListener("click", this.listenerHandler);
         }
-        this.lo = map.getLayerById('identify');
+        this.lo = mapUtils.getLayerById('identify');
         if (this.lo) {
             this.lo.visible = true;
             if (this.lo.boxSource) 

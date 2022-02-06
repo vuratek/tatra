@@ -1,6 +1,5 @@
 import { baseComponent } from "./baseComponent";
 import { events } from "../events";
-import { map } from "..";
 import { controls } from "./controls";
 import { Layer } from "../obj/Layer";
 import { Slider } from "../../aux/Slider";
@@ -44,7 +43,7 @@ export class opacity extends baseComponent {
 	}
 
 	public static setLayer (id : string, title : string | null = null) {
-		this.currentLayer = map.getLayerById(id);
+		this.currentLayer = mapUtils.getLayerById(id);
 		if (! this.currentLayer) { return; }
 		if (title) {
 			this.currentLayerTitle = title;

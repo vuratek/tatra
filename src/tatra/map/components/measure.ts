@@ -2,7 +2,6 @@ import { baseComponent } from "./baseComponent";
 import { tools } from "../tools";
 import { MeasureArea } from "../mapTools/MeasureArea";
 import { MeasureDistance } from "../mapTools/MeasureDistance";
-import { map } from "..";
 import { utils as mapToolsUtils } from "../mapTools/utils";
 import { events } from "../events";
 import { utils } from "../../utils";
@@ -12,6 +11,7 @@ import { Group } from "ol/layer";
 import { UNITS } from "../mapTools/utils";
 import { Vector } from "ol/source";
 import { controls } from "./controls";
+import { mapUtils } from "../mapUtils";
 
 export enum TOOLS {
     CLEAR       = 'clear',
@@ -44,7 +44,7 @@ export class measure extends baseComponent {
         this.updateUnits();
         let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
 
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (lo) {
             lo.visible = true;
         }
@@ -55,7 +55,7 @@ export class measure extends baseComponent {
 
     public static close() {
         super.close();        
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (lo) {
             lo.visible = false;
         }
@@ -64,7 +64,7 @@ export class measure extends baseComponent {
     }
 
     private static clearAll () {
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (lo && lo.boxSource) { lo.boxSource.clear(); }
         this.toolArea.reset();
         this.toolDistance.reset();
@@ -234,7 +234,7 @@ export class measure extends baseComponent {
 
     private static delete (id : string) {
         let isArea = (id.indexOf('Area') >=0 ) ? true : false;
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (!lo || !lo._layer) { return; }
         let src = (lo._layer.getSource() as Vector);
         let feature = src.getFeatureById(id);
