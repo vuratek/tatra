@@ -11,11 +11,7 @@ export class screenshot extends baseComponent {
 
     public static open () {
         super.open();
-        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight  - 250;
-        let mw = ((document.getElementById('map') as HTMLDivElement).clientWidth- 300) / 2 - 40;
-        if (mh < 0) { mh = 0;}
-        if (mw < 0) { mw = 0;}
-        this.position(mw, mh );
+        this.defaultPosition();
     }
 
     public static createWindow () {

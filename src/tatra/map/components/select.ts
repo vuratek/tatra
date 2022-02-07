@@ -75,6 +75,7 @@ export class select extends baseComponent {
         }
         tools.activate(this.currentTool);
         this.updateToolbar();  
+        this.defaultPosition(true);
     }
 
     public static close() {

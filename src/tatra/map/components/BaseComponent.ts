@@ -16,7 +16,7 @@ export class baseComponent {
     public static currentTool   : string = '';
     public static showInfoBar   : boolean = false;
     public static isOpened      : boolean = false;
-    public static ignoreResize : boolean = false;
+    public static ignoreResize  : boolean = false;
         
     public static init () {
         document.addEventListener(events.EVENT_CONTROL_BTN, (evt : Event) => this.onClick (evt as CustomEvent));
@@ -103,11 +103,45 @@ export class baseComponent {
         controls.ignoreResize = ignore;
     }
 
+    public static defaultPosition(isTool : boolean = false) {
+        let offsetY = 120;
+        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
+        let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
+        let el = document.getElementById(`lmvControls_${this.id}`) as HTMLDivElement;
+        if (! el) { return; }
+        let hh = el.clientHeight;
+        let hw = el.clientWidth;
+        let defaultX = (el.style.left && el.style.left.indexOf('px')>=0) ? Number(el.style.left.replace('px', '')) : null;
+        let defaultY = (el.style.top && el.style.top.indexOf('px')>=0) ? Number(el.style.top.replace('px', '')) : null;
+        if ((defaultX && (defaultX + hw < mw -10)) &&  
+            (defaultY && (defaultY + hh < mh - 70)) ) {
+                // keep the last position - if user moved the window
+                return;
+        }
+        if (isTool) {
+            this.position(70, offsetY);
+            return;
+        }
+        let ref = document.getElementById(`bb_${this.id}_btn`) as HTMLDivElement;
+        let x = (mw - hw) / 2;
+        if (ref) {
+            let rect = ref.getBoundingClientRect();
+            x = Math.round((rect.right - rect.left)/2 + rect.left - hw / 2);
+        }
+        let y = mh - hh - offsetY;
+        if (x < 0) { x = 0;}
+        else if (x + hw > mw -10) {
+            x = mw - hw - 10;
+        }
+        if (y < 0) { y = 0;}
+        this.position(x, y);
+    }
+
     public static position (x: number, y: number) {
-        let el = document.getElementById(`lmvControls_${this.id}`);
+        let el = document.getElementById(`lmvControls_${this.id}`) as HTMLDivElement;
 		if (el) {
 			el.style.left = (x/10) + 'rem';
-			el.style.top = (y/10) + 'rem';
+            el.style.top = (y/10) + 'rem';
 		}
     }
     public static resize() {

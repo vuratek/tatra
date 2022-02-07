@@ -50,7 +50,7 @@ export class measure extends baseComponent {
         }
         this.toolArea.setState(true);
         this.toolDistance.setState(true);
-
+        this.defaultPosition(true);
     }
 
     public static close() {

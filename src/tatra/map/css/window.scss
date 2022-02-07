@@ -336,7 +336,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
     left: 0;
     border: 0.1rem solid #878787;
     background: #222;
-    border-radius: 0.5rem;
+    border-radius: 0.7rem;
     z-index: 200;
 	display:none;
 }
@@ -345,23 +345,24 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	margin: 0;
 }
 .lmvControlsWindowLabel {
-	font-family: 'Titillium Web','Helvetica Neue',Helvetica,Arial,sans-serif;
-	font-size:1.9rem;
-	color:#fc6814;
-	border-radius: 0.4rem 0.4rem 0 0;
-	padding:0.8rem 3rem 0.7rem 1rem;
-	width:100%;
-	cursor:default;
-	text-transform: uppercase;
+    font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.9rem;
+    color: #fc6814;
+    border-radius: 0.4rem 0.4rem 0 0;
+    padding: 0.8rem 3rem 0.7rem 1rem;
+    width: 100%;
+    cursor: move;
+    text-transform: uppercase;
 }
 .lmvControlsWindowCloseBtn {
-	font-size:2rem;
-	position:absolute;
-	top:0.3rem;
-	color:#DDD;
-	cursor:pointer;
-	right:0.5rem;
-	padding: 0.3rem 0.5rem;
+    font-size: 2rem;
+    background: #ce5511;
+    color: #333;
+    position: absolute;
+    top: 0.3rem;  
+    right: 0.5rem;
+    padding: 0.3rem 0.5rem 0.2rem 0.5rem;
+    cursor: pointer;
 }
 #lmv_identify_CloseBtn {
 	top:0.5rem;
@@ -386,7 +387,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	background:#262626;
 	box-shadow: rgba(20, 20, 20, 0.4) 0.2rem 0.2rem 0.2rem;
 	border: 0.1rem solid #999;
-	border-radius: 1rem;
+	border-radius: .7rem;
 	font-size: 1.4rem;
 }
 .transparentWindow .lmvControlsWindowContent {
@@ -395,12 +396,11 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	line-height: 1.5rem;
 }
 .transparentWindow .lmvControlsWindowCloseBtn {
-    position: absolute;
-    color: #AAA;
-    /*font-size: 1.7rem;*/
-    top: 0.4rem;
-    right: 1rem;
+	top: 0.3rem;  
+	right: 0.5rem;
 	cursor: pointer;
+	background: #ce5511;
+	color: #333;
 }
 .colorPickerWindow {
 	width:auto;
