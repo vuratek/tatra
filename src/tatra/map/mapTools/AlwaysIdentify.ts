@@ -1,8 +1,7 @@
-import { map } from "../index";
 import { props } from "../props";
 import { Layer } from "../obj/Layer";
-import { events } from "../events";
 import { BaseTool } from "./BaseTool";
+import { mapUtils } from "../mapUtils";
 
 export class AlwaysIdentify extends BaseTool  {
 
@@ -14,7 +13,7 @@ export class AlwaysIdentify extends BaseTool  {
         if (! props.map) { return; }
         this.listenerHandler = (evt : Event) => this.identify(evt);
         props.map.on('singleclick', this.listenerHandler);
-        this.lo = map.getLayerById('identify');
+        this.lo = mapUtils.getLayerById('identify');
 
         if (this.lo) {
             this.lo.visible = true;

@@ -1,14 +1,13 @@
-import { map } from "../index";
+
 import { Layer } from "../obj/Layer";
 import { Feature } from 'ol';
 import { Point } from "ol/geom";
-import { Coord } from "../obj/Coord";
 import { props } from "../props";
 import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
-import { UrlTile } from "ol/source";
+
 
 class AreaLabels {
     public km       : string = '';
@@ -38,7 +37,7 @@ export class layerStyle {
     }
 
     public static updateOrbitUrl (id : string, tileCoord : Array <number>) {
-		let lo = map.getLayerById(id);
+		let lo = mapUtils.getLayerById(id);
 		if (!lo || !lo.source) { return; }
 		
 		let url = lo.source.url as string;

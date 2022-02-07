@@ -1,5 +1,5 @@
 /* The container */
-.llCheckbox {
+#locator-options .llCheckbox {
     display: block;
     position: relative;
     padding-left: 3.5rem;
@@ -11,7 +11,7 @@
 }
 
 /* Hide the browser's default checkbox */
-.llCheckbox input {
+#locator-options .llCheckbox input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -20,7 +20,7 @@
 }
 
 /* Create a custom checkbox */
-.checkmark {
+#locator-options .checkmark {
     position: absolute;
     top: -0.3rem;
     left: 0;
@@ -28,32 +28,33 @@
     width: 2.5rem;
     background-color: #eee;
     border:0.1rem solid #AAA;
+    margin:0;
 }
 
 /* On mouse-over, add a grey background color */
-.llCheckbox input ~ .checkmark {
+#locator-options .llCheckbox input ~ .checkmark {
     /*  background-color: #ccc;*/
     background-color: #767676;
 }
 
 /* When the checkbox is checked, add a blue background */
-.llCheckbox input:checked ~ .checkmark {
+#locator-options .llCheckbox input:checked ~ .checkmark {
     background-color: #0000;
 }
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+#locator-options .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
 /* Show the checkmark when checked */
-.llCheckbox input:checked ~ .checkmark:after {
+#locator-options .llCheckbox input:checked ~ .checkmark:after {
     display: block;
 }
 
 /* Style the checkmark/indicator */
-.llCheckbox .checkmark:after {
+#locator-options .llCheckbox .checkmark:after {
     left: 0.8rem;
     top: 0.2rem;
     width: 0.8rem;

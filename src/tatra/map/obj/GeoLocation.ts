@@ -101,7 +101,7 @@ export class GeoLocation {
                 scale: [0.5, 0.5],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: '/images/map-pin.png',
+                src: props.mapPinUrl,
                 }),
             });
             this.feature = new Feature({

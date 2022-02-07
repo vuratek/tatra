@@ -3,11 +3,11 @@ import { Vector } from 'ol/source';
 import { Coord } from './Coord';
 import { Circle, Polygon} from 'ol/geom';
 import { Feature } from 'ol';
-import { map } from '../../map';
 import { layer } from '../handlers/layer';
 import { events } from '../events';
 import { mapboxStyle } from "../handlers/mapboxStyle";
 import RasterSource from 'ol/source/Raster';
+import { mapUtils } from '../mapUtils';
 //import { applyStyle } from 'ol-mapbox-style';
 
 export enum layerCategories {
@@ -230,7 +230,7 @@ export class Layer {
     // make visible only if parent is visible
     public showLabel () {
         if (this._category == 'label' && this.parent) {
-            let lo = map.getLayerById(this.parent);
+            let lo = mapUtils.getLayerById(this.parent);
             if (lo) {
                 // if parent is not visible, label can't show up
                 this.visible = lo.visible;

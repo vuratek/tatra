@@ -4,7 +4,7 @@
 	top:3rem;
 	right:0;
 	border:0.1rem solid #999;
-	width:33rem;
+	width:40rem;
 	background:rgb(34,34,34);
 	box-shadow:0 0 0.3rem #e9e9e9;
 	display:block; 
@@ -89,10 +89,10 @@
 }
 @keyframes menuMoveClose {
 	from {  }
-	to { right: -34.1rem; }
+	to { right: -40.1rem; }
 }
 @keyframes menuMoveOpen {
-	from { right: -34.1rem; }
+	from { right: -40.1rem; }
 	to { right: 0; }
 }
 @media screen and (max-width: 700px) {
@@ -150,7 +150,7 @@
 /* needed for IE11 */
 @media screen and (max-width: 1px) {
 	.mapMenu {
-		width:33rem;
+		width:40rem;
 		border:0.1rem solid #999;
 		border-radius:0.7rem 0 0 0.7rem;
 		border-right:none;

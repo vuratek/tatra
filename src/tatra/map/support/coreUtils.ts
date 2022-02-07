@@ -1,6 +1,5 @@
 import { props } from "../props";
 import { configProps } from "./configProps";
-import { map } from "..";
 import { Layer, LayerSource } from "../obj/Layer";
 import { Coord } from "../obj/Coord";
 import { Feature } from 'ol';
@@ -10,6 +9,7 @@ import { IConfigDef } from "../defs/ConfigDef";
 import { layerStyle } from "../handlers/layerStyle";
 //import Units from "ol/proj/Units";
 import { hash } from "../hash";
+import { mapUtils } from "../mapUtils";
 
 export class coreUtils {
         
@@ -312,13 +312,13 @@ export class coreUtils {
         let lys = ['classicBox','drawPolygon'];
         let lo = null;
         for (let i=0; i<lys.length; i++) {
-            lo = map.getLayerById(lys[i]);
+            lo = mapUtils.getLayerById(lys[i]);
             if (lo && lo._layer) { lo.boxSource.clear(); }
         }
         if (configProps.aoiType && configProps.aoi) {
             switch (configProps.aoiType) {
                 case 'classicBox':
-                    lo = map.getLayerById('classicBox');
+                    lo = mapUtils.getLayerById('classicBox');
                     if (lo) {
                         let points = configProps.aoi;
                         let coord = new Coord(points[0], points[1], points[2], points[3]);
@@ -328,7 +328,7 @@ export class coreUtils {
                     }
                     break;
                 case 'drawPolygon':
-                    lo = map.getLayerById('drawPolygon');
+                    lo = mapUtils.getLayerById('drawPolygon');
                     if (lo) {
                         lo.isSelect = false;
                         lo.visible = true;

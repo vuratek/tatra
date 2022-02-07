@@ -1,4 +1,3 @@
-import { map } from "..";
 import { utils } from "../../utils";
 import { events } from "../events";
 import "./css/*.scss";
@@ -51,7 +50,7 @@ export class layers {
         ul.className = "tatraSuppLyrs";
         base.appendChild(ul);
 		for (let i = 0; i < this.mainLayers.length; i++) {
-            let lo = map.getLayerById(this.mainLayers[i]);
+            let lo = mapUtils.getLayerById(this.mainLayers[i]);
             if (!lo) { return '';}    
             support_layers.createLayer(lo, ul, this.appId);
            //this.generateSupportLayer(ul, this.ids[i]);
@@ -98,7 +97,7 @@ export class layers {
             return;
         }
 
-        let lo = map.getLayerById(id);
+        let lo = mapUtils.getLayerById(id);
         if (!lo) { return '';}
         if (lo.category == 'basemap') {
             mapUtils.setBasemap(id);
@@ -124,7 +123,7 @@ export class layers {
                 }
             }            
             for (let i=0; i < props.layers.length; i++) {
-                let lo = map.getLayerById(props.layers[i].id);
+                let lo = mapUtils.getLayerById(props.layers[i].id);
                 if (! lo || lo.parent) { continue; }
                 if (lo.category == "basemap") {
                     let found = false; 

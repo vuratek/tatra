@@ -1,5 +1,4 @@
 import { props } from "../props";
-import { map } from "..";
 import { mapUtils } from "../mapUtils";
 import { utils } from "../../utils";
 import { IConfigDef, IMapControlsItem } from "../defs/ConfigDef";

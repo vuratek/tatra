@@ -74,10 +74,6 @@ export class map {
         utils.clearLoader();
     }
 
-    public static getLayerById (id : string) {
-        return mapUtils.getLayerById(id);
-    }
-
     // in some instances javascript reads json directly, otherwise parse is needed
     public static parseJSON (result : string) {
         let str;

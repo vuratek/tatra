@@ -1,6 +1,5 @@
 import { baseComponent } from "./baseComponent";
 import { tools } from "../tools";
-import { map } from "..";
 import { GroupContent } from "../../aux/GroupContent";
 import { controls } from "./controls";
 import { props } from "../props";
@@ -13,6 +12,7 @@ import { DrawPolygon } from "../mapTools/DrawPolygon";
 import { events } from "../events";
 import { utils } from "../../utils";
 import { DrawClassicBox } from "../mapTools/DrawClassicBox";
+import { mapUtils } from "../mapUtils";
 
 export enum TOOLS {
     CLASSIC     = 'classic',
@@ -75,11 +75,12 @@ export class select extends baseComponent {
         }
         tools.activate(this.currentTool);
         this.updateToolbar();  
+        this.defaultPosition(true);
     }
 
     public static close() {
         super.close();        
-        let lo = map.getLayerById('measure');
+        let lo = mapUtils.getLayerById('measure');
         if (lo) {
             lo.visible = false;
         }

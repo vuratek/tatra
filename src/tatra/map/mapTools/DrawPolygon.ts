@@ -5,12 +5,12 @@ import { Layer, LayerSource } from "../obj/Layer";
 import { Selection } from "../obj/Selection";
 import {unByKey} from 'ol/Observable';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
-import { map } from "..";
 import GeometryType from "ol/geom/GeometryType";
 import { selectLayer } from "../handlers/selectLayer";
 import { events } from "../events";
 import { DataHandler } from "./dataHandler";
 import { utils } from "../../utils";
+import { mapUtils } from "../mapUtils";
 
 
 export class DrawPolygon extends BaseTool {
@@ -28,7 +28,7 @@ export class DrawPolygon extends BaseTool {
 
     public activate() {
         super.activate();
-        this.lo = map.getLayerById('polygon');
+        this.lo = mapUtils.getLayerById('polygon');
         if (!this.lo) { 
             this.lo = new Layer();
             this.lo.type = "manualLayer";

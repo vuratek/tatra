@@ -3,9 +3,9 @@ import { events } from "./events";
 import { props } from "./props";
 import { configProps } from "./support/configProps";
 import { coreUtils } from "./support/coreUtils";
-import { map } from ".";
 import { utils } from "../utils";
 import { flatpickr } from "../aux/flatpickr";
+import { mapUtils } from "./mapUtils";
 
 export interface IHashLayer {
     layerId     : string;
@@ -162,7 +162,7 @@ export class hash {
         }
         this.values.layers = [];
         for (let i=0; i < arr.length; i++) {
-            let lo = map.getLayerById(arr[i]);
+            let lo = mapUtils.getLayerById(arr[i]);
             if (! lo || lo.tag != '') {
                 let subs = arr[i].split('=');
                 if (subs.length == 2) {

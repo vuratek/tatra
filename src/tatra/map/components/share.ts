@@ -42,9 +42,7 @@ export class share extends baseComponent {
     public static open () {
         share.setValue();
         super.open();
-        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-		let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
-        this.position((mw - 300) / 2, mh - 260);
+        this.defaultPosition();
     }
 
 	public static onClick (evt:Event) {
