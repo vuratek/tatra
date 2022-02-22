@@ -13,7 +13,8 @@ export class props  {
     public static defaultStartTool      : string = 'pan';
     public static map                   : Map;
     public static currentBasemap        : string = '';
-    public static mapPinUrl             : string = '/images/map-pin.png';        
+    public static mapPinUrl             : string = '/images/map-pin.png';    
+    public static ignoreResize          : boolean = false;
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];

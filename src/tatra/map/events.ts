@@ -6,6 +6,7 @@ export class events {
     public static readonly EVENT_CONTROL_BTN            : string = "control_btn";
     public static readonly EVENT_CONTROL_DISABLED       : string = "control_btn_disabled";
     public static readonly EVENT_CONTROL_SET            : string = "control_set";
+    public static readonly EVENT_CONTROL_SET_WINDOW     : string = "control_set_window";
     public static readonly EVENT_GEOJSON_LOADED         : string = "geojson_loaded";
     public static readonly EVENT_GROUP_CONTENT_CHANGE   : string = "group_content_change";
     public static readonly EVENT_HASH_UPDATE            : string = "hash_update";
@@ -23,6 +24,7 @@ export class events {
     public static readonly EVENT_MENU_CLOSEABLE         : string = "menu_closeable";
     public static readonly EVENT_MENU_RESIZE            : string = "menu_resize";
     public static readonly EVENT_SELECTION_UPDATE       : string = "selection_update";
+    public static readonly EVENT_SET_CONTROL_ITEM       : string = "set_control_item";
     public static readonly EVENT_TOOL_RESULT_UPDATE     : string = "tool_result_update";
     public static readonly EVENT_UI_LAYER_UPDATE        : string = "ui_layer_update"; 
     
@@ -43,6 +45,15 @@ export class events {
         document.dispatchEvent(new CustomEvent(events.EVENT_CONTROL_DISABLED, {
             detail: {
                 id : id
+            },
+        }));
+    }
+
+    public static controlSetWindow (id : string, opened : boolean) {
+        document.dispatchEvent(new CustomEvent(events.EVENT_CONTROL_SET_WINDOW, {
+            detail: {
+                id : id,
+                opened : opened
             },
         }));
     }
@@ -104,6 +115,15 @@ export class events {
             detail: {
                 id: id,
                 internal : internal
+            }
+        }));
+    }
+
+    public static setControlItem (id: string, visible : boolean = false) {
+        document.dispatchEvent(new CustomEvent(events.EVENT_SET_CONTROL_ITEM, {
+            detail: {
+                id: id,
+                visible : visible
             }
         }));
     }

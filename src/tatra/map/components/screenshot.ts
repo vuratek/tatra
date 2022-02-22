@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { props } from "../props";
 import { Navigation } from "../../page/Navigation";

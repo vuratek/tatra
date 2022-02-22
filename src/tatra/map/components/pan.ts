@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { tools } from "../tools";
 import { Pan as PanTool } from "../mapTools/Pan";
 

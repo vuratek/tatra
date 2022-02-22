@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 
 export class help extends baseComponent {
     public static id		: string = 'help';

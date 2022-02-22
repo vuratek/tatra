@@ -1,13 +1,11 @@
 import { props } from "../props";
 import { events } from "../events";
-//import { events as menuEvents } from "../../laadsLayerMenu/events";
 import { Layer } from "../obj/Layer";
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { GroupContent } from "../../aux/GroupContent";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
-import { noUiSlider } from "../../aux/nouislider";
 import { opacity } from "./opacity";
 
 export interface ISLMenus {
