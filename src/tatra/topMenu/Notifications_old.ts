@@ -1,5 +1,7 @@
 import { utils } from "../utils";
+import { Modal } from "../aux/Modal";
 import { TopMenuItem, ITopMenuItemObj } from "./TopMenuItem";
+import { ajax } from "../ajax";
 
 export interface INotification {
     id          : string;
@@ -11,7 +13,7 @@ export interface INotification {
 export interface INotificationRecord {
     id          : string;
     url         : string;
-    data        : string | null;
+    data        : Array<INotification> | null;
     obj         : ITopMenuItemObj;
 }
 export interface INotificationRecords {
@@ -26,44 +28,111 @@ export class Notifications {
     private static records      : INotificationRecords = {};
 
     public static load(url : string, obj:ITopMenuItemObj) {
-        let rec =  { id: obj.id, url : url, data : null, obj: obj} as INotificationRecord;
+        // check if data was loaded (notification vs. what's new)
+        for (let rec in this.records) {
+            if (this.records[rec].url == url) {
+                // found record from another set
+                if (rec != obj.id && !this.records[obj.id]) {
+                    this.records[obj.id] = {id : obj.id, url : url, data: this.records[rec].data, obj: obj};
+                    // record not loaded; return
+                    if (!this.records[rec].data) { return; }
+                    else { 
+                        Notifications.prepareData(this.records[obj.id]);
+                        return;
+                    }
+                }
+            }
+        }
+        let rec =  { id: obj.id, url : url, data : null, obj: obj}
         this.records[obj.id] = rec;
         fetch(url)
             .then(response => {
                 if (response.status == 404) {
                     throw new TypeError("No notifications.");
                 }
-                return response.text();
+                if (url.indexOf('.html') >= 0) {
+                    return response.text();
+                } else return response.json();
             })
             .then (data => {
-                if (data.length < 2) { throw new TypeError("No notifications."); }
-                let notif = document.getElementById(`${TopMenuItem.prefix}_notifications`) as HTMLLIElement;
-                notif.style.display = "table-cell";
-                utils.setClick(`${TopMenuItem.prefix}_${obj.id}`, ()=> this.show(obj.id));
-                utils.show(`${TopMenuItem.prefix}_${obj.id}`);
-                utils.postLoad(data, (converted_data : any) => this.loadContent(data, rec, obj));
+                if (url.indexOf('.html') >= 0) {
+                    let notif = document.getElementById(`${TopMenuItem.prefix}_notifications`) as HTMLLIElement;
+                    notif.style.display = "table-cell";
+                    utils.setClick(`${TopMenuItem.prefix}_${obj.id}`, ()=> this.show(obj.id));
+                    utils.show(`${TopMenuItem.prefix}_${obj.id}`);
+                    ajax.postLoad(data, (data : any) => this.loadContent(data, obj));
+                } else {
+                    if (typeof(data) == 'object') {
+                        rec.data = data;
+                        Notifications.prepareData(rec);
+                        // now check for sibling that expects the same data
+                        for (let r in this.records) {
+                            if (this.records[r].id != rec.id && this.records[r].url == rec.url) {
+                                this.records[r].data = data;
+                                Notifications.prepareData(this.records[r]);
+                            }
+                        }
+                    }
+                }           
             })
             .catch(error => {});
     }
-    private static loadContent (data:string, rec : INotificationRecord, obj:ITopMenuItemObj) {     
-        let id = obj.id;
-        let header = '';
+    private static prepareData(rec : INotificationRecord) {
+        let notif = document.getElementById(`${TopMenuItem.prefix}_notifications`) as HTMLLIElement;
+        notif.style.display = "table-cell";
+
+        let html = '';
+        let type = 'notification';
         if (rec.id.indexOf('news')>=0) {
-            header = `<div class="notif-banner">WHAT'S NEW: </div>`;
+            type = 'news';
+            html = `<div class="notif-banner">WHAT'S NEW: </div>`;
         } else {
-            header = '<div class="notif-banner">NOTIFICATIONS: </div>';
+            html = '<div class="notif-banner">NOTIFICATIONS: </div>';
         }
-        if (data && data != null) {
-            rec.data = header + data;
+        let counter = 0;
+        
+        for (let i=0; i< rec.data.length; i++) {
+            let memo = rec.data[i];
+            if (type == 'news') {
+                if (memo.type == 'news') {
+                    counter ++;
+                    html += `
+                        <div class="notif-item-content" tatra-news="news-${memo.id}">
+                            ${memo.description}
+                        </div>
+                    `;
+                }
+            } else {
+                if (memo.type == 'notification') {
+                    counter ++;
+                    html += `
+                        <div class="notif-item-content" tatra-announcement="notif-${memo.id}">
+                            <span class="title">${memo.title}</span><br/>
+                            ${memo.description}
+                        </div>
+                    `;    
+                }
+            }
         }
+        if (type == 'notification') {
+            html += '<img src="/images/NASA_logo.svg">';
+        }
+        if (counter > 0) {
+            utils.setClick(`${TopMenuItem.prefix}_${rec.obj.id}`, ()=> this.show(rec.obj.id));
+            utils.show(`${TopMenuItem.prefix}_${rec.obj.id}`);    
+            Notifications.loadContent(html, rec.obj);
+        }
+    }
+    private static loadContent (data:string, obj:ITopMenuItemObj) {     
+        let id = obj.id;
         let par = document.getElementById(this.prefix);       
-        if (par && rec.data) {
+        if (par) {
             this.activeEls.push(id);
             let el = document.createElement('div'); 
             el.setAttribute("id", `${this.prefix}_${id}`);
             el.setAttribute("class", "notif-item");
             par.appendChild(el);
-            el.innerHTML = rec.data;
+            el.innerHTML = data;
             let show = (obj.showOnLoad === true) ? true : false;
             let close = document.createElement('div');
             close.setAttribute("id", `${this.prefix}_${id}_close`);
@@ -95,7 +164,7 @@ export class Notifications {
             let news = [];
             for (let i=0; i<els.length; i++) {
                 let el = els[i] as HTMLDivElement;
-                notif_id = el.getAttribute('tatra-news') as string;
+                notif_id = el.getAttribute('tatra-news');
                 if (! notif_id) { continue; }
                 if (!localStorage.getItem(notif_id)) {
                     notif_counter ++;

@@ -183,7 +183,6 @@
 		"handler"	: "imagery",
 		"replace"	: ["layer", "?"],
 		"clandestine": false,
-		"maxLevel"	: 12.5,
 		"props"		: {
 				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
 				"layer"			: "#layer#",

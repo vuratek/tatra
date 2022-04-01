@@ -312,4 +312,25 @@ export class utils {
         let s = "000000000" + num.toString();
         return s.substr(s.length-size);
     }
+
+    public static postLoad (data : any, callback : Function) {
+        let temp = document.createElement("div");
+        temp.setAttribute("id", "_temp_loader");
+        document.body.appendChild(temp);
+        temp.style.display = "none";
+        temp.innerHTML = data;
+        let str = '';
+        for (let i=0; i < temp.childElementCount; i++) {
+            let child = temp.children[i];
+            if (child.tagName.toLowerCase() == "script" || child.tagName.toLowerCase() == "style") {
+                let el = document.createElement(child.tagName.toLowerCase());
+                document.head.appendChild(el);
+                el.innerHTML = child.innerHTML;
+            } else {
+                str += child.outerHTML;
+            }
+        }
+        document.body.removeChild(temp);
+        callback(str);
+    }
 }

@@ -1,6 +1,7 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
 import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
+import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
@@ -451,9 +452,24 @@ export class layer {
         if (func) {
             (lo._layer.getSource() as XYZ).setTileUrlFunction(func);
             //ajax.get(lo.style as string, null, (data : any) => this.setLayerStyle(data, lo));
-        }        
+        }
+        if (lo.tileErrorUrl) {
+            (lo._layer.getSource() as XYZ).on( TileEventType.TILELOADERROR, function (e) {
+                layer.loadErrorTile(e, lo.tileErrorUrl as string, lo.showTileError);
+            });
+        }
+          
     //(lo._layer.getSource() as XYZ).setTileUrlFunction(() => layer.test());
     }
+
+    public static loadErrorTile(e, tileUrl : string, showTile : boolean) {
+        if (showTile) {
+            e.tile.src_ = tileUrl;
+        } else {
+            e.tile.src_ = '/images/empty_256.png';
+        }
+        e.tile.load();
+  }
     
     public static addBoxLayer (lo : Layer) {
         lo.boxSource = new VectorSrc();

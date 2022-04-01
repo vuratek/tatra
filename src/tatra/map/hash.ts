@@ -163,7 +163,7 @@ export class hash {
         this.values.layers = [];
         for (let i=0; i < arr.length; i++) {
             let lo = mapUtils.getLayerById(arr[i]);
-            if (! lo || lo.tag != '') {
+            if (! lo || (lo.tag != '' && lo.tag != 'sentinel')) {
                 let subs = arr[i].split('=');
                 if (subs.length == 2) {
                     this.values.layers.push({ layerId: subs[0], classifier: subs[1]});

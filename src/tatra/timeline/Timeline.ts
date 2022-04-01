@@ -503,7 +503,7 @@ export class Timeline {
         }
         for (let i=0; i < props.layers.length; i++) {
             let lo = props.layers[i];
-            if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits') && lo.visible) {
+            if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits' || lo.handler == "sentinel") && lo.visible) {
                 visible = true;
             }
         }

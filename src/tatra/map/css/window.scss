@@ -221,13 +221,25 @@
 .layerValueRangeSlider .ui-widget-header {
 	background:#777;
 }
+.layerMissingTile {
+	position: relative;
+    padding: 0 0 1.5rem 6rem;
+}
+.layerMissingTile .llCheckbox {
+	position: relative;
+}
+.layerMissingTile > div {
+	padding: 0.7rem 0 0 4rem;
+    font-size: 1.4rem;
+    color: #CCC;
+}
 .lmvControlsLayerLegendIcon {
 	position:absolute;
 	top:1.8rem;
 	right: 6rem;
 	font-size:1.8rem;
 }
-.lmvControlsLayerDisabled {
+.lmvControlsLayerDisabled, .lmvControlsLayerLevelDisabled {
 	position: absolute;
 	height: 100%;
 	top:0;
@@ -240,6 +252,10 @@
 	display:none;
 	cursor:default;
 	font-size:1.6rem;
+}
+.lmvControlsLayerLevelDisabled {
+	color: #ffc964;	
+	padding-top:2rem;
 }
 #lmvControls_screenshot_Content button:hover {
     background: #c1500f;
@@ -294,6 +310,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 }
 .limSelectTabSelected {
 	background:#cbcbcb;
+	color:#333;
 }
 .limSelectTabResult {
 	font-size:1.2rem;

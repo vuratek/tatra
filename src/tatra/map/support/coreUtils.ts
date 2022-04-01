@@ -158,7 +158,7 @@ export class coreUtils {
             (lo.source.tileGrid["resolutions"] as Array <number>).splice(start, end);    
             (lo.source.tileGrid["matrixIds"] as Array <number>).splice(start, end);    
             lo.source.matrixSet = ms[lo.cloneLevel - 6];
-            lo.maxLevel = lo.cloneLevel + .5;
+            //lo.maxLevel = lo.cloneLevel + .5;
             lo.source.format = lo.cloneFormat;
             if (lo.cloneHasTime) {
                 lo.source.url += 'TIME=*TIME*';

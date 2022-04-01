@@ -147,6 +147,8 @@ export class Layer {
     public pixelSize        : number = 0;
     public altTitle1        : string | null = null;
     public altTitle2        : string | null = null;
+    public tileErrorUrl     : string | null = null;
+    public showTileError    : boolean = false;
  
     public addFeature (coord : Coord) {
         if (!this.boxSource) {
