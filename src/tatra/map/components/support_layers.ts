@@ -319,12 +319,10 @@ export class support_layers extends baseComponent{
 	}
 
 	private static refreshMissingTile(baseId : string, id: string) {
-		console.log("ID", id);
 		let lo = mapUtils.getLayerById(id);
 		if (!lo) { return; }
 		let el = document.getElementById(`layerShowMissingTile_${baseId}_${lo.id}`) as HTMLInputElement;
 		if (!el) { return; }
-		console.log(el.checked);
 		lo.showTileError = el.checked;
 		lo.refresh();
 	}

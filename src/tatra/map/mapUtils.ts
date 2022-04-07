@@ -33,7 +33,7 @@ export class mapUtils {
             let lo =props.layers[i];
             if (!lo) { continue; }
             lo.time = date;
-            if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits") && ! lo.noDateRefresh) {
+            if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
                 lo.refresh();
             }
         }
