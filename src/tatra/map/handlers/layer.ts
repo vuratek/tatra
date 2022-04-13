@@ -453,6 +453,17 @@ export class layer {
             (lo._layer.getSource() as XYZ).setTileUrlFunction(func);
             //ajax.get(lo.style as string, null, (data : any) => this.setLayerStyle(data, lo));
         }
+        if (lo.trackLoading) {
+            (lo._layer.getSource() as XYZ).on(TileEventType.TILELOADSTART, function (e) {
+                props.tileLoadActive[lo.id] = 1;
+                events.dispatchLayer(events.EVENT_LAYER_LOAD_TRACK, lo.id);
+            });
+            (lo._layer.getSource() as XYZ).on(TileEventType.TILELOADEND, function (e) {
+                props.tileLoadActive[lo.id] = 0;
+                events.dispatchLayer(events.EVENT_LAYER_LOAD_TRACK, lo.id);
+            });
+        }
+
         if (lo.tileErrorUrl) {
             (lo._layer.getSource() as XYZ).on( TileEventType.TILELOADERROR, function (e) {
                 layer.loadErrorTile(e, lo.tileErrorUrl as string, lo.showTileError);

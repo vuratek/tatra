@@ -17,6 +17,7 @@ export class events {
     public static readonly EVENT_LAYER_RANGE_UPDATE     : string = "layerRangeUpdate";
     public static readonly EVENT_LAYERS_REFRESH         : string = "layersRefresh";
     public static readonly EVENT_LAYER_VISIBLE          : string = "layerUpdate";
+    public static readonly EVENT_LAYER_LOAD_TRACK       : string = "layerLoadTrack";    // track tile loading event
     public static readonly EVENT_LEGEND_CLICK           : string = "legend_click";
     public static readonly EVENT_MAP_EXTENT_CHANGE      : string = "map_extent_change";
     public static readonly EVENT_MAPVIEWER_READY        : string = "mapviewer_ready";

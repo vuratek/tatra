@@ -148,6 +148,7 @@ export class Layer {
     public altTitle1        : string | null = null;
     public altTitle2        : string | null = null;
     public tileErrorUrl     : string | null = null;
+    public trackLoading     : boolean = false;
     public showTileError    : boolean = false;
  
     public addFeature (coord : Coord) {

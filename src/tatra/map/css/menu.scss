@@ -164,3 +164,27 @@
 		border-radius: 0.6rem 0 0 0;
 	}
 }
+
+span.spinnerMapMenu {
+	display:none;
+    float: right;
+    position: relative;
+    top: 0;
+    right: 1rem;
+    border: 0.6rem solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    border-top: 0.6rem solid rgba(60, 155, 76, 0.7);
+    width: 2rem;
+    height: 2rem;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+/* Safari */
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
