@@ -20,6 +20,12 @@ class AreaLabels {
     public _sqmi    : number = 0;
 
 }
+class IncidentInfo {
+    public Country : string = 'USA';
+    public Name : string = '';
+    public IncidentManagementOrganization : string | null = null;
+    public PercentContained : string | null = null;
+}
 export class layerStyle {
     public static symbols       = [];
     public static scale         : number = 1;
@@ -372,22 +378,41 @@ export class layerStyle {
         let date = new Date();
         date.setTime(Number(feature.get("FireDiscoveryDateTime")));
         let areas = layerStyle.getAreas(feature.get("DailyAcres"), false);
-        return layerStyle.fireAlertTemplate(feature.get("IncidentName"), '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
+        let ii = new IncidentInfo();
+        ii.IncidentManagementOrganization = feature.get("IncidentManagementOrganization");
+        ii.PercentContained = feature.get("PercentContained");
+        ii.Name = feature.get("IncidentName");
+        return layerStyle.fireAlertTemplate(ii, '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
     }
 
-    private static fireAlertTemplate(name : string, flagUrl: string, dateString : string, areas:AreaLabels, reportUrl:string) {
+    private static fireAlertTemplate(ii : IncidentInfo, flagUrl: string, dateString : string, areas:AreaLabels, reportUrl:string) {
+        let incident = '';
+        let incidentLink = '';
+        let stReportLink = '';
+        if (ii.PercentContained) {
+            incident += `<tr><td>% Contained</td><td>${ii.PercentContained} %</td></tr>`;
+        }
+        if (ii.IncidentManagementOrganization) {
+            incident += `<tr><td>Incident Mgmt Org</td><td>${ii.IncidentManagementOrganization}</td></tr>`;
+            incidentLink = '<a href="https://www.nps.gov/articles/wildland-fire-incident-command-system-levels.htm" target="_blank" rel="noopener">Incident Command System Levels <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>';
+        }
+        if (ii.Country == "USA") {
+            stReportLink = `<a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>`;
+        }
         return `
-            <span class="faLbl"><img src="${flagUrl}">${name}</span><br/>
+            <span class="faLbl"><img src="${flagUrl}">${ii.Name}</span><br/>
             <div class="faSize">
                 <table>
                     <tr><td>${areas.acres} acres</td><td>${areas.ha} ha</td></tr>
                     <tr><td>${areas.sqmi} miles<sup>2</sup></td><td>${areas.km} km<sup>2</sup></td></tr>
+                    ${incident}
                 </table>
             </div>
             <div class="zoomto" id="geojson_info"><span><i class="fa fa-search-plus" aria-hidden="true"></i></span> zoom to location</div>
             <span class="faDate">Discovery Date: <br/>${dateString}</span>
             <div class="faSituation">
-                <a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a>
+                ${stReportLink}
+                ${incidentLink}
             </div>
         `;
     }
@@ -395,7 +420,10 @@ export class layerStyle {
     public static _fireAlertCanada_info(feature : Feature) : string {
         let areas = layerStyle.getAreas(feature.get("hectares"), true);
         let ds = layerStyle.formatDate(new Date(feature.get("startdate")));
-        return layerStyle.fireAlertTemplate(feature.get("firename"), '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/en/ciffc/public/sitrep");
+        let ii = new IncidentInfo();
+        ii.Name = feature.get("firename");
+        ii.Country = "Canada";
+        return layerStyle.fireAlertTemplate(ii, '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/en/ciffc/public/sitrep");
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style | null {

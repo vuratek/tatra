@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "Transcending Application Tool for Research and Analysis",
   "main": "index.ts",
   "scripts": {
@@ -33,7 +33,7 @@
     "flatpickr": "^4.6.9",
     "gifencoder": "^2.0.1",
     "nouislider": "^14.6.3",
-    "ol": "^6.14.1"
+    "ol": "^6.5.0"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",

@@ -96,7 +96,7 @@ export class support_layers extends baseComponent{
     }
     
 	public static generateLayers (menu : HTMLDivElement, type : string, baseId : string, label : string | null = null, opened : boolean = true, showAll : boolean = true, hasSpinner : boolean = false) {
-        this.menus[baseId] = true;
+		this.menus[baseId] = true;
         let id = baseId +'_' + type;
 		let lbl = (label) ? label : type;
 		if (hasSpinner) { lbl += `<span id="spinner_${type}" class="spinnerMapMenu"></span>`; }
@@ -107,6 +107,7 @@ export class support_layers extends baseComponent{
 		ul.className = 'lmvSupportLayersContent';
 		base.appendChild(ul);
 		if (type == "dynamic") { this.appendDynamicLayerSelector(ul); }
+		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
@@ -137,6 +138,15 @@ export class support_layers extends baseComponent{
 			</div>
 		`;
 		utils.setChange('ll_dynamic_multi', ()=> this.updateMultiDynamicLayer());
+	}
+
+	private static appendActiveAlertsInfo(ul : HTMLUListElement) {
+		let li = document.createElement("li");
+		li.setAttribute("class", "fmmActiveFiresInfo");
+		ul.appendChild(li);
+		li.innerHTML = `
+			Fires not declared contained, controlled, nor out.
+		`;
 	}
 
 	private static updateMultiDynamicLayer() {

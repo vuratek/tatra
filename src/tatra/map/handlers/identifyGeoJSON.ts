@@ -44,7 +44,7 @@ export class identifyGeoJSON {
         this.identifyTooltipElement.className = 'ol-identify';
         this.identifyTooltip = new Overlay({
             element: this.identifyTooltipElement,
-            offset: [0, -10],
+            offset: [0, -12],
             positioning: OverlayPositioning.BOTTOM_CENTER
         });
         if (props.map) {

@@ -16,7 +16,7 @@ export class FileDownload {
     private static downloadSpeedHandler : (evt: Event) => void; 
     private static dataUpdateHandler : (evt: Event) => void; 
     private static currentSpeed : string = "checking ...";
-    private static MODE : FILE_DOWNLOAD_MODE = FILE_DOWNLOAD_MODE.PLAY;
+    private static MODE : FILE_DOWNLOAD_MODE = FILE_DOWNLOAD_MODE.PAUSE;
     private static MY_ID : string = "";
     
     public static init (url : string) {
