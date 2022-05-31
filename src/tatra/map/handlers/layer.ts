@@ -1,6 +1,6 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
 import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
@@ -23,6 +23,8 @@ import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
+//import { GeoTIFFImage } from "geotiff";
+import WebGLTile from 'ol/layer/WebGLTile';
 
 export class layer {
         
@@ -40,6 +42,9 @@ export class layer {
             break;
         case "vector_tile":
             this.addVectorTileLayer(lo);
+            break;
+        case "geotiff" :
+            this.addGeoTIFFLayer(lo);
             break;
         case "xyz":
             this.addXYZLayer(lo);
@@ -496,13 +501,33 @@ export class layer {
             });
         }
     }
+
+    public static addGeoTIFFLayer (lo:Layer) {
+
+//        min: min,
+//        max: max,
+        console.log("GEOTIFF");
+        let source = new GeoTIFF({
+            sources: [
+              {
+                url: lo.source.url,
+                nodata: 0,
+              }
+            ]
+        });
+
+        lo._layer = new WebGLTile({
+            opacity : lo.alpha,
+            source: source,
+        });
+    }
     
     public static addStaticImageLayer (lo : Layer) {
         lo._layer = new ImageLayer({
             opacity: 1,
             source: new ImageStatic({
                 url: lo.source.url,
-                imageSize: lo.source.imageSize,
+                imageSize: [lo.source.imageSize],
                 imageExtent: lo.source.imageExtent,
             })
         });
