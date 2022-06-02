@@ -25,6 +25,7 @@ import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
+import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 
 export class layer {
         
@@ -506,7 +507,6 @@ export class layer {
 
 //        min: min,
 //        max: max,
-        console.log("GEOTIFF");
         let source = new GeoTIFF({
             sources: [
               {
@@ -520,6 +520,14 @@ export class layer {
             opacity : lo.alpha,
             source: source,
         });
+/*        let img = fromUrl('/tif/OMPS-NPP_NMTO3-L3-DAILY-Ozone-GeoTIFF_v2.1_2022m0101_2022m0103t015721.tif')
+            .then(tiff => {
+                console.log(tiff);
+                let image = tiff.getImage(0)
+                .then (img => {
+                    let tiepoint =img.getTiePoints();  
+                })
+            });*/
     }
     
     public static addStaticImageLayer (lo : Layer) {
