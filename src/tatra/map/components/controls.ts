@@ -42,7 +42,6 @@ export class controls  {
     public static zIndexBase        : number = 200;
     public static DEFAULT_TOOL      : string = "pan";
     public static alwaysIdentify    : AlwaysIdentify | null;
-    public static ignoreResize      : boolean = false;
 
     public static init () {
         if (! ((props.config as IConfigDef).mapControls && document.getElementById("lmvControls"))) {
@@ -79,6 +78,8 @@ export class controls  {
             }
         }
         document.addEventListener(events.EVENT_CONTROL_SET, (evt) => this.updateControls(evt));
+        document.addEventListener(events.EVENT_SET_CONTROL_ITEM, (evt) => this.updateControlItem(evt as CustomEvent));
+        document.addEventListener(events.EVENT_CONTROL_SET_WINDOW, (evt) => this.setWindow(evt as CustomEvent));
     }
 
     public static option_firmsInfo () {
@@ -159,6 +160,22 @@ export class controls  {
                     if (! item.type) { item.type = ControlTypes.FLAG;} 
 //                    if (! item.handler) { item.handler = resize;} 
                     break;
+            }
+        }
+    }
+
+    private static updateControlItem(evt:CustomEvent) {
+        if (evt.detail) {
+            this.setItem(evt.detail.id, evt.detail.visible);
+        }
+    }
+
+    private static setWindow(evt : CustomEvent) {
+        if (evt.detail) {
+            if (evt.detail.opened) {
+                this.openWindow(evt.detail.id);
+            } else {
+                this.closeWindow(evt.detail.id);
             }
         }
     }

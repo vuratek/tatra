@@ -147,6 +147,9 @@ export class Layer {
     public pixelSize        : number = 0;
     public altTitle1        : string | null = null;
     public altTitle2        : string | null = null;
+    public tileErrorUrl     : string | null = null;
+    public trackLoading     : boolean = false;
+    public showTileError    : boolean = false;
  
     public addFeature (coord : Coord) {
         if (!this.boxSource) {
@@ -341,7 +344,7 @@ export class Layer {
     }
     
     public set category (cat) {
-        if (cat == 'basemap' || cat == 'overlay' || cat == 'layer' || cat == 'label' || cat == 'dynamic') {
+        if (cat == 'basemap' || cat == 'overlay' || cat == 'layer' || cat == 'label' || cat == 'dynamic' || cat == 'sentinel') {
             this._category = cat;
         } else {
             console.log("Invalid category provided for lmv.obj.Layer: " + cat);

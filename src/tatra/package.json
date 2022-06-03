@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "1.1.11",
+  "version": "1.2.2",
   "description": "Transcending Application Tool for Research and Analysis",
   "main": "index.ts",
   "scripts": {
@@ -27,16 +27,17 @@
     "@jaames/iro": "^5.3.1",
     "@types/nouislider": "^9.0.9",
     "@types/ol": "^6.5.3",
-    "chokidar": "^3.5.2",
+    "buffer": "^6.0.3",
     "elm-pep": "^1.0.6",
+    "events": "^3.3.0",
     "flatpickr": "^4.6.9",
-    "gifencoder": "^2.0.1",
     "nouislider": "^14.6.3",
-    "ol": "^6.5.0"
+    "ol": "^6.14.1",
+    "stream": "^0.0.2"
   },
   "devDependencies": {
-    "cssnano": "^4.1.10",
+    "cssnano": "^5.1.9",
     "sass": "^1.32.5",
-    "typescript": "^3.9.7"
+    "typescript": "^4.3.5"
   }
 }

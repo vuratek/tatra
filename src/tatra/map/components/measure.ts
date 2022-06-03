@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { tools } from "../tools";
 import { MeasureArea } from "../mapTools/MeasureArea";
 import { MeasureDistance } from "../mapTools/MeasureDistance";

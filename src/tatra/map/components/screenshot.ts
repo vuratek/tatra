@@ -1,9 +1,10 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { props } from "../props";
 import { Navigation } from "../../page/Navigation";
 import { hash } from "../hash";
-import GIFEncoder from 'gifencoder';
+import GIFEncoder from '../../gif-encoder';
+import { writeArrayBuffer } from 'geotiff';
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
 	public static label		: string = 'Screenshot';
@@ -37,6 +38,7 @@ export class screenshot extends baseComponent {
                             <option value="png">PNG</option>
                             <option value="jpeg" selected>JPG</option>
                             <option value="gif">GIF</option>
+                            <option value="tif">GeoTIFF</option>
                         </select>
 
                         <button id="lmvControlsBtn_${this.id}_whole"><i class="fa fa-download fa-lg"></i> Download image</button>
@@ -92,7 +94,12 @@ export class screenshot extends baseComponent {
         let location = hash.locationToString();
         let ext = utils.getSelectText('lmvCtrlImgFormat').toLowerCase();
         let type = utils.getSelectValue('lmvCtrlImgFormat');
+        if (type == "tif") {
+            ext = "tif";
+        }
         let name = `${props.config.properties.applicationName}_${dates}[${location}].${ext}`;
+        let link = document.getElementById(`lmvControlsBtn_${this.id}_a`) as HTMLAnchorElement;
+        link.download = name;
 
         if (ext == 'gif') {
             let encoder = new GIFEncoder(image.width, image.height);
@@ -102,27 +109,40 @@ export class screenshot extends baseComponent {
             encoder.setQuality(10); // image quality. 10 is default.
             encoder.addFrame(context);
             encoder.finish();
-            let blob = new Blob([encoder.out.getData()], {type: "octet/stream"});
-            let link = document.getElementById(`lmvControlsBtn_${this.id}_a`) as HTMLAnchorElement;
-            link.download = name;
-            let url = window.URL.createObjectURL(blob);
+            let blob = new Blob([encoder.out.getData()], {type: "image/gif"});
+            let url = URL.createObjectURL(blob);
             link.href = url
-            link.click();
             setTimeout(function() {
                 window.URL.revokeObjectURL(url);
-            }, 1000);            
+            }, 1000);    
+        } else if (ext == 'tif') { 
+            let extent = props.map.getView().calculateExtent();
+            let size = props.map.getSize();
+            if (! size || size[0] == 0 || size[1] == 0) { return; }
+            let dx = (extent[2] - extent[0]) / size[0];
+            let dy = (extent[3] - extent[1]) / size[1];
+            let values = (context as CanvasRenderingContext2D).getImageData(0,0, image.width, image.height).data;
+            let metadata = {
+                height: image.height,
+                width: image.width,
+                GeographicTypeGeoKey:4326,
+                ModelPixelScale: [dx, dy, 0],
+                ModelTiepoint: [0, 0, 0, extent[0], extent[3], 0]
+            };
+
+            let arrayBuffer = writeArrayBuffer(values, metadata);
+            let blob = new Blob(  [arrayBuffer], { type: "image/tiff" } );	
+            link.href = URL.createObjectURL( blob );
         } else {        
             if (navigator.msSaveBlob) {
                 // link download attribute does not work on MS browsers
                 navigator.msSaveBlob(image.msToBlob(), name);
+                return;
             } else {
-                let link = document.getElementById(`lmvControlsBtn_${this.id}_a`) as HTMLAnchorElement;
-                link.download = name;
-
                 link.href = image.toDataURL(`image/${type}`);
-                link.click();
             }
         }
+        link.click();
     }
 
     private static onGifComplete(obj, width, height) {

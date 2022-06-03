@@ -1,13 +1,11 @@
 import { props } from "../props";
 import { events } from "../events";
-//import { events as menuEvents } from "../../laadsLayerMenu/events";
 import { Layer } from "../obj/Layer";
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { GroupContent } from "../../aux/GroupContent";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
-import { noUiSlider } from "../../aux/nouislider";
 import { opacity } from "./opacity";
 
 export interface ISLMenus {
@@ -27,6 +25,7 @@ export class support_layers extends baseComponent{
 		document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
 		document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
+		document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, () => this.updateDisabled());
 //		document.addEventListener(menuEvents.EVENT_LAYERS_UPDATE, () => this.updateWindow());
 
 		let counter = 0;
@@ -96,10 +95,11 @@ export class support_layers extends baseComponent{
 		}
     }
     
-	public static generateLayers (menu : HTMLDivElement, type : string, baseId : string, label : string | null = null, opened : boolean = true, showAll : boolean = true) {
-        this.menus[baseId] = true;
+	public static generateLayers (menu : HTMLDivElement, type : string, baseId : string, label : string | null = null, opened : boolean = true, showAll : boolean = true, hasSpinner : boolean = false) {
+		this.menus[baseId] = true;
         let id = baseId +'_' + type;
-        let lbl = (label) ? label : type;
+		let lbl = (label) ? label : type;
+		if (hasSpinner) { lbl += `<span id="spinner_${type}" class="spinnerMapMenu"></span>`; }
         GroupContent.create({ id: id, label : lbl, parent: menu, opened : opened});
 		let base = GroupContent.getContainer(id);
 		let ul = document.createElement('ul');
@@ -107,6 +107,7 @@ export class support_layers extends baseComponent{
 		ul.className = 'lmvSupportLayersContent';
 		base.appendChild(ul);
 		if (type == "dynamic") { this.appendDynamicLayerSelector(ul); }
+		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
@@ -137,6 +138,15 @@ export class support_layers extends baseComponent{
 			</div>
 		`;
 		utils.setChange('ll_dynamic_multi', ()=> this.updateMultiDynamicLayer());
+	}
+
+	private static appendActiveAlertsInfo(ul : HTMLUListElement) {
+		let li = document.createElement("li");
+		li.setAttribute("class", "fmmActiveFiresInfo");
+		ul.appendChild(li);
+		li.innerHTML = `
+			Fires not declared contained, controlled, nor out.
+		`;
 	}
 
 	private static updateMultiDynamicLayer() {
@@ -230,6 +240,14 @@ export class support_layers extends baseComponent{
 				</div>
 			`;
 		}
+		let lvlTxt = '';
+		if (lo.minLevel != -1 || lo.maxLevel != -1) {
+			lvlTxt = `
+				<div id="layerInfo_level_disabled_${baseId}_${lo.id}" class="lmvControlsLayerLevelDisabled">
+					Current zoom level not supported
+				</div>
+			`;
+		}
 		let expandMenu = '';
 		if (lo.paletteUrl) {
 			expandMenu = `<div id="layerMenu_${baseId}_${lo.id}" class="lmvLayerMenu"></div>`;
@@ -241,17 +259,34 @@ export class support_layers extends baseComponent{
 				</div>`;
 		}
 
+		let tileBtn = '';
+		if (lo.tileErrorUrl) {
+			tileBtn = `
+				<div class="layerMissingTile">
+					<label class="llCheckbox">
+						<input type="checkbox" id="layerShowMissingTile_${baseId}_${lo.id}">
+						<span class="checkmark"></span>
+					</label>
+					<div>
+						Show unavailable tiles
+					</div>
+				</div>
+			`;
+		}
+
 		let str = `
 			<div id="${baseId}_${lo.id}" class="supp_lyrs_lyr_click ${legIcon}">
 				${icon}
 				${iconLabel}
 				<div class="bottomBarSubMenuItemLabel">
 					${lo.title}
-				</div>
+				</div>				
 			</div>
 			${extraBtn}
+			${tileBtn}
 			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
 			${disTxt}
+			${lvlTxt}
 			${expandMenu}
 		`;
 		if (lo.needsLegendIcon) { 
@@ -273,6 +308,11 @@ export class support_layers extends baseComponent{
 		utils.setClick(`${baseId}_${lo.id}`, () => this.selectLayer(lo.id));
 		this.setLayerInfoField(`layerInfo_${baseId}_${lo.id}`, lo);
 		utils.setClick(`layerExtra_${baseId}_${lo.id}`, () => this.showExtraOption(lo.id));
+		utils.setChange(`layerShowMissingTile_${baseId}_${lo.id}`, ()=> this.refreshMissingTile(baseId, lo.id));
+		let el = document.getElementById(`layerShowMissingTile_${baseId}_${lo.id}`) as HTMLInputElement;
+		if (el) {
+			el.checked = lo.showTileError;
+		}
 
 		if (lo.needsLegendIcon) { 
 			this.setLayerLegendField(`layerLegend_${baseId}_${lo.id}`, lo);
@@ -287,6 +327,15 @@ export class support_layers extends baseComponent{
 			type = 'minus';
 		}
 		el.innerHTML = `<i class="fa fa-${type}-circle" aria-hidden="true"></i>`;
+	}
+
+	private static refreshMissingTile(baseId : string, id: string) {
+		let lo = mapUtils.getLayerById(id);
+		if (!lo) { return; }
+		let el = document.getElementById(`layerShowMissingTile_${baseId}_${lo.id}`) as HTMLInputElement;
+		if (!el) { return; }
+		lo.showTileError = el.checked;
+		lo.refresh();
 	}
 
 	private static showExtraOption(id : string) {
@@ -427,13 +476,16 @@ export class support_layers extends baseComponent{
 	}
 	public static updateDisabled() {
 		let update = false;
+		let level = props.map.getView().getZoom();
 		for (let menu in this.menus) {
             for (let i=0; i<props.layers.length; i++) {
 				let lo = props.layers[i];
+				let isDisabled = false;
 				if (lo.minDate || lo.maxDate) {
 					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
 						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
 						utils.show(`layerInfo_disabled_${menu}_${lo.id}`);
+						isDisabled = true;
 						if (props.currentBasemap == lo.id) {
 							update = true;
 						}
@@ -443,7 +495,12 @@ export class support_layers extends baseComponent{
 					} else {
 						utils.hide(`layerInfo_disabled_${menu}_${lo.id}`);
 					}
-				}	
+				}
+				if (!isDisabled && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
+					utils.show(`layerInfo_level_disabled_${menu}_${lo.id}`);
+				} else {
+					utils.hide(`layerInfo_level_disabled_${menu}_${lo.id}`);
+				}
 			}
 		}
 		if (update) {

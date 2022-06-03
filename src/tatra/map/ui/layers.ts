@@ -35,9 +35,9 @@ export class layers {
         this.mainLayers = layers;
     }
 
-    public generateAuxLayers (type: string, label : string | null = null, opened : boolean = true, showAll : boolean = true) {
+    public generateAuxLayers (type: string, label : string | null = null, opened : boolean = true, showAll : boolean = true, hasSpinner : boolean = false) {
         //        GroupContent.create("fmm_lyrs_"+ type, type, '', menu, false);
-        support_layers.generateLayers(this.menu, type, this.appId, label, opened, showAll);
+        support_layers.generateLayers(this.menu, type, this.appId, label, opened, showAll, hasSpinner);
     }
 
     public generateSupportLayers (opened : boolean = true, generateAll : boolean = true) {

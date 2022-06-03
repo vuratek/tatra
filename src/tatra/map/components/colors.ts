@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { Layer } from "../obj/Layer";
 import { events } from "../events";
 import { controls } from "./controls";

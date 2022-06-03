@@ -1,7 +1,7 @@
 import { events } from "../events";
 import { mapUtils } from "../mapUtils";
 import { utils } from "../../utils";
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { props } from "../props";
 import { IConfigDef } from "../defs/ConfigDef";
 

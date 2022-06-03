@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 
 export class timeline extends baseComponent {

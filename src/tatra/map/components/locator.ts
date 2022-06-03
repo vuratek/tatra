@@ -1,4 +1,4 @@
-import { baseComponent } from "./baseComponent";
+import { baseComponent } from "./BaseComponent";
 import { tools } from "../tools";
 import { Locator } from "../mapTools/Locator";
 import { controls } from "./controls";

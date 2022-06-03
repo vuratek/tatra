@@ -1,8 +1,8 @@
 import { utils } from "../../utils";
 import { tools as t } from "../tools";
 import { events } from "../events";
-import { controls } from "./controls";
 import { draggable } from "../../aux/draggable";
+import { props } from "../props";
 
 export class baseComponent {
 	public static initialized   : boolean = false;
@@ -68,7 +68,8 @@ export class baseComponent {
         }
         
         utils.setClick(`lmv_${this.id}_CloseBtn`, () => this.onClose());
-        utils.setUIAction("mousedown", "lmvControls_"+ this.id, () => controls.openWindow(this.id));
+//        utils.setUIAction("mousedown", "lmvControls_"+ this.id, () => controls.openWindow(this.id));
+        utils.setUIAction("mousedown", "lmvControls_"+ this.id, () => events.controlSetWindow(this.id, true));
     }
 
     public static setDraggable (id : string) {
@@ -78,21 +79,23 @@ export class baseComponent {
     }
 
     public static onClose() {
-        controls.setItem(this.id, false);
+        events.setControlItem(this.id, false);
     }
     public static onOpen() {
-        controls.setItem(this.id, true);
+        events.setControlItem(this.id, true);
     }
 
 	public static close () {
         utils.hide("lmvControls_" + this.id);
-        controls.closeWindow(this.id);
+        events.controlSetWindow(this.id, false);
+//        controls.closeWindow(this.id);
         this.isOpened = false;
 	}
     
     public static open () {
         utils.show("lmvControls_" + this.id);
-        controls.openWindow(this.id);
+        events.controlSetWindow(this.id, true);
+//        controls.openWindow(this.id);
         this.isOpened = true;
         //controls.setItem(this.id, true);
 //        utils.analyticsTrack(this.id);
@@ -100,7 +103,7 @@ export class baseComponent {
 
     public static setIgnoreResize(ignore : boolean) {
         this.ignoreResize = ignore;
-        controls.ignoreResize = ignore;
+        props.ignoreResize = ignore;
     }
 
     public static defaultPosition(isTool : boolean = false) {
@@ -145,7 +148,7 @@ export class baseComponent {
 		}
     }
     public static resize() {
-        if (controls.ignoreResize || this.ignoreResize) { 
+        if (props.ignoreResize || this.ignoreResize) { 
             return; 
         }
         this.onClose();

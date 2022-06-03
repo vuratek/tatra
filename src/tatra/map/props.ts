@@ -13,7 +13,8 @@ export class props  {
     public static defaultStartTool      : string = 'pan';
     public static map                   : Map;
     public static currentBasemap        : string = '';
-    public static mapPinUrl             : string = '/images/map-pin.png';        
+    public static mapPinUrl             : string = '/images/map-pin.png';    
+    public static ignoreResize          : boolean = false;
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];
@@ -35,6 +36,7 @@ export class props  {
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
+    public static tileLoadActive        : ITileLoadTracker = {};
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
@@ -53,4 +55,7 @@ export interface IColorLookup {
 }
 export interface IColorLookupItem {
     [color : string] : number;
+}
+export interface ITileLoadTracker {
+    [layer_id:string] : number;
 }

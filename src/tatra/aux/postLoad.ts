@@ -8,7 +8,19 @@ export class postLoad {
             let el = els[i] as HTMLDivElement;
             let url = el.getAttribute('tatra-bg-image');
             if (url) {
-                ajax.get (url, null, (response : any) => this.updateBgImage(response, el));
+                fetch(url)
+                .then(response => {
+                    if (response.status == 404) {
+                        throw new TypeError("No notifications.");
+                    }
+                    else {
+                        return response.text();
+                        
+                    }
+                }) 
+                .then (data => {
+                    this.updateBgImage(data, el);
+                });
             }
         }
     }

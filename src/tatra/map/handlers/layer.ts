@@ -1,6 +1,7 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
+import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
@@ -22,6 +23,9 @@ import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
+//import { GeoTIFFImage } from "geotiff";
+import WebGLTile from 'ol/layer/WebGLTile';
+import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 
 export class layer {
         
@@ -39,6 +43,9 @@ export class layer {
             break;
         case "vector_tile":
             this.addVectorTileLayer(lo);
+            break;
+        case "geotiff" :
+            this.addGeoTIFFLayer(lo);
             break;
         case "xyz":
             this.addXYZLayer(lo);
@@ -451,9 +458,35 @@ export class layer {
         if (func) {
             (lo._layer.getSource() as XYZ).setTileUrlFunction(func);
             //ajax.get(lo.style as string, null, (data : any) => this.setLayerStyle(data, lo));
-        }        
+        }
+        if (lo.trackLoading) {
+            (lo._layer.getSource() as XYZ).on(TileEventType.TILELOADSTART, function (e) {
+                props.tileLoadActive[lo.id] = 1;
+                events.dispatchLayer(events.EVENT_LAYER_LOAD_TRACK, lo.id);
+            });
+            (lo._layer.getSource() as XYZ).on(TileEventType.TILELOADEND, function (e) {
+                props.tileLoadActive[lo.id] = 0;
+                events.dispatchLayer(events.EVENT_LAYER_LOAD_TRACK, lo.id);
+            });
+        }
+
+        if (lo.tileErrorUrl) {
+            (lo._layer.getSource() as XYZ).on( TileEventType.TILELOADERROR, function (e) {
+                layer.loadErrorTile(e, lo.tileErrorUrl as string, lo.showTileError);
+            });
+        }
+          
     //(lo._layer.getSource() as XYZ).setTileUrlFunction(() => layer.test());
     }
+
+    public static loadErrorTile(e, tileUrl : string, showTile : boolean) {
+        if (showTile) {
+            e.tile.src_ = tileUrl;
+        } else {
+            e.tile.src_ = '/images/empty_256.png';
+        }
+        e.tile.load();
+  }
     
     public static addBoxLayer (lo : Layer) {
         lo.boxSource = new VectorSrc();
@@ -469,13 +502,40 @@ export class layer {
             });
         }
     }
+
+    public static addGeoTIFFLayer (lo:Layer) {
+
+//        min: min,
+//        max: max,
+        let source = new GeoTIFF({
+            sources: [
+              {
+                url: lo.source.url,
+                nodata: 0,
+              }
+            ]
+        });
+
+        lo._layer = new WebGLTile({
+            opacity : lo.alpha,
+            source: source,
+        });
+/*        let img = fromUrl('/tif/OMPS-NPP_NMTO3-L3-DAILY-Ozone-GeoTIFF_v2.1_2022m0101_2022m0103t015721.tif')
+            .then(tiff => {
+                console.log(tiff);
+                let image = tiff.getImage(0)
+                .then (img => {
+                    let tiepoint =img.getTiePoints();  
+                })
+            });*/
+    }
     
     public static addStaticImageLayer (lo : Layer) {
         lo._layer = new ImageLayer({
             opacity: 1,
             source: new ImageStatic({
                 url: lo.source.url,
-                imageSize: lo.source.imageSize,
+                imageSize: [lo.source.imageSize],
                 imageExtent: lo.source.imageExtent,
             })
         });
