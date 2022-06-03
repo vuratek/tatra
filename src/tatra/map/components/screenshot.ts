@@ -3,8 +3,8 @@ import { utils } from "../../utils";
 import { props } from "../props";
 import { Navigation } from "../../page/Navigation";
 import { hash } from "../hash";
-import GIFEncoder from 'gifencoder';
-import { GeoTIFF, writeArrayBuffer } from 'geotiff';
+import GIFEncoder from '../../gif-encoder';
+import { writeArrayBuffer } from 'geotiff';
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
 	public static label		: string = 'Screenshot';
