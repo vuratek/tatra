@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.3
+    
+    - Fix bug in loading ESRI Geojson
+
 ## 1.2.2
 
     - Added support for GeoTiff in Screenshot

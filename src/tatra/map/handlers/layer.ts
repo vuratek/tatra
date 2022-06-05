@@ -1,6 +1,7 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
+//import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
 import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
@@ -24,8 +25,8 @@ import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
-import WebGLTile from 'ol/layer/WebGLTile';
-import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
+//import WebGLTile from 'ol/layer/WebGLTile';
+//import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 
 export class layer {
         
@@ -442,10 +443,11 @@ export class layer {
                 resolutions: resolutions,
                 tileSize: 512,
             });
-            let func = layerStyle['_' + lo.source.style];
+            let func2 = layerStyle['_' + lo.source.style];
+            
             lo._layer = new VectorTileLayer({
                 source: new VectorTileSrc (input),
-                style: func
+                style: func2
             });
             //console.log((lo._layer.getSource() as VectorTileSrc).getTileGrid());
 //            (lo._layer.getSource() as VectorTileSrc).setTileLoadFunction(func);

@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Transcending Application Tool for Research and Analysis",
   "main": "index.ts",
   "scripts": {
