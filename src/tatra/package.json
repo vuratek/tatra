@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Transcending Application Tool for Research and Analysis",
   "main": "index.ts",
   "scripts": {
@@ -28,6 +28,7 @@
     "@types/nouislider": "^9.0.9",
     "@types/ol": "^6.5.3",
     "buffer": "^6.0.3",
+    "coordinate-parser": "^1.0.7",
     "elm-pep": "^1.0.6",
     "events": "^3.3.0",
     "flatpickr": "^4.6.9",

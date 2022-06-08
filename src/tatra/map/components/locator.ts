@@ -8,6 +8,8 @@ import { Vector } from "ol/layer";
 import { MapBrowserEvent } from "ol";
 import { mapUtils } from "../mapUtils";
 import { GeoLocation } from "../obj/GeoLocation";
+import  Coordinates from 'coordinate-parser';
+//import convert from 'geo-coordinates-parser';
 
 interface ISearchRecord {
     data? : any;
@@ -350,6 +352,28 @@ export class locator extends baseComponent {
                 counter ++;
             }
         }
+        let hasLatLon = false;
+        let lat = 0;
+        let lon = 0;
+        if (val.length > 2) {
+            if (val.indexOf(' ') > 0 || val.indexOf(',') > 0 || val.indexOf('/') > 0) {
+                if (this.isValidPosition(val)) {
+                    let position = new Coordinates(val);
+                    counter++;
+                    hasLatLon = true;
+                    lat = position.getLatitude();
+                    lon = position.getLongitude();
+                    str += `
+                        <li id="locator-search-result_coord" class="coord">
+                            Lat: <span class="primary">${lat}</span>, 
+                            Lon: <span class="primary">${lon}</span>
+                        </li>`;
+                }
+            }
+        }
+        if (!hasLatLon) {
+            str += `<li class="coord">Coordinates: lat, lon</li>`;
+        }
         if (val.length > 0 && counter == 0) {
             str += `<li class="notfound">No suggestions found.<br/>Please check your search text and try again.</li>`;
         }
@@ -362,16 +386,43 @@ export class locator extends baseComponent {
                 counter ++;
             }
         }
+        if (hasLatLon) {
+            utils.setClick('locator-search-result_coord', ()=>this.goToLatLon(lat, lon));
+        }
+    }
+
+    private static isValidPosition (position : string) {
+        let error;
+        let isValid;
+        try {
+            isValid = true;
+            new Coordinates(position);
+            return isValid;
+        } catch (error) {
+            isValid = false;
+            return isValid;
+        }
+    };
+
+    private static goToLatLon(lat:number, lon:number) {
+        /*props.map.getView().setCenter( [lon, lat]);
+        props.map.getView().setZoom(10);
+        locator.showPosition(position)*/
+        let geo = new GeoLocation();
+        geo.setCoords([lon, lat]);
+        this.gotoPosition(geo);
     }
 
     private static goToLocation(suggestion : any) {
         let geo = GeoLocation.hasMagicLocation(suggestion.magicKey);
         if (geo) {
+            console.log(geo);
             this.zoomTo(geo);
             return;
         }
         geo = new GeoLocation();
         geo.magicKey = suggestion.magicKey;
+        if (!geo.magicKey) { return; }
         let url = this.ESRI_LOCATION_URL.replace("#MAGICKEY#", geo.magicKey);
         fetch(url)
         .then(response => {
@@ -380,9 +431,10 @@ export class locator extends baseComponent {
         .then (data => {
             if (data.candidates) {
                 let info = data.candidates[0];
-                geo.setCoords([(info.location.x as number), (info.location.y as number)]);
-                geo.setInfo(info.attributes);
-                this.zoomTo(geo);
+                (geo as GeoLocation).setCoords([(info.location.x as number), (info.location.y as number)]);
+                (geo as GeoLocation).setZoomLevel(info.extent);
+                (geo as GeoLocation).setInfo(info.attributes);
+                this.zoomTo(geo as GeoLocation);
             }
         })
         .catch(error => {
@@ -391,6 +443,7 @@ export class locator extends baseComponent {
     }
 
     private static reverseGeocode(geo : GeoLocation) {
+        if (! geo.coord) { return; }
         let url = this.ESRI_REVERSE_GEOCODE.replace("#LOCATION#", `${geo.coord[0]},${geo.coord[1]}`);
         let myGeo = geo;
         fetch(url)
@@ -421,15 +474,75 @@ export class locator extends baseComponent {
     private static showPosition(position : Position) {
         let geo = GeoLocation.setNewMyLocation();
         geo.setCoords([position.coords.longitude, position.coords.latitude]);
+        this.gotoPosition(geo);
+    }
+
+    private static gotoPosition(geo:GeoLocation) {
+        geo.zoomLevel = 10;
         this.reverseGeocode(geo);
     }
+
+    private static flyTo(location : Array <number>, done : Function, zoomLevel : number) {
+        let view = props.map.getView();
+        let s = view.getCenter();
+        let duration = 2000;
+        let zoomIncrease = 0;
+        if (s) {
+            let dx = Math.abs(s[0] - location[0]);
+            let dy = Math.abs(s[1] - location[1]);
+            let d  = (dx > dy) ? dx : dy;
+            duration = Math.round(d / 60) * 1000;
+            if (duration < 2000) {
+                duration = 2000;
+            }
+            zoomIncrease = Math.ceil(d / 10);
+        }
+
+        let zoom = view.getZoom();
+        if (! zoom) { zoom = 2;}
+        zoom = zoom - zoomIncrease;
+        if (zoom < 2) { zoom = 2;}
+        
+        let parts = 2;
+        let called = false;
+        function callback(complete : any) {
+          --parts;
+          if (called) {
+            return;
+          }
+          if (parts === 0 || !complete) {
+            called = true;
+            done(complete);
+          }
+        }
+        view.animate(
+          {
+            center: location,
+            duration: duration,
+          },
+          callback
+        );
+        view.animate(
+          {
+            zoom: zoom,
+            duration: duration / 2,
+          },
+          {
+            zoom: zoomLevel,
+            duration: duration / 2,
+          },
+          callback
+        );
+      }
 
     private static zoomTo(geo : GeoLocation) {
         if (! geo.coord || ! geo.active) { return; }
         if (geo.reposition) {
-            props.map.getView().setCenter( geo.coord );
-            if (props.map.getView().getZoom() < 10) {
-                props.map.getView().setZoom(10);
+            if (props.locatorFLyToEnabled) {
+                this.flyTo(geo.coord, function () {}, geo.zoomLevel);
+            } else {
+                props.map.getView().setCenter( geo.coord );
+                props.map.getView().setZoom(geo.zoomLevel);
             }
         }
 

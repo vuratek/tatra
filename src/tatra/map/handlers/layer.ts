@@ -1,7 +1,6 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-//import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
 import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
@@ -25,7 +24,7 @@ import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
-//import WebGLTile from 'ol/layer/WebGLTile';
+import WebGLTile from 'ol/layer/WebGLTile';
 //import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 
 export class layer {

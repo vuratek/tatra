@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.4
+
+    - Support Lat Lon in Locator tool
+
 ## 1.2.3
     
     - Fix bug in loading ESRI Geojson

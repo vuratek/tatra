@@ -21,6 +21,7 @@ export class props  {
     public static overlayLayers : [];*/
     
     public static hashValue             : string =  '';
+    public static locatorFLyToEnabled   : boolean = false;
     
     public static scaleLineControlKM    : ScaleLine | null = null;
     public static scaleLineControlMI    : ScaleLine | null = null;

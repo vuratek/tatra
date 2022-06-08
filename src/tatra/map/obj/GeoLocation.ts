@@ -1,4 +1,4 @@
-import { mapUtils } from "../mapUtils";
+import { mapUtils, ICoordinates } from "../mapUtils";
 import { default as Feature } from "ol/Feature";
 import { default as Overlay } from "ol/Overlay";
 import { Vector as VectorSrc } from "ol/source";
@@ -35,6 +35,7 @@ export class GeoLocation {
     public id               : number = 0;
     public active           : boolean = true;
     public reposition       : boolean = true;
+    public zoomLevel        : number = 0;
     private isMyLocation    : boolean = false;
     private divElement      : HTMLDivElement | null = null;
     private feature         : Feature | null = null;
@@ -54,6 +55,10 @@ export class GeoLocation {
         }
         this.id = GeoLocation.currentID++;
         GeoLocation.list.push(this);
+    }
+
+    public setZoomLevel (extent : ICoordinates) {
+        this.zoomLevel = mapUtils.computeZoomLevel(extent).zoom;
     }
 
     public setCoords (coord : Array <number>) {
