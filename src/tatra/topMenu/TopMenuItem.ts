@@ -146,6 +146,9 @@ export abstract class TopMenuItem {
             case "_min":
                 icon = 'fa fa-ellipsis-v';
                 break;
+            case "login": 
+                icon = 'fa fa-user-circle';
+                break;
             default:
                 return '';
         }

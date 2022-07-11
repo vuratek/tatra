@@ -9,6 +9,7 @@ import { fontAwesome } from "../aux/fontAwesome";
 import { postLoad } from '../aux/postLoad';
 import { feedback as axuFeedback } from "../aux/feedback";
 import { RightMenu } from '../sideMenu/RightMenu';
+import { authentication } from '../aux/authentication';
 
 export class Navigation {
     
@@ -45,7 +46,6 @@ export class Navigation {
             utils.addClass("html", "isMap", false);
         }
 
-
         Header.init();
         Header.setLogo();
         Footer.init(); 
@@ -73,8 +73,32 @@ export class Navigation {
                     window.submitFeedbackForm = axuFeedback.submit;
                 }
             }
+            if (item.id == "login") {
+                utils.hide('topbar_login-out');
+                utils.hide('topbar_login-in');
+                authentication.init();
+                document.addEventListener(authentication.EVENT_AUTHENTICATION_UPDATE, (evt)=> this.updateAuthentication(evt as CustomEvent));        
+
+                if (! window.authenticateLogin ) {
+                    window.authenticateLogin = authentication.login;
+                }
+                if (! window.authenticateLogout ) {
+                    window.authenticateLogout = authentication.logout;
+                }
+                authentication.checkLogin();
+            }
         }
-    }       
+    }
+
+    private static updateAuthentication (evt : CustomEvent) {
+        if (authentication.isLoggedin) {
+            utils.show('topbar_login-out');
+            utils.hide('topbar_login-in');
+            } else {
+            utils.hide('topbar_login-out');
+            utils.show('topbar_login-in');    
+        }
+    }
 
     private static addMainComponents () {
         if (! this.main) { return; }

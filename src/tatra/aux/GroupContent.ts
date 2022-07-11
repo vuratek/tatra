@@ -78,6 +78,14 @@ export class GroupContent {
     public static isOpened (id : string) : boolean {
         return GroupContent.list[id];
     }
+
+    public static getHTMLDivId (id: string) : string {
+        return `navGCContent_${id}`;
+    }
+
+    public static getHeaderHTMLDivId (id: string) : string {
+        return `navGCHeader_${id}`;
+    }
     
     public static getContainer (id : string) : HTMLDivElement {
         return document.getElementById("navGCContent_" + id) as HTMLDivElement;

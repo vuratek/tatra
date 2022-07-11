@@ -226,11 +226,11 @@
 #topbar_lbl_download-ui {
     font-size: 1.9rem;
 }
-#topbar_home {
+#topbar_home, #topbar_login {
     font-size: 2rem;
     padding-top: 1.5rem;
 }
-.isMap #topbar_home {
+.isMap #topbar_home, .isMap #topbar_login {
     padding-top: 1rem;
 }
 #topMenuContentWrap {
