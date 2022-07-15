@@ -9,6 +9,7 @@ export class events {
     public static readonly EVENT_CONTROL_SET_WINDOW     : string = "control_set_window";
     public static readonly EVENT_GEOJSON_LOADED         : string = "geojson_loaded";
     public static readonly EVENT_GROUP_CONTENT_CHANGE   : string = "group_content_change";
+    public static readonly EVENT_GROUP_CONTENT_OPEN     : string = "group_content_open";
     public static readonly EVENT_HASH_UPDATE            : string = "hash_update";
     public static readonly EVENT_EXTERNAL_HASH_UPDATE   : string = "external_hash_update";  // user altered hash
     public static readonly EVENT_INFO_CLICK             : string = "info_click";

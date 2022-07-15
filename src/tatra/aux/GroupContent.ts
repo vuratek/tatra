@@ -64,6 +64,7 @@ export class GroupContent {
     private static _update(id:string) {
         GroupContent.setCtrl(id);
         events.dispatch(events.EVENT_GROUP_CONTENT_CHANGE);
+        events.dispatchLayer(events.EVENT_GROUP_CONTENT_OPEN, id);
     }
 
     private static setCtrl (id : string) {
