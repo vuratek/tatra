@@ -4,21 +4,34 @@ import { Modal } from "../../aux/Modal";
 import { GroupContent } from "../../aux/GroupContent";
 import { Layer } from "../obj/Layer";
 import { events } from "../events";
+import { utils } from "../../utils";
 
 export interface ILayerInfo {
     id               : string;
     label?           : string;
     GIBS_id?         : string;
     GIBS_imageId?    : string;
-    FIRMS_id?        : string;
-    FIRMS_imageId?   : string;
+    Local_id?        : string;
+    Local_imageId?   : string;
     keywords?        : Array <string>;
     dateInfo?        : string;
     category?        : string;
 }
 
+export interface ILayerCategory {
+    id      : string;
+    label   : string;
+}
+export interface ILayerCategories {
+    [key : string]  : ILayerCategory;
+}
 export interface ILayerInfos {
     [key:string]    : LayerInfo;
+}
+
+export interface ILayerConfig {
+    infos       : Array <ILayerInfo>;
+    categories? : Array <ILayerCategory>;
 }
 
 export class LayerInfo {
@@ -27,9 +40,9 @@ export class LayerInfo {
     public GIBS_id          : string | null = null;
     public GIBS_imageId     : string | null = null;
     public GIBS_text        : string | null = null;
-    public FIRMS_id         : string | null = null;
-    public FIRMS_imageId    : string | null = null;
-    public FIRMS_text       : string | null = null;
+    public Local_id         : string | null = null;
+    public Local_imageId    : string | null = null;
+    public Local_text       : string | null = null;
     public keywords         : Array <string> = [];
     public dateInfo         : string | null = null;
     public lo               : Layer | null = null;
@@ -46,10 +59,10 @@ export class LayerInfo {
             else if (! obj.GIBS_imageId ) {
                 this.GIBS_imageId = this.GIBS_id;
             }
-            if (obj.FIRMS_id) { this.FIRMS_id = obj.FIRMS_id; }
-            if (obj.FIRMS_imageId && obj.FIRMS_imageId != '' ) { this.FIRMS_imageId = obj.FIRMS_imageId; }
-            else if (! obj.FIRMS_imageId ) {
-                this.FIRMS_imageId = this.FIRMS_id;
+            if (obj.Local_id) { this.Local_id = obj.Local_id; }
+            if (obj.Local_imageId && obj.Local_imageId != '' ) { this.Local_imageId = obj.Local_imageId; }
+            else if (obj.Local_imageId === undefined ) {
+                this.Local_imageId = this.Local_id;
             }
             if (obj.keywords) { this.keywords = obj.keywords; }
             if (obj.dateInfo) { this.dateInfo = obj.dateInfo; }
@@ -61,28 +74,36 @@ export class LayerInfo {
 export class layerInfo {
 
     public static layers : ILayerInfos = {};
+    public static categories : ILayerCategories = {};
     public static GIBSImageUrl : string = 'https://worldview.earthdata.nasa.gov/images/layers/previews/geographic/';
     public static GIBSDataUrl : string = 'https://worldview.earthdata.nasa.gov/config/metadata/layers/';
-    public static FIRMSImageUrl : string = '/content/description/images/';
-    public static FIRMSDataUrl : string = '/content/descriptions/';
+    public static LocalImageUrl : string = '/content/description/images/';
+    public static LocalDataUrl : string = '/content/descriptions/';
 
-
-    public static init (config : Array <ILayerInfo>) {
-        let arr = [];
-        let _layers = {};
-        for (let i=0; i < config.length; i++) {
-            let li = new LayerInfo(config[i]);
-            if (! li.label) {
-                for (let j=0; j<props.layers.length; j++) {
-                    let lo = props.layers[j];
-                    if (lo.id == li.id || lo.info == li.id) {
+    public static init (config : ILayerConfig) {
+        if (!config.infos) { return; }
+        for (let i=0; i < config.infos.length; i++) {
+            let li = new LayerInfo(config.infos[i]);
+            for (let j=0; j<props.layers.length; j++) {
+                let lo = props.layers[j];
+                if (lo.id == li.id || lo.info == li.id) {
+                    if (! li.label) {
                         li.label = lo.title;
-                        li.lo = lo;
                     }
+                    li.lo = lo;
                 }
             }
             this.layers[li.id] = li;
             
+        }
+        if (config.categories) {
+            for (let i=0; i<config.categories.length; i++) {
+                let cat = config.categories[i];
+                let id = cat.id;
+                if (! this.categories[id]) {
+                    this.categories[id] = cat;
+                }
+            }
         }
         document.addEventListener(events.EVENT_GROUP_CONTENT_OPEN, (evt)=>this.updateLayerInfo(evt as CustomEvent));
         console.log(this.layers);
@@ -115,6 +136,8 @@ export class layerInfo {
     }
 
     public static render() {
+        //let test = '<div><div class="triangle"></div></div><div style="position:absolute;color:#edeaea;">FIRMS Layer Information</div>';
+
         let li = new Modal({id: 'layerInfo', style : 'fmmModalLayerInfo', header : 'FIRMS Layer Information'});
         let el = li.getContent();
         li.open();
@@ -124,9 +147,10 @@ export class layerInfo {
             <div></div>
             <div id="layerInfoDescriptions"></div>
         `;
-        let str = '';
+
         let desc = document.getElementById('layerInfoDescriptions') as HTMLDivElement;
         desc.innerHTML = '';
+        let cat = '';
         for (let id in this.layers) {
             let li = this.layers[id];
 
@@ -134,6 +158,14 @@ export class layerInfo {
                 <div id="lid_header_${li.id}"></div>
                 <div>${li.label}</div>
             `;
+            if (li.category && cat != li.category && this.categories[li.category]) {
+                cat = li.category;
+                let br = document.createElement('div');
+                br.setAttribute("class", "lid_break");
+                desc.appendChild(br); 
+                br.innerHTML = this.categories[li.category].label;
+            }
+
 
             GroupContent.create( 
                 { 
@@ -146,6 +178,10 @@ export class layerInfo {
             let header = document.getElementById(`lid_header_${li.id}`) as HTMLDivElement;
             if (li.lo && header) {
                 this.setIcon(li.lo, header);
+                let div = GroupContent.getHeaderHTMLDivId(`lid_${li.id}`);
+                if (div && li.category) {
+                    utils.addClass(div, li.category);
+                }
             }
             let str = '';
             if (li.GIBS_id) {
@@ -154,11 +190,11 @@ export class layerInfo {
                 }
                 str += `<div id="lid_gibs_text_${li.id}"></div>`;
             }
-            if (li.FIRMS_id) {
-                if (li.FIRMS_imageId != '') {
-                    str += `<div id="lid_firms_img_${li.id}" class="lid-image"></div>`;
+            if (li.Local_id) {
+                if (li.Local_imageId ) {
+                    str += `<div id="lid_local_img_${li.id}" class="lid-image"></div>`;
                 }
-                str += `<div id="lid_firms_text_${li.id}"></div>`;
+                str += `<div id="lid_local_text_${li.id}"></div>`;
             }
             let content = GroupContent.getContainer(`lid_${li.id}`);
             content.innerHTML = str;
@@ -181,14 +217,14 @@ export class layerInfo {
                 console.error("Error processing ", url);
             });
         }
-        if (! li.FIRMS_text && li.FIRMS_id) {
-            let url = `${this.FIRMSDataUrl}${li.FIRMS_id}.html`;
+        if (! li.Local_text && li.Local_id) {
+            let url = `${this.LocalDataUrl}${li.Local_id}.html`;
             fetch(url)
             .then(response => {
                 return response.text();
             })
             .then (data => {
-                li.FIRMS_text = data;
+                li.Local_text = data;
                 li._loading = false;
                 this.showLayer(li);
             })
@@ -208,21 +244,26 @@ export class layerInfo {
         img.style.backgroundImage = `url('${this.GIBSImageUrl}${li.GIBS_imageId}.jpg')`;
     }
 
-    private static setFIRMSText (li : LayerInfo) {
-        if (! li.FIRMS_id || ! li.FIRMS_text) { return; }
-        let el = document.getElementById(`lid_firms_text_${li.id}`) as HTMLDivElement;
+    private static setLocalText (li : LayerInfo) {
+        if (! li.Local_id || ! li.Local_text) { return; }
+        let el = document.getElementById(`lid_local_text_${li.id}`) as HTMLDivElement;
         if (el) {
-            el.innerHTML = li.FIRMS_text;
+            el.innerHTML = li.Local_text;
         }
-        let img = document.getElementById(`lid_firms_img_${li.id}`) as HTMLDivElement;
-        img.style.backgroundImage = `url('${this.FIRMSImageUrl}${li.FIRMS_imageId}.jpg')`;
+        if (li.Local_imageId) {
+            let img = document.getElementById(`lid_local_img_${li.id}`) as HTMLDivElement;
+            img.style.backgroundImage = `url('${this.LocalImageUrl}${li.Local_imageId}.jpg')`;
+        }
     }
 
     private static showLayer(li : LayerInfo) {
-        if (li.GIBS_text || li.FIRMS_text) {
+        if (li.GIBS_text || li.Local_text) {
             this.setGIBSText(li);
-            this.setFIRMSText(li);
-            
+            this.setLocalText(li);
+            let el = GroupContent.getHeader(`lid_${li.id}`);
+            if (el) {
+                el.scrollIntoView(true);
+            }
         } else {
             if (! li._loading) {
                 li._loading = true;

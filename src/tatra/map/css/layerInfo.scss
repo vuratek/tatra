@@ -5,20 +5,59 @@
     text-align: center;
     margin: 0 0 2rem;
     height: 33rem;
+    background-repeat: repeat-x;
+    background-position-x: center;
+    background-size: contain;
 }
 #layerInfoDescriptions .navGCLbl > div:first-child {
-    width:3.2rem;
-    height:3.2rem;    
+    width:6.4rem;
+    height:6.4rem;    
     border-radius: 3.2rem;
     position:absolute;
     left:1rem;
     top:.3rem;
+    transform: scale(0.5, 0.5);
+    -ms-transform: scale(0.5, 0.5);
+    -webkit-transform: scale(0.5, 0.5);
+    transform: scale(0.5, 0.5);
+    -ms-transform: scale(0.5, 0.5);
+    -webkit-transform: scale(0.5, 0.5);
+    transform: translateX(0);
+    transform: translateY(0);
+    -webkit-transform-origin-x: 0;
+    -webkit-transform-origin-y: 0;
+    border: 0.2rem solid #ddd;
 }
 #layerInfoDescriptions .navGCLbl > div:last-child {
-    margin-left:4.5rem;
+    margin-left:4.5rem;    
 }
 #layerInfoDescriptions .navGCHeader {
-    background:#4e6472;
+    background:#2d2828;
+    text-transform: uppercase;
+    font-weight: 200;
+}
+#layerInfoDescriptions .overlay {
+    background: #363659;
+}
+#layerInfoDescriptions .background {
+    background: #321d12;
+}
+#layerInfoDescriptions .orbit {
+    background: #19434a;
+}
+#layerInfoDescriptions .navGCHeader:hover {
+    opacity: 0.7;
+    color:#FFF;
+}
+#layerInfoDescriptions .lid_break {
+    width: 100%;
+    padding: 1rem 2rem 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #ddd;
+    border-top: 0.1rem solid #aaa;
+    margin-top: 0.5rem;
+    background: #555;
 }
 #layerInfoDescriptions .navGCWrap {
     background: #dedede;
@@ -38,4 +77,33 @@
     padding: 0.5rem 0 0.5rem 1rem;
     margin: 0 0 -0.2rem;
     text-transform: uppercase;
+}
+.triangle {
+    width: 50rem;
+    height: 4.5rem;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.1rem;
+    border-radius: 0.4rem;
+    background: linear-gradient(to top left, #fff0 0% 50%, #630202, #b3120e);
+}
+
+#layerInfoDescriptions .attributes {
+	background:#b8cbd0;
+	border-spacing: .1rem;
+}
+#layerInfoDescriptions .attributes th {
+	background:#2b4f69;
+	color:#fff;
+	border-width: 0;
+}
+#layerInfoDescriptions .attributes tr {
+	border-width: 0;
+	background:#fff;
+}
+#layerInfoDescriptions .attributes tr:nth-child(2n){
+	background: #eef0f0;
+}
+#layerInfoDescriptions .attributes td {
+	border-width: 0;
 }
