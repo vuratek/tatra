@@ -36,7 +36,7 @@
     height: 100%;
 }
 .modalHeader {
-    font-size: 2.4rem;
+    font-size: 2.7rem;
     font-weight: 500;
     width:100%;
     cursor: default;
@@ -49,10 +49,11 @@
 }
 .modalContent {
     position: absolute;
-    left: 2rem;
+    inset: 4.7rem 0 1rem;
+/*    left: 2rem;
     top: 7rem;
     bottom: 1rem;
-    right: 2rem;
+    right: 2rem;*/
     overflow-y: auto;
     line-height: 2.5rem;
 }
@@ -140,12 +141,6 @@
 .modal-close2 {
     font-size: 2.4rem;
     margin-top: 1rem;
-}
-@media screen and (max-width: 600px) {
-    .modalContent {
-        right: 1rem;
-        left: 1rem;
-    }
 }
 @media screen and (max-height: 600px) {
     .modalWindow {

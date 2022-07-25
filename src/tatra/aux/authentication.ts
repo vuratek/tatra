@@ -5,7 +5,7 @@ export class authentication {
     public static readonly EVENT_AUTHENTICATION_UPDATE      : string = "authenticateUpdate";
 
     public static init() {
-        setInterval(()=>this.checkLogin(), 5 * 60 * 1000);
+        setInterval(()=>this.checkLogin(), 15 * 60 * 1000);
     }
 
     public static login() {

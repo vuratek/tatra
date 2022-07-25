@@ -1,21 +1,24 @@
-import { layer } from "@fortawesome/fontawesome-svg-core";
 import { props } from "../props";
 import { Modal } from "../../aux/Modal";
 import { GroupContent } from "../../aux/GroupContent";
 import { Layer } from "../obj/Layer";
 import { events } from "../events";
 import { utils } from "../../utils";
+import { keyword } from "./keyword";
+import flatpickr from "flatpickr";
 
 export interface ILayerInfo {
     id               : string;
     label?           : string;
     GIBS_id?         : string;
     GIBS_imageId?    : string;
+    GIBS_hasDate?    : boolean;
     Local_id?        : string;
     Local_imageId?   : string;
     keywords?        : Array <string>;
     dateInfo?        : string;
     category?        : string;
+    repeat?          : string;
 }
 
 export interface ILayerCategory {
@@ -40,6 +43,7 @@ export class LayerInfo {
     public GIBS_id          : string | null = null;
     public GIBS_imageId     : string | null = null;
     public GIBS_text        : string | null = null;
+    public GIBS_hasDate     : boolean = true;
     public Local_id         : string | null = null;
     public Local_imageId    : string | null = null;
     public Local_text       : string | null = null;
@@ -48,6 +52,7 @@ export class LayerInfo {
     public lo               : Layer | null = null;
     public category         : string | null = null;
     public _loading         : boolean = false;
+    public repeat           : string | null = null;
 
     public constructor ( obj : ILayerInfo | null) {
         this.id = "_none_";
@@ -56,8 +61,9 @@ export class LayerInfo {
             if (obj.label) { this.label = obj.label; }
             if (obj.GIBS_id) { this.GIBS_id = obj.GIBS_id; }
             if (obj.GIBS_imageId && obj.GIBS_imageId != '' ) { this.GIBS_imageId = obj.GIBS_imageId; }
-            else if (! obj.GIBS_imageId ) {
-                this.GIBS_imageId = this.GIBS_id;
+            else if (obj.GIBS_id && ! obj.GIBS_imageId ) {
+                let arr = obj.GIBS_id.split('/');
+                this.GIBS_imageId = arr[arr.length - 1];
             }
             if (obj.Local_id) { this.Local_id = obj.Local_id; }
             if (obj.Local_imageId && obj.Local_imageId != '' ) { this.Local_imageId = obj.Local_imageId; }
@@ -67,20 +73,48 @@ export class LayerInfo {
             if (obj.keywords) { this.keywords = obj.keywords; }
             if (obj.dateInfo) { this.dateInfo = obj.dateInfo; }
             if (obj.category) { this.category = obj.category; }
+            if (obj.repeat) { this.repeat = obj.repeat; }
+            if (obj.GIBS_hasDate) { this.GIBS_hasDate = obj.GIBS_hasDate; }
         }
     }
-
 }
 export class layerInfo {
 
-    public static layers : ILayerInfos = {};
-    public static categories : ILayerCategories = {};
-    public static GIBSImageUrl : string = 'https://worldview.earthdata.nasa.gov/images/layers/previews/geographic/';
-    public static GIBSDataUrl : string = 'https://worldview.earthdata.nasa.gov/config/metadata/layers/';
-    public static LocalImageUrl : string = '/content/description/images/';
-    public static LocalDataUrl : string = '/content/descriptions/';
+    public static layers            : ILayerInfos = {};
+    public static categories        : ILayerCategories = {};
+    public static GIBSImageUrl      : string = 'https://worldview.earthdata.nasa.gov/images/layers/previews/geographic/';
+    public static GIBSDataUrl       : string = 'https://worldview.earthdata.nasa.gov/config/metadata/layers/';
+    public static LocalImageUrl     : string = '/content/descriptions/images/';
+    public static LocalDataUrl      : string = '/content/descriptions/';
+    public static keyword           : string | null = null;
 
-    public static init (config : ILayerConfig) {
+    public static additionalLink    : string | null = null;     // FAQ link or so
+
+    private static loaded           : boolean = false;
+    private static configUrl         : string | null = null;
+
+    public static init (url: string) {
+        this.configUrl = url;
+    }
+
+    private static load(id : string | null) {
+        this.loaded = true;
+        if (this.configUrl) {
+            fetch(this.configUrl)
+            .then(response => {
+                return response.json();
+            })
+            .then (data => {
+                this.processConfig(data);
+                this.show(id);
+            })
+            .catch(error => {
+                console.error("Error processing ", this.configUrl);
+            });
+        }
+    }
+
+    public static processConfig (config : ILayerConfig) {
         if (!config.infos) { return; }
         for (let i=0; i < config.infos.length; i++) {
             let li = new LayerInfo(config.infos[i]);
@@ -115,14 +149,17 @@ export class layerInfo {
         if (lo.icon && lo.icon.indexOf('color:') == 0) {
             let color = lo.icon.replace('color:', '');
             el.style.background = color;
-        } else {
-            if (lo.iconMatrix && lo.iconMatrix.length == 2) {
-                x = lo.iconMatrix[0] * 70;
-                y = lo.iconMatrix[1] * 70;
-            } 
+        } else if (lo.icon && lo.iconMatrix && lo.iconMatrix.length == 2) {
+            x = lo.iconMatrix[0] * 70;
+            y = lo.iconMatrix[1] * 70;
             el.style.background = 'url('+lo.icon+') -' + x + 'px -' + y + 'px';
+        } else {
+            el.style.background = 'url('+lo.icon+')'
+            el.style.backgroundSize= 'contain';
+            if (! lo.iconHasBorder) {
+                el.style.border = 'none';
+            }
         }
-
     }
 
     private static updateLayerInfo(evt:CustomEvent) {
@@ -143,16 +180,42 @@ export class layerInfo {
         li.open();
         let cont = document.getElementById(el) as HTMLDivElement;
         if (! cont) { return; }
+        let val = (this.keyword) ? `value="${this.keyword}"` : '';
+        let addition = '';
+        if (this.additionalLink) {
+            addition = `<div class="addition">${this.additionalLink}</div>`;
+        }
         cont.innerHTML = `
-            <div></div>
+            <div>
+                <div class="llmKeywordWrap">
+                    <div><span><i class="fa fa-search" aria-hidden="true"></i></span></div>
+                    <input id="llmKeyword" type="text" placeholder="keyword" ${val}>
+                    <div id="llmKeywordClear"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                </div>
+                ${addition}
+            </div>
             <div id="layerInfoDescriptions"></div>
         `;
+
+        utils.setChange('llmKeyword', ()=>this.updateKeyword());
+        utils.setUIAction('keyup', 'llmKeyword', ()=>this.updateKeyword());
+        utils.setClick('llmKeywordClear', ()=>this.clearKeyword())
+
+        this.updateKeyword();
+    }
+
+    public static renderData() {
 
         let desc = document.getElementById('layerInfoDescriptions') as HTMLDivElement;
         desc.innerHTML = '';
         let cat = '';
         for (let id in this.layers) {
             let li = this.layers[id];
+            if (this.keyword && this.keyword != '') {
+                if (!keyword.hasKeyword(this.keyword, li)) {
+                    continue;
+                }
+            }
 
             let lbl = `
                 <div id="lid_header_${li.id}"></div>
@@ -176,14 +239,22 @@ export class layerInfo {
                 }
             );
             let header = document.getElementById(`lid_header_${li.id}`) as HTMLDivElement;
-            if (li.lo && header) {
-                this.setIcon(li.lo, header);
+            if (header) {
                 let div = GroupContent.getHeaderHTMLDivId(`lid_${li.id}`);
                 if (div && li.category) {
                     utils.addClass(div, li.category);
                 }
+                if (li.lo) {
+                    this.setIcon(li.lo, header);
+               }
             }
             let str = '';
+            str += `
+                <div id="lid_loader_${li.id}">
+                    <div class="dot-flashing"></div>
+                </div>
+            `;
+
             if (li.GIBS_id) {
                 if (li.GIBS_imageId != '') {
                     str += `<div id="lid_gibs_img_${li.id}" class="lid-image"></div>`;
@@ -199,6 +270,30 @@ export class layerInfo {
             let content = GroupContent.getContainer(`lid_${li.id}`);
             content.innerHTML = str;
         }
+    }
+
+    public static updateKeyword() {
+        let el = document.getElementById('llmKeyword') as HTMLInputElement;
+        if (el && el.value) {
+            this.keyword = el.value;
+        } else {
+            this.keyword = null;
+        }
+        if (this.keyword) {
+            utils.show('llmKeywordClear');
+        } else {
+            utils.hide('llmKeywordClear');
+        }
+        this.renderData();
+    }
+
+    public static clearKeyword() {
+        this.keyword = null;
+        let el = document.getElementById('llmKeyword') as HTMLInputElement;
+        if (el) {
+            el.value = '';
+        }
+        this.updateKeyword();
     }
 
     private static getInfo(li : LayerInfo) {
@@ -236,16 +331,34 @@ export class layerInfo {
 
     private static setGIBSText (li : LayerInfo) {
         if (! li.GIBS_id || ! li.GIBS_text) { return; }
+        utils.hide(`lid_loader_${li.id}`);
         let el = document.getElementById(`lid_gibs_text_${li.id}`) as HTMLDivElement;
         if (el) {
-            el.innerHTML = li.GIBS_text;
+            let dateInfo = '';
+            if (li.GIBS_hasDate && li.lo && li.lo.minDate) {
+                let _date = flatpickr.parseDate(li.lo.minDate as string, 'Y-m-d') as Date;
+                let date = flatpickr.formatDate(_date, 'd F Y');
+                dateInfo += `
+                    <h4>
+                        Temporal coverage: <span>${date} - Present</span>
+                    </h4>
+                `;
+            }
+            el.innerHTML = `
+                ${dateInfo}
+                ${li.GIBS_text}
+            `;
         }
         let img = document.getElementById(`lid_gibs_img_${li.id}`) as HTMLDivElement;
         img.style.backgroundImage = `url('${this.GIBSImageUrl}${li.GIBS_imageId}.jpg')`;
+        if (li["repeat"]) {
+            img.style.backgroundRepeat = li["repeat"];
+        }
     }
 
     private static setLocalText (li : LayerInfo) {
         if (! li.Local_id || ! li.Local_text) { return; }
+        utils.hide(`lid_loader_${li.id}`);
         let el = document.getElementById(`lid_local_text_${li.id}`) as HTMLDivElement;
         if (el) {
             el.innerHTML = li.Local_text;
@@ -253,6 +366,9 @@ export class layerInfo {
         if (li.Local_imageId) {
             let img = document.getElementById(`lid_local_img_${li.id}`) as HTMLDivElement;
             img.style.backgroundImage = `url('${this.LocalImageUrl}${li.Local_imageId}.jpg')`;
+            if (li["repeat"]) {
+                img.style.backgroundRepeat = li["repeat"];
+            }
         }
     }
 
@@ -276,12 +392,16 @@ export class layerInfo {
     }
 
     public static show(id : string | null) {
-        this.render();
-        if (id) {
-            let li = this.layers[id];
-            if (li) {
-                this.showLayer(li);
+        if (this.loaded) {
+            this.render();
+            if (id) {
+                let li = this.layers[id];
+                if (li) {
+                    this.showLayer(li);
+                }
             }
+        } else {
+            this.load(id);
         }
     }
 

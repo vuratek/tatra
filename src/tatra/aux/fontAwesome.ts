@@ -13,7 +13,7 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, faLayerGroup,
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
-        faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder,
+        faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
@@ -41,7 +41,7 @@ export class fontAwesome {
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faCaretDown);
         // laads
-        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash);
+        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash, faBolt);
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap, faCheckSquare, faSquareEmpty );
         // moon

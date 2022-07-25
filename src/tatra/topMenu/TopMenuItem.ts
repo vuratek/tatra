@@ -3,6 +3,7 @@ import { Notifications } from "./Notifications";
 import { Navigation } from "../page/Navigation";
 import { NavigationModes } from "../page/navConfigDef";
 import { TopMenu } from "./TopMenu";
+import { authentication } from "../aux/authentication";
 
 export interface ITopMenuItemObj {
     id              : string;
@@ -16,6 +17,7 @@ export interface ITopMenuItemObj {
     description?    :string;
     subMenu         : Array <ITopMenuItemObj>;
     url             : string;
+    smallImage?     : boolean;
     article?        : boolean;
     ext?            : boolean;
 }
@@ -67,7 +69,10 @@ export abstract class TopMenuItem {
                 lcol.style.backgroundImage = `url('${item.image}')`;
                 lcol.style.backgroundPosition = "center";
                 lcol.style.backgroundRepeat = "no-repeat";
-                lcol.style.backgroundSize = "cover";
+                if (item.smallImage && item.smallImage === true) {}
+                else {
+                    lcol.style.backgroundSize = "cover";
+                }
             }
             let descr = (item.description) ? `<div>${item.description}</div>` : '';
             lcol.innerHTML = descr;
@@ -85,14 +90,15 @@ export abstract class TopMenuItem {
                     continue;
                 }
                 if (sub.url) {
-                    options += `<li><a href="${sub.url}">${sub.label}</a></li>`;
+                    options += `<li id="topbar_${sub.id}"><a href="${sub.url}">${sub.label}</a></li>`;
                 } else {
-                    options += `<li><span class="topMenuEmptyLabel">${sub.label}</span></li>`;
+                    options += `<li id="topbar_${sub.id}"><span class="topMenuEmptyLabel">${sub.label}</span></li>`;
                 }
             }
             options = `<ul ${extra}>${options}</ul>`;
             rcol.innerHTML = lbl + options;
         }
+        document.dispatchEvent(new CustomEvent(authentication.EVENT_AUTHENTICATION_UPDATE));
     }
 
     public static renderMin(pEl : HTMLDivElement) {

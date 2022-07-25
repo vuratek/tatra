@@ -74,8 +74,7 @@ export class Navigation {
                 }
             }
             if (item.id == "login") {
-                utils.hide('topbar_login-out');
-                utils.hide('topbar_login-in');
+                this.hideAllLogin();
                 authentication.init();
                 document.addEventListener(authentication.EVENT_AUTHENTICATION_UPDATE, (evt)=> this.updateAuthentication(evt as CustomEvent));        
 
@@ -90,13 +89,24 @@ export class Navigation {
         }
     }
 
+    public static hideAllLogin() {
+        utils.hide('topbar_login-out');
+        utils.hide('topbar_login-in');
+        utils.hide('sidebar_right_login-in');
+        utils.hide('sidebar_right_login-out');
+    }
+
     private static updateAuthentication (evt : CustomEvent) {
         if (authentication.isLoggedin) {
             utils.show('topbar_login-out');
+            utils.show('sidebar_right_login-out');
             utils.hide('topbar_login-in');
-            } else {
+            utils.hide('sidebar_right_login-in');
+        } else {
             utils.hide('topbar_login-out');
+            utils.hide('sidebar_right_login-out');
             utils.show('topbar_login-in');    
+            utils.show('sidebar_right_login-in');
         }
     }
 
