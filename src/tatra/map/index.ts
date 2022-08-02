@@ -17,6 +17,7 @@ import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
 import './css/*.scss';
+import { layerInfo } from './layerInfo';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -70,6 +71,7 @@ export class map {
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
+        layerInfo.init(props.config.properties.layerInfoURL);
 
         utils.clearLoader();
     }

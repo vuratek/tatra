@@ -4,6 +4,18 @@
 #lmvControls_locator {
     max-width: 40rem;
 }
+#lmvControls_locator .lmvControlsWindowLabel {
+	border-radius: 1rem 1rem 0 0;
+    font-size: 1.6rem;
+    padding: 0.3rem 1rem;
+}
+#lmv_locator_CloseBtn {
+	font-size:1.6rem;
+	padding: .2rem;
+	font-size: 1.6rem;
+	padding: 0.2rem 0.5rem 0;
+	top: 0.2rem;
+}
 .locator-tab-wrap {
     padding: 0 .5rem 0 0;
 }

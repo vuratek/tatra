@@ -1,5 +1,11 @@
-#layerInfoDescriptions {
-    
+.modalLayerInfo {
+    max-width: 120rem;
+	max-height: 120rem;
+	background: #666;
+	border: 0.1rem solid #5e5e5e;
+}
+#modal_layerInfo_header {
+    background:#000;
 }
 #layerInfoDescriptions .lid-image {
     text-align: center;
@@ -16,6 +22,7 @@
     position:absolute;
     left:1rem;
     top:.3rem;
+    transform-origin: 0 0;
     transform: scale(0.5, 0.5);
     -ms-transform: scale(0.5, 0.5);
     -webkit-transform: scale(0.5, 0.5);
@@ -100,6 +107,9 @@
     margin: 0 0 0 1rem;
     color:#63d2ff;
 }
+.lid-bold .navGCLbl {
+    font-weight: 600;
+}
 .triangle {
     width: 50rem;
     height: 4.5rem;
@@ -137,7 +147,11 @@
     background: #333;
     border-radius: 2rem;
 }
-.llmKeywordWrap {
+.modalContent .addition a, .modalContent .addition a:visited {
+    color:white;
+    font-weight:600;
+}
+.liKeywordWrap {
     position: relative;
     font-size: 1.7rem;
     border-radius: 2rem;
@@ -147,7 +161,7 @@
     margin: 1.2rem 0 1rem 1rem;
     height:3rem;
  }
- #llmKeyword {
+ #liKeyword {
     font-size: 1.7rem;
     border: none;
     width: 75%;
@@ -156,7 +170,7 @@
     left: 4rem;
     outline:none;
 }
-.llmKeywordWrap div:first-child {
+.liKeywordWrap div:first-child {
     position: absolute;
     left: 0rem;
     top: 0rem;
@@ -166,7 +180,7 @@
     padding: 0.3rem 0.7rem 0.2rem 0.9rem;
     border-radius: 2rem 0rem 0rem 2rem;
 }
-.llmKeywordWrap div:last-child {
+.liKeywordWrap div:last-child {
     position: absolute;
     right: 0;
     top: 0;

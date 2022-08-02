@@ -25,7 +25,7 @@ export class BaseSelectGeoJSONTool extends BaseTool {
         }),
         new Style({
             fill: new Fill({
-                color: 'rgba(255, 255, 255, 0.7)'
+                color: 'rgba(255, 255, 255, 0.1)'
             }),
             stroke: new Stroke({
                 color: '#eee',

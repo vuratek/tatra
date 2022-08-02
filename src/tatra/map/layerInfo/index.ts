@@ -31,10 +31,17 @@ export interface ILayerCategories {
 export interface ILayerInfos {
     [key:string]    : LayerInfo;
 }
+export interface ILayerSettings {
+    localDescriptionUrl : string;
+    localImageUrl : string;
+    LayerInfoWindowLabel? : string;
+    faqUrl? : string;
+}
 
 export interface ILayerConfig {
     infos       : Array <ILayerInfo>;
     categories? : Array <ILayerCategory>;
+    settings?   : ILayerSettings;
 }
 
 export class LayerInfo {
@@ -84,8 +91,10 @@ export class layerInfo {
     public static categories        : ILayerCategories = {};
     public static GIBSImageUrl      : string = 'https://worldview.earthdata.nasa.gov/images/layers/previews/geographic/';
     public static GIBSDataUrl       : string = 'https://worldview.earthdata.nasa.gov/config/metadata/layers/';
-    public static LocalImageUrl     : string = '/content/descriptions/images/';
-    public static LocalDataUrl      : string = '/content/descriptions/';
+    public static LocalImageUrl     : string = '/';
+    public static LocalDataUrl      : string = '/';
+    public static LayerInfoWindowLabel : string = 'Layer Information';
+    public static FAQUrl            : string | null = null;
     public static keyword           : string | null = null;
 
     public static additionalLink    : string | null = null;     // FAQ link or so
@@ -99,8 +108,9 @@ export class layerInfo {
 
     private static load(id : string | null) {
         this.loaded = true;
+        let rand = '?dt=' + (Math.round(Math.random() * 1000) + 1).toString();
         if (this.configUrl) {
-            fetch(this.configUrl)
+            fetch(this.configUrl + rand)
             .then(response => {
                 return response.json();
             })
@@ -139,8 +149,17 @@ export class layerInfo {
                 }
             }
         }
+        if (config.settings) {
+            this.LocalDataUrl = config.settings.localDescriptionUrl;
+            this.LocalImageUrl = config.settings.localImageUrl;
+            if (config.settings.LayerInfoWindowLabel) {
+                this.LayerInfoWindowLabel = config.settings.LayerInfoWindowLabel;
+            }
+            if (config.settings.faqUrl) {
+                this.FAQUrl = config.settings.faqUrl;
+            }
+        }
         document.addEventListener(events.EVENT_GROUP_CONTENT_OPEN, (evt)=>this.updateLayerInfo(evt as CustomEvent));
-        console.log(this.layers);
     }
 
     public static setIcon (lo : Layer, el : HTMLDivElement) {
@@ -175,31 +194,37 @@ export class layerInfo {
     public static render() {
         //let test = '<div><div class="triangle"></div></div><div style="position:absolute;color:#edeaea;">FIRMS Layer Information</div>';
 
-        let li = new Modal({id: 'layerInfo', style : 'fmmModalLayerInfo', header : 'FIRMS Layer Information'});
+        let li = new Modal({id: 'layerInfo', style : 'modalLayerInfo', header : this.LayerInfoWindowLabel});
         let el = li.getContent();
         li.open();
         let cont = document.getElementById(el) as HTMLDivElement;
         if (! cont) { return; }
         let val = (this.keyword) ? `value="${this.keyword}"` : '';
-        let addition = '';
-        if (this.additionalLink) {
-            addition = `<div class="addition">${this.additionalLink}</div>`;
+        let faq = '';
+        
+        if (this.FAQUrl) {
+            faq = `<span><a href="${this.FAQUrl}" rel="noopener noreferrer" target="_blank">FAQ</a></span>`;
         }
+        if (this.additionalLink) {
+            faq += this.additionalLink;
+        }
+        faq = `<div class="addition">${faq}</div>`;
+
         cont.innerHTML = `
             <div>
-                <div class="llmKeywordWrap">
+                <div class="liKeywordWrap">
                     <div><span><i class="fa fa-search" aria-hidden="true"></i></span></div>
-                    <input id="llmKeyword" type="text" placeholder="keyword" ${val}>
-                    <div id="llmKeywordClear"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                    <input id="liKeyword" type="text" placeholder="keyword" ${val}>
+                    <div id="liKeywordClear"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
                 </div>
-                ${addition}
+                ${faq}
             </div>
             <div id="layerInfoDescriptions"></div>
         `;
 
-        utils.setChange('llmKeyword', ()=>this.updateKeyword());
-        utils.setUIAction('keyup', 'llmKeyword', ()=>this.updateKeyword());
-        utils.setClick('llmKeywordClear', ()=>this.clearKeyword())
+        utils.setChange('liKeyword', ()=>this.updateKeyword());
+        utils.setUIAction('keyup', 'liKeyword', ()=>this.updateKeyword());
+        utils.setClick('liKeywordClear', ()=>this.clearKeyword())
 
         this.updateKeyword();
     }
@@ -273,23 +298,23 @@ export class layerInfo {
     }
 
     public static updateKeyword() {
-        let el = document.getElementById('llmKeyword') as HTMLInputElement;
+        let el = document.getElementById('liKeyword') as HTMLInputElement;
         if (el && el.value) {
             this.keyword = el.value;
         } else {
             this.keyword = null;
         }
         if (this.keyword) {
-            utils.show('llmKeywordClear');
+            utils.show('liKeywordClear');
         } else {
-            utils.hide('llmKeywordClear');
+            utils.hide('liKeywordClear');
         }
         this.renderData();
     }
 
     public static clearKeyword() {
         this.keyword = null;
-        let el = document.getElementById('llmKeyword') as HTMLInputElement;
+        let el = document.getElementById('liKeyword') as HTMLInputElement;
         if (el) {
             el.value = '';
         }
@@ -387,7 +412,11 @@ export class layerInfo {
             }
         }
         if (! GroupContent.isOpened(`lid_${li.id}`)) {
-            GroupContent.open(`lid_${li.id}`);
+            GroupContent.open(`lid_${li.id}`);            
+        }
+        if (GroupContent.isOpened(`lid_${li.id}`)) {
+            let div = GroupContent.getHeaderHTMLDivId(`lid_${li.id}`);
+            utils.addClass(div, 'lid-bold');
         }
     }
 
@@ -404,5 +433,4 @@ export class layerInfo {
             this.load(id);
         }
     }
-
 }

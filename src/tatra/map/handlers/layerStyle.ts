@@ -93,7 +93,7 @@ export class layerStyle {
         }),
         new Style({
             fill: new Fill({
-                color: 'rgba(255, 255, 255, 0.1)'
+                color: 'rgba(255, 255, 255, 0.3)'
             }),
             stroke: new Stroke({
                 color: '#ee8331',
