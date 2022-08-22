@@ -87,6 +87,36 @@
 .menuAnimOpen {
 	animation: menuMoveOpen 1s;
 }
+.mapOptionTab {
+	opacity:0.7;
+    font-size: 1.6rem;
+    position: absolute;
+	color: #b1b3b3;
+    height: 3.2rem;
+	background: #73736e;
+    padding: .7rem .5rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+	text-transform: uppercase;
+}
+.mapOptionTab:hover {
+	opacity:0.9;
+}
+.mapOptionTabSelected, .mapOptionTabSelected:hover {
+	background:#222;
+	color:#DDD;
+	opacity:1;
+}
+.mapOptionTab_1 {
+	width:90%;
+}
+.mapOptionTab_2 {
+	width:45%;
+}
+.mapOptionTab_3 {
+	width:30%;
+}
 @keyframes menuMoveClose {
 	from {  }
 	to { right: -40.1rem; }

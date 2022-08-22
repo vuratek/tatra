@@ -370,7 +370,7 @@ export class mapUtils {
         if (! txt ) { return; }
         for (let i=0; i<props.layers.length; i++) {
             let lyr = props.layers[i];
-            if (lyr.handler && lyr.visible && lyr.handler == "imagery" && lyr.category == "basemap") {
+            if (lyr.handler && lyr.visible && lyr.handler == "imagery" && lyr.category == "dynamic") {
                 txt.innerHTML = lyr.title + ' ' + flatpickr.formatDate(lyr.time, 'M d Y');
                 return;
             }

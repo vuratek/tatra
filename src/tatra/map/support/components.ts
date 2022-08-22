@@ -43,6 +43,8 @@ export class components {
 			el.appendChild(components.createAnyElement('div', 'lmvFeatureInfoPixel')); 
 			(document.getElementById("lmvFeatureInfoPixel") as HTMLDivElement).innerHTML = '<span id="lmvFeatureInfoPixelLabel">&nbsp;</span><canvas id="lmvFeatureInfoPixelLegend" width="15" height="15"/>';
 		}
+		el.appendChild(components.createAnyElement('div', 'lmvBETA'));
+		(document.getElementById("lmvBETA") as HTMLDivElement).innerHTML = "BETA";
 	}
 	public static loadMenu(id : string) {
 		components.container = document.getElementById('lmvWrapper') as HTMLDivElement;

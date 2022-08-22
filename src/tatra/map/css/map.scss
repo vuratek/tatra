@@ -45,17 +45,19 @@
 	bottom:3.2rem;
 	height:5rem;
 	right:0;
-	/*background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.65));*/
-	background:rgba(250, 250, 250,0.9);
+	/*background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.65));
+	background:rgba(250, 250, 250,0.9); */
+	background:rgba(227,230,234,0.91);
 	display:inline-flex;
 	margin:0;
-	padding:0.2rem 0 0 0;
+	padding:0.2rem 0 0;
 	z-index:2000;
 }
-.lmvControls:hover {
-	/*background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.85));*/
-	background:rgb(250, 250, 250);
-}
+/*.lmvControls:hover {
+	background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.85));
+	background:rgb(227,230,234);
+} */
+
 .lmvControlsMax {
 	bottom:0;
 }
@@ -251,23 +253,29 @@
 	--widthBtn:9rem;
 	height:4.4rem;
 	display:inherit;
-	padding:0.4rem 0 0.2rem;
+	padding:0.4rem 0rem 0.2rem 0.2rem;
 	border-radius:0.3rem ;
 }
 .bottomBarMenuTool:hover {
     background:#111;
 	color:#DDD;
+	border:solid 0.1rem #cfd5db;
 }
 .bottomBarMenuWind:hover {
     background:#0b0e11;
 	color:#DDD;
+	border:solid 0.1rem #cfd5db;
 }
 .bottomBarMenuItemSelected{
-	background: #080f18;
+	/*background: #080f18;*/
+	background: rgba(32,32,32,0.8);
+	border:solid 0.1rem #cfd5db;
 	color:#eee;
 }
 .bottomBarMenuItemSelected:hover {
-	background: #0b0e11;
+	/*background: #0b0e11;*/
+	background:#222;
+	border:solid 0.1rem #cfd5db;
 }
 .bottomBarMenuItemSelected .bottomBarIcon{
 	color: #eee;
@@ -285,8 +293,8 @@
 	right:1rem;
 }
 .bottomBarBtnLabel {
-	font-size:2.2rem;
-	padding-bottom:0.3rem;
+	font-size: 2.2rem;
+	padding:0.3rem 0 0 0;
 }
 .bottomBarMenuItem>p {
 	margin:0;
@@ -297,6 +305,7 @@
 	background:rgba(32,32,32,0.8);
 	color:#DDD;
 	cursor:default;
+	border:solid 0.1rem #cfd5db;
 }
 .bottomBarSelected:hover {
 	background:#111;
@@ -367,9 +376,12 @@
 	font-size:1.1rem;
 }
 .bottomBarSubMenuItemLabel {
-	padding-top:1.5rem;
+	padding-top:1.1rem;
 	line-height: 1.8rem;
 	display:flex;
+}
+#lmvControls_help_Content .bottomBarSubMenuItemLabel {
+    line-height: 3rem;
 }
 .mapMenu .bottomBarSubMenuItemLabel {
 	padding-bottom:.3rem;
@@ -516,6 +528,7 @@
 		height:3.6rem;
 		display:inherit;
 		padding-top:0.2rem;
+		border:solid 0.1rem #cfd5db;
 	}
 	.bottomBarMenuItemList {
 		width:7.5rem;

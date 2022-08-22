@@ -86,6 +86,7 @@ export class screenshot extends baseComponent {
         if (showScaleline) { this.drawScaleline(image); }
         if (showTimestamp) { this.addTimestamp(image, (new Date().toString()));}
         if (showHeader) { this.addLogo(image); }
+        this.addBeta(image);
 
         let dates = '';
         if (hash.datesToString()) {
@@ -171,6 +172,19 @@ export class screenshot extends baseComponent {
         }
     }
 
+    private static addBeta (canvas : HTMLCanvasElement) {
+        let bd = document.querySelector("body");
+        if (bd && bd.className.indexOf('isbeta') >=0) {
+            let ctx = canvas.getContext('2d');
+            if (!ctx) { return;}
+            let x = 20;
+            let y = canvas.height - 7;
+            let text = 'BETA';
+            ctx.font = '14px "Titillium Web", sans-serif';
+            this.writeTranparentText(ctx, text, x, y);
+        }
+    } 
+
     public static addLogo (canvas : HTMLCanvasElement) {
         let ctx = canvas.getContext('2d');
         if (!ctx || !props.config) { return;}
@@ -198,16 +212,21 @@ export class screenshot extends baseComponent {
         ctx.font = '14px "Titillium Web", sans-serif';
         ctx.textAlign = "left";
         this.writeTranparentText(ctx, text, x, y);
-
     }
 
     private static writeTranparentText (ctx:CanvasRenderingContext2D ,text: string, x : number, y : number) {
-        ctx.fillStyle = "rgba(30,30,30,0.8)";
+        let c1 = "rgba(30,30,30,0.8)";
+        let c2 = "rgba(240,240,240, 0.85)";
+        if (text == 'BETA') {
+            c1 = "rgba(250,250,250,0.8)";
+            c2 = "#b939d4";
+        }
+        ctx.fillStyle = c1;
         ctx.fillText(text,x-1,y-1);        
         ctx.fillText(text,x-1,y+1);        
         ctx.fillText(text,x+1,y-1);        
         ctx.fillText(text,x+1,y+1);        
-        ctx.fillStyle = "rgba(240,240,240, 0.85)";
+        ctx.fillStyle = c2;
         ctx.fillText(text,x,y); 
     }
 

@@ -106,11 +106,14 @@ export class layerInfo {
         this.configUrl = url;
     }
 
+    private static getRand() : string {
+        return '?dt=' + (Math.round(Math.random() * 1000) + 1).toString();
+    }
+
     private static load(id : string | null) {
         this.loaded = true;
-        let rand = '?dt=' + (Math.round(Math.random() * 1000) + 1).toString();
         if (this.configUrl) {
-            fetch(this.configUrl + rand)
+            fetch(this.configUrl + this.getRand())
             .then(response => {
                 return response.json();
             })
@@ -338,7 +341,7 @@ export class layerInfo {
             });
         }
         if (! li.Local_text && li.Local_id) {
-            let url = `${this.LocalDataUrl}${li.Local_id}.html`;
+            let url = `${this.LocalDataUrl}${li.Local_id}.html` + this.getRand();
             fetch(url)
             .then(response => {
                 return response.text();

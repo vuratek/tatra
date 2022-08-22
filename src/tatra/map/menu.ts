@@ -4,6 +4,7 @@ import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
 import './css/menu.scss';
+//import { mainMenu } from "./menu/mainMenu";
 export class menu {
 
     private static id : string = '';
@@ -50,11 +51,13 @@ export class menu {
 
         content = document.createElement("div");
         content.setAttribute("id", this.id + "Content");
+        //content.setAttribute("id", this.id + "_content");
         content.setAttribute("class",  "mapMenuContent");        
         div.appendChild(content);
         this.renderMenuBtnHolder(div);
 
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
+        //mainMenu.render(this.id);
     }
 
     public static registerMenu (id : string) {
@@ -127,6 +130,7 @@ export class menu {
     
     public static resize () {
         let el = document.getElementById(`${this.id}Content`);
+        //let el = document.getElementById(`${this.id}_content`);
 		if (! el) { return; }
 		let controls = (document.getElementById('lmvControls') as HTMLDivElement) ? (document.getElementById('lmvControls') as HTMLDivElement).clientHeight : 0;
 		let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
