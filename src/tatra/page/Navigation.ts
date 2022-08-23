@@ -35,20 +35,22 @@ export class Navigation {
 
         this.header = utils.cc('header', body, true);
         this.main = utils.cc('main', body);
-        this.footer = utils.cc('footer', body);
 
-        if (! this.header || ! this.main || ! this.footer) { 
+        if (! this.header || ! this.main) { 
             console.log('Failed to initialize');
             return;
         }
 
-        if (this.settings.app.useMap) {
-            utils.addClass("html", "isMap", false);
-        }
-
         Header.init();
         Header.setLogo();
-        Footer.init(); 
+
+        if (this.settings.app.useMap) {
+            utils.addClass("html", "isMap", false);
+        } else {
+            this.footer = utils.cc('footer', body);
+            Footer.init(); 
+        }
+
 
         this.addMainComponents();
         TopMenu.render();

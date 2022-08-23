@@ -134,7 +134,7 @@ export class menu {
 		if (! el) { return; }
 		let controls = (document.getElementById('lmvControls') as HTMLDivElement) ? (document.getElementById('lmvControls') as HTMLDivElement).clientHeight : 0;
 		let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
-		let footer = (document.querySelector('footer') as HTMLDivElement).clientHeight;
+		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;
         let header2 = (document.getElementById(this.id + 'Header') as HTMLDivElement).clientHeight;
         let timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
         let topcontent = (document.getElementById(this.id + 'TopContent') as HTMLDivElement).clientHeight;
