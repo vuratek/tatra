@@ -13,6 +13,24 @@
 .leftMenuActive .timeline {
     left:6.5rem;
 }
+@keyframes timelineAnimationOpen {
+	0%   {opacity:0;}
+	100% {opacity:100;}
+  }
+@keyframes timelineAnimationClose {
+	0%   {opacity:100; left:.7rem; bottom:0.7rem;}
+	100% {opacity:0; left:.7rem; bottom:-5.5rem;}
+  }
+.timelineAnimationOPEN {
+	animation-name: timelineAnimationOpen;
+	animation-duration: 1s;
+	opacity: 100%;
+}
+.timelineAnimationCLOSE {
+	animation-name: timelineAnimationClose;
+	animation-duration: 1s;
+	position: fixed; left:.7rem; bottom:-5.5rem;
+}
 .timeline-display {
 	height:8.1rem;
 }
@@ -82,5 +100,23 @@
     }
     .timelineMissing {
         width:auto;
+    }
+    @keyframes timelineAnimationOpen {
+        0%   {opacity:0;}
+        100% {opacity:100;}
+      }
+    @keyframes timelineAnimationClose {
+        0%   {opacity:100; left:.3rem; bottom:0.3rem;}
+        100% {opacity:0; left:.3rem; bottom:-12rem;}
+      }
+    .timelineAnimationOPEN {
+        animation-name: timelineAnimationOpen;
+        animation-duration: 1s;
+        opacity: 100%;
+    }
+    .timelineAnimationCLOSE {
+        animation-name: timelineAnimationClose;
+        animation-duration: 1s;
+        position: fixed; left:.3rem; bottom:-12rem;
     }
 }

@@ -116,7 +116,7 @@ export class baseComponent {
     }
 
     public static defaultPosition(isTool : boolean = false) {
-        let offsetY = 120;
+        let offsetY = 230;
         let ctrl = (this.isWithinModal) ? 'modalWrap' : 'map';
         let mh = (document.getElementById(ctrl) as HTMLDivElement).clientHeight;
         let mw = (document.getElementById(ctrl) as HTMLDivElement).clientWidth;
@@ -132,7 +132,7 @@ export class baseComponent {
                 return;
         }
         if (isTool) {
-            this.position(70, offsetY - 80);
+            this.position(20, offsetY - 80);
             return;
         }
         let ref = document.getElementById(`bb_${this.id}_btn`) as HTMLDivElement;

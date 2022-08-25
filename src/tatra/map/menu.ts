@@ -133,10 +133,14 @@ export class menu {
         //let el = document.getElementById(`${this.id}_content`);
 		if (! el) { return; }
 		let controls = (document.getElementById('lmvControls') as HTMLDivElement) ? (document.getElementById('lmvControls') as HTMLDivElement).clientHeight : 0;
-		let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
-		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;
+        let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
+//		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;
+        let footer = 0;
         let header2 = (document.getElementById(this.id + 'Header') as HTMLDivElement).clientHeight;
-        let timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
+        let timeline = 0;
+        if ((document.querySelector('html') as HTMLElement).className.indexOf('isTimeline')>= 0) {
+            timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
+        }
         let topcontent = (document.getElementById(this.id + 'TopContent') as HTMLDivElement).clientHeight;
         let map = (document.getElementById('map') as HTMLDivElement).clientHeight;
         if (window.innerHeight > 600) { header += 30;}
@@ -146,7 +150,7 @@ export class menu {
 		else if (window.innerWidth <= 700 ) {
 			el.style.maxHeight = (map - header2 - topcontent - 2 ) + "px";	
 		} else {
-			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 7) + "px";	
+			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 20) + "px";	
         }
 
 		

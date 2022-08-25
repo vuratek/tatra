@@ -13,6 +13,7 @@ import { help } from "./help";
 import { measure } from "./measure";
 import { select } from "./select";
 import { locator } from "./locator";
+import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
 
 export interface IControlsItem {
@@ -70,13 +71,11 @@ export class controls  {
                     }
                     let navbar = document.getElementById("bottomBar") as HTMLUListElement;
                     let control_id = control;
-                    if (control.indexOf('spacer') >= 0 ) { 
-                        this.option_spacer(navbar);
-                    } else { 
-                        this.optionItem(control_id, navbar);
-                    }
+                    this.optionItem(control_id, navbar);
             }
         }
+        ctrl.appendChild(utils.ae("bottomBarLeftInfo"));
+        this.option_leftInfo(document.getElementById("bottomBarLeftInfo") as HTMLDivElement);
         document.addEventListener(events.EVENT_CONTROL_SET, (evt) => this.updateControls(evt));
         document.addEventListener(events.EVENT_SET_CONTROL_ITEM, (evt) => this.updateControlItem(evt as CustomEvent));
         document.addEventListener(events.EVENT_CONTROL_SET_WINDOW, (evt) => this.setWindow(evt as CustomEvent));
@@ -160,6 +159,10 @@ export class controls  {
                     if (! item.type) { item.type = ControlTypes.FLAG;} 
                     if (! item.handler) { item.handler = resize;} 
                     break;
+                case "toggle":
+                    if (! item.type) { item.type = ControlTypes.FLAG;} 
+                    if (! item.handler) { item.handler = toggle;} 
+                    break;
             }
         }
     }
@@ -181,8 +184,20 @@ export class controls  {
     }
 
     private static setResize ( visible : boolean) {
-        let label = (visible) ? 'MINIMIZE' : 'MAXIMIZE';
+        let label = (visible) ? 'STANDARD' : 'MAXIMIZE';
         let icon = (visible) ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
+        return `
+            <p>
+                <i class="fa ${icon} fa-lg bottomBarBtnLabel"></i>
+                <br/>
+                <span class="bottomBarBtnLabelTxt">${label}</span>
+            </p>
+        `;
+    }
+
+    private static setToggle ( visible : boolean) {
+        let label = '&nbsp;';
+        let icon =  "fa-times";
         return `
             <p>
                 <i class="fa ${icon} fa-lg bottomBarBtnLabel"></i>
@@ -210,6 +225,8 @@ export class controls  {
         
         if (id == 'resize') {
             el.innerHTML = this.setResize(false);
+        } else if (id == 'toggle') {
+            el.innerHTML = this.setToggle(false);
         } else {
             let label = (item.label) ? item.label : '?';
             let icon = (item.icon) ? item.icon : 'fa-square';
@@ -303,7 +320,11 @@ export class controls  {
             controls.items[id].visible = visible;
             let btn = document.getElementById( `bb_${id}_btn`) as HTMLDivElement;
             if (! btn) { return; }
-            btn.innerHTML = this.setResize(visible);
+            if (id == 'resize') {
+                btn.innerHTML = this.setResize(visible);
+            } else if (id == 'toggle') {
+                btn.innerHTML = this.setToggle(visible);
+            }
 
             this.controlItemClicked(id); 
         }
@@ -348,19 +369,20 @@ export class controls  {
         utils.removeClass(`bb_${id}_btn`, "bottomBarMenuItemDisabled");
     }
     
-    public static option_spacer (el : HTMLUListElement) {
-        let sp1 = document.createElement("li");
-        sp1.setAttribute("class", "bottomBarSpace");
-        el.appendChild(sp1);
-        let sp2 = document.createElement("li");
-        sp2.setAttribute("class", "bottomBarSpace2");
-        el.appendChild(sp2);
-    }
-        
-    public static option_rightInfo () {
+    public static option_rightInfo (): string {
         return `
             <img src="${(props.config as IConfigDef).mapControls.rightInfo.image}" alt="logo" class="bottomBarLogo">
         `;
+    }
+
+    private static option_leftInfo (div : HTMLDivElement) {
+        div.innerHTML = `
+            <div id="bottomMenuClosed" class="bottomBarClose">
+                <i class="fa fa fa-cog" aria-hidden="true"></i>
+            </div>
+        `;
+        //let ci = (props.config as IConfigDef).mapControls['toggle'];
+        utils.setClick('bottomMenuClosed', () => this.onClick('toggle'));
     }
         
     private static clearTools () {

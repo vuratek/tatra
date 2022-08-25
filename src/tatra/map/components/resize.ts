@@ -1,6 +1,8 @@
 import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { props } from "../props";
+import { menu } from "../menu";
+import { controls } from "./controls";
 
 export class resize extends baseComponent {
     public static id		    : string = 'resize';
@@ -11,6 +13,10 @@ export class resize extends baseComponent {
         super.open();
         utils.addClass('body', 'resize', false);
         props.map.updateSize();
+        menu.close();
+        if (! controls.items['toggle'].visible) {
+            controls.onClick('toggle');
+        }
     }
 
     public static close() {

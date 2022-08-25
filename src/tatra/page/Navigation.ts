@@ -42,7 +42,7 @@ export class Navigation {
         }
 
         Header.init();
-        Header.setLogo();
+        Header.setLogo('header');
 
         if (this.settings.app.useMap) {
             utils.addClass("html", "isMap", false);
@@ -50,7 +50,6 @@ export class Navigation {
             this.footer = utils.cc('footer', body);
             Footer.init(); 
         }
-
 
         this.addMainComponents();
         TopMenu.render();
@@ -130,15 +129,24 @@ export class Navigation {
                 </div>
             `;
         }
-        if (this.settings.app.useMap && this.settings.app.useMap === true) {
+        if (this.settings.app.useMap === true) {
             str += `
                 <div id="map" class="map"></div>
+                <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="timeline" class="timeline"></div>
             `;
         }
 
         this.main.innerHTML = str;
+        if (this.settings.app.useMap === true) {
+            let el = document.getElementById('mapMaxLabel') as HTMLDivElement;
+            if (el) {
+                el.innerHTML = Header.getLabelLogo('mapMaxLabel');
+            }
+            Header.setLogo('mapMaxLabel');
+        }
+
 //        <div id="${menu.app.search}"></div>
   
     }

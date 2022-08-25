@@ -44,7 +44,7 @@ header {
     margin-top: 1.8rem;
 }
 
-#headerTxtLabelSmall {
+#headerTxtLabelSmall, #mapMaxLabelTxtLabelSmall {
     display:none;
     text-transform: uppercase;
 }
@@ -108,11 +108,11 @@ header a:link, header a:visited{
     width: 6rem;
     height: 6rem;
 }
-.isMap #headerLogo {
+.isMap #headerLogo, #mapMaxLabelLogo {
     width: 5rem;
     height: 5rem;
 }
-#headerLogo2 {
+#headerLogo2, #mapMaxLabelLogo2 {
     margin: 1.2rem 0.5rem 0 0;
     width:4.7rem;
     height:5rem;
@@ -125,9 +125,9 @@ header a:link, header a:visited{
     .headerLabel {
         display:none;
     }
-    #headerTxtLabelSmall {
+    #headerTxtLabelSmall, #mapMaxLabelTxtLabelSmall {
         display: block;
-        margin: 2.2rem 0 0 0;
+        margin: 1.7rem 0 0 0;
         font-size: 3rem;
         font-weight: 600;
     }    
