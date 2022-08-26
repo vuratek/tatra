@@ -37,7 +37,7 @@
 	bottom: 0;
 }
 .leftNavBar {
-	bottom:8.2rem;
+	bottom:0;
 }
 .lmvMousePosition {
 	position: absolute;
@@ -58,8 +58,8 @@
 .lmvControls {
 	position:fixed;
 	left:0;
-	bottom:.7rem;
-	height:5rem;
+	bottom:5.7rem;
+	height:0;
 	right:0;
 	/*background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.65));
 	background:rgba(250, 250, 250,0.9); 
@@ -71,7 +71,7 @@
 	z-index:2000;
 }
 .isTimeline .lmvControls {
-	bottom: 6.3rem;
+	bottom: 11.3rem;
 }
 /*.lmvControls:hover {
 	background:linear-gradient(rgba(34, 34, 34, 0.85), rgba(150, 150, 150, 0.85));
@@ -245,28 +245,47 @@
 }
 @keyframes mapControlBarAnimationOpen {
 	0%   {opacity:0; left:0; top:0;}
-	100% {opacity:100; left:30%; top:0; }
+	100% {opacity:1; left:30%; top:0; }
   }
 @keyframes mapControlBarAnimationClose {
-	0% {opacity:100; left:30%; top:0; }
+	0% {opacity:1; left:30%; top:0; }
 	100% {opacity:0; left:0; top:0;}
   }
-#mapControlBar {
+.mapControlBar {
 	/*margin:0 auto;*/
 	position: relative; left:30%; top:0;
 }
 .mapControlBarAnimationOPEN {
 	animation-name: mapControlBarAnimationOpen;
-	animation-duration: 1.2s;
+	animation-duration: 3s;
 	position: relative; left:30%; top:0;
-	opacity: 100%;
+	opacity: 1;
 }
 .mapControlBarAnimationCLOSE {
 	animation-name: mapControlBarAnimationClose;
-	animation-duration: 1s;
+	animation-duration: 3s;
 	position: relative; left:0; top:0;
 	opacity: 0;
 }
+/*
+@keyframes mapControlBartimelineAnimationOpen {
+	0%   {opacity:1; bottom:-5.5rem;}
+	100% {opacity:1; bottom:0.7rem;}
+  }
+@keyframes mapControlBartimelineAnimationClose {
+	0%   {opacity:1; bottom:0.7rem;}
+	100% {opacity:1; bottom:-5.5rem;}
+  }
+.mapControlBartimelineAnimationOPEN {
+	animation-name: mapControlBartimelineAnimationOpen;
+	animation-duration: 1s;
+	opacity: 1;
+}
+.mapControlBartimelineAnimationCLOSE {
+	animation-name: mapControlBartimelineAnimationClose;
+	animation-duration: 1s;
+	position: fixed; bottom:-5.5rem;
+}*/
 .bottomBar {
 	list-style-type:none;
 	margin:0;
@@ -347,11 +366,6 @@
 .bottomBarClose:hover {
     color: #eee;
     background: #ec6111;
-}
-.mapMenuBtns:hover {
-	background: #999;
-//    border: 0.1rem solid #ccc;
-    color: #e3e3e3;
 }
 .bottomBarBtnLabel {
 	font-size: 2.5rem;
@@ -551,14 +565,13 @@
 	.isTimeline .ol-scale-lineMI {
 		bottom: 11.5rem;
 	}
-	.leftNavBar {
-		bottom: 4.2rem;
+	.isTimeline .lmvControls {
+		bottom: 10.3rem;
 	}
 	.map {
 		bottom:0;
 	}
 	.lmvControls {
-		height:4.2rem;
 		padding:0.3rem 0 0 0;
 	}
 	.bottomBarLabel {
@@ -665,13 +678,15 @@
 		margin-left: calc(-19.5rem + var(--widthBtn)); 
 		border-radius: 0.7rem 0.7rem 0 0.7rem;
 	}	
-	
+	.mapMaxLabel {
+		left: 1rem;
+	}
 	.ol-zoom {
-		top:4.5rem;
+		top:5.5rem;
 		/*display:none;*/
 	}
 	.ol-locator {
-		top: 11.5rem;
+		top: 12.5rem;
 	}
 	.ol-scale-line {
 		font-size:1rem;
@@ -734,7 +749,7 @@
 }
 @media screen and (max-width: 500px) {
 	.isTimeline .lmvControls {
-		bottom: 12rem;
+		bottom: 16rem;
 	}
 	.isTimeline .ol-scale-line {
 		bottom: 19rem;
@@ -744,5 +759,23 @@
 	}
 	#bb_locator_btn {
 		display:none;
-	}
+	}/*
+	@keyframes mapControlBartimelineAnimationOpen {
+        0%   {opacity:1; bottom:-12rem;}
+		100% {opacity:1; bottom:0.3rem;}
+      }
+    @keyframes mapControlBartimelineAnimationClose {
+        0%   {opacity:1; bottom:0.3rem;}
+        100% {opacity:1; bottom:-12rem;}
+      }
+	.mapControlBartimelineAnimationOPEN {
+        animation-name: mapControlBartimelineAnimationOpen;
+        animation-duration: 1s;
+        opacity: 1;
+    }
+    .mapControlBartimelineAnimationCLOSE {
+        animation-name: mapControlBartimelineAnimationClose;
+        animation-duration: 1s;
+        position: fixed; bottom:-12rem;
+    }*/
 }
