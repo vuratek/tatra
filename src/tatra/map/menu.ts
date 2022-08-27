@@ -132,7 +132,7 @@ export class menu {
         let el = document.getElementById(`${this.id}Content`);
         //let el = document.getElementById(`${this.id}_content`);
 		if (! el) { return; }
-		let controls = (document.getElementById('lmvControls') as HTMLDivElement) ? (document.getElementById('lmvControls') as HTMLDivElement).clientHeight : 0;
+		let controls = (document.getElementById('bottomBar') as HTMLDivElement) ? (document.getElementById('bottomBar') as HTMLDivElement).clientHeight : 0;
         let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
 //		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;
         let footer = 0;

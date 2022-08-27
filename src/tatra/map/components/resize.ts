@@ -11,18 +11,22 @@ export class resize extends baseComponent {
 
     public static open() {
         super.open();
-        utils.addClass('body', 'resize', false);
+        utils.addClass('html', 'resize', false);
         props.map.updateSize();
         menu.close();
         if (! controls.items['toggle'].visible) {
             controls.onClick('toggle');
         }
+        utils.show('leftNavBarMapResize');
+        utils.hide('leftNavBarShell');
     }
 
     public static close() {
         super.close();
-        utils.removeClass('body', 'resize', false);
+        utils.removeClass('html', 'resize', false);
         props.map.updateSize();
+        utils.hide('leftNavBarMapResize');
+        utils.show('leftNavBarShell');
     }
 
 }

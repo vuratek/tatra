@@ -10,6 +10,7 @@ import { postLoad } from '../aux/postLoad';
 import { feedback as axuFeedback } from "../aux/feedback";
 import { RightMenu } from '../sideMenu/RightMenu';
 import { authentication } from '../aux/authentication';
+import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
 
 export class Navigation {
     
@@ -125,6 +126,9 @@ export class Navigation {
                     <div id="leftNavBarWrap" class="sideNavBarWrap"></div>
                     <div id="leftNavBar" class="leftNavBar"></div>
                 </div>
+                <div id="leftNavBarMapResize" class="mapCircleBtn">
+                    <i class="fa fa-bars"></i>
+                </div>
                 <div id="notifications">
                 </div>
             `;
@@ -145,9 +149,16 @@ export class Navigation {
                 el.innerHTML = Header.getLabelLogo('mapMaxLabel');
             }
             Header.setLogo('mapMaxLabel');
+            utils.setClick('leftNavBarMapResize',()=>this.handleMapResize());
         }
 
 //        <div id="${menu.app.search}"></div>
   
+    }
+
+    private static handleMapResize() {
+        utils.show('leftNavBarShell');
+        utils.hide('leftNavBarMapResize');
+        HomeMenuButton.setState();
     }
 }

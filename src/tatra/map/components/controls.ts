@@ -150,7 +150,7 @@ export class controls  {
                     if (! item.handler) { item.handler = share;}
                     break;
                 case "screenshot": 
-                    if (! item.label) { item.label = "SCREENSHOT"; }
+                    if (! item.label) { item.label = "CAPTURE"; }
                     if (! item.icon) { item.icon = "fa-camera"; }
                     if (! item.type) { item.type = ControlTypes.MENU;}
                     if (! item.handler) { item.handler = screenshot;}
@@ -360,6 +360,7 @@ export class controls  {
         if (!controls.items[id]) { return; }
         controls.items[id].enabled = false;
         utils.addClass(`bb_${id}_btn`, "bottomBarMenuItemDisabled");
+        utils.removeClass(`bb_${id}_btn`,'bottomBarMenuItemSelected');
     }
 
     public static enableBtn (id:string) {
@@ -377,7 +378,7 @@ export class controls  {
 
     private static option_leftInfo (div : HTMLDivElement) {
         div.innerHTML = `
-            <div id="bottomMenuClosed" class="bottomBarClose">
+            <div id="bottomMenuClosed" class="mapCircleBtn">
                 <i class="fa fa fa-cog" aria-hidden="true"></i>
             </div>
         `;

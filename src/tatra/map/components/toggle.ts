@@ -13,7 +13,6 @@ export class toggle extends baseComponent {
         //utils.hide('mapControlBar');
         utils.removeClass('mapControlBar','mapControlBarAnimationOPEN');
         utils.addClass('mapControlBar','mapControlBarAnimationCLOSE');
-//        utils.addClass('body', 'resize', false);
     }
 
     public static close() {
@@ -22,7 +21,6 @@ export class toggle extends baseComponent {
         utils.show('mapControlBar');
         utils.removeClass('mapControlBar','mapControlBarAnimationCLOSE');
         utils.addClass('mapControlBar','mapControlBarAnimationOPEN');
-//        utils.removeClass('body', 'resize', false);
     }
 
 }

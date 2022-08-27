@@ -67,11 +67,24 @@ export class LeftMenu {
     }
 
     private static closeWrap() {
+        let hide = false;
         let map = (document.querySelector('main') as HTMLDivElement).clientWidth;
         if (map < 700) {
-            model.close();
-            LeftMenuBar.hide();
+            hide = true;
         }
+        let el = document.querySelector('html') as HTMLElement;
+           if (el) {
+            if (el.className.indexOf('resize') >=0) {
+                hide = true;
+                utils.hide('leftNavBarShell');
+                utils.show('leftNavBarMapResize');    
+            }
+        }
+        if (hide) {
+            model.close();
+            LeftMenuBar.hide();    
+        }
+
         LeftMenu.minimize();
     }
 

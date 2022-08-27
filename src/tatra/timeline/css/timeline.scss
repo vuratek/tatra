@@ -15,16 +15,16 @@
 }
 @keyframes timelineAnimationOpen {
 	0%   {opacity:0;}
-	100% {opacity:100;}
+	100% {opacity:1;}
   }
 @keyframes timelineAnimationClose {
-	0%   {opacity:100; left:.7rem; bottom:0.7rem;}
+	0%   {opacity:1; left:.7rem; bottom:0.7rem;}
 	100% {opacity:0; left:.7rem; bottom:-5.5rem;}
   }
 .timelineAnimationOPEN {
 	animation-name: timelineAnimationOpen;
 	animation-duration: 1s;
-	opacity: 100%;
+	opacity: 1;
 }
 .timelineAnimationCLOSE {
 	animation-name: timelineAnimationClose;
@@ -103,20 +103,20 @@
     }
     @keyframes timelineAnimationOpen {
         0%   {opacity:0;}
-        100% {opacity:100;}
+        100% {opacity:1;}
       }
     @keyframes timelineAnimationClose {
-        0%   {opacity:100; left:.3rem; bottom:0.3rem;}
+        0%   {opacity:1; left:.3rem; bottom:0.3rem;}
         100% {opacity:0; left:.3rem; bottom:-12rem;}
       }
     .timelineAnimationOPEN {
         animation-name: timelineAnimationOpen;
         animation-duration: 1s;
-        opacity: 100%;
+        opacity: 1;
     }
     .timelineAnimationCLOSE {
         animation-name: timelineAnimationClose;
-        animation-duration: 1s;
+        animation-duration: 0.4s;
         position: fixed; left:.3rem; bottom:-12rem;
     }
 }
