@@ -1,5 +1,6 @@
 #lmvControls_locator_Content {
     padding: 1rem 0 0 0;
+    overflow-y: scroll;
 }
 #lmvControls_locator {
     max-width: 40rem;
@@ -253,4 +254,8 @@
     height:3rem;
     color: #eee;
     font-family: 'Titillium Web';
+}
+.locator-page-start  .llCheckbox {
+    position: relative;
+    top: -0.7rem;
 }

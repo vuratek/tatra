@@ -854,16 +854,16 @@ body::-webkit-scrollbar {
 	}
 	@keyframes mapControlBarAnimationOpen {
 		0%   {opacity:0; left:0; top:0;}
-		100% {opacity:1; left:6%; top:0; }
+		100% {opacity:1; left:7%; top:0; }
 	  }
 	@keyframes mapControlBarAnimationClose {
-		0% {opacity:1; left:6%; top:0; }
+		0% {opacity:1; left:7%; top:0; }
 		100% {opacity:0; left:0; top:0;}
 	}
 	.mapControlBarAnimationOPEN {
 		animation-name: mapControlBarAnimationOpen;
 		animation-duration: 1s;
-		position: relative; left:6%; top:0;
+		position: relative; left:7%; top:0;
 		opacity: 1;
 	}
 	.mapControlBarAnimationCLOSE {
@@ -892,7 +892,7 @@ body::-webkit-scrollbar {
 	}
 	#mapControlBar {
 		/*margin:0 auto;*/
-		position: relative; top:0; left:6%;
+		position: relative; top:0; left:7%;
 	} 
 	#bottomBar {
 		position: relative; bottom:0;
