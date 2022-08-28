@@ -19,6 +19,9 @@ export class resize extends baseComponent {
         }
         utils.show('leftNavBarMapResize');
         utils.hide('leftNavBarShell');
+        if (utils.mobileAndTabletCheck() && ! utils.isFullScreen()) {
+            utils.toggleFullScreen();
+        }
     }
 
     public static close() {
@@ -27,6 +30,8 @@ export class resize extends baseComponent {
         props.map.updateSize();
         utils.hide('leftNavBarMapResize');
         utils.show('leftNavBarShell');
+        if (utils.isFullScreen()) {
+            utils.toggleFullScreen();
+        }
     }
-
 }

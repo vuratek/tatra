@@ -143,12 +143,18 @@
 @media screen and (max-height: 600px) {
 	.mapMenu {
 		top:-5.5rem;
-	}		
+	}
+	.resize .mapMenu {
+		top:0;
+	}
 	.mapMenuBtns {
 		margin: 0 -.3rem;
 	}
 	.mapMenuCloseHolder {
 		top: 6rem;
+	}
+	.resize .mapMenuCloseHolder {
+		top: 1rem;
 	}
 }
 @media screen and (max-width: 400px) {

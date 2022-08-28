@@ -7,7 +7,7 @@ import GIFEncoder from '../../gif-encoder';
 import { writeArrayBuffer } from 'geotiff';
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
-	public static label		: string = 'Screenshot';
+	public static label		: string = 'Capture';
     public static draggable : boolean = true;
 
     public static open () {
@@ -22,7 +22,7 @@ export class screenshot extends baseComponent {
         if (! el) { return; }
         el.innerHTML = `
             <p>
-                Download current map view into image file.
+                Download screenshot into image file.
             </p>
             <table style="width:100%;">
                 <tr>

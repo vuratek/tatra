@@ -14,8 +14,8 @@
     left:6.5rem;
 }
 @keyframes timelineAnimationOpen {
-	0%   {opacity:0;}
-	100% {opacity:1;}
+	0%   {opacity:0; left:.7rem; bottom:-5.5rem;}
+	100% {opacity:1; left:.7rem; bottom:0.7rem;}
   }
 @keyframes timelineAnimationClose {
 	0%   {opacity:1; left:.7rem; bottom:0.7rem;}
@@ -75,6 +75,39 @@
     }
 }
 
+@media screen and (max-width: 700px), screen and (max-height: 500px) {
+
+@keyframes timelineAnimationOpen {
+    0%   {opacity:0; left:.7rem; bottom:-5rem;}
+    100% {opacity:1; left:.7rem; bottom:0.7rem;}
+    }
+@keyframes timelineAnimationClose {
+    0%   {opacity:1; left:.7rem; bottom:0.7rem;}
+    100% {opacity:0; left:.7rem; bottom:-5rem;}
+    }
+.timelineAnimationOPEN {
+    animation-name: timelineAnimationOpen;
+    animation-duration: 1s;
+    opacity: 1;
+}
+.timelineAnimationCLOSE {
+    animation-name: timelineAnimationClose;
+    animation-duration: 1s;
+    position: fixed; left:.7rem; bottom:-5rem;
+}
+.timeline {
+    position: fixed;
+    height:5rem;
+    left:.7rem;
+    right: 0.7rem;
+    display:none;
+    padding: 0.3rem;
+    box-shadow: 0 0 0.2rem 0.2rem #748ca1;
+    background: rgba(7, 43, 73, 0.9);
+    z-index:500;
+}
+}
+
 @media screen and (max-width: 900px) {
     .timeline {
         left: 0.7rem;
@@ -102,8 +135,8 @@
         width:auto;
     }
     @keyframes timelineAnimationOpen {
-        0%   {opacity:0;}
-        100% {opacity:1;}
+        0%   {opacity:0; left:.3rem; bottom:-12rem;}
+        100% {opacity:1; left:.3rem; bottom:0.3rem;}
       }
     @keyframes timelineAnimationClose {
         0%   {opacity:1; left:.3rem; bottom:0.3rem;}

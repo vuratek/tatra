@@ -155,3 +155,8 @@ body .leftNavBarMenuWrap {
         font-size:9px;
     }
 }
+@media screen and (max-width: 550px) {
+    #lmvInfoBar {
+        width:70%;
+    }
+}

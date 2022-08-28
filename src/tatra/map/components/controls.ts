@@ -43,6 +43,8 @@ export class controls  {
     public static zIndexBase        : number = 200;
     public static DEFAULT_TOOL      : string = "pan";
     public static alwaysIdentify    : AlwaysIdentify | null;
+    private static btnTime          : number = 0;
+    
 
     public static init () {
         if (! ((props.config as IConfigDef).mapControls && document.getElementById("lmvControls"))) {
@@ -331,6 +333,12 @@ export class controls  {
     }
 
     public static onClick(id : string) {
+        let now = Date.now();
+        if (now - this.btnTime < 350) {
+            return;
+        }
+        this.btnTime = now;
+        
         let item = (props.config as IConfigDef).mapControls[id];
         if (!item) { return; }
         if (item.type == ControlTypes.MENU || item.type == ControlTypes.FLAG) {
