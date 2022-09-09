@@ -15,6 +15,9 @@ import { select } from "./select";
 import { locator } from "./locator";
 import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
+import { quickSearch } from "../../aux/quickSearch";
+import { hash } from "../hash";
+import { menu } from "../menu";
 
 export interface IControlsItem {
     [key : string]  : ControlsItem;          // whether icon is turned on / off
@@ -81,6 +84,15 @@ export class controls  {
         document.addEventListener(events.EVENT_CONTROL_SET, (evt) => this.updateControls(evt));
         document.addEventListener(events.EVENT_SET_CONTROL_ITEM, (evt) => this.updateControlItem(evt as CustomEvent));
         document.addEventListener(events.EVENT_CONTROL_SET_WINDOW, (evt) => this.setWindow(evt as CustomEvent));
+        document.addEventListener(quickSearch.EVENT_QUICK_SEARCH, (evt) => this.openLocation(evt as CustomEvent));
+    }
+
+    public static setStartTool() {
+        let _tool = hash.getTool() ? hash.getTool() as string : props.defaultStartTool;
+        controls.setTool(_tool);
+        if (_tool == 'location') {
+            this.openLocation(null);
+        }
     }
 
     public static option_firmsInfo () {
@@ -183,6 +195,12 @@ export class controls  {
                 this.closeWindow(evt.detail.id);
             }
         }
+    }
+
+    private static openLocation (evt:CustomEvent | null) {
+        controls.setTool('locator');
+        locator.setTab(2);
+        menu.close();
     }
 
     private static setResize ( visible : boolean) {

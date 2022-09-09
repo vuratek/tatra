@@ -155,6 +155,9 @@ export abstract class TopMenuItem {
             case "login": 
                 icon = 'fa fa-user-circle';
                 break;
+            case "quickSearch":
+                icon = 'fa fa-search-location';
+                break;
             default:
                 return '';
         }

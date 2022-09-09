@@ -8,6 +8,7 @@ import { utils } from '../utils';
 import { fontAwesome } from "../aux/fontAwesome";
 import { postLoad } from '../aux/postLoad';
 import { feedback as axuFeedback } from "../aux/feedback";
+import { quickSearch } from "../aux/quickSearch";
 import { RightMenu } from '../sideMenu/RightMenu';
 import { authentication } from '../aux/authentication';
 import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
@@ -73,6 +74,12 @@ export class Navigation {
                 }
                 if (! window.submitFeedbackForm ) {
                     window.submitFeedbackForm = axuFeedback.submit;
+                }
+            }
+            if (item.id == "quickSearch") {
+                quickSearch.isMap = (this.settings.app.useMap === true) ? true : false;
+                if (! window.applyQuickSearch ) {
+                    window.applyQuickSearch = quickSearch.submit;
                 }
             }
             if (item.id == "login") {

@@ -202,7 +202,7 @@ export class locator extends baseComponent {
     }
     private static determineStart () {
         let val = localStorage.getItem('show-locator');
-        if (val && val == 'true') {
+        if (val && val == 'true' && GeoLocation.savedLocations.length > 0) {
             props.defaultStartTool = 'locator';
             this.currentTab = 3;
         }

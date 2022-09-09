@@ -69,12 +69,6 @@
     left:auto;
 }
 
-@media screen and (max-height: 600px), screen and (max-width: 1200px) {
-	.timeline {
-        bottom: .7rem;
-    }
-}
-
 @media screen and (max-width: 700px), screen and (max-height: 500px) {
 
 @keyframes timelineAnimationOpen {

@@ -67,7 +67,7 @@ export class map {
         mapUtils.setInfoBar();
         controls.init();
         coreUtils.setAOI();
-        controls.setTool(props.defaultStartTool);
+        controls.setStartTool();
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();

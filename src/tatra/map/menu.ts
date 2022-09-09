@@ -4,6 +4,7 @@ import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
 import './css/menu.scss';
+import { hash } from "./hash";
 //import { mainMenu } from "./menu/mainMenu";
 export class menu {
 
@@ -15,10 +16,14 @@ export class menu {
         animation.init();
         this.render();
         this.resize();
-        this.setMenu();
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
         document.addEventListener(events.EVENT_MENU_RESIZE, ()=> this.resize());
         closeable.create(this.id, id, 'map');
+        
+        if (hash.getTool()) {
+            props.windowIsOpened = true;
+        } 
+        this.setMenu();
     }
     
     private static render () {
