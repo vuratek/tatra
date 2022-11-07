@@ -279,6 +279,24 @@
     color: #eee;
     font-size: 1.4rem;
 }
+.limFilterOptions {
+	height: 2.7rem;
+    background: #2f556e;
+    color: #eee;
+    text-transform: uppercase;
+    position: relative;
+    font-size: 1.1rem;
+    padding: 0.3rem 0 0 1rem;
+}
+.limFilterOptions select {
+	width:15rem;
+	font-size: 1.1rem;
+}
+.limFilterOptions input[type=text] {
+	border-radius: 0.5rem;
+	font-size: 1.1rem;
+	width:15rem;
+}
 .limContent {
 	margin-top:4rem;
 	width:100%;
@@ -321,6 +339,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 .limSelectTabFirst {
 	border-radius:0.7rem 0 0 0;
 	border-left: none;
+}
+.limTableWrap {
+	max-height: 26rem;
+	overflow: auto;
 }
 #limTable th {
 	text-transform: uppercase;

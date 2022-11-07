@@ -21,13 +21,13 @@ export class authentication {
         .then(response => {
             if (response.status == 401) { 
                 this.isLoggedin = false;
-            } else {
+            } else if (response.status == 400) {
                 this.isLoggedin = true;
             }
             return response.text();
         }) 
         .then (data => {
-            if (data) {
+            if (data && this.isLoggedin) {
                 let json = JSON.parse(data);
                 if (json.email) {
                     authentication.email = json.email;

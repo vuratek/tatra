@@ -163,7 +163,7 @@ export class layerStyle {
                 lineCap: "round",
             }),
             fill: new Fill({
-                color: "rgba(0,0,250,0.7)",
+                color: "rgba(0,0,250,0.2)",
             }),
             zIndex: 1,
         });

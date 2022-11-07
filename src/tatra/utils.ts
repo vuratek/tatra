@@ -67,7 +67,7 @@ export class utils {
 
     public static getSelectValue (divId : string) : string {
         let el = document.getElementById(divId) as HTMLSelectElement;
-        if (el) {
+        if (el && el.selectedIndex >= 0) {
             return el.options[el.selectedIndex].value;
         }
         return '';
@@ -82,7 +82,7 @@ export class utils {
 
     public static getSelectText (divId : string) : string {
         let el = document.getElementById(divId) as HTMLSelectElement;
-        if (el) {
+        if (el && el.selectedIndex >= 0) {
             return el.options[el.selectedIndex].text;
         }
         return '';
