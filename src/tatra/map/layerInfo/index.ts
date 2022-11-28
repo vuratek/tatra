@@ -115,11 +115,15 @@ export class layerInfo {
         if (this.configUrl) {
             fetch(this.configUrl + this.getRand())
             .then(response => {
-                return response.json();
+                if (response) {
+                    return response.json();
+                }
             })
             .then (data => {
-                this.processConfig(data);
-                this.show(id);
+                if (data) {
+                    this.processConfig(data);
+                    this.show(id);
+                }
             })
             .catch(error => {
                 console.error("Error processing ", this.configUrl);
@@ -324,36 +328,39 @@ export class layerInfo {
         this.updateKeyword();
     }
 
+    private static loadContentPage(li : LayerInfo, isGIBS:boolean) {
+        let url = (isGIBS) ? `${this.GIBSDataUrl}${li.GIBS_id}.html` : `${this.LocalDataUrl}${li.Local_id}.html` + this.getRand();
+        fetch(url)
+        .then(response => {
+            if (response.status != 200) {
+                return '';
+            }
+            return response.text();
+        })
+        .then (data => {
+            let ref = 'Page not found.';
+            if (data && data != '') {
+                ref = data;
+            }
+            if (isGIBS) {
+                li.GIBS_text = ref;
+            } else {
+                li.Local_text = ref;
+            }
+            li._loading = false;
+            this.showLayer(li);
+        })
+        .catch(error => {
+            console.error("Error processing ", url);
+        });
+    }
+
     private static getInfo(li : LayerInfo) {
         if (! li.GIBS_text && li.GIBS_id) {
-            let url = `${this.GIBSDataUrl}${li.GIBS_id}.html`;
-            fetch(url)
-            .then(response => {
-                return response.text();
-            })
-            .then (data => {
-                li.GIBS_text = data;
-                li._loading = false;
-                this.showLayer(li);
-            })
-            .catch(error => {
-                console.error("Error processing ", url);
-            });
-        }
+            this.loadContentPage(li, true);
+        }            
         if (! li.Local_text && li.Local_id) {
-            let url = `${this.LocalDataUrl}${li.Local_id}.html` + this.getRand();
-            fetch(url)
-            .then(response => {
-                return response.text();
-            })
-            .then (data => {
-                li.Local_text = data;
-                li._loading = false;
-                this.showLayer(li);
-            })
-            .catch(error => {
-                console.error("Error processing ", url);
-            });
+            this.loadContentPage(li, false);
         }
     }
 
