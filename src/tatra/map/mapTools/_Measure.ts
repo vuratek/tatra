@@ -11,7 +11,7 @@ import { utils as mapToolsUtils } from "./utils";
 import { utils } from "../../utils";
 import { events } from "../events";
 import { Layer, LayerSource } from "../obj/Layer";
-import OverlayPositioning from "ol/OverlayPositioning";
+import OverlayPositioning from "ol/Overlay";
 import { mapUtils } from "../mapUtils";
 
 export interface IMeasure {

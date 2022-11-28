@@ -4,14 +4,12 @@ import { Coordinate } from 'ol/coordinate';
 import { events } from '../events';
 import { Layer, LayerSource } from '../obj/Layer';
 import { Select } from 'ol/interaction';
-import {Layer as olLayer} from 'ol/layer';
-import Source from 'ol/source/Source';
 import { platformModifierKeyOnly, click } from 'ol/events/condition';
 import { layerStyle } from './layerStyle';
 import Feature from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
-import OverlayPositioning from 'ol/OverlayPositioning';
+import OverlayPositioning from 'ol/Overlay';
 import { identifyUtils } from '../identifyUtils';
 import { Point } from 'ol/geom';
 

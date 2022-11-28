@@ -2,7 +2,7 @@ import { mapUtils, ICoordinates } from "../mapUtils";
 import { default as Feature } from "ol/Feature";
 import { default as Overlay } from "ol/Overlay";
 import { Vector as VectorSrc } from "ol/source";
-import { default as OverlayPositioning } from "ol/OverlayPositioning";
+import OverlayPositioning from "ol/Overlay";
 import { props } from "../props";
 import { Style, Icon } from "ol/style";
 import { Point } from "ol/geom";

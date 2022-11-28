@@ -1,6 +1,6 @@
 import { MapBrowserEvent } from 'ol';
 import Overlay from 'ol/Overlay';
-import OverlayPositioning from 'ol/OverlayPositioning';
+import OverlayPositioning from 'ol/Overlay';
 
 export class identifyUtils {
 

@@ -5,7 +5,7 @@ import { Layer, LayerSource } from "../obj/Layer";
 import { Selection } from "../obj/Selection";
 import {unByKey} from 'ol/Observable';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
-import GeometryType from "ol/geom/GeometryType";
+import GeometryType from "ol/geom/Geometry";
 import { selectLayer } from "../handlers/selectLayer";
 import { events } from "../events";
 import { DataHandler } from "./dataHandler";
