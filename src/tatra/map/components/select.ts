@@ -103,11 +103,21 @@ export class select extends baseComponent {
 
         let wrap = document.getElementById(`${this.id}_results`) as HTMLDivElement;
         GroupContent.create({ id: "select", label : "Current selection ", parent : wrap, opened : true});
-        utils.addClass('navGCContent_select', 'windowRRContent');        
+        utils.addClass('navGCContent_select', 'windowRRContent');   
+        this.setInstruction();     
     }
 
+    private static clearInstruction() {
+        utils.hide('select_infoBar');
+    }
+
+    private static setInstruction() {
+        utils.show('select_infoBar');
+        setTimeout(this.clearInstruction, 5000);
+    }
 
     public static onToolSelect ( id : string ) {
+        this.setInstruction();
         if (id == "clear") {
             tools.clearAll();
             if (this.currentTool != "pan" ) {

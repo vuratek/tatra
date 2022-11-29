@@ -17,6 +17,7 @@ export class baseComponent {
     public static showInfoBar   : boolean = false;
     public static isOpened      : boolean = false;
     public static ignoreResize  : boolean = false;
+    public static isWithinModal : boolean = false;
         
     public static init () {
         document.addEventListener(events.EVENT_CONTROL_BTN, (evt : Event) => this.onClick (evt as CustomEvent));
@@ -30,7 +31,13 @@ export class baseComponent {
 		if (!this.initialized) {
             this.initialized = true;
             this.createWindow();
-		} 
+        } 
+        if (this.isWithinModal) {
+            let win = document.getElementById(`lmvControls_${this.id}`) as HTMLDivElement;
+            if (!win) {
+                this.createWindow();
+            }
+        }
 		if (evt.detail.visible) {
 			this.open();
 		} else {
@@ -40,11 +47,12 @@ export class baseComponent {
 	
 	public static createWindow () {
 		let el = document.createElement("div");
-        el.setAttribute("id", "lmvControls_"+ this.id);
+        el.setAttribute("id", `lmvControls_${this.id}`);
         if (! this.clandestine) {
             el.setAttribute("class", this.className);
         }
-        let menus = document.getElementById('lmvMenus');
+        let type = (this.isWithinModal) ? 'modalWrap' : 'lmvMenus';
+        let menus = document.getElementById(type);
 	    if (menus){ 
             menus.appendChild(el); 
         }
@@ -74,7 +82,8 @@ export class baseComponent {
 
     public static setDraggable (id : string) {
         if (this.draggable) {
-            draggable.create("lmvControls_"+ this.id, id, 'map');
+            let ctrl = (this.isWithinModal) ? 'modalWrap' : 'map';
+            draggable.create("lmvControls_"+ this.id, id, ctrl);
         }
     }
 
@@ -107,9 +116,10 @@ export class baseComponent {
     }
 
     public static defaultPosition(isTool : boolean = false) {
-        let offsetY = 120;
-        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-        let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
+        let offsetY = 230;
+        let ctrl = (this.isWithinModal) ? 'modalWrap' : 'map';
+        let mh = (document.getElementById(ctrl) as HTMLDivElement).clientHeight;
+        let mw = (document.getElementById(ctrl) as HTMLDivElement).clientWidth;
         let el = document.getElementById(`lmvControls_${this.id}`) as HTMLDivElement;
         if (! el) { return; }
         let hh = el.clientHeight;
@@ -122,7 +132,7 @@ export class baseComponent {
                 return;
         }
         if (isTool) {
-            this.position(70, offsetY);
+            this.position(20, offsetY - 80);
             return;
         }
         let ref = document.getElementById(`bb_${this.id}_btn`) as HTMLDivElement;

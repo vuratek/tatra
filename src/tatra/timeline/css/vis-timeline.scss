@@ -1191,19 +1191,18 @@ div.vis-tooltip {
   }
   */
 .vis-time-slider-range {
-    border-color: #23638f;
-    background: rgba(50, 104, 138, 0.6);
-    border-radius: 0.7rem;
+    border-color:rgb(35, 99, 143);
+    background: rgba(116, 197, 247, 0.5);
     min-height: 2.4rem;
-    margin-top: 0.4rem;
+    margin-top: 0.7rem;
 }
 .vis-time-slider-single {
     background: linear-gradient(#AAA, #555);
     border-color: #9d9d9d;
     border-radius:2rem;
     padding:0;
-    min-height: 3.2rem;
-    border-radius: 0.3rem 0.3rem 1.4rem 1.4rem;
+    min-height: 4rem;
+    border-radius: 1.3rem 1.3rem 0.3rem 0.3rem;
     border-width: thin;
     z-index:20;
 }
@@ -1215,12 +1214,14 @@ div.vis-tooltip {
 .vis-july div, .vis-august div, .vis-september div, .vis-october div, .vis-november div, 
 .vis-december div, .vis-text.vis-major.vis-even, .vis-text.vis-major.vis-odd {
     font-weight: 500;   
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     color: #EEE;
     font-family: "Titillium Web", sans-serif;
     background: #477899;
     border-radius: 1.5rem;
-    padding: 0 0.8rem;
+    padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+    line-height: 1rem;
+    margin-top: 0.2rem;
 }
 .vis-center {
     z-index:2000;

@@ -1,9 +1,11 @@
+import './css/menu.scss';
 import { props } from "./props";
 import { utils } from "../utils";
 import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
-import './css/menu.scss';
+import { hash } from "./hash";
+//import { mainMenu } from "./menu/mainMenu";
 export class menu {
 
     private static id : string = '';
@@ -14,10 +16,14 @@ export class menu {
         animation.init();
         this.render();
         this.resize();
-        this.setMenu();
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
         document.addEventListener(events.EVENT_MENU_RESIZE, ()=> this.resize());
         closeable.create(this.id, id, 'map');
+        
+        if (hash.getTool()) {
+            props.windowIsOpened = true;
+        } 
+        this.setMenu();
     }
     
     private static render () {
@@ -50,11 +56,13 @@ export class menu {
 
         content = document.createElement("div");
         content.setAttribute("id", this.id + "Content");
+        //content.setAttribute("id", this.id + "_content");
         content.setAttribute("class",  "mapMenuContent");        
         div.appendChild(content);
         this.renderMenuBtnHolder(div);
 
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
+        //mainMenu.render(this.id);
     }
 
     public static registerMenu (id : string) {
@@ -127,12 +135,17 @@ export class menu {
     
     public static resize () {
         let el = document.getElementById(`${this.id}Content`);
+        //let el = document.getElementById(`${this.id}_content`);
 		if (! el) { return; }
-		let controls = (document.getElementById('lmvControls') as HTMLDivElement) ? (document.getElementById('lmvControls') as HTMLDivElement).clientHeight : 0;
-		let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
-		let footer = (document.querySelector('footer') as HTMLDivElement).clientHeight;
+		let controls = (document.getElementById('bottomBar') as HTMLDivElement) ? (document.getElementById('bottomBar') as HTMLDivElement).clientHeight : 0;
+        let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
+//		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;
+        let footer = 0;
         let header2 = (document.getElementById(this.id + 'Header') as HTMLDivElement).clientHeight;
-        let timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
+        let timeline = 0;
+        if ((document.querySelector('html') as HTMLElement).className.indexOf('isTimeline')>= 0) {
+            timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
+        }
         let topcontent = (document.getElementById(this.id + 'TopContent') as HTMLDivElement).clientHeight;
         let map = (document.getElementById('map') as HTMLDivElement).clientHeight;
         if (window.innerHeight > 600) { header += 30;}
@@ -142,7 +155,7 @@ export class menu {
 		else if (window.innerWidth <= 700 ) {
 			el.style.maxHeight = (map - header2 - topcontent - 2 ) + "px";	
 		} else {
-			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 7) + "px";	
+			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 20) + "px";	
         }
 
 		

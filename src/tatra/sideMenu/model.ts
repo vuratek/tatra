@@ -1,5 +1,3 @@
-import { Navigation } from "../page/Navigation";
-import { INavConfigMenuItems } from "../page/navConfigDef";
 import { SideMenuCommon } from "./SideMenuCommon";
 import { utils } from "../utils";
 

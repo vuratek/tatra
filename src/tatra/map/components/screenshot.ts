@@ -1,13 +1,13 @@
 import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { props } from "../props";
-import { Navigation } from "../../page/Navigation";
 import { hash } from "../hash";
 import GIFEncoder from '../../gif-encoder';
 import { writeArrayBuffer } from 'geotiff';
+import { navProps } from "../../page/navProps";
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
-	public static label		: string = 'Screenshot';
+	public static label		: string = 'Capture';
     public static draggable : boolean = true;
 
     public static open () {
@@ -22,7 +22,7 @@ export class screenshot extends baseComponent {
         if (! el) { return; }
         el.innerHTML = `
             <p>
-                Download current map view into image file.
+                Download screenshot into image file.
             </p>
             <table style="width:100%;">
                 <tr>
@@ -86,6 +86,7 @@ export class screenshot extends baseComponent {
         if (showScaleline) { this.drawScaleline(image); }
         if (showTimestamp) { this.addTimestamp(image, (new Date().toString()));}
         if (showHeader) { this.addLogo(image); }
+        this.addBeta(image);
 
         let dates = '';
         if (hash.datesToString()) {
@@ -171,6 +172,19 @@ export class screenshot extends baseComponent {
         }
     }
 
+    private static addBeta (canvas : HTMLCanvasElement) {
+        let bd = document.querySelector("body");
+        if (bd && bd.className.indexOf('isbeta') >=0) {
+            let ctx = canvas.getContext('2d');
+            if (!ctx) { return;}
+            let x = 20;
+            let y = canvas.height - 7;
+            let text = 'BETA';
+            ctx.font = '14px "Titillium Web", sans-serif';
+            this.writeTranparentText(ctx, text, x, y);
+        }
+    } 
+
     public static addLogo (canvas : HTMLCanvasElement) {
         let ctx = canvas.getContext('2d');
         if (!ctx || !props.config) { return;}
@@ -189,25 +203,30 @@ export class screenshot extends baseComponent {
         
         x = 70;
         y = 46;
-        if (Navigation.settings.app.singleLabel) {
-            text = Navigation.settings.app.singleLabel;
-        } else if ( Navigation.settings.app.doubleLongLabel) {
-            text = Navigation.settings.app.doubleLongLabel;
+        if (navProps.settings.app.singleLabel) {
+            text = navProps.settings.app.singleLabel;
+        } else if ( navProps.settings.app.doubleLongLabel) {
+            text = navProps.settings.app.doubleLongLabel;
         }
         text.replace('&amp;', '&');
         ctx.font = '14px "Titillium Web", sans-serif';
         ctx.textAlign = "left";
         this.writeTranparentText(ctx, text, x, y);
-
     }
 
     private static writeTranparentText (ctx:CanvasRenderingContext2D ,text: string, x : number, y : number) {
-        ctx.fillStyle = "rgba(30,30,30,0.8)";
+        let c1 = "rgba(30,30,30,0.8)";
+        let c2 = "rgba(240,240,240, 0.85)";
+        if (text == 'BETA') {
+            c1 = "rgba(250,250,250,0.8)";
+            c2 = "#b939d4";
+        }
+        ctx.fillStyle = c1;
         ctx.fillText(text,x-1,y-1);        
         ctx.fillText(text,x-1,y+1);        
         ctx.fillText(text,x+1,y-1);        
         ctx.fillText(text,x+1,y+1);        
-        ctx.fillStyle = "rgba(240,240,240, 0.85)";
+        ctx.fillStyle = c2;
         ctx.fillText(text,x,y); 
     }
 

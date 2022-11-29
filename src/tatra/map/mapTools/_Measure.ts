@@ -11,8 +11,8 @@ import { utils as mapToolsUtils } from "./utils";
 import { utils } from "../../utils";
 import { events } from "../events";
 import { Layer, LayerSource } from "../obj/Layer";
-import OverlayPositioning from "ol/OverlayPositioning";
 import { mapUtils } from "../mapUtils";
+import { Type } from "ol/geom/Geometry";
 
 export interface IMeasure {
     [id : string] : number;
@@ -130,7 +130,7 @@ export class Measure extends BaseTool  {
         this.measureTooltip = new Overlay({
             element: this.measureTooltipElement,
             offset: [0, -15],
-            positioning: OverlayPositioning.BOTTOM_CENTER
+            positioning: 'bottom-center'
         });
         if (props.map) {
             props.map.addOverlay(this.measureTooltip as Overlay);
@@ -146,7 +146,7 @@ export class Measure extends BaseTool  {
         this.helpTooltip = new Overlay({
             element: this.helpTooltipElement,
             offset: [15, 0],
-            positioning: OverlayPositioning.CENTER_LEFT
+            positioning: 'center-left'
         });
         if (props.map) {
             props.map.addOverlay(this.helpTooltip as Overlay);
@@ -163,7 +163,7 @@ export class Measure extends BaseTool  {
         let source = lo.boxSource;
         this.draw = new Draw({
             source: source,
-            type: this.type as GeometryType,
+            type: this.type as Type,
             style: [
                 new Style({
                     stroke: new Stroke({

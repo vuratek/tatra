@@ -4,14 +4,11 @@ import { Coordinate } from 'ol/coordinate';
 import { events } from '../events';
 import { Layer, LayerSource } from '../obj/Layer';
 import { Select } from 'ol/interaction';
-import {Layer as olLayer} from 'ol/layer';
-import Source from 'ol/source/Source';
 import { platformModifierKeyOnly, click } from 'ol/events/condition';
 import { layerStyle } from './layerStyle';
 import Feature from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
-import OverlayPositioning from 'ol/OverlayPositioning';
 import { identifyUtils } from '../identifyUtils';
 import { Point } from 'ol/geom';
 
@@ -45,7 +42,7 @@ export class identifyGeoJSON {
         this.identifyTooltip = new Overlay({
             element: this.identifyTooltipElement,
             offset: [0, -12],
-            positioning: OverlayPositioning.BOTTOM_CENTER
+            positioning: 'bottom-center'
         });
         if (props.map) {
             props.map.addOverlay(this.identifyTooltip as Overlay);

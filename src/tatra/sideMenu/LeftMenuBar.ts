@@ -1,7 +1,7 @@
 import { utils } from "../utils";
-import { Navigation } from "../page/Navigation";
 import { SideMenuItem } from "./SideMenuItem";
 import { LeftMenu } from "./LeftMenu";
+import { navProps } from "../page/navProps";
 
 export class LeftMenuBar {
 
@@ -20,8 +20,8 @@ export class LeftMenuBar {
             <div id="leftNavBarClickHandler" class="leftNavBarClickHandler">
             </div>
         `;
-        for (let i =0 ; i<Navigation.settings.sideMenu.items.length; i++) {
-            let element = Navigation.settings.sideMenu.items[i];
+        for (let i =0 ; i<navProps.settings.sideMenu.items.length; i++) {
+            let element = navProps.settings.sideMenu.items[i];
             SideMenuItem.render('leftNavBarMenu', element, false, true);
             if (element.subMenu) {
                 for (let j=0; j < element.subMenu.length; j ++) {

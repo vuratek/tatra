@@ -81,6 +81,9 @@ body .leftNavBarMenuWrap {
 	top:5.5rem;	
 	height:0;
 }
+.resize #lmvMenus, .resize #lmvTools {
+    top: 0;
+}
 #lmvInfoBar {
 	position: fixed;
     top: 5.5rem;
@@ -100,7 +103,20 @@ body .leftNavBarMenuWrap {
     border-bottom: 0.1rem solid #EEE3;
     color: #DDD;
 }
-
+.resize #lmvInfoBar {
+    top: 0;
+}
+#lmvBETA {
+    background: #fff;
+    padding: .1rem .4rem 0 .4em;
+    font-weight: 600;
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+    border-radius: 0.3em;
+    color: #b939d4;
+    display:none;
+}
 ::-webkit-scrollbar {
 	width: 1.2rem;
 }
@@ -137,5 +153,10 @@ body .leftNavBarMenuWrap {
     }
     .isMap {
         font-size:9px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #lmvInfoBar {
+        width:70%;
     }
 }

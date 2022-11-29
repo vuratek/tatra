@@ -41,7 +41,7 @@
 .lmvControlsLayer {
 	text-align:left;
 	padding:0;
-	min-height:5.7rem;
+	min-height:5.2rem; /* min-height: 5.7rem */
 	cursor:pointer;
 	border-top: 0.1rem solid #AAA;
 	font-size:1.5rem;
@@ -49,9 +49,10 @@
 	opacity:0.9;
 	background:#575757;
 	color:#f0f0f0;
-}
+} 
 .lmvControlsMultiLayer {
 	min-height: 3.3rem;
+	height:auto;
     padding: .5rem 0 0 1rem;
     font-size: 1.4rem;
     background: #333;
@@ -79,19 +80,18 @@
 }
 .lmvControlsIconLabel {
     position: absolute;
-    left: 1.5rem;
-    font-size: 1.4rem;
+    left: 1rem;
+    font-size: 1.3rem;
     color: #EEE;
-    top: 3rem;
+    top: 3.3rem;
     text-shadow: 0.1rem 0.1rem #2c2929;
     opacity:0.5;
 }
 .lmvControlsLayer img, .lmControlsIconDiv {
 	float:left;
-	width:4.5rem;
-	height:4.5rem;
-	border:0;
-	margin:0.5rem 2rem 0 0.5rem;
+	width:4rem;
+	height:4rem;
+	margin:0.5rem 1rem 0 0.6rem;
 	padding:0;
 	border-radius:3.2rem;
 	border:0.1rem solid #CCC;
@@ -102,11 +102,11 @@
     width: 4.5rem;
     height: 4.5rem;
     border: 0;
-    margin: 1rem 1.5rem 0 1rem;
-    padding: 0;
+    /*margin: 1rem 0 0 0;*/
+    padding: 1rem 0.3rem 0 0.5rem;
     opacity: 0.7;
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.6rem;
 }
 .lmvControlsLayer:hover img, .lmvControlsLayer:hover .lmControlsIconDiv {
 	border:0.1rem solid #EEE;
@@ -125,8 +125,8 @@
 	color:#DDD;
 }
 .lmvControlsIconLabelLong {
-	left:.5rem;
-	font-size: 0.9em;
+	left:0.5rem;
+	font-size: 0.75em;
 }
 
 .lmvControlsLayerSelected:hover img, .lmvControlsLayerSelected:hover .lmControlsIconDiv {
@@ -166,10 +166,10 @@
 	font-size:1.8rem;
 }
 .lmvControlsLayerInfo  {
-	right: 1rem;
+	right: 0.5rem;
 }
 .lmvControlsLayerMenu  {
-	right:3.5rem;
+	right:2.7rem;
 }
 .lmvLayerMenu {
 	position: relative;
@@ -214,7 +214,7 @@
     text-align: center;
 }
 .layerValueRangeSlider {
-    width: 21rem;
+    width: 26rem;
     margin-right: .5rem;
     display: inline-block;
 }
@@ -279,6 +279,24 @@
     color: #eee;
     font-size: 1.4rem;
 }
+.limFilterOptions {
+	height: 2.7rem;
+    background: #2f556e;
+    color: #eee;
+    text-transform: uppercase;
+    position: relative;
+    font-size: 1.1rem;
+    padding: 0.3rem 0 0 1rem;
+}
+.limFilterOptions select {
+	width:15rem;
+	font-size: 1.1rem;
+}
+.limFilterOptions input[type=text] {
+	border-radius: 0.5rem;
+	font-size: 1.1rem;
+	width:15rem;
+}
 .limContent {
 	margin-top:4rem;
 	width:100%;
@@ -322,6 +340,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	border-radius:0.7rem 0 0 0;
 	border-left: none;
 }
+.limTableWrap {
+	max-height: 26rem;
+	overflow: auto;
+}
 #limTable th {
 	text-transform: uppercase;
 }
@@ -363,22 +385,22 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 }
 .lmvControlsWindowLabel {
     font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.9rem;
+    font-size: 1.8rem;
     color: #fc6814;
     border-radius: 0.4rem 0.4rem 0 0;
-    padding: 0.8rem 3rem 0.7rem 1rem;
+    padding: 0.4rem 3rem 0.6rem 1rem;
     width: 100%;
     cursor: move;
     text-transform: uppercase;
 }
 .lmvControlsWindowCloseBtn {
-    font-size: 2rem;
+    font-size: 1.7rem;
     background: #ce5511;
     color: #333;
     position: absolute;
     top: 0.3rem;  
     right: 0.5rem;
-    padding: 0.3rem 0.5rem 0.2rem 0.5rem;
+    padding: 0.1rem 0.5rem;
     cursor: pointer;
 }
 #lmv_identify_CloseBtn {
@@ -454,7 +476,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
     display: inline-flex;
     list-style: none;
     margin: 0;
-    padding: 0 0.5rem;    
+    padding: 0.2rem 0.4rem;    
     cursor:pointer;
     line-height: 1.2rem;
 	width:100%;

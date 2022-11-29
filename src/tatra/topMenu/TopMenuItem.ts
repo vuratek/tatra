@@ -1,8 +1,9 @@
 import { utils } from "../utils";
 import { Notifications } from "./Notifications";
-import { Navigation } from "../page/Navigation";
 import { NavigationModes } from "../page/navConfigDef";
 import { TopMenu } from "./TopMenu";
+import { authentication } from "../aux/authentication";
+import { navProps } from "../page/navProps";
 
 export interface ITopMenuItemObj {
     id              : string;
@@ -16,6 +17,7 @@ export interface ITopMenuItemObj {
     description?    :string;
     subMenu         : Array <ITopMenuItemObj>;
     url             : string;
+    smallImage?     : boolean;
     article?        : boolean;
     ext?            : boolean;
 }
@@ -34,7 +36,7 @@ export abstract class TopMenuItem {
         let url = (obj.url && obj.id != "notifications") ? obj.url : 'javascript:void(0);';
         let title = (obj.iconOnly) ? '' : obj.label;
         let link = '';
-        if (Navigation.settings.app.navigationMode == NavigationModes.RICH) {
+        if (navProps.settings.app.navigationMode == NavigationModes.RICH) {
             link = `<a href="${url}" title="${obj.label}">${icon}<span id="${this.prefix}_lbl_${obj.id}">${title}</span></a>`;
             if (!isJScall) { 
                 utils.setClick(`${this.prefix}_${obj.id}`, () => TopMenu.openMenu(obj.id));
@@ -49,8 +51,8 @@ export abstract class TopMenuItem {
     }
 
     public static setTopButton( id : string | null ) {
-        for (let i =0 ; i< Navigation.settings.topMenu.items.length; i++) {
-            let item = Navigation.settings.topMenu.items[i] as ITopMenuItemObj;
+        for (let i =0 ; i< navProps.settings.topMenu.items.length; i++) {
+            let item = navProps.settings.topMenu.items[i] as ITopMenuItemObj;
             if (id && item.id == id) {
                 utils.addClass(`${this.prefix}_${item.id}`, "topMenuSelected");
                 this.populateMenu(item);
@@ -67,7 +69,10 @@ export abstract class TopMenuItem {
                 lcol.style.backgroundImage = `url('${item.image}')`;
                 lcol.style.backgroundPosition = "center";
                 lcol.style.backgroundRepeat = "no-repeat";
-                lcol.style.backgroundSize = "cover";
+                if (item.smallImage && item.smallImage === true) {}
+                else {
+                    lcol.style.backgroundSize = "cover";
+                }
             }
             let descr = (item.description) ? `<div>${item.description}</div>` : '';
             lcol.innerHTML = descr;
@@ -85,14 +90,15 @@ export abstract class TopMenuItem {
                     continue;
                 }
                 if (sub.url) {
-                    options += `<li><a href="${sub.url}">${sub.label}</a></li>`;
+                    options += `<li id="topbar_${sub.id}"><a href="${sub.url}">${sub.label}</a></li>`;
                 } else {
-                    options += `<li><span class="topMenuEmptyLabel">${sub.label}</span></li>`;
+                    options += `<li id="topbar_${sub.id}"><span class="topMenuEmptyLabel">${sub.label}</span></li>`;
                 }
             }
             options = `<ul ${extra}>${options}</ul>`;
             rcol.innerHTML = lbl + options;
         }
+        document.dispatchEvent(new CustomEvent(authentication.EVENT_AUTHENTICATION_UPDATE));
     }
 
     public static renderMin(pEl : HTMLDivElement) {
@@ -145,6 +151,12 @@ export abstract class TopMenuItem {
                 break;
             case "_min":
                 icon = 'fa fa-ellipsis-v';
+                break;
+            case "login": 
+                icon = 'fa fa-user-circle';
+                break;
+            case "quickSearch":
+                icon = 'fa fa-search-location';
                 break;
             default:
                 return '';

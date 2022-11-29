@@ -13,7 +13,7 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, faLayerGroup,
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
-        faAngleDoubleUp, faEyeSlash, faCaretDown,
+        faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt, faCog, faSearchLocation,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
@@ -24,13 +24,15 @@ export class fontAwesome {
         //main
         library.add(faTimes, faExternalLinkAlt, faPlusCircle, faMinusCircle, faInfoCircle, faMinus, faPlus, faFile, faDatabase, faDownload);
         // top menu
-        library.add(faComments, faHome, faUserCircle, faSearch, faSearchPlus, faAngleRight, faAngleLeft, faChevronCircleRight, faEllipsisV, faBullhorn);
+        library.add(faComments, faHome, faUserCircle, faSearch, faSearchPlus, faAngleRight, faAngleLeft, 
+            faChevronCircleRight, faEllipsisV, faBullhorn, faSearchLocation);
         // left menu
         library.add(faBars, faCaretLeft, faCaretUp, faCheck);
         // map control bar
         library.add(faHandPaper, faMapMarkedAlt, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
             faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft, faMapMarkerAlt, 
-            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage, faCrosshairs );
+            faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage, faCrosshairs,
+            faCog );
         // corporate icons    
         library.add(faRedditAlien, faTwitter, faFacebook);
         // timeline 
@@ -41,11 +43,11 @@ export class fontAwesome {
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faCaretDown);
         // laads
-        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash);
+        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash, faBolt);
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap, faCheckSquare, faSquareEmpty );
         // moon
-        library.add(faUpload, faLock, faLockOpen);
+        library.add(faUpload, faLock, faLockOpen, faFolder);
         this.refresh();
         config.searchPseudoElements = false;    // turn off to prevent performance issues. Used only for initial loading
         dom.watch();

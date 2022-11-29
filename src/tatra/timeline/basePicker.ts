@@ -2,7 +2,6 @@ import { utils } from "../utils";
 import { Timeline, TimelineAdjustType, TimelineType } from "./Timeline";
 import { flatpickr } from "../aux/flatpickr";
 import { Instance } from "flatpickr/dist/types/instance";
-import LRUCache from "ol/structs/LRUCache";
 
 export class basePicker {
 

@@ -1,3 +1,4 @@
+import './css/*.scss';
 import 'ol/ol.css';
 import { props } from "./props";
 import { configProps } from "./support/configProps";
@@ -16,7 +17,7 @@ import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
-import './css/*.scss';
+import { layerInfo } from './layerInfo';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -66,10 +67,11 @@ export class map {
         mapUtils.setInfoBar();
         controls.init();
         coreUtils.setAOI();
-        controls.setTool(props.defaultStartTool);
+        controls.setStartTool();
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
+        layerInfo.init(props.config.properties.layerInfoURL);
 
         utils.clearLoader();
     }

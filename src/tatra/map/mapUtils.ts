@@ -10,9 +10,21 @@ import { flatpickr } from "../aux/flatpickr";
 import { events } from "./events";
 import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
-import RasterSource from "ol/source/Raster";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
+
+export interface ICoordinates {
+    xmin : number;
+    xmax : number;
+    ymax : number;
+    ymin : number;
+}
+
+export interface IPosition {
+    x : number;
+    y : number;
+    zoom : number;
+}
 
 //utils
 export class mapUtils {
@@ -358,7 +370,7 @@ export class mapUtils {
         if (! txt ) { return; }
         for (let i=0; i<props.layers.length; i++) {
             let lyr = props.layers[i];
-            if (lyr.handler && lyr.visible && lyr.handler == "imagery" && lyr.category == "basemap") {
+            if (lyr.handler && lyr.visible && lyr.handler == "imagery" && lyr.category == "dynamic") {
                 txt.innerHTML = lyr.title + ' ' + flatpickr.formatDate(lyr.time, 'M d Y');
                 return;
             }
@@ -492,6 +504,28 @@ export class mapUtils {
 				}
 			}
 		}
+    }
+
+    public static getBaseLog( x : number, y : number ) {
+        return Math.log(y+1) / Math.log(x+1);
+    }
+
+    public static computeZoomLevel(c : ICoordinates, maxZoom : number = 12):IPosition {
+        let zoomx = this.getBaseLog((c.xmax - c.xmin), 360);
+        let zoomy = this.getBaseLog((c.ymax - c.ymin), 180);        
+
+        zoomx = Math.round(zoomx) + 2;
+        zoomy = Math.round(zoomy) + 2;
+        let zoom = (zoomx < zoomy) ? zoomy : zoomx;
+        let x = (c.xmax - c.xmin) / 2 + c.xmin;
+        let y = (c.ymax - c.ymin) / 2 + c.ymin;
+        if (zoom == 0) {
+            x = 0;
+            y = 0;
+        }
+        if (zoom > maxZoom) { zoom = maxZoom;}
+        return { x : x, y : y, zoom : zoom};
+    
     }
 
     public static analyticsTrack (val : string) {}

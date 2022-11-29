@@ -28,6 +28,14 @@ export class HomeMenuButton {
             model.close();
             LeftMenuBar.hide();
             LeftMenu.minimize();
+            let el = document.querySelector('html') as HTMLElement;
+            if (el) {
+                if (el.className.indexOf('resize') >=0) {
+                    utils.hide('leftNavBarShell');
+                    utils.show('leftNavBarMapResize');
+            
+                }
+            }
         } else {
             //model.state = LEFTBAR_STATE.OPENED;
             model.open();

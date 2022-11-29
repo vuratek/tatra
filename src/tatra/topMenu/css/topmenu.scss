@@ -149,10 +149,10 @@
     opacity:0.7;
 }
 .topNavBar ul > li:last-child > ul {
-    margin-left: -17rem;
+    margin-left: -7rem;
 }
 .topNavBar ul > li:nth-last-child(2) > ul {
-    margin-left: -17rem;
+    margin-left: -7rem;
 }
 /*.topNavBar ul > li:nth-last-child(3) > ul {
     margin-left: -12rem;
@@ -210,7 +210,7 @@
     font-size:2rem;
     padding-top:1.4rem;
 }
-#topbar_feedback, #topbar_notifications {
+#topbar_feedback, #topbar_notifications, #topbar_quickSearch {
     padding-top:1.7rem;
 }
 #topbar_notifications {
@@ -226,11 +226,11 @@
 #topbar_lbl_download-ui {
     font-size: 1.9rem;
 }
-#topbar_home {
+#topbar_home, #topbar_login {
     font-size: 2rem;
     padding-top: 1.5rem;
 }
-.isMap #topbar_home {
+.isMap #topbar_home, .isMap #topbar_login {
     padding-top: 1rem;
 }
 #topMenuContentWrap {
@@ -409,11 +409,11 @@
         padding: 1rem;
     }
 }
-@media screen and (max-width: 600px) {
-    #topbar_lbl_feedback, #topbar_lbl_notifications {
+@media screen and (max-width: 900px) {
+    #topbar_lbl_feedback, #topbar_lbl_notifications,  #topbar_lbl_quickSearch {
         display:none;
     }
-    #topMenu-icon_feedback, #topMenu-icon_notifications {
+    #topMenu-icon_feedback, #topMenu-icon_notifications, #topMenu-icon_quickSeach {
         font-size:2.2rem;
    }   
    .topNavBar li a {
@@ -433,6 +433,11 @@
 @media screen and (max-height: 500px) {
     .notif-item-content {
         max-height: 60vh;
+    }
+}
+@media screen and (max-width: 500px) {
+    .isMap .topNavBar li {
+        padding: 1rem 0.3rem 0 0.3rem;
     }
 }
 

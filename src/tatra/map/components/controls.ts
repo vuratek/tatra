@@ -6,14 +6,18 @@ import { events } from "../events";
 import { support_layers } from "./support_layers";
 import { timeline } from "./timeline";
 import { share } from "./share";
-//import { resize } from "./resize";
+import { resize } from "./resize";
 import { screenshot } from "./screenshot";
 import { pan } from "./pan";
 import { help } from "./help";
 import { measure } from "./measure";
 import { select } from "./select";
 import { locator } from "./locator";
+import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
+import { quickSearch } from "../../aux/quickSearch";
+import { hash } from "../hash";
+import { menu } from "../menu";
 
 export interface IControlsItem {
     [key : string]  : ControlsItem;          // whether icon is turned on / off
@@ -42,6 +46,8 @@ export class controls  {
     public static zIndexBase        : number = 200;
     public static DEFAULT_TOOL      : string = "pan";
     public static alwaysIdentify    : AlwaysIdentify | null;
+    private static btnTime          : number = 0;
+    
 
     public static init () {
         if (! ((props.config as IConfigDef).mapControls && document.getElementById("lmvControls"))) {
@@ -70,16 +76,23 @@ export class controls  {
                     }
                     let navbar = document.getElementById("bottomBar") as HTMLUListElement;
                     let control_id = control;
-                    if (control.indexOf('spacer') >= 0 ) { 
-                        this.option_spacer(navbar);
-                    } else { 
-                        this.optionItem(control_id, navbar);
-                    }
+                    this.optionItem(control_id, navbar);
             }
         }
+        ctrl.appendChild(utils.ae("bottomBarLeftInfo"));
+        this.option_leftInfo(document.getElementById("bottomBarLeftInfo") as HTMLDivElement);
         document.addEventListener(events.EVENT_CONTROL_SET, (evt) => this.updateControls(evt));
         document.addEventListener(events.EVENT_SET_CONTROL_ITEM, (evt) => this.updateControlItem(evt as CustomEvent));
         document.addEventListener(events.EVENT_CONTROL_SET_WINDOW, (evt) => this.setWindow(evt as CustomEvent));
+        document.addEventListener(quickSearch.EVENT_QUICK_SEARCH, (evt) => this.openLocation(evt as CustomEvent));
+    }
+
+    public static setStartTool() {
+        let _tool = hash.getTool() ? hash.getTool() as string : props.defaultStartTool;
+        controls.setTool(_tool);
+        if (_tool == 'location') {
+            this.openLocation(null);
+        }
     }
 
     public static option_firmsInfo () {
@@ -151,14 +164,18 @@ export class controls  {
                     if (! item.handler) { item.handler = share;}
                     break;
                 case "screenshot": 
-                    if (! item.label) { item.label = "SCREENSHOT"; }
+                    if (! item.label) { item.label = "CAPTURE"; }
                     if (! item.icon) { item.icon = "fa-camera"; }
                     if (! item.type) { item.type = ControlTypes.MENU;}
                     if (! item.handler) { item.handler = screenshot;}
                     break;
                 case "resize": 
                     if (! item.type) { item.type = ControlTypes.FLAG;} 
-//                    if (! item.handler) { item.handler = resize;} 
+                    if (! item.handler) { item.handler = resize;} 
+                    break;
+                case "toggle":
+                    if (! item.type) { item.type = ControlTypes.FLAG;} 
+                    if (! item.handler) { item.handler = toggle;} 
                     break;
             }
         }
@@ -180,9 +197,27 @@ export class controls  {
         }
     }
 
+    private static openLocation (evt:CustomEvent | null) {
+        controls.setTool('locator');
+        locator.setTab(2);
+        menu.close();
+    }
+
     private static setResize ( visible : boolean) {
-        let label = (visible) ? 'MINIMIZE' : 'MAXIMIZE';
+        let label = (visible) ? 'STANDARD' : 'MAXIMIZE';
         let icon = (visible) ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
+        return `
+            <p>
+                <i class="fa ${icon} fa-lg bottomBarBtnLabel"></i>
+                <br/>
+                <span class="bottomBarBtnLabelTxt">${label}</span>
+            </p>
+        `;
+    }
+
+    private static setToggle ( visible : boolean) {
+        let label = '&nbsp;';
+        let icon =  "fa-times";
         return `
             <p>
                 <i class="fa ${icon} fa-lg bottomBarBtnLabel"></i>
@@ -210,6 +245,8 @@ export class controls  {
         
         if (id == 'resize') {
             el.innerHTML = this.setResize(false);
+        } else if (id == 'toggle') {
+            el.innerHTML = this.setToggle(false);
         } else {
             let label = (item.label) ? item.label : '?';
             let icon = (item.icon) ? item.icon : 'fa-square';
@@ -303,13 +340,23 @@ export class controls  {
             controls.items[id].visible = visible;
             let btn = document.getElementById( `bb_${id}_btn`) as HTMLDivElement;
             if (! btn) { return; }
-            btn.innerHTML = this.setResize(visible);
+            if (id == 'resize') {
+                btn.innerHTML = this.setResize(visible);
+            } else if (id == 'toggle') {
+                btn.innerHTML = this.setToggle(visible);
+            }
 
             this.controlItemClicked(id); 
         }
     }
 
     public static onClick(id : string) {
+        let now = Date.now();
+        if (now - this.btnTime < 350) {
+            return;
+        }
+        this.btnTime = now;
+        
         let item = (props.config as IConfigDef).mapControls[id];
         if (!item) { return; }
         if (item.type == ControlTypes.MENU || item.type == ControlTypes.FLAG) {
@@ -339,6 +386,7 @@ export class controls  {
         if (!controls.items[id]) { return; }
         controls.items[id].enabled = false;
         utils.addClass(`bb_${id}_btn`, "bottomBarMenuItemDisabled");
+        utils.removeClass(`bb_${id}_btn`,'bottomBarMenuItemSelected');
     }
 
     public static enableBtn (id:string) {
@@ -348,19 +396,20 @@ export class controls  {
         utils.removeClass(`bb_${id}_btn`, "bottomBarMenuItemDisabled");
     }
     
-    public static option_spacer (el : HTMLUListElement) {
-        let sp1 = document.createElement("li");
-        sp1.setAttribute("class", "bottomBarSpace");
-        el.appendChild(sp1);
-        let sp2 = document.createElement("li");
-        sp2.setAttribute("class", "bottomBarSpace2");
-        el.appendChild(sp2);
-    }
-        
-    public static option_rightInfo () {
+    public static option_rightInfo (): string {
         return `
             <img src="${(props.config as IConfigDef).mapControls.rightInfo.image}" alt="logo" class="bottomBarLogo">
         `;
+    }
+
+    private static option_leftInfo (div : HTMLDivElement) {
+        div.innerHTML = `
+            <div id="bottomMenuClosed" class="mapCircleBtn">
+                <i class="fa fa fa-cog" aria-hidden="true"></i>
+            </div>
+        `;
+        //let ci = (props.config as IConfigDef).mapControls['toggle'];
+        utils.setClick('bottomMenuClosed', () => this.onClick('toggle'));
     }
         
     private static clearTools () {

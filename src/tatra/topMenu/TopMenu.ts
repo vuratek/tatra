@@ -1,8 +1,8 @@
 import './css/*.scss';
 import {TopMenuItem, ITopMenuItemObj } from './TopMenuItem';
-import { Navigation } from '../page/Navigation';
 import { NavigationModes } from '../page/navConfigDef';
 import { utils } from '../utils';
+import { navProps } from '../page/navProps';
 
 export enum STATE {
     NORMAL = 1,
@@ -21,12 +21,12 @@ export class TopMenu {
         let ul = document.createElement('ul');
         ul.setAttribute("id", "navBarList");
         el.appendChild(ul);
-        for (let i =0 ; i< Navigation.settings.topMenu.items.length; i++) {
-            let item = Navigation.settings.topMenu.items[i] as ITopMenuItemObj;
+        for (let i =0 ; i< navProps.settings.topMenu.items.length; i++) {
+            let item = navProps.settings.topMenu.items[i] as ITopMenuItemObj;
             TopMenuItem.render(item, ul);
         }
         TopMenuItem.renderMin(el);
-        if (Navigation.settings.app.navigationMode == NavigationModes.RICH) {
+        if (navProps.settings.app.navigationMode == NavigationModes.RICH) {
             let wrap = document.getElementById("topMenuContentWrap") as HTMLDivElement;
             wrap.innerHTML = `
                 <div id="topMenuContent">

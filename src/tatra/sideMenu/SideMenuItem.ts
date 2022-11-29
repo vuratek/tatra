@@ -2,12 +2,9 @@
 import './css/*.scss';
 import { INavConfigMenuItems } from '../page/navConfigDef';
 import { utils } from '../utils';
-import { LeftMenu } from './LeftMenu';
-import { LeftMenuBar } from './LeftMenuBar';
 import { HomeMenuButton } from './HomeMenuButton';
-import { RightMenu } from './RightMenu';
-import { RightMenuBar } from './RightMenuBar';
 import { SideMenuCommon } from './SideMenuCommon';
+import { authentication } from '../aux/authentication';
 
 export abstract class SideMenuItem {
 
@@ -61,7 +58,6 @@ export abstract class SideMenuItem {
         if (obj.subMenu) {
             utils.setClick(`sidebar_${myid}`, () => this.click(obj.id, isLeft));
         }
-
     }
 
     public static update (obj:INavConfigMenuItems, isChild : boolean, collapsed :boolean, isLeft:boolean) {
@@ -86,6 +82,9 @@ export abstract class SideMenuItem {
         if (obj.subMenu && obj.subMenu.length > 0) {
             obj.collapsed = ! obj.collapsed;
             SideMenuCommon.update(isLeft);
+            if (! obj.collapsed) {
+                document.dispatchEvent(new CustomEvent(authentication.EVENT_AUTHENTICATION_UPDATE));
+            }
             return;
         }
         if (obj.external) {

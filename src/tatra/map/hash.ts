@@ -22,6 +22,7 @@ interface IHash {
     initLayers?     : Array <IHashLayer> | null;
     dates?          : IHashDates;
     mode?           : Array<string>;
+    tool?           : string;
 }
 export class hash {
 
@@ -306,6 +307,16 @@ export class hash {
         return this.currentHash;
     }
 
+    private static parseTool(tool:string) {
+        if (tool == 'location' || tool == 'measure') {
+            this.values.tool = tool;
+        }
+    }
+
+    public static getTool() : string | null {
+        return (this.values.tool) ? this.values.tool : null;
+    }
+
     public static parse() {
         let str = window.location.hash;
         this.currentHash = str;
@@ -347,6 +358,9 @@ export class hash {
                     case 't':
                         this.values.tab = PAR;
 //                        configProps.tab = PAR;
+                        break;
+                    case 'tool' : 
+                        this.parseTool(PAR);
                         break;
                     case 'm':
                         this.values.mode = PAR.split(',');

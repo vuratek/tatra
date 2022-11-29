@@ -93,7 +93,7 @@ export class layerStyle {
         }),
         new Style({
             fill: new Fill({
-                color: 'rgba(255, 255, 255, 0.1)'
+                color: 'rgba(255, 255, 255, 0.3)'
             }),
             stroke: new Stroke({
                 color: '#ee8331',
@@ -163,7 +163,7 @@ export class layerStyle {
                 lineCap: "round",
             }),
             fill: new Fill({
-                color: "rgba(0,0,250,0.7)",
+                color: "rgba(0,0,250,0.2)",
             }),
             zIndex: 1,
         });

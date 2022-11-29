@@ -15,12 +15,14 @@ export class props  {
     public static currentBasemap        : string = '';
     public static mapPinUrl             : string = '/images/map-pin.png';    
     public static ignoreResize          : boolean = false;
+    public static imageryDate 		    : Date = new Date();
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];
     public static overlayLayers : [];*/
     
     public static hashValue             : string =  '';
+    public static locatorFLyToEnabled   : boolean = false;
     
     public static scaleLineControlKM    : ScaleLine | null = null;
     public static scaleLineControlMI    : ScaleLine | null = null;

@@ -1,15 +1,36 @@
 import { configProps } from "../support/configProps";
+import { MenuModule } from "../obj/MenuModule";
 import { Layer } from "../obj/Layer";
 import { Tool } from "../obj/Tool";
+import { MenuOption } from "../menu/MenuOption";
+import { Module } from "../menu/components/Module";
 
 export interface IConfigDef {
-    properties          : configProps;
-    layers              : Array <Layer>;
     components          : IComponents;
-    tools               : ITools;
+    modules             : Array <MenuModule> | null;
+    layers              : Array <Layer>;
     mapControls         : IMapControls;
+    menuOptions         : Array <IMenuOption> | null;
+    properties          : configProps;
+    tools               : ITools;
+}
+export enum MenuOptionCategory {
+    MENU        = "menu",
+    TAB         = "tab"
 }
 
+export interface IModuleHandlers {
+    [key:string]    : Module;
+}
+export interface IMenuOption {
+    category        : MenuOptionCategory | null;
+    modules         : Array <string> | null;
+    id              : string;
+    label           : string;
+    options         : Array <IMenuOption> | null;
+    _handler        : MenuOption | null;
+    _moduleHandlers : IModuleHandlers;
+}
 export interface ISupportFiles {
     files       : Array <string>;
 }

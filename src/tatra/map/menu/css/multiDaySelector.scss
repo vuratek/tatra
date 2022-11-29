@@ -1,0 +1,101 @@
+.mds {
+	text-align:center;
+	font-size:1.3rem; 
+	left:1%; 
+	width:98%;
+	margin-bottom:0.7rem;
+	color:#F0F0F0;
+	padding:0 0.5rem;
+	font-weight:500;
+	cursor:default;
+	/*height:65px;*/
+	position:relative;
+}
+.mds_content, #fmmTimeCustomContent {
+	width:100%;
+	position:relative;
+	display:inline-block;
+	padding-top:0.2rem;
+}
+.mds_content input {
+	width:10.5rem;
+	font-size:1.6rem;
+	padding: 0.2rem;
+}
+.mds_content input[type="date" i] {
+	width:15rem;
+	font-family: sans-serif;
+	background: none;
+    color: #7fc7f8;
+    border: none;
+    outline: none;
+}
+.mds_content select {
+	font-size: 1.6rem;
+}
+
+.mds_time_btn {
+    background: #555;
+    background: #6a6966;
+    color: #EEE;
+    font-size: 1.3rem;
+    padding: 1rem 0;
+    line-height: 1em;
+    /*border:0.1rem solid #AAA;*/
+    border-radius:2.5rem;
+    width:5rem; 
+    height:5rem;
+    margin:0 1.5rem;
+    display:inline-block;
+    /*float:left;*/
+    cursor:pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.mds_time_btn:hover {
+    /*background:#555;*/
+    background:#4acb62;
+    color:#222;
+    opacity:0.7;
+}
+.mds_time_btn div {
+	position:absolute;
+	width:4.8rem;
+}
+.mds_time_btn.first {
+    padding: 1.9rem 0 0 0.1rem;
+}
+.mds_bookmark_btn {
+	position:absolute;
+	top:.5rem;
+	right:0.8rem;
+	color:#999;
+	cursor:pointer;
+	font-size:1.6rem;
+}
+
+.fmmTimeBtnSelected {
+	/*background: rgb(43, 103, 141);
+    color:#F0F0F0;
+    border:0.2rem solid yellow;*/
+    background:#4acb62;
+    color:#222;
+}
+.fmmDNButtonActive:hover {
+    background: #073f63;
+    /*background:#4acb62;	*/
+}
+.fmmTimeBtnSelected:hover {
+    /*background:rgb(43, 103, 141);*/
+    background:#4acb62;
+}
+
+#fmmTimePeriodStatement {
+    padding:0.3rem;
+    color:#CCC;
+    font-size:1.1rem;
+    display:none;
+}
+#fmmTimePeriodStatement a {
+    color: #65b2e3;
+}

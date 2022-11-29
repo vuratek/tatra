@@ -1,4 +1,3 @@
-import { Navigation } from '../page/Navigation';
 import { utils } from '../utils';
 export abstract class TopMenuContent {
     public static init () {
@@ -6,7 +5,10 @@ export abstract class TopMenuContent {
             <div id="topMenuContent"></div>
             <i class="fa fa-times topMenuContentIconClose" id="topMenuContentCloseBtn"></i>
         `;
-        document.getElementById('topMenuContentWrap').innerHTML = txt;
+        let el = document.getElementById('topMenuContentWrap');
+        if (el){
+            el.innerHTML = txt;
+        }
         let btn = document.getElementById('topMenuContentCloseBtn');
         if (btn) {
             //btn.addEventListener("click", () => Cloak.clearCloak());
@@ -24,7 +26,10 @@ export abstract class TopMenuContent {
     public static populate(option:string | null) {
         if (!option) { return;}
         let txt = '';
-        document.getElementById('topMenuContent').innerHTML = txt;
+        let el = document.getElementById('topMenuContent');
+        if (el) {
+            el.innerHTML = txt;
+        }
     }
     
     

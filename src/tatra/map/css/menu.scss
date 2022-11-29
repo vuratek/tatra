@@ -64,19 +64,18 @@
 }
 .mapMenuBtns {
     margin: -.9rem;
-    width: 5rem;
-    height: 5rem;
-    background: hsla(0,0%,54.9%,.7);
-    color: hsl(0, 1.5%, 87.3%);
+    width: 4.8rem;
+    height: 4.8rem;
+    color: #e3e3e3;
+	background: rgba(140, 140, 140, 0.5);
     border-radius: 2.5rem;
-    font-size: 3rem;
+    font-size: 2.8rem;
     padding-top: .9rem;
     display: none;
 }
 .mapMenuBtns:hover {
-	background: #999;
-//    border: 0.1rem solid #ccc;
-    color: #e3e3e3;
+	color: #eee;
+    background: #ec6111;
 }
 .mapMenu .navGCHeader {
 	text-align: left;
@@ -86,6 +85,36 @@
 }
 .menuAnimOpen {
 	animation: menuMoveOpen 1s;
+}
+.mapOptionTab {
+	opacity:0.7;
+    font-size: 1.6rem;
+    position: absolute;
+	color: #b1b3b3;
+    height: 3.2rem;
+	background: #73736e;
+    padding: .7rem .5rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+	text-transform: uppercase;
+}
+.mapOptionTab:hover {
+	opacity:0.9;
+}
+.mapOptionTabSelected, .mapOptionTabSelected:hover {
+	background:#222;
+	color:#DDD;
+	opacity:1;
+}
+.mapOptionTab_1 {
+	width:90%;
+}
+.mapOptionTab_2 {
+	width:45%;
+}
+.mapOptionTab_3 {
+	width:30%;
 }
 @keyframes menuMoveClose {
 	from {  }
@@ -114,12 +143,18 @@
 @media screen and (max-height: 600px) {
 	.mapMenu {
 		top:-5.5rem;
-	}		
+	}
+	.resize .mapMenu {
+		top:0;
+	}
 	.mapMenuBtns {
 		margin: 0 -.3rem;
 	}
 	.mapMenuCloseHolder {
 		top: 6rem;
+	}
+	.resize .mapMenuCloseHolder {
+		top: 1rem;
 	}
 }
 @media screen and (max-width: 400px) {
