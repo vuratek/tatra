@@ -1,3 +1,4 @@
+import './css/*.scss';
 import 'ol/ol.css';
 import { props } from "./props";
 import { configProps } from "./support/configProps";
@@ -16,7 +17,6 @@ import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
-import './css/*.scss';
 import { layerInfo } from './layerInfo';
 
 interface Window {

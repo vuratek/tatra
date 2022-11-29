@@ -1,6 +1,6 @@
-import { Navigation } from "../page/Navigation";
 import { library } from "../library";
 import { Timeline } from "./Timeline";
+import { navProps } from "../page/navProps";
 
 export class loadHandler {
     private static loaded : boolean = false;
@@ -13,8 +13,8 @@ export class loadHandler {
         } else {
             if (! this.loading) {
                 this.loading = true;
-                if (Navigation.settings.app.timelineURL) {
-                    library.load(Navigation.settings.app.timelineURL, () => this.callBack());
+                if (navProps.settings.app.timelineURL) {
+                    library.load(navProps.settings.app.timelineURL, () => this.callBack());
                 }
             }
         }

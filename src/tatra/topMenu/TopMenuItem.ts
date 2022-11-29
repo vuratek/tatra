@@ -1,9 +1,9 @@
 import { utils } from "../utils";
 import { Notifications } from "./Notifications";
-import { Navigation } from "../page/Navigation";
 import { NavigationModes } from "../page/navConfigDef";
 import { TopMenu } from "./TopMenu";
 import { authentication } from "../aux/authentication";
+import { navProps } from "../page/navProps";
 
 export interface ITopMenuItemObj {
     id              : string;
@@ -36,7 +36,7 @@ export abstract class TopMenuItem {
         let url = (obj.url && obj.id != "notifications") ? obj.url : 'javascript:void(0);';
         let title = (obj.iconOnly) ? '' : obj.label;
         let link = '';
-        if (Navigation.settings.app.navigationMode == NavigationModes.RICH) {
+        if (navProps.settings.app.navigationMode == NavigationModes.RICH) {
             link = `<a href="${url}" title="${obj.label}">${icon}<span id="${this.prefix}_lbl_${obj.id}">${title}</span></a>`;
             if (!isJScall) { 
                 utils.setClick(`${this.prefix}_${obj.id}`, () => TopMenu.openMenu(obj.id));
@@ -51,8 +51,8 @@ export abstract class TopMenuItem {
     }
 
     public static setTopButton( id : string | null ) {
-        for (let i =0 ; i< Navigation.settings.topMenu.items.length; i++) {
-            let item = Navigation.settings.topMenu.items[i] as ITopMenuItemObj;
+        for (let i =0 ; i< navProps.settings.topMenu.items.length; i++) {
+            let item = navProps.settings.topMenu.items[i] as ITopMenuItemObj;
             if (id && item.id == id) {
                 utils.addClass(`${this.prefix}_${item.id}`, "topMenuSelected");
                 this.populateMenu(item);

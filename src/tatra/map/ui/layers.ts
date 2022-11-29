@@ -1,6 +1,6 @@
+import "./css/*.scss";
 import { utils } from "../../utils";
 import { events } from "../events";
-import "./css/*.scss";
 import { support_layers } from "../components/support_layers";
 import { props } from "../props";
 import { GroupContent } from "../../aux/GroupContent";

@@ -1,11 +1,11 @@
 import { INavConfigMenuItems, INavConfigMenu } from "../page/navConfigDef";
-import { Navigation } from "../page/Navigation";
 import { SideMenuItem } from "./SideMenuItem";
+import { navProps } from "../page/navProps";
 
 export class SideMenuCommon {
 
     public static getDataSource (isLeft : boolean) : INavConfigMenu {
-        return (isLeft) ? Navigation.settings.sideMenu : Navigation.settings.topMenu;
+        return (isLeft) ? navProps.settings.sideMenu : navProps.settings.topMenu;
     }
 
     public static getSideMenuItemById (id: string, isLeft:boolean) : INavConfigMenuItems | null {

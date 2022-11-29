@@ -2,7 +2,6 @@ import { mapUtils, ICoordinates } from "../mapUtils";
 import { default as Feature } from "ol/Feature";
 import { default as Overlay } from "ol/Overlay";
 import { Vector as VectorSrc } from "ol/source";
-import OverlayPositioning from "ol/Overlay";
 import { props } from "../props";
 import { Style, Icon } from "ol/style";
 import { Point } from "ol/geom";
@@ -82,7 +81,7 @@ export class GeoLocation {
                 insertFirst : false,
                 element: this.divElement,
                 offset: [0, -200],
-                positioning: OverlayPositioning.TOP_CENTER
+                positioning: 'top-center'
             });
             if (props.map) {
                 props.map.addOverlay(this.overlay as Overlay);

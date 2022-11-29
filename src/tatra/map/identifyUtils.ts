@@ -1,6 +1,5 @@
 import { MapBrowserEvent } from 'ol';
 import Overlay from 'ol/Overlay';
-import OverlayPositioning from 'ol/Overlay';
 
 export class identifyUtils {
 
@@ -9,24 +8,25 @@ export class identifyUtils {
         let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
         if (mc[1] < windowHeight) {
             if (mc[0] < 150) {
-                window.setPositioning(OverlayPositioning.TOP_LEFT);
+//                window.setPositioning(OverlayPositioning.TOP_LEFT);
+                window.setPositioning('top-left');
                 window.setOffset([-20, 10]);    
             } else if (mc[0] > mw - 200) {
-                window.setPositioning(OverlayPositioning.TOP_RIGHT);
+                window.setPositioning('top-right');
                 window.setOffset([20, 10]);    
             } else {
-                window.setPositioning(OverlayPositioning.TOP_CENTER);
+                window.setPositioning('top-center');
                 window.setOffset([0, 10]);    
             }
         } else {
             if (mc[0] < 150) {
-                window.setPositioning(OverlayPositioning.BOTTOM_LEFT);
+                window.setPositioning('bottom-left');
                 window.setOffset([-20, -17]);    
             } else if (mc[0] > mw - 200) {
-                window.setPositioning(OverlayPositioning.BOTTOM_RIGHT);
+                window.setPositioning('bottom-right');
                 window.setOffset([20, -17]);    
             } else {
-                window.setPositioning(OverlayPositioning.BOTTOM_CENTER);
+                window.setPositioning('bottom-center');
                 window.setOffset([0, -17]);
             }
         }

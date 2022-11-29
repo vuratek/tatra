@@ -1,7 +1,5 @@
 
 //import { PageLoadEvent } from '../../main/PageLoadEvent';
-import { Navigation } from '../page/Navigation';
-import { INavConfigMenuItems } from '../page/navConfigDef';
 import { utils } from '../utils';
 import { RightMenuBar } from './RightMenuBar';
 import { SideMenuCommon } from './SideMenuCommon';

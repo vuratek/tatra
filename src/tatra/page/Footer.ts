@@ -1,9 +1,9 @@
-import { Navigation } from './Navigation';
 import { utils } from '../utils';
 import { INavConfigMenuItems } from './navConfigDef';
+import { navProps } from './navProps';
 export class Footer {
     public static init() {
-        let footer = Navigation.footer;
+        let footer = navProps.footer;
         if (!footer) { return; }
         footer.innerHTML = `
             <div class="ft-wrap">
@@ -11,13 +11,13 @@ export class Footer {
                 <section class="ft-compliance" id="compliance"></section>
             </div>
         `;
-        if ( Navigation.settings.footer && Navigation.settings.app.showFooterLinks || Navigation.settings.app.useNavigationLinks) {
+        if ( navProps.settings.footer && navProps.settings.app.showFooterLinks || navProps.settings.app.useNavigationLinks) {
             this.render();
         }
         this.setCompliance();
     }
     private static setCompliance () {
-        let official = (Navigation.settings.app.official) ? `<li>NASA Official: ${Navigation.settings.app.official}</li>` : '';
+        let official = (navProps.settings.app.official) ? `<li>NASA Official: ${navProps.settings.app.official}</li>` : '';
         let txt = `
             <ul>
                 ${official}
@@ -57,11 +57,11 @@ export class Footer {
     }
 
     private static render() {
-        if (! Navigation.settings.footer && ! Navigation.settings.app.useNavigationLinks) { return;}
+        if (! navProps.settings.footer && ! navProps.settings.app.useNavigationLinks) { return;}
         let txt = `
             <section class="ft-main">
         `;
-        let data = ( Navigation.settings.app.useNavigationLinks ) ? Navigation.settings.topMenu : Navigation.settings.footer;
+        let data = ( navProps.settings.app.useNavigationLinks ) ? navProps.settings.topMenu : navProps.settings.footer;
         if (data) {
             for (let i=0; i < data.items.length; i++) {
                 let item = data.items[i];

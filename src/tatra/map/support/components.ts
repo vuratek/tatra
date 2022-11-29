@@ -1,8 +1,9 @@
 import { props } from "../props";
 import { IConfigDef } from "../defs/ConfigDef";
-import { Navigation } from "../../page/Navigation";
 import { menu } from "../menu";
 import { utils } from "../../utils";
+import { navProps } from "../../page/navProps";
+import { Navigation } from "../../page/Navigation";
 
 export class components {
 	private static container 	: HTMLDivElement | null = null;
@@ -71,8 +72,8 @@ export class components {
 		if (!el) { return; }
 		el.appendChild(components.createAnyElement('img', 'lmvMaxLabelImg'));
 		(document.getElementById("lmvMaxLabelImg") as HTMLDivElement).setAttribute('alt', "Logo");
-		if (Navigation.settings.app.mainIcon) {
-			(document.getElementById("lmvMaxLabelImg") as HTMLImageElement).setAttribute('src', Navigation.settings.app.screenShotIcon);
+		if (navProps.settings.app.mainIcon) {
+			(document.getElementById("lmvMaxLabelImg") as HTMLImageElement).setAttribute('src', navProps.settings.app.screenShotIcon);
 			//let mainLogo = document.getElementById('headerLogo') as HTMLImageElement;
 			let logo = document.getElementById('lmvMaxLabelImg') as HTMLImageElement;
 			utils.show('lmvMaxLabel');
@@ -82,12 +83,15 @@ export class components {
 		}
 		el.appendChild(components.createAnyElement('div', 'lmvMaxLabelTop'));
 		el.appendChild(components.createAnyElement('div', 'lmvMaxLabelBottom'));
-		if (Navigation.settings.app.singleLabel) {
-			(document.getElementById('lmvMaxLabelTop') as HTMLDivElement).innerHTML = Navigation.settings.app.singleLabel;
+		// ??? not sure why not keeping a reference to Navigation doubles the size of code
+		if (Navigation.settings && Navigation.settings.app && Navigation.settings.app.singleLabel) {
+		}
+		if (navProps.settings.app.singleLabel) {
+			(document.getElementById('lmvMaxLabelTop') as HTMLDivElement).innerHTML = navProps.settings.app.singleLabel;
 			(document.getElementById('lmvMaxLabelBottom')  as HTMLDivElement).innerHTML = '';
-        } else if (Navigation.settings.app.doubleLongLabel && Navigation.settings.app.doubleShortLabel) {
-			(document.getElementById('lmvMaxLabelTop')  as HTMLDivElement).innerHTML = Navigation.settings.app.doubleShortLabel;
-			(document.getElementById('lmvMaxLabelBottom') as HTMLDivElement).innerHTML = Navigation.settings.app.doubleLongLabel;
+        } else if (navProps.settings.app.doubleLongLabel && navProps.settings.app.doubleShortLabel) {
+			(document.getElementById('lmvMaxLabelTop')  as HTMLDivElement).innerHTML = navProps.settings.app.doubleShortLabel;
+			(document.getElementById('lmvMaxLabelBottom') as HTMLDivElement).innerHTML = navProps.settings.app.doubleLongLabel;
         }
 	}
 	

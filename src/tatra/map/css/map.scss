@@ -201,6 +201,9 @@ body::-webkit-scrollbar {
 }
 .ol-scale-line .ol-scale-line-inner {
 	line-height: 1.5rem;
+	color:#eee;
+	border: 1px solid #eee;
+	border-top: none;
 }
 .ol-scale-lineMI {
 	bottom:7rem;
@@ -316,7 +319,7 @@ body::-webkit-scrollbar {
 .bottomBarMenuItem {
 	width: 7.5rem;
     --widthBtn: 7.5rem;
-    height: 5rem;
+    /*height: 5rem;*/
     display: inherit;
     background: #072b49cc;
     border-radius: 0.3rem;

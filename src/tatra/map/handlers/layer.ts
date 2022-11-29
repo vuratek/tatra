@@ -25,7 +25,7 @@ import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
-//import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
+import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 
 export class layer {
         
@@ -512,6 +512,8 @@ export class layer {
             sources: [
               {
                 url: lo.source.url,
+                min: 200,
+                max: 500,
                 nodata: 0,
               }
             ]
@@ -521,14 +523,30 @@ export class layer {
             opacity : lo.alpha,
             source: source,
         });
-/*        let img = fromUrl('/tif/OMPS-NPP_NMTO3-L3-DAILY-Ozone-GeoTIFF_v2.1_2022m0101_2022m0103t015721.tif')
+        let img = fromUrl('/tif/OMPS-NPP_NMTO3-L3-DAILY-Ozone-GeoTIFF_v2.1_2022m0101_2022m0103t015721.tif')
             .then(tiff => {
                 console.log(tiff);
                 let image = tiff.getImage(0)
                 .then (img => {
                     let tiepoint =img.getTiePoints();  
+                    let data = img.readRasters().then
+                    (mydata => {
+                        let w = img.getWidth();
+                        let h = img.getHeight();
+                        let min = 1000;
+                        let max = 0;
+                        for (let i=0; i<mydata[0].length; i++) {
+                            if (min > mydata[0][i] && mydata[0][i] > 0) {
+                                min = mydata[0][i];
+                            }
+                            if (max < mydata[0][i]) {
+                                max = mydata[0][i];
+                            }
+                        }
+                        console.log(min, max);
+                    });
                 })
-            });*/
+            });
     }
     
     public static addStaticImageLayer (lo : Layer) {

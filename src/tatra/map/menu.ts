@@ -1,9 +1,9 @@
+import './css/menu.scss';
 import { props } from "./props";
 import { utils } from "../utils";
 import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
-import './css/menu.scss';
 import { hash } from "./hash";
 //import { mainMenu } from "./menu/mainMenu";
 export class menu {

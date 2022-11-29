@@ -9,7 +9,6 @@ import { layerStyle } from './layerStyle';
 import Feature from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
-import OverlayPositioning from 'ol/Overlay';
 import { identifyUtils } from '../identifyUtils';
 import { Point } from 'ol/geom';
 
@@ -43,7 +42,7 @@ export class identifyGeoJSON {
         this.identifyTooltip = new Overlay({
             element: this.identifyTooltipElement,
             offset: [0, -12],
-            positioning: OverlayPositioning.BOTTOM_CENTER
+            positioning: 'bottom-center'
         });
         if (props.map) {
             props.map.addOverlay(this.identifyTooltip as Overlay);

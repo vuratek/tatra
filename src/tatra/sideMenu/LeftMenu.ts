@@ -1,13 +1,11 @@
 //import { PageLoadEvent } from '../../main/PageLoadEvent';
-import { Navigation } from '../page/Navigation';
-import { INavConfigMenuItems } from '../page/navConfigDef';
 import { HomeMenuButton } from './HomeMenuButton';
 import { model, LEFTBAR_STATE } from './model';
 import { CloseButton } from './CloseButton';
 import { LeftMenuBar } from './LeftMenuBar';
-import { events } from '../map/events';
 import { utils } from '../utils';
 import { SideMenuCommon } from './SideMenuCommon';
+import { navProps } from '../page/navProps';
 
 export class LeftMenu {
 
@@ -19,7 +17,7 @@ export class LeftMenu {
     public static init () {
         this.div = 'leftNavBar';
         model.init();
-        if (Navigation.settings.app.useMap === true) {
+        if (navProps.settings.app.useMap === true) {
             this.hasMap = true;
         }
         window.addEventListener("resize", () => this.resize());
@@ -27,7 +25,7 @@ export class LeftMenu {
         wrap.addEventListener("click", () => this.closeWrap());
         //this.resize();
         let path =  window.location.pathname;
-        if (path == "/" || (Navigation.settings.app.alternateHome && Navigation.settings.app.alternateHome == path)) {
+        if (path == "/" || (navProps.settings.app.alternateHome && navProps.settings.app.alternateHome == path)) {
             model.close();
             LeftMenuBar.hide();
             LeftMenu.minimize();    
@@ -116,11 +114,11 @@ export class LeftMenu {
         LeftMenuBar.render(this.div);
 
         let img = document.querySelector("#leftNavBarLogo1") as HTMLImageElement;
-        img.style.background = `url(${Navigation.settings.app.mainIcon}) no-repeat`;
+        img.style.background = `url(${navProps.settings.app.mainIcon}) no-repeat`;
         img.style.backgroundSize = "cover";
-        if (Navigation.settings.app.mainIcon2) {
+        if (navProps.settings.app.mainIcon2) {
             img = document.querySelector("#leftNavBarLogo2") as HTMLImageElement;
-            img.style.background = `url(${Navigation.settings.app.mainIcon2}) no-repeat`;
+            img.style.background = `url(${navProps.settings.app.mainIcon2}) no-repeat`;
             img.style.backgroundSize = "cover";
         }
 
@@ -135,7 +133,7 @@ export class LeftMenu {
         home.setAttribute("id", "leftNavBarLabel");
         home.setAttribute('class', "leftNavBarLabel font");
         el.appendChild(home);
-        let urlHome = (Navigation.settings.app.alternateHome) ? Navigation.settings.app.alternateHome : '/';
+        let urlHome = (navProps.settings.app.alternateHome) ? navProps.settings.app.alternateHome : '/';
         home.innerHTML = `
             <a href="${urlHome}">
                 <div class="leftNavBarLogoWrapper">
@@ -143,7 +141,7 @@ export class LeftMenu {
                     <img id="leftNavBarLogo2" alt="home" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"> 
                 </div>
 
-                <span>${Navigation.settings.app.menuLabel}</span>
+                <span>${navProps.settings.app.menuLabel}</span>
             </a>
         `;
 

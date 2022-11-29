@@ -1,10 +1,10 @@
 import { baseComponent } from "./BaseComponent";
 import { utils } from "../../utils";
 import { props } from "../props";
-import { Navigation } from "../../page/Navigation";
 import { hash } from "../hash";
 import GIFEncoder from '../../gif-encoder';
 import { writeArrayBuffer } from 'geotiff';
+import { navProps } from "../../page/navProps";
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
 	public static label		: string = 'Capture';
@@ -203,10 +203,10 @@ export class screenshot extends baseComponent {
         
         x = 70;
         y = 46;
-        if (Navigation.settings.app.singleLabel) {
-            text = Navigation.settings.app.singleLabel;
-        } else if ( Navigation.settings.app.doubleLongLabel) {
-            text = Navigation.settings.app.doubleLongLabel;
+        if (navProps.settings.app.singleLabel) {
+            text = navProps.settings.app.singleLabel;
+        } else if ( navProps.settings.app.doubleLongLabel) {
+            text = navProps.settings.app.doubleLongLabel;
         }
         text.replace('&amp;', '&');
         ctx.font = '14px "Titillium Web", sans-serif';

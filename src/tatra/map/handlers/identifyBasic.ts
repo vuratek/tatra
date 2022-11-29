@@ -5,7 +5,6 @@ import { events } from '../events';
 import { Layer, LayerSource } from '../obj/Layer';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
-import OverlayPositioning from 'ol/Overlay';
 import { MapBrowserEvent } from 'ol';
 import { identifyUtils } from "../identifyUtils";
 
@@ -48,7 +47,7 @@ export class identifyBasic {
             element: this.identifyTooltipElement,
             offset: [0, -10],
             id: "basicIdentify",
-            positioning: OverlayPositioning.BOTTOM_CENTER
+            positioning: 'bottom-center'
         });
         if (props.map) {
             props.map.addOverlay(this.identifyTooltip as Overlay);

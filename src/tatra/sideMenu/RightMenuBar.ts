@@ -1,7 +1,7 @@
 import { utils } from "../utils";
-import { Navigation } from "../page/Navigation";
 import { SideMenuItem } from "./SideMenuItem";
 import { ITopMenuItemObj } from "../topMenu/TopMenuItem";
+import { navProps } from "../page/navProps";
 
 export class RightMenuBar {
 
@@ -17,8 +17,8 @@ export class RightMenuBar {
             </ul>
         `;
 
-        for (let i =0 ; i<Navigation.settings.topMenu.items.length; i++) {
-            let element = Navigation.settings.topMenu.items[i];
+        for (let i =0 ; i<navProps.settings.topMenu.items.length; i++) {
+            let element = navProps.settings.topMenu.items[i];
             SideMenuItem.render('rightNavBarMenu', element, false, false);
             if (element.subMenu) {
                 for (let j=0; j < element.subMenu.length; j ++) {

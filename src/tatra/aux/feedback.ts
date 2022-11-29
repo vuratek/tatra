@@ -1,4 +1,4 @@
-import { Navigation } from "../page/Navigation";
+import { navProps } from "../page/navProps";
 
 export class feedback {
     
@@ -8,7 +8,7 @@ export class feedback {
             str += window.location.hash;
         }
         if (window.feedback) {
-            let feed = (Navigation.settings.app.feedbackHeader) ? Navigation.settings.app.feedbackHeader : 'Feedback';
+            let feed = (navProps.settings.app.feedbackHeader) ? navProps.settings.app.feedbackHeader : 'Feedback';
             window.feedback.showForm({subject:feed + str});
         }
     }
