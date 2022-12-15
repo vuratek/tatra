@@ -285,7 +285,7 @@
 		"isSelect"	: true,
 		"clandestine" : true,
 		"props"		: {
-				"url"			: "/geodata/world_countries.geojson",
+				"url"			: "/content/geodata/world_countries.geojson",
 				"style"			: "country",
 				"selectHandler"	: "country"
 				}
@@ -295,7 +295,7 @@
 		"isSelect"	: true,
 		"clandestine" : true,
 		"props"		: {
-				"url"			: "/geodata/world_countries.geojson",
+				"url"			: "/content/geodata/world_countries.geojson",
 				"style"			: "country",
 				"selectHandler"	: "country"
 				}
@@ -305,7 +305,7 @@
 		"isSelect"	: true,
 		"clandestine" : true,
 		"props"		: {
-				"url"			: "/geodata/val-sites.geojson",
+				"url"			: "/content/geodata/val-sites.geojson",
 				"style"			: "validationSite",
 				"selectHandler"	: "site"				
 				}
@@ -316,7 +316,7 @@
 		"clandestine" : true,
 		"icon"		: "/images/bg_tile.png",
 		"props"		: {
-				"url"			: "/geodata/mod_tiles.geojson",
+				"url"			: "/content/geodata/mod_tiles.geojson",
 				"style"			: "country",
 				"selectHandler"	: "tile"
 				}
@@ -327,7 +327,7 @@
 		"clandestine" : true,
 		"icon"		: "/images/bg_tile.png",
 		"props"		: {
-				"url"			: "/floods/geodata/flood_tiles.geojson",
+				"url"			: "/content/geodata/flood_tiles.geojson",
 				"style"			: "country",
 				"selectHandler"	: "tile"
 				}

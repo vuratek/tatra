@@ -14,7 +14,6 @@ import { GeoJSON, MVT, EsriJSON } from "ol/format";
 import { unByKey } from "ol/Observable";
 import { get as projGet } from "ol/proj";
 import { layerStyle} from "./layerStyle";
-import { ajax } from "../../ajax";
 import TileGrid from "ol/tilegrid/TileGrid";
 import {getWidth} from 'ol/extent';
 import {get as getProjection} from 'ol/proj';
