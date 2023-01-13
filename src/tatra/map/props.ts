@@ -16,6 +16,8 @@ export class props  {
     public static mapPinUrl             : string = '/images/map-pin.png';    
     public static ignoreResize          : boolean = false;
     public static imageryDate 		    : Date = new Date();
+    public static version               : string = '1.0.0';
+    public static mapMenuOpened         : boolean = false;
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];

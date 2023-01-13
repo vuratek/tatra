@@ -371,4 +371,15 @@ export class utils {
           cancelFullScreen.call(doc);
         }
     }
+    
+    public static isDeclaredFunction (func : string) {
+		let win = Object.getOwnPropertyNames(window);
+		for (let i=win.length-1; i>=0; i--) {
+			if (win[i] == func) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

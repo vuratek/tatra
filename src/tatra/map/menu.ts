@@ -5,7 +5,7 @@ import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
 import { hash } from "./hash";
-//import { mainMenu } from "./menu/mainMenu";
+import { mainMenu } from "./menu/mainMenu";
 export class menu {
 
     private static id : string = '';
@@ -40,6 +40,9 @@ export class menu {
         let header = document.createElement("div");
         header.setAttribute("id", this.id + "Header");
         div.appendChild(header);
+        if (props.version > '1.0.0') {
+            header.setAttribute('class', 'mmHeader');
+        }
         let close = document.createElement("div");
         close.setAttribute("id", this.id + "Close");
         close.setAttribute("class",  "mapMenuClose");
@@ -61,8 +64,19 @@ export class menu {
         div.appendChild(content);
         this.renderMenuBtnHolder(div);
 
+        if (props.version > '1.0.0') {
+            content = document.createElement("div");
+            content.setAttribute("id", "MapMenuItems");
+            //content.setAttribute("id", this.id + "_content");
+            content.setAttribute("class",  "mapMenuItems");        
+            div.appendChild(content);
+        }
+        
+
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
-        //mainMenu.render(this.id);
+        if (props.version > '1.0.0') {
+            mainMenu.render(this.id);
+        }
     }
 
     public static registerMenu (id : string) {

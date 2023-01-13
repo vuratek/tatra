@@ -27,6 +27,8 @@ export interface IMenuOption {
     modules         : Array <string> | null;
     id              : string;
     label           : string;
+    icon            : string;
+    description     : string;
     options         : Array <IMenuOption> | null;
     _handler        : MenuOption | null;
     _moduleHandlers : IModuleHandlers;

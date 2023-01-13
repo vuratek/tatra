@@ -11,6 +11,7 @@
 	border-radius:0.7rem 0 0 0.7rem;
 	border-right:none;
 	opacity:0.95;
+	min-height: 20rem;
 }
 
 .mapMenu:hover {
@@ -115,6 +116,81 @@
 }
 .mapOptionTab_3 {
 	width:30%;
+}
+.mapMenuOptions {
+	position: absolute;
+    font-size: 2.5rem;
+    top: 0.3rem;
+	left: 0.7rem;
+	border-radius: 0.7rem 0 0 0;
+	cursor:pointer;
+}
+.mapMenuOptions .selected {
+	color: red;
+}
+.mapMenuItems {
+	background: rgba(20, 20, 10, 0.8);
+    position: absolute;
+    top: 3.2rem;
+    bottom: 0;
+    width: 100%;
+	border-radius: 0 0 0 0.7rem;
+	overflow: auto;
+}
+.mapMenuItems .option {
+	border: 0.1rem solid #aaa;
+    margin: 0.3rem 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+	background: #444;
+	position: relative;
+	cursor:pointer;
+}
+.mapMenuItems .option:hover {
+	background:#1d6b98;
+}
+.mapMenuItems .icon {
+	display: inline-block;
+    color: #ddd;
+	font-size: 3rem;
+	color: #ddd;
+    font-size: 3rem;
+    position: absolute;
+    top: 1rem;
+}
+.mapMenuItems .label {
+	color : #ddd;
+	font-size: 1.8rem;
+	margin-left: 5rem;
+    display: inline-block;
+}
+.mapMenuItems .label span:first-child {
+	text-transform: uppercase;
+	font-size: 2rem;
+}
+.mapMenuTitle {
+	text-align: left;
+	position: absolute;
+	text-transform: uppercase;
+    top: 0.7rem;
+    left: 5rem;
+    font-weight: 600;
+    font-size: 2.2rem;
+}
+.mapMenuIcons {
+	position: absolute;
+	right: 5rem;
+	top:.5rem;
+	font-size: 2.2rem;
+	cursor:pointer;
+}
+.mapMenuIcons span {
+	margin-right: .5rem;
+}
+.mmHeader {
+	background: linear-gradient(#555,#000);
+	color: #4fdc69;
+	border-radius: .7rem 0 0 0;
 }
 @keyframes menuMoveClose {
 	from {  }

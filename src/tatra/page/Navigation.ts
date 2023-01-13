@@ -37,6 +37,7 @@ export class Navigation {
         }
 
         navProps.header = utils.cc('header', body, true);
+        navProps.content = utils.cc('content', body);
         navProps.main = utils.cc('main', body);
 
         if (! navProps.header || ! navProps.main) { 
