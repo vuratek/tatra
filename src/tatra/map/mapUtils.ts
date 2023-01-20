@@ -12,6 +12,7 @@ import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
+import { IMenuModule, IConfigDef } from "./defs/ConfigDef";
 
 export interface ICoordinates {
     xmin : number;
@@ -31,7 +32,7 @@ export class mapUtils {
 
     public static featureLabelAuto : boolean = true;
 
-    public static getLayerById (id : string) {
+    public static getLayerById (id : string) : Layer | null {
         for (let i = 0; i < props.layers.length; i++) {
             if (props.layers[i].id == id) {
                 return props.layers[i];

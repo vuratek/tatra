@@ -295,11 +295,11 @@ export class Layer {
         return Math.floor(Date.now() / (1000 * 60) - 1); // subtract one minute
     }
     
-    public applyStyle () {
+/*    public applyStyle () {
     	if (this.type == "vector_tile" && this.styleJSON) {
             mapboxStyle.apply(this);
         }	
-    }
+    }*/
 
     public set visible(vis) {
         //loader.start();
@@ -309,18 +309,18 @@ export class Layer {
                 this._layer.setVisible(false);
             } else {
                 this._layer.setVisible(vis); // set actual layer in open layers
-                if (vis) { this.applyStyle();}
+//                if (vis) { this.applyStyle();}
             }
         } else {
             if (vis) {
                 layer.addLayer(this);
-                if (this.type == "vector_tile" && ! this.styleJSON) {
-                    this._layer.setVisible(false);
-                }
+//                if (this.type == "vector_tile" && ! this.styleJSON) {
+//                    this._layer.setVisible(false);
+//                }
             }
         }
         this._visible = vis;
-        if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+        if (vis && this.type == "vector_tile" && ! this.styleJSON && this._layer) {
             this._layer.setVisible(false);
         } else {
             if (vis && ! current) { this.notify(true); }

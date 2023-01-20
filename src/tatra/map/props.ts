@@ -3,6 +3,7 @@ import { Layer } from './obj/Layer';
 import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
 import { ColorPalette } from './obj/ColorPalette';
+import { Module } from './menu/components/Module';
 
 export class props  {
     
@@ -36,6 +37,8 @@ export class props  {
     public static windowIsOpened            : boolean = false;
     public static window                    : boolean = false;
 
+    public static menuModules           : IMenuModuleLoader = {};
+
     public static colorPalettes         : IColorPalettes = {};
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
     public static defaultBasemap        : string = 'earth';
@@ -62,4 +65,8 @@ export interface IColorLookupItem {
 }
 export interface ITileLoadTracker {
     [layer_id:string] : number;
+}
+
+export interface IMenuModuleLoader {
+    [menu_module_id : string] : Module;
 }

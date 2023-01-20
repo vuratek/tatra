@@ -3,6 +3,7 @@
 		"id"		: "street2",
 		"type"		: "xyz",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Streets",
 		"iconMatrix": [0,1], 
 		"props" 	: {
@@ -22,6 +23,7 @@
 		"id"		: "street_old",
 		"type"		: "xyz",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Streets",
 		"iconMatrix": [0,1], 
 		"props" 	: {
@@ -41,19 +43,20 @@
 		"id"		: "street",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Streets",
 		"iconMatrix": [0,1],
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/cc8072363d614d96b08b2361a09979a5/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#1c2325",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url" 		: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "earth",
 		"type"		: "xyz",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Blue Marble",
 		"altTitle1"	: "Blue Marble (no clouds)",
 		"iconMatrix": [0,0], 
@@ -75,19 +78,20 @@
 		"id"		: "topo",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Topographic",
 		"iconMatrix": [0,2], 
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/670c2a9ee3b949a8991b99df425abd0d/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#FFF",
 		"isLabel"	: true,
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "topo_shade",
 		"type"		: "xyz",
+		"tag"		: "basemap",
 		"category"	: "basemap",
 		"title"		: "Topographic",
 		"parent"	: "topo",
@@ -106,6 +110,7 @@
 		"id"		: "dark_gray",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Dark Gray",
 		"iconMatrix": [0,4], 
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/55253142ea534123882314f0d880ddab/resources/styles/root.json?f=pjson",
@@ -119,60 +124,61 @@
 		"id"		: "dark_gray_labels",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"parent"	: "dark_gray",
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/b21e69e11f344697a13450b0970d9241/resources/styles/root.json?f=pjson",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "light_gray",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Light Gray",
 		"iconMatrix": [0,3], 
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/fe92de877afe498fa62a5ae4c5b6c8ba/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#ced3d4",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "light_gray_labels",
 		"type"		: "vector_tile",
 		"category"	: "basemap",
+		"tag"		: "basemap",
 		"title"		: "Light Gray",
 		"parent"	: "light_gray",
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/3f79b4dde3c34e1c8f8c9688be8733bb/resources/styles/root.json?f=pjson",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	}, {
 		"id"		: "graticule",
 		"type"		: "graticule",
 		"category"	: "overlay",
+		"tag"		: "overlay",
 		"title"		: "Latitude-Longitude Lines",
 		"iconMatrix": [1,5]
 	}, {
 		"id"		: "countries",
 		"type"		: "vector_tile",
 		"category"	: "overlay",
+		"tag"		: "overlay",
 		"title"		: "Countries, Regions and Roads",
 		"iconMatrix": [1,0], 
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#FFF",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-		        "url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
-				"wrapX"				: true
-		    	}
+			"url"				: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "imagery_template",
 		"title"		: "Imagery Template",
@@ -204,6 +210,7 @@
 		"title"		: "Orbit Template",
 		"type"		: "xyz",
 		"handler"	: "orbits",
+		"tag"		: "orbits",
 		"clandestine": false,
 		"replace"	: ["layer", "?" ],
 		"props" 	: {
@@ -221,6 +228,7 @@
 		"id"		: "protected_areas",
 		"type"		: "xyz",
 		"category"	: "overlay",
+		"tag"		: "overlay",
 		"title"		: "Protected Areas",
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
@@ -242,6 +250,7 @@
 		"id"		: "protected_areas_regional",
 		"type"		: "xyz",
 		"category"	: "overlay",
+		"tag"		: "overlay",
 		"title"		: "European Regional PAs",
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
@@ -263,6 +272,7 @@
 		"id"		: "modis_static",
 		"type"		: "xyz",
 		"category"	: "overlay",
+		"tag"		: "overlay",
 		"title"		: "Static non-vegetation",
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.8,

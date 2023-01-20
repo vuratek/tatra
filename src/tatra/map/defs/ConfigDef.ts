@@ -14,24 +14,28 @@ export interface IConfigDef {
     properties          : configProps;
     tools               : ITools;
 }
-export enum MenuOptionCategory {
-    MENU        = "menu",
-    TAB         = "tab"
-}
-
 export interface IModuleHandlers {
     [key:string]    : Module;
 }
 export interface IMenuOption {
-    category        : MenuOptionCategory | null;
     modules         : Array <string> | null;
     id              : string;
     label           : string;
     icon            : string;
     description     : string;
-    options         : Array <IMenuOption> | null;
-    _handler        : MenuOption | null;
-    _moduleHandlers : IModuleHandlers;
+}
+export interface IMenuModuleLayers {
+    id              : string;
+}
+export interface IMenuModule {
+    id              : string;
+    label           : string;
+    icon            : string | null;
+    description     : string | null;
+    opened          : boolean;
+    hasGroup        : boolean;
+    layer_refs      : Array<IMenuModuleLayers> | null;
+    handler         : null;
 }
 export interface ISupportFiles {
     files       : Array <string>;

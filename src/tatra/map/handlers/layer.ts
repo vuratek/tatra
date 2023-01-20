@@ -6,8 +6,8 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
-import VectorTileSrc from 'ol/source/VectorTile';
-import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileLayer from 'ol/layer/VectorTile.js';
+import VectorTileSource from 'ol/source/VectorTile';
 import { events } from "../events";
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import { GeoJSON, MVT, EsriJSON } from "ol/format";
@@ -19,12 +19,13 @@ import {getWidth} from 'ol/extent';
 import {get as getProjection} from 'ol/proj';
 import { Feature, Graticule } from "ol";
 import Stroke from "ol/style/Stroke";
-import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
+import { createXYZ } from 'ol/tilegrid';
+import { applyStyle } from 'ol-mapbox-style';
 
 export class layer {
         
@@ -233,20 +234,32 @@ export class layer {
     }
     
     public static addVectorTileLayer (lo : Layer) {
-        let input = [];
-        // parse layer object properties from config; and set open layers layer object
-
-        let properties = Object.keys(lo.source);
-        for (let i = 0; i < properties.length; i++) {
-            let key = properties[i];
-            let value = lo.source[key];
-            input[key] = value;
+        if (! lo.source || ! lo.source.url) {
+            console.log("Vector tile missing url");
+            return;
         }
-        input["crossOrigin"] = "anonymous";
-        input["format"] = new MVT();
-        lo._layer = new VectorTileLayer({
-            source: new VectorTileSrc (input)
+        let url = lo.source.url;
+        const tileGrid = createXYZ({
+            extent: [-180, -90, 180, 90],
+            tileSize: 512,
+            maxResolution: 180 / 512,
+            maxZoom: 15,
         });
+
+        lo._layer = new VectorTileLayer({
+            declutter: true,
+            source: new VectorTileSource({
+                format: new MVT(),
+                projection: 'EPSG:4326',
+                tileGrid: tileGrid,
+                tileUrlFunction: function(tileCoord):string {
+                    return (url)
+                        .replace('{z}', String(tileCoord[0] + 1))
+                        .replace('{x}', String(tileCoord[1]))
+                        .replace('{y}', String(tileCoord[2]));
+                },
+            }),
+          });
 
         if (lo.style) {
             fetch(lo.style)
@@ -254,8 +267,12 @@ export class layer {
                 return response.json();
             })
             .then (data => {
+                if (data.sources && data.sources.esri && data.sources.esri.url) {
+                    data.sources.esri.url = '';
+                }
                 lo.styleJSON = data;
-                lo.applyStyle();
+                applyStyle(lo._layer as VectorTileLayer, lo.styleJSON, "", undefined, tileGrid.getResolutions());
+                lo.visible = true;
             })
             .catch(error => {
                 console.error("Error processing ", lo.style);

@@ -28,6 +28,7 @@ export class menu {
     
     private static render () {
         let cont = document.getElementById(`lmvMenus${this.id}`) as HTMLElement;
+        
         if (! cont) { 
             console.log("Parent container " + cont + ' not found.');
             return;

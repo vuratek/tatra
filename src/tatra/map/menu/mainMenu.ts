@@ -79,11 +79,7 @@ export class mainMenu {
             str += `
                 <div class="option" id="MapMenuItem_${obj.id}">
                     <div class="icon"><i class="fas fa-${obj.icon}"></i></div>
-                    <div class="label">
-                        <span>${obj.label}</span>
-                        <br/>
-                        <span>${obj.description}</span>
-                    </div>
+                    <div class="label"><span>${obj.label}</span></div>
                 </div>
             `;
 //            utils.setClick(`${this.id}Header_${obj.id}`, () => this.tab(obj.id));
@@ -91,18 +87,43 @@ export class mainMenu {
         el.innerHTML = str;
         for (let i=0; i<cfg.menuOptions.length; i++) {
             let obj = cfg.menuOptions[i];
-            utils.setClick(`MapMenuItem_${obj.id}`, ()=>this.setTab(obj.id));
+            utils.setClick(`MapMenuItem_${obj.id}`, ()=>this.tab(obj.id));
         }
+        utils.setClick('MapMenuItems', (evt:Event)=> this.closeMapMenuItems(evt));
     }
 
-    public static setTab(id : string) {
-        let menu =  this.getMenuOptionById(id);
+    public static tab(tab : string) {
+        let menu =  this.getMenuOptionById(tab);
         if (! menu) { return;}
+        if (this.currentTab == tab) { 
+            props.mapMenuOpened = false;
+            this.updateMapMenuOptionBar();
+            return; 
+        }
+        if (this.currentTab != '') {
+            for (let key in props.menuModules) {
+                props.menuModules[key].deactivate();
+            }
+        }
+        this.currentTab = tab;
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (! el) { return; }
         el.innerHTML = menu.label;
         props.mapMenuOpened = false;
         this.updateMapMenuOptionBar();
+        this.renderMenuOptions();
+    }
+
+    private static closeMapMenuItems(evt:Event) {
+        let path = evt.path || (evt.composedPath && evt.composedPath());
+        let max = (path.length > 1) ? 1 :path.length;
+        for (let i=0; i<max; i++) {
+            if (path[i].id && path[i].id == 'MapMenuItems') {
+                props.mapMenuOpened = false;
+                this.updateMapMenuOptionBar();
+            }
+        }
+
     }
 
     private static setMapMenuOptionBar () {
@@ -117,6 +138,29 @@ export class mainMenu {
             utils.hide('MapMenuItems');
         }
     }
+    private static renderMenuOptions() {
+        let cfg = (props.config as IConfigDef);
+        if (! cfg.menuOptions) { return; }
+        let div = document.getElementById(this.id + 'Content') as HTMLDivElement;
+        if (! div) { return; }
+        div.innerHTML = '';
+        // check menuOptions matching current tab
+        for (let m =0; m<cfg.menuOptions.length; m++) {
+            if (cfg.menuOptions[m].id == this.currentTab) {
+                let mod = cfg.menuOptions[m];
+                if (mod.modules) {
+                    // render all menuOptions
+                    for (let i=0; i<mod.modules.length; i++) {
+                        let key = mod.modules[i];
+                        if (props.menuModules[key]) {
+                            props.menuModules[key].render(div);
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
 
     public static getId() : string {
         return this.id;
@@ -126,11 +170,12 @@ export class mainMenu {
         return this.currentTab;
     }
 
-    public static tab(tab: string) {
+    /*public static tab(tab: string) {
         let cfg = (props.config as IConfigDef);
         if (! cfg.menuOptions || this.currentTab == tab) {
             return;
         }
+        
         let _old = null;
         let _new = null;
         for (let i=0; i<cfg.menuOptions.length; i++) {
@@ -151,6 +196,6 @@ export class mainMenu {
             _new._handler.open();
             utils.addClass(`${this.id}Header_${this.currentTab}`, "mapOptionTabSelected");
         }
-    }
+    }*/
     
 }
