@@ -27,6 +27,9 @@ export class Notifications {
 
     public static load(url : string, obj:ITopMenuItemObj) {
         let rec =  { id: obj.id, url : url, data : null, obj: obj} as INotificationRecord;
+        let server = (window.location.host.indexOf('firms2') >=0 ) ? 'firms2' : 'firms';
+        url = url.replace('#HOST#', server);
+
         this.records[obj.id] = rec;
         fetch(url)
             .then(response => {
@@ -119,9 +122,29 @@ export class Notifications {
             let notfound = true;
             let counter = 0;
             let donotshow = false;
+            let activeCounter = 0;
             for (let i=0; i<els.length; i++) {
                 let el = els[i] as HTMLDivElement;
                 let ann = el.getAttribute('tatra-announcement');
+                let exp = el.getAttribute('tatra-expire');
+                if (exp) { 
+                    let dts = [];
+                    dts.push(Number(exp.substr(0,4)));
+                    dts.push(Number(exp.substr(5,2)));
+                    dts.push(Number(exp.substr(8,2)));
+                    dts.push(Number(exp.substr(11,2)));
+                    dts.push(Number(exp.substr(14,2)));
+                    dts.push(Number(exp.substr(17,2)));
+                    let date = new Date();
+                    date.setUTCFullYear(dts[0],dts[1]-1,dts[2]);
+                    date.setHours(dts[3],dts[4],dts[5]);
+                    let now = new Date();
+                    if (date < now) {
+                        donotshow = true; 
+                        continue;
+                    }
+                }
+                activeCounter ++;
                 if (! ann) { continue; }
                 notif_id = ann;
                 if (localStorage.getItem(notif_id)) {
@@ -151,8 +174,14 @@ export class Notifications {
             if ((passive && counter >= this.MAX_COUNT) || (passive && ! initialShow) || donotshow) {
                 let cont = document.getElementById(`${this.prefix}_${id}`) as HTMLDivElement;
                 cont.style.display = "none";
-            }        
-    }
+            }
+            if (activeCounter == 0) {
+                let el = document.getElementById(`${this.prefix}_${id}`);
+                el.parentNode.removeChild(el);
+                el = document.getElementById(`${TopMenuItem.prefix}_notifications-info`);
+                el.parentNode.removeChild(el);
+            }
+        }
         if (show) {
             utils.show(`${TopMenuItem.prefix}_counter_${id}`);
             utils.addClass("topMenu-icon_notifications", "topMenuNotificationActive");
