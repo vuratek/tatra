@@ -5,10 +5,8 @@ import { Circle, Polygon} from 'ol/geom';
 import { Feature } from 'ol';
 import { layer } from '../handlers/layer';
 import { events } from '../events';
-import { mapboxStyle } from "../handlers/mapboxStyle";
 import RasterSource from 'ol/source/Raster';
 import { mapUtils } from '../mapUtils';
-//import { applyStyle } from 'ol-mapbox-style';
 
 export enum layerCategories {
     LAYER = "layer",
@@ -294,22 +292,31 @@ export class Layer {
     public getCurrentTime () : number {
         return Math.floor(Date.now() / (1000 * 60) - 1); // subtract one minute
     }
-    
-/*    public applyStyle () {
-    	if (this.type == "vector_tile" && this.styleJSON) {
-            mapboxStyle.apply(this);
-        }	
-    }*/
 
     public set visible(vis) {
         //loader.start();
         let current = this._visible;
         if (this._layer) {
-            if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+            this._layer.setVisible(vis); // set actual layer in open layers
+        } else {
+            if (vis) {
+                layer.addLayer(this);
+            }
+        }
+        this._visible = vis;
+        if (vis && ! current) { this.notify(true); }
+        else if (!vis && current) { this.notify(false); }
+        this.lastRefresh = this.getCurrentTime();
+    }
+
+/*    public set visible(vis) {
+        //loader.start();
+        let current = this._visible;
+        if (this._layer) {
+            if (vis && this.type == "vector_tile" && ! this.style) {
                 this._layer.setVisible(false);
             } else {
                 this._layer.setVisible(vis); // set actual layer in open layers
-//                if (vis) { this.applyStyle();}
             }
         } else {
             if (vis) {
@@ -320,14 +327,14 @@ export class Layer {
             }
         }
         this._visible = vis;
-        if (vis && this.type == "vector_tile" && ! this.styleJSON && this._layer) {
+        if (vis && this.type == "vector_tile" && ! this.style && this._layer) {
             this._layer.setVisible(false);
         } else {
             if (vis && ! current) { this.notify(true); }
             else if (!vis && current) { this.notify(false); }
             this.lastRefresh = this.getCurrentTime();
         }
-    }
+    }*/
 
     public notify(vis:boolean) {
         let evt = (vis) ? events.EVENT_LAYER_VISIBLE : events.EVENT_LAYER_HIDDEN;

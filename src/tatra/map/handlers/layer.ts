@@ -6,17 +6,12 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
-import VectorTileLayer from 'ol/layer/VectorTile.js';
-import VectorTileSource from 'ol/source/VectorTile';
 import { events } from "../events";
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import { GeoJSON, MVT, EsriJSON } from "ol/format";
+import { GeoJSON, EsriJSON } from "ol/format";
 import { unByKey } from "ol/Observable";
 import { get as projGet } from "ol/proj";
 import { layerStyle} from "./layerStyle";
-import TileGrid from "ol/tilegrid/TileGrid";
-import {getWidth} from 'ol/extent';
-import {get as getProjection} from 'ol/proj';
 import { Feature, Graticule } from "ol";
 import Stroke from "ol/style/Stroke";
 import { mapUtils } from "../mapUtils";
@@ -24,8 +19,7 @@ import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
-import { createXYZ } from 'ol/tilegrid';
-import { applyStyle } from 'ol-mapbox-style';
+import { vectorLayers } from "./vectorLayers";
 
 export class layer {
         
@@ -41,8 +35,8 @@ export class layer {
         case "tile_wms":
             this.addTile_WMSLayer(lo);
             break;
-        case "vector_tile":
-            this.addVectorTileLayer(lo);
+        case "esri_vector_tile":
+            vectorLayers.addESRILayer(lo);
             break;
         case "geotiff" :
             this.addGeoTIFFLayer(lo);
@@ -233,53 +227,6 @@ export class layer {
         });
     }
     
-    public static addVectorTileLayer (lo : Layer) {
-        if (! lo.source || ! lo.source.url) {
-            console.log("Vector tile missing url");
-            return;
-        }
-        let url = lo.source.url;
-        const tileGrid = createXYZ({
-            extent: [-180, -90, 180, 90],
-            tileSize: 512,
-            maxResolution: 180 / 512,
-            maxZoom: 15,
-        });
-
-        lo._layer = new VectorTileLayer({
-            declutter: true,
-            source: new VectorTileSource({
-                format: new MVT(),
-                projection: 'EPSG:4326',
-                tileGrid: tileGrid,
-                tileUrlFunction: function(tileCoord):string {
-                    return (url)
-                        .replace('{z}', String(tileCoord[0] + 1))
-                        .replace('{x}', String(tileCoord[1]))
-                        .replace('{y}', String(tileCoord[2]));
-                },
-            }),
-          });
-
-        if (lo.style) {
-            fetch(lo.style)
-            .then(response => {
-                return response.json();
-            })
-            .then (data => {
-                if (data.sources && data.sources.esri && data.sources.esri.url) {
-                    data.sources.esri.url = '';
-                }
-                lo.styleJSON = data;
-                applyStyle(lo._layer as VectorTileLayer, lo.styleJSON, "", undefined, tileGrid.getResolutions());
-                lo.visible = true;
-            })
-            .catch(error => {
-                console.error("Error processing ", lo.style);
-            });
-        }
-    }
-    
     public static addWMSLayer(lo : Layer) {        
         let input : any = [];
         // parse layer object properties from config; and set open layers layer object
@@ -443,30 +390,11 @@ export class layer {
         }
         input["crossOrigin"] = "anonymous";
         if (type == "xyz_vector") {
-            input["format"] = new EsriJSON();
             if (func) {
-                input["loader"] = func;
+//                input["loader"] = func;
             }
-            let projExtent = getProjection('EPSG:4326').getExtent();
-            let startResolution = getWidth(projExtent) / 512;
-            let resolutions = new Array(14);
-            for (let i = 0; i < resolutions.length; i++) {
-                resolutions[i] = startResolution / Math.pow(2, i);
-            }
-            input["tileGrid"] = new TileGrid({
-                extent: projGet('EPSG:4326').getExtent(),
-                resolutions: resolutions,
-                tileSize: 512,
-            });
-            let func2 = layerStyle['_' + lo.source.style];
-            
-            lo._layer = new VectorTileLayer({
-                source: new VectorTileSrc (input),
-                style: func2
-            });
-            //console.log((lo._layer.getSource() as VectorTileSrc).getTileGrid());
+            vectorLayers.addVectorLayer(lo, layerStyle['_' + lo.source.style]);
 //            (lo._layer.getSource() as VectorTileSrc).setTileLoadFunction(func);
-
         } else {
             lo._layer = new TileLayer({
                 source: new XYZ(input),
