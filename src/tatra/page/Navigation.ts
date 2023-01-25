@@ -124,13 +124,10 @@ export class Navigation {
     private static addMainComponents () {
         if (! navProps.main) { return; }
         let str = `<div id="modalWrap" class="modalWrap"></div>`;
-        if (navProps.settings.sideMenu) {
-            str += `
-                <div class="topMenuCloak" id="topMenuCloak"></div>
-                <div id="rightNavBarShell">
-                    <div id="rightNavBarWrap" class="sideNavBarWrap"></div>
-                    <div id="rightNavBar" class="rightNavBar"></div>
-                </div>
+        if (navProps.settings.sideMenu || navProps.settings.app.mobileMenu) {
+            let sideMenu = '';
+            if (navProps.settings.sideMenu) {
+                sideMenu = `
                 <div id="leftNavBarShell">
                     <div id="leftNavBarWrap" class="sideNavBarWrap"></div>
                     <div id="leftNavBar" class="leftNavBar"></div>
@@ -138,6 +135,21 @@ export class Navigation {
                 <div id="leftNavBarMapResize" class="mapCircleBtn">
                     <i class="fa fa-bars"></i>
                 </div>
+                `;
+            }
+            let rightMenu = '';
+            if (navProps.settings.app.mobileMenu) {
+                rightMenu = `
+                    <div id="rightNavBarShell">
+                        <div id="rightNavBarWrap" class="sideNavBarWrap"></div>
+                        <div id="rightNavBar" class="rightNavBar"></div>
+                    </div>
+                `;
+            }
+            str += `
+                <div class="topMenuCloak" id="topMenuCloak"></div>
+                ${rightMenu}
+                ${sideMenu}
                 <div id="notifications">
                 </div>
             `;
