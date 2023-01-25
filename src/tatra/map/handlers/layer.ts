@@ -143,7 +143,8 @@ export class layer {
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
 
-        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
+//        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
+        if (lo.paletteUrl || lo.paletteColorDef) {        
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
