@@ -24,16 +24,16 @@
 }
 .mapMenuClose {
 	right: 0;
-    top: 0;
-    height: 3.2rem;
+    top: 0rem;
+    height: 4rem;
     width: 10%;
-	padding: 0.2rem 0.7rem;
+	padding: 0.5rem 0.7rem;
     position: absolute;
 	cursor: pointer;
 	font-weight:500;
 	color:#DDD;
 	text-align: center;
-	font-size:2.5rem;
+	font-size:3rem;
 }
 .mapMenuTopContent {
 	padding:1rem 0;
@@ -118,70 +118,77 @@
 	width:30%;
 }
 .mapMenuOptions {
-	position: absolute;
-    font-size: 2.5rem;
-    top: 0.3rem;
-	left: 0.7rem;
-	border-radius: 0.7rem 0 0 0;
-	cursor:pointer;
+	cursor: pointer;
+    border-radius: 0.6rem 0 0;
+    padding: 0.3rem 0.5rem;
+    font-size: 3rem;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.1rem;
 }
 .mapMenuOptions .selected {
 	color: red;
 }
+.mapMenuOptions:hover {
+	background: linear-gradient(180deg,#4acb62,#0d3d16);
+}
 .mapMenuItems {
-	background: rgba(20, 20, 10, 0.8);
+	background: rgba(255, 255, 255, 0.9);
     position: absolute;
-    top: 3.2rem;
+    top: 4rem;
     bottom: 0;
     width: 100%;
 	border-radius: 0 0 0 0.7rem;
 	overflow: auto;
 }
 .mapMenuItems .option {
-	border: 0.1rem solid #aaa;
-    margin: 0.3rem 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-	background: #444;
+    padding: 0.5rem;
+	width: 30%;
+	display: inline-block;
+	vertical-align: top; 
+	min-height: 9rem;
+	margin: 0.3rem 1%;
 	position: relative;
+	border: .2rem solid rgba(0,0,0,0);
 	cursor:pointer;
 }
 .mapMenuItems .option:hover {
-	background:#1d6b98;
+	border:.2rem solid rgb(29, 107, 152);
+	background: rgba(29, 107, 152,0.4);
 }
 .mapMenuItems .icon {
-	display: inline-block;
-    color: #ddd;
-	font-size: 3rem;
-	color: #ddd;
+	color: #5e5e5e;
+    width: 80%;
+    text-align: center;
     font-size: 3rem;
+    display: inline-block;
     position: absolute;
     top: 1rem;
 }
 .mapMenuItems .label {
-	color : #ddd;
-	font-size: 1.8rem;
-	margin-left: 5rem;
+	font-size: 1.5rem;
     display: inline-block;
+    text-align: center;
+	margin-top: 4.5rem;
 }
 .mapMenuItems .label span:first-child {
 	text-transform: uppercase;
-	font-size: 2rem;
+	font-size: 1.6rem;
 }
 .mapMenuTitle {
 	text-align: left;
 	position: absolute;
 	text-transform: uppercase;
-    top: 0.7rem;
+    top: 1rem;
     left: 5rem;
     font-weight: 600;
-    font-size: 2.2rem;
+    font-size: 2rem;
 }
 .mapMenuIcons {
 	position: absolute;
 	right: 5rem;
-	top:.5rem;
-	font-size: 2.2rem;
+	top:.7rem;
+	font-size: 2.5rem;
 	cursor:pointer;
 }
 .mapMenuIcons span {

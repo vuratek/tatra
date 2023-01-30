@@ -18,7 +18,7 @@ export class mainMenu {
         }
         let str = `
             <div class="mapMenuOptions" id="mapMenuOptionBar">
-                <span><i class="fas fa-bars"></i></span>
+                <span><i class="fas fa-th"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
             <div class="mapMenuIcons">
@@ -76,9 +76,10 @@ export class mainMenu {
         let str = '';
         for (let i=0; i<cfg.menuOptions.length; i++) {
             let obj = cfg.menuOptions[i];
+            let color = (obj.icon_color) ? `style="color:${obj.icon_color};"` : '';
             str += `
                 <div class="option" id="MapMenuItem_${obj.id}">
-                    <div class="icon"><i class="fas fa-${obj.icon}"></i></div>
+                    <div class="icon" ${color}><i class="fas fa-${obj.icon}"></i></div>
                     <div class="label"><span>${obj.label}</span></div>
                 </div>
             `;
@@ -132,11 +133,22 @@ export class mainMenu {
     }
 
     private static updateMapMenuOptionBar() {
+        let lbl = '';
         if (props.mapMenuOpened) {
+            lbl = 'Main Map Menu';
             utils.show('MapMenuItems');
         } else {
+            let menu =  this.getMenuOptionById(this.currentTab);
+            if (menu) {
+                lbl = menu.label;
+            }
             utils.hide('MapMenuItems');
         }
+        let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
+        if (el) {
+            el.innerHTML = lbl;
+        }
+
     }
     private static renderMenuOptions() {
         let cfg = (props.config as IConfigDef);

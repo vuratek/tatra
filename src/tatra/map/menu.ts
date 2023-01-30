@@ -25,6 +25,10 @@ export class menu {
         } 
         this.setMenu();
     }
+
+    public static setTab (tab : string) {
+        mainMenu.tab(tab);
+    }
     
     private static render () {
         let cont = document.getElementById(`lmvMenus${this.id}`) as HTMLElement;
