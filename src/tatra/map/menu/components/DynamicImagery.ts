@@ -1,11 +1,11 @@
 import { IMenuModule } from '../../defs/ConfigDef';
 import { LayerGroup, MenuLayerGroup } from './LayerGroup';
 
-export class Overlays extends LayerGroup {
+export class DynamicImagery extends LayerGroup {
 
     public constructor(props : IMenuModule) {
-        super(props,  MenuLayerGroup.TYPE_OVERLAYS);
-        this.type = MenuLayerGroup.TYPE_OVERLAYS;
+        super(props,  MenuLayerGroup.TYPE_IMAGERY);
+        this.type = MenuLayerGroup.TYPE_IMAGERY;
     }
 
     public activate() {

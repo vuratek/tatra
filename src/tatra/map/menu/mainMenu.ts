@@ -10,7 +10,6 @@ export class mainMenu {
     public static render(id: string) {
         this.id = id;
         let header = document.getElementById(`${this.id}Header`) as HTMLDivElement;
-        console.log(header);
         if (! header) { return; }
         let cfg = (props.config as IConfigDef);
         if (! cfg.menuOptions) {
@@ -103,7 +102,12 @@ export class mainMenu {
         }
         if (this.currentTab != '') {
             for (let key in props.menuModules) {
-                props.menuModules[key].deactivate();
+                props.menuModules[key].presetLayers();
+            }
+            for (let key in props.menuModules) {
+                if (props.menuModules[key].isActive()) {
+                    props.menuModules[key].deactivate();
+                }
             }
         }
         this.currentTab = tab;

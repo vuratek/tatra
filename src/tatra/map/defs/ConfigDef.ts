@@ -27,6 +27,7 @@ export interface IMenuOption {
 }
 export interface IMenuModuleLayers {
     id              : string;
+    visible         : boolean;
 }
 export interface IMenuModule {
     id              : string;
@@ -34,6 +35,8 @@ export interface IMenuModule {
     icon            : string | null;
     description     : string | null;
     opened          : boolean;
+    tag             : string | null;
+    defaultBasemap  : string | null;
     hasGroup        : boolean;
     layer_refs      : Array<IMenuModuleLayers> | null;
     handler         : null;

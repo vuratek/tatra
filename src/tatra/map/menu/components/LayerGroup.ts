@@ -39,7 +39,8 @@ export class LayerGroup extends Module {
 			let go = false;
 			if (! lo.clandestine && (
 				lo.tag == MenuLayerGroup.TYPE_BASEMAPS || 
-				lo.tag == MenuLayerGroup.TYPE_OVERLAYS || 
+                lo.tag == MenuLayerGroup.TYPE_OVERLAYS || 
+                lo.tag == MenuLayerGroup.TYPE_IMAGERY || 
 				lo.tag == MenuLayerGroup.TYPE_ORBITS 
 			)) { 
 				go = this.checkLayerRef(lo, this.props.layer_refs, this.type);
