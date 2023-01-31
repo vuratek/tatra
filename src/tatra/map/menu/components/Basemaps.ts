@@ -7,7 +7,7 @@ import { layerCategories } from '../../obj/Layer';
 export class Basemaps extends LayerGroup {
 
     public constructor(props : IMenuModule) {
-        super(props, MenuLayerGroup.TYPE_BASEMAPS);
+        super(props);
         this.type = MenuLayerGroup.TYPE_BASEMAPS;
     }
 
@@ -18,8 +18,8 @@ export class Basemaps extends LayerGroup {
         let defBasemap = props.currentBasemap;
         // check if currentBasemap is set, if not set to defaultBasemap (if defined in config)
         if (defBasemap == '') {
-            if (this.props.defaultBasemap) {
-                defBasemap = this.props.defaultBasemap;
+            if (this.props.defaultLayers) {
+                defBasemap = this.props.defaultLayers[0];
             } else {
                 defBasemap = 'earth';
             }

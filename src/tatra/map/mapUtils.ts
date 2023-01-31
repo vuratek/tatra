@@ -91,6 +91,24 @@ export class mapUtils {
         }
     }
 
+    public static resetDynamicLayers() {
+		if (!props.allowMultipleDynamicLayers) {
+			let counter = 0;
+			for (let i=props.layers.length-1; i>=0; i--) {
+				let lo = props.layers[i];
+				if (lo.category == 'dynamic' && lo.visible) {
+					if (counter > 0) {
+						lo.visible = false;
+					}
+					counter++;
+				}
+			}
+			if (counter > 0) {
+				events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+			}
+		}
+	}
+
     public static setOverlay (id : string) {
         for (let i = 0; i < props.layers.length; i++) {
             let layer = props.layers[i];

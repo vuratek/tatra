@@ -1,4 +1,8 @@
-import '../css/multiDaySelector.scss';
+import { Module } from "./Module";
+export class MultiDaySelector extends Module {
+}
+
+/*import '../css/multiDaySelector.scss';
 import { utils } from "../../../utils";
 import { Module } from "./Module";
 import { controls } from '../../components/controls';
@@ -46,11 +50,11 @@ export class MultiDaySelector extends Module {
   /*      if (model.quickTimeOption == '') {
             model.quickTimeOption = '24';            
         }
-        menuQuick.setTime(model.quickTimeOption);*/
+        menuQuick.setTime(model.quickTimeOption);
     }
     public setTime ( time : string ) {
         console.log("TIME", time);
-/*		if (time == "7") {
+/		if (time == "7") {
 			model.advancedDate = utils.getGMTTime(new Date());
 			model.advancedImagery = model.advancedDate;
 			model.advancedRange = 6;
@@ -107,11 +111,11 @@ export class MultiDaySelector extends Module {
 			hash.dates({start: model.cacheObj.date});
 			localUtils.analyticsTab(`tab-${this.menuId}-${time}`);
 		}
-		mapUtils.setImageryInfo();*/
+		mapUtils.setImageryInfo();
     }
     private bookmark() {
 		controls.activateControlItem('bookmark');
 //        bookmark.open();
 	}
 
-}
+}*/

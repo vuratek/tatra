@@ -7,7 +7,7 @@ import { Module } from './menu/components/Module';
 
 export class props  {
     
-    public static config                : IConfigDef | any = {};
+    public static config                : IConfigDef | null = null;
     public static data                  = {};
     public static isIE                  : boolean = false;
     public static server                : string = '';
@@ -49,7 +49,10 @@ export class props  {
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
 
     public static getApplicationName () : string {
-        return props.config.properties.applicationName;
+        if (props.config) {
+            return props.config.properties.applicationName;
+        }
+        return '';
     }
 }
 

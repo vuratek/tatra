@@ -260,7 +260,7 @@ export class Layer {
                 for (let i=0; i< (src as RasterSource)["layers_"].length; i++) {
                     (src as RasterSource)["layers_"][i].getSource().refresh();
                 }                
-            } else {
+            } else if (src) {
                 src.refresh();
             }
         }

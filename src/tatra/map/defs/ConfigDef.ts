@@ -1,13 +1,11 @@
 import { configProps } from "../support/configProps";
-import { MenuModule } from "../obj/MenuModule";
 import { Layer } from "../obj/Layer";
 import { Tool } from "../obj/Tool";
-import { MenuOption } from "../menu/MenuOption";
 import { Module } from "../menu/components/Module";
 
 export interface IConfigDef {
     components          : IComponents;
-    modules             : Array <MenuModule> | null;
+    modules             : Array <IMenuModule> | null;
     layers              : Array <Layer>;
     mapControls         : IMapControls;
     menuOptions         : Array <IMenuOption> | null;
@@ -28,18 +26,22 @@ export interface IMenuOption {
 export interface IMenuModuleLayers {
     id              : string;
     visible         : boolean;
+    _defaultVisible : boolean | null;
 }
 export interface IMenuModule {
     id              : string;
     label           : string;
     icon            : string | null;
     description     : string | null;
+    module          : string;
     opened          : boolean;
-    tag             : string | null;
-    defaultBasemap  : string | null;
-    hasGroup        : boolean;
-    layer_refs      : Array<IMenuModuleLayers> | null;
-    handler         : null;
+    tag             : string | null;        // used for matching layers in the config
+    defaultLayers   : Array<string> | null; // default layers that should load unless URL overrides it
+    noGroup         : boolean;              // if set, doesn't show +/- for expansion; default is false
+    isTopModule     : boolean;              // this is top part of map menu and the sroll doesn't apply to this
+    hasMultiLayer   : boolean | null;       // dynamic iamagery by default only allows 1 layer, but this will show a checkbox and allow multiple
+    layer_refs      : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
+    handler         : Module | null;        // module handler pointer
 }
 export interface ISupportFiles {
     files       : Array <string>;

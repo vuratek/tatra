@@ -6,6 +6,11 @@ import { closeable } from "../aux/closeable";
 import { events } from "./events";
 import { hash } from "./hash";
 import { mainMenu } from "./menu/mainMenu";
+import { IConfigDef, IMenuModule } from './defs/ConfigDef';
+import { Basemaps } from './menu/components/Basemaps';
+import { Basic } from './menu/components/Basic';
+import { MultiDaySelector } from './menu/components/MultiDaySelector';
+import { Module } from './menu/components/Module';
 export class menu {
 
     private static id : string = '';
@@ -14,6 +19,7 @@ export class menu {
         this.id = id;
         window.addEventListener("resize", () => this.resize());
         animation.init();
+        this.setDefaultMenuModules();
         this.render();
         this.resize();
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
@@ -24,6 +30,57 @@ export class menu {
             props.windowIsOpened = true;
         } 
         this.setMenu();
+        this.presetDefaultLayerVisibility();
+    }
+
+    private static setDefaultMenuModules() {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+				let m = cfg.modules[i];
+				switch (m.module) {
+					case "basemaps" : props.menuModules[m.id] = new Basemaps(m); break;
+                    case "basic" : props.menuModules[m.id] = new Basic(m); break;
+                    case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
+                }
+                if (props.menuModules[m.id]) {
+                    m.handler = props.menuModules[m.id];
+                }
+			}
+        }
+        console.log(cfg.modules);
+    }
+    public static getMenuModuleById (id:string) : IMenuModule | null {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+                let m = cfg.modules[i];
+                if (m.module == id) {
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+    public static addModule(module : Module) {
+        let m = this.getMenuModuleById(module.props.module);
+        if (m) {
+            props.menuModules[m.id] = module;
+            m.handler = props.menuModules[m.id];
+        }
+    }
+
+    // if URL doesn't override the default visible layers, check which ones are set as default in the menu module config
+    public static presetDefaultLayerVisibility() {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+                let m = cfg.modules[i];
+                if (m.handler) {
+                    m.handler.presetDefaultLayerVisibility();
+                }
+            }
+        }
     }
 
     public static setTab (tab : string) {

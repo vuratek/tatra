@@ -1,6 +1,7 @@
 import { props } from "../props";
 import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
+import { mapUtils } from "../mapUtils";
 
 export class mainMenu {
 
@@ -17,7 +18,7 @@ export class mainMenu {
         }
         let str = `
             <div class="mapMenuOptions" id="mapMenuOptionBar">
-                <span><i class="fas fa-th"></i></span>
+                <span><i class="fas fa-bars"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
             <div class="mapMenuIcons">
@@ -115,8 +116,16 @@ export class mainMenu {
         if (! el) { return; }
         el.innerHTML = menu.label;
         props.mapMenuOpened = false;
+        // by default disable multi layer selection. If it is provided it will be set in the module
+        props.allowMultipleDynamicLayersSelection = false;
         this.updateMapMenuOptionBar();
         this.renderMenuOptions();
+        
+        // if no module allows multi layer selection, set to false and reset the layers in the system
+        if (! props.allowMultipleDynamicLayersSelection) {
+            props.allowMultipleDynamicLayers = false;
+            mapUtils.resetDynamicLayers();
+        }
     }
 
     private static closeMapMenuItems(evt:Event) {
@@ -128,7 +137,6 @@ export class mainMenu {
                 this.updateMapMenuOptionBar();
             }
         }
-
     }
 
     private static setMapMenuOptionBar () {
@@ -157,6 +165,7 @@ export class mainMenu {
     private static renderMenuOptions() {
         let cfg = (props.config as IConfigDef);
         if (! cfg.menuOptions) { return; }
+        let topDiv = document.getElementById(this.id + 'TopContent') as HTMLDivElement;
         let div = document.getElementById(this.id + 'Content') as HTMLDivElement;
         if (! div) { return; }
         div.innerHTML = '';
@@ -168,8 +177,9 @@ export class mainMenu {
                     // render all menuOptions
                     for (let i=0; i<mod.modules.length; i++) {
                         let key = mod.modules[i];
+                        let _div = (props.menuModules[key].props.noGroup) ? topDiv : div;
                         if (props.menuModules[key]) {
-                            props.menuModules[key].render(div);
+                            props.menuModules[key].render(_div);
                         }
                     }
                 }

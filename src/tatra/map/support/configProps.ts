@@ -10,6 +10,7 @@ export class configProps {
     public static extent                : [number, number, number, number] | null = null;
     public static hasLocation           : boolean = true;
     public static icons                 : string | null = null;
+    public static initialMenuOption     : string | null = null;
     public static initURL               : string = '';
     public static layerInfoURL          : string = '';
     public static layers                : string | null = null;

@@ -10,12 +10,9 @@ import { IMenuModuleLayers } from "../../defs/ConfigDef";
 
 export enum MenuLayerGroup {
 	TYPE_BASEMAPS	= "basemap",
-	TYPE_ORBITS		= "orbits",
-	TYPE_OVERLAYS	= "overlay",
-	TYPE_IMAGERY	= "imagery",
+	TYPE_BASIC		= "basic",
 	TYPE_CUSTOM		= "custom"
 }
-
 
 export class LayerGroup extends Module {
 
@@ -29,43 +26,47 @@ export class LayerGroup extends Module {
 		ul.id = this.props.id + '_content';
 		ul.className = 'lmvSupportLayersContent';
         base.appendChild(ul);
-		let baseId = this.props.id;
-//		if (type == "dynamic") { this.appendDynamicLayerSelector(ul); }
+        let baseId = this.props.id;
+        if (this.props.hasMultiLayer) {
+            this.appendDynamicLayerSelector(ul); 
+        }
 //		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
 			let lo = props.layers[i];
 			if (lo.parent) { continue; }
 //			if (! showAll && ! lo.isBasicLayer) { continue; }
 			let go = false;
-			if (! lo.clandestine && (
-				lo.tag == MenuLayerGroup.TYPE_BASEMAPS || 
-                lo.tag == MenuLayerGroup.TYPE_OVERLAYS || 
-                lo.tag == MenuLayerGroup.TYPE_IMAGERY || 
-				lo.tag == MenuLayerGroup.TYPE_ORBITS 
-			)) { 
-				go = this.checkLayerRef(lo, this.props.layer_refs, this.type);
-			} else if (lo.handler == MenuLayerGroup.TYPE_ORBITS) {
-				go = this.checkLayerRef(lo, this.props.layer_refs, this.type);
+			if (! lo.clandestine && lo.tag == this.props.tag) {                 
+                go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 			}
 			else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
 				if (! this.props.layer_refs) {
 					console.log("Layers are not defined for the custom module.");
 					go = false;
 				} else {
-					go = this.checkLayerRef(lo, this.props.layer_refs, this.type);
+					go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 				}
-			}
+            }
 			if (! go) { continue;}
 			this.createLayer(lo, ul, baseId);
 		}
-		this.updateLayers();
-//		this.setMultiDynamicLayer();
+        this.updateLayers();
+        if (this.props.hasMultiLayer) {
+            this.setMultiDynamicLayer();
+        }
+        document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateLayers());
+        document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.updateLayers());
+        document.addEventListener(events.EVENT_COLOR_PALETTE_LOADED, () => this.updateLayers());
+        document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, () => this.updateLayers());
+        document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
+        document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
+        document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, () => this.updateDisabled());
 	}
 	
-	private checkLayerRef(lo:Layer, layers:Array<IMenuModuleLayers> | null, type : string | null) : boolean {
+	private checkLayerRef(lo:Layer, layers:Array<IMenuModuleLayers> | null, tag : string | null) : boolean {
 		// check for module.layer_refs, if not found, check for tag
 		if (! layers) { 
-			if (lo.tag == type) {
+			if (lo.tag == tag) {
 				return true; 
 			} else {
 				return false;
@@ -73,7 +74,7 @@ export class LayerGroup extends Module {
 		}
 		for (let i=0; i<layers.length; i++) {
 			if (lo.id == layers[i].id) { 
-				if(lo.tag == type) {
+				if(lo.tag == tag) {
 					return true; 
 				}
 				break;
@@ -259,10 +260,9 @@ export class LayerGroup extends Module {
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
 			}
-			//support_layers.updateLayers();
-			//utils.analyticsTrack(lo.category + '-' + id);
+            //utils.analyticsTrack(lo.category + '-' + id);
+            this.updateLayers();
 		}
-		this.updateLayers();
     }
     
     public setLayerInfoField (parentId: string, lo : Layer) {
@@ -392,5 +392,35 @@ export class LayerGroup extends Module {
 			mapUtils.setBasemap('earth');
 		}
 	}
+    private appendDynamicLayerSelector(ul : HTMLUListElement) {
+		let li = document.createElement("li");
+		li.setAttribute("id", `bb_layer_multi_${this.props.id}`);
+		li.setAttribute("class", "lmvControlsLayer lmvControlsMultiLayer");
+		ul.appendChild(li);
+		li.innerHTML = `
+			<label class="llCheckbox">
+				<input type="checkbox" id="ll_dynamic_multi_${this.props.id}">
+				<span class="checkmark"></span>
+			</label>
+			<div>
+				Allow multi layer selection
+			</div>
+		`;
+        utils.setChange(`ll_dynamic_multi_${this.props.id}`, ()=> this.updateMultiDynamicLayer());
+        props.allowMultipleDynamicLayersSelection = true;
+    }
+    private updateMultiDynamicLayer() {
+		let el = document.getElementById(`ll_dynamic_multi_${this.props.id}`) as HTMLInputElement;
+		if (el) {
+			props.allowMultipleDynamicLayers = el.checked;
+			mapUtils.resetDynamicLayers();
+		}
+    }
 
+    private setMultiDynamicLayer() {
+		let el = document.getElementById(`ll_dynamic_multi_${this.props.id}`) as HTMLInputElement;
+		if (el) {
+			el.checked = props.allowMultipleDynamicLayers;
+		}
+    }
 }
