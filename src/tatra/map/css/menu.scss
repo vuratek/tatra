@@ -25,18 +25,17 @@
 .mapMenuClose {
 	right: 0;
     top: 0rem;
-    height: 4rem;
+    height: 3.2rem;
     width: 10%;
-	padding: 0.5rem 0.7rem;
+	padding: 0.3rem 0.5rem;
     position: absolute;
 	cursor: pointer;
 	font-weight:500;
 	color:#DDD;
 	text-align: center;
-	font-size:3rem;
+	font-size:2.5rem;
 }
 .mapMenuTopContent {
-	padding:1rem 0;
 	overflow-x: hidden;
 }
 .mapMenuContent {
@@ -121,7 +120,7 @@
 	cursor: pointer;
     border-radius: 0.6rem 0 0;
     padding: 0.3rem 0.5rem;
-    font-size: 3rem;
+    font-size: 2.5rem;
     position: absolute;
     top: 0.1rem;
     left: 0.1rem;
@@ -133,7 +132,7 @@
 	background: linear-gradient(180deg,#4acb62,#0d3d16);
 }
 .mapMenuItems {
-	background: rgba(255, 255, 255, 0.9);
+	background: linear-gradient(45deg, #500303, #000000ba);
     position: absolute;
     top: 4rem;
     bottom: 0;
@@ -149,16 +148,20 @@
 	min-height: 10rem;
 	margin: 0.3rem 1%;
 	position: relative;
-	border: .2rem solid rgba(0,0,0,0);
+	border-radius: 0.5rem;
+	color: #0c2e3e;
+    background: #dfdfdf;
 	cursor:pointer;
 }
 .mapMenuItems .option:hover {
 	border:.2rem solid rgb(29, 107, 152);
-	background: linear-gradient(180deg,#30aaf255,#1c77aa55);
+/*	background: linear-gradient(180deg,#30aaf255,#1c77aa55);*/
+	opacity: 0.8;
+    background: #6cb7dd;
 }
 .mapMenuItems .icon {
-	color: #5e5e5e;
-    width: 80%;
+	color: #0c2e3e;
+    width: 90%;
     text-align: center;
     font-size: 3rem;
     display: inline-block;
@@ -170,6 +173,8 @@
     display: inline-block;
     text-align: center;
 	margin-top: 4.5rem;
+	width:100%;
+	font-family: 'Titillium Web';
 }
 .mapMenuItems .label span:first-child {
 	text-transform: uppercase;
@@ -179,16 +184,16 @@
 	text-align: left;
 	position: absolute;
 	text-transform: uppercase;
-    top: 1rem;
+    top: .8rem;
     left: 5rem;
     font-weight: 600;
     font-size: 2rem;
 }
 .mapMenuIcons {
 	position: absolute;
-	right: 5rem;
-	top:.7rem;
-	font-size: 2.5rem;
+	right: 4.5rem;
+	top:.5rem;
+	font-size: 2.2rem;
 	cursor:pointer;
 }
 .mapMenuIcons span {
@@ -198,6 +203,12 @@
 	background: linear-gradient(#555,#000);
 	color: #4fdc69;
 	border-radius: .7rem 0 0 0;
+	text-align: center;
+    width: 100%;
+    height: 3.2rem;
+    cursor: default;
+    font-size: 1.8rem;
+    position: relative;
 }
 @keyframes menuMoveClose {
 	from {  }

@@ -76,7 +76,8 @@ export class mainMenu {
         let str = '';
         for (let i=0; i<cfg.menuOptions.length; i++) {
             let obj = cfg.menuOptions[i];
-            let color = (obj.icon_color) ? `style="color:${obj.icon_color};"` : '';
+//            let color = (obj.icon_color) ? `style="color:${obj.icon_color};"` : '';
+            let color = '';
             str += `
                 <div class="option" id="MapMenuItem_${obj.id}">
                     <div class="icon" ${color}><i class="fas fa-${obj.icon}"></i></div>
@@ -149,12 +150,14 @@ export class mainMenu {
         if (props.mapMenuOpened) {
             lbl = 'Main Map Menu';
             utils.show('MapMenuItems');
+            utils.hide(`${this.id}Close`);
         } else {
             let menu =  this.getMenuOptionById(this.currentTab);
             if (menu) {
                 lbl = menu.label;
             }
             utils.hide('MapMenuItems');
+            utils.show(`${this.id}Close`);
         }
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (el) {
@@ -169,6 +172,7 @@ export class mainMenu {
         let div = document.getElementById(this.id + 'Content') as HTMLDivElement;
         if (! div) { return; }
         div.innerHTML = '';
+        topDiv.innerHTML = '';
         // check menuOptions matching current tab
         for (let m =0; m<cfg.menuOptions.length; m++) {
             if (cfg.menuOptions[m].id == this.currentTab) {

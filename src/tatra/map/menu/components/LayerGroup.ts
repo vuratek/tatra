@@ -23,7 +23,7 @@ export class LayerGroup extends Module {
         super.render(par);
         let base = GroupContent.getContainer(this.props.id);
 		let ul = document.createElement('ul');
-		ul.id = this.props.id + '_content';
+        ul.id = this.props.id + '_content';
 		ul.className = 'lmvSupportLayersContent';
         base.appendChild(ul);
         let baseId = this.props.id;

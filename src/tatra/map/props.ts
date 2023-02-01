@@ -4,6 +4,7 @@ import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
 import { ColorPalette } from './obj/ColorPalette';
 import { Module } from './menu/components/Module';
+import { MapTime } from "./obj/MapTime";
 
 export class props  {
     
@@ -44,6 +45,7 @@ export class props  {
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
     public static tileLoadActive        : ITileLoadTracker = {};
+    public static time                  : MapTime = new MapTime();
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
