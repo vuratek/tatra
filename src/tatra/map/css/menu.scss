@@ -132,42 +132,42 @@
 	background: linear-gradient(180deg,#4acb62,#0d3d16);
 }
 .mapMenuItems {
-	background: linear-gradient(45deg, #500303, #000000ba);
+	background: linear-gradient(45deg, #030303c7, #000000c7);
     position: absolute;
-    top: 4rem;
+    top: 4rem; 
     bottom: 0;
-    width: 100%;
+	width: 100%;
+	padding-left: 0.8rem;
+	padding-bottom: 1rem;
 	border-radius: 0 0 0 0.7rem;
 	overflow: auto;
 }
 .mapMenuItems .option {
-    padding: 0.5rem;
-	width: 30%;
-	display: inline-block;
-	vertical-align: top; 
-	min-height: 10rem;
-	margin: 0.3rem 1%;
-	position: relative;
-	border-radius: 0.5rem;
-	color: #0c2e3e;
-    background: #dfdfdf;
-	cursor:pointer;
+    width: 31%;
+    vertical-align: top;
+    min-height: 9rem;
+    color: #0c2e3e;
+    cursor: pointer;
+	background: #f2f2f2;
+    border-radius: 0rem;
+    margin: 0.3rem 0.3rem 0.4rem 0.1rem;
+    display: inline-block;
+    position: relative;
 }
 .mapMenuItems .option:hover {
-	border:.2rem solid rgb(29, 107, 152);
-/*	background: linear-gradient(180deg,#30aaf255,#1c77aa55);*/
 	opacity: 0.8;
-    background: #6cb7dd;
+	background: linear-gradient(180deg,#30aaf2,#1e81b9);
 }
 .mapMenuItems .icon {
 	color: #0c2e3e;
-    width: 90%;
+    width: 98%;
     text-align: center;
-    font-size: 3rem;
+    font-size: 3.4rem;
     display: inline-block;
     position: absolute;
-    top: 1rem;
+    top: .8rem;
 }
+
 .mapMenuItems .label {
 	font-size: 1.5rem;
     display: inline-block;
@@ -178,27 +178,41 @@
 }
 .mapMenuItems .label span:first-child {
 	text-transform: uppercase;
-	font-size: 1.6rem;
+	font-size: 1.7rem;
 }
 .mapMenuTitle {
 	text-align: left;
 	position: absolute;
 	text-transform: uppercase;
-    top: .8rem;
+    top: .7rem;
     left: 5rem;
     font-weight: 600;
-    font-size: 2rem;
+	font-size: 2.2rem;
+	font-family: 'Titillium Web';
 }
 .mapMenuIcons {
 	position: absolute;
-	right: 4.5rem;
-	top:.5rem;
-	font-size: 2.2rem;
+	right: 5rem;
+	top:.4rem;
+	font-size: 2.4rem;
 	cursor:pointer;
 }
 .mapMenuIcons span {
 	margin-right: .5rem;
 }
+.mapMenuItems .noAction {
+	background:#888;
+}
+.mapMenuItems .sublabel {
+	color: red;
+    text-transform: uppercase;
+    background: white;
+    text-align: center;
+    width: 100%;
+    padding: 0.3rem 0;
+    margin-top: 0.3rem;
+}
+
 .mmHeader {
 	background: linear-gradient(#555,#000);
 	color: #4fdc69;

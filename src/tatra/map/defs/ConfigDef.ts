@@ -22,6 +22,7 @@ export interface IMenuOption {
     icon            : string;
     icon_color      : string | null;
     description     : string;
+    noAction        : boolean;
 }
 export interface IMenuModuleLayers {
     id              : string;

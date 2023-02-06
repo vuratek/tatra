@@ -78,10 +78,13 @@ export class mainMenu {
             let obj = cfg.menuOptions[i];
 //            let color = (obj.icon_color) ? `style="color:${obj.icon_color};"` : '';
             let color = '';
+            let actionClass = (obj.noAction) ? 'noAction' : '';
+            let actionDiv = (obj.noAction) ? '<div class="sublabel">in-progress</div>' : '';
             str += `
-                <div class="option" id="MapMenuItem_${obj.id}">
-                    <div class="icon" ${color}><i class="fas fa-${obj.icon}"></i></div>
+                <div class="option ${actionClass}" id="MapMenuItem_${obj.id}">
+                    <div class="icon"><i class="fas fa-${obj.icon}"></i></div>
                     <div class="label"><span>${obj.label}</span></div>
+                    ${actionDiv}
                 </div>
             `;
 //            utils.setClick(`${this.id}Header_${obj.id}`, () => this.tab(obj.id));
@@ -89,7 +92,10 @@ export class mainMenu {
         el.innerHTML = str;
         for (let i=0; i<cfg.menuOptions.length; i++) {
             let obj = cfg.menuOptions[i];
-            utils.setClick(`MapMenuItem_${obj.id}`, ()=>this.tab(obj.id));
+            if (obj.noAction) {}
+            else {
+                utils.setClick(`MapMenuItem_${obj.id}`, ()=>this.tab(obj.id));
+            }
         }
         utils.setClick('MapMenuItems', (evt:Event)=> this.closeMapMenuItems(evt));
     }
