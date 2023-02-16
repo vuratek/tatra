@@ -15,6 +15,7 @@ export class Module {
             props.opened = false;
         }
         this.setLayerRefs();
+
     }
 
     // create initial div component; customization done in a child class
@@ -87,6 +88,12 @@ export class Module {
         }
     }
 
+    /**
+     * setDateTime() - datetime handler for date/time updates
+     */
+    public setDateTime() { }
+
+
     public showLayers() {
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;   
         for (let i=0; i< arr.length; i++) {
@@ -110,7 +117,9 @@ export class Module {
         }
     }
 
-    // this will return array list of layers that url hash should display
+    /**
+     * getHashLayers() - returns list of layers that should be included in url hash
+     */
     public getHashLayers() : Array<string> {
         let res:Array<string> = [];
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;

@@ -1,0 +1,6 @@
+remove TileLoadFunctions from config
+remove basicTileUrlHandler from config
+remove orbit tile url from config
+
+
+layerStyle, remove WMSTime and Orbit stuff

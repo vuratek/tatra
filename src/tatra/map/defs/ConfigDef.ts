@@ -20,9 +20,10 @@ export interface IMenuOption {
     id              : string;
     label           : string;
     icon            : string;
-    icon_color      : string | null;
+    icon_fab?       : string;
+    icon_color?     : string | null;
     description     : string;
-    noAction        : boolean;
+    noAction?       : boolean;
 }
 export interface IMenuModuleLayers {
     id              : string;

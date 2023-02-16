@@ -4,7 +4,7 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'*/
 
 import { faComments, faBookmark, faEnvelopeOpen, faSquare as faSquareEmpty, faEye } from '@fortawesome/free-regular-svg-icons';
-import { faRedditAlien, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faRedditAlien, faTwitter, faFacebook, faGripfire } from '@fortawesome/free-brands-svg-icons';
 import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastForward, faStepBackward, faStepForward, faUpload,
         faCaretLeft, faCaretUp, faExternalLinkAlt, faBars, faTimes, faPlusCircle, faMinusCircle, faInfoCircle, faHandPaper,
         faMapMarkerAlt, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust, faCheck,
@@ -27,7 +27,7 @@ export class fontAwesome {
         library.add(faComments, faHome, faUserCircle, faSearch, faSearchPlus, faAngleRight, faAngleLeft, 
             faChevronCircleRight, faEllipsisV, faBullhorn, faSearchLocation);
         // left menu
-        library.add(faBars, faCaretLeft, faCaretUp, faCheck, faGraduationCap, faCogs, faFlask);
+        library.add(faBars, faCaretLeft, faCaretUp, faCheck, faGraduationCap, faCogs, faFlask, faGripfire);
         // map control bar
         library.add(faHandPaper, faMapMarkedAlt, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
             faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft, faMapMarkerAlt, 

@@ -80,9 +80,10 @@ export class mainMenu {
             let color = '';
             let actionClass = (obj.noAction) ? 'noAction' : '';
             let actionDiv = (obj.noAction) ? '<div class="sublabel">in-progress</div>' : '';
+            let icon = (obj.icon_fab) ? `<i class="fab fa-${obj.icon_fab}"></i>` : `<i class="fas fa-${obj.icon}"></i>`;
             str += `
                 <div class="option ${actionClass}" id="MapMenuItem_${obj.id}">
-                    <div class="icon"><i class="fas fa-${obj.icon}"></i></div>
+                    <div class="icon">${icon}</div>
                     <div class="label"><span>${obj.label}</span></div>
                     ${actionDiv}
                 </div>
@@ -109,6 +110,7 @@ export class mainMenu {
             return; 
         }
         if (this.currentTab != '') {
+            utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             for (let key in props.menuModules) {
                 props.menuModules[key].presetLayers();
             }
@@ -119,6 +121,7 @@ export class mainMenu {
             }
         }
         this.currentTab = tab;
+        utils.addClass(`MapMenuItem_${this.currentTab}`, 'selected');
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (! el) { return; }
         el.innerHTML = menu.label;
@@ -155,14 +158,14 @@ export class mainMenu {
         let lbl = '';
         if (props.mapMenuOpened) {
             lbl = 'Main Map Menu';
-            utils.show('MapMenuItems');
+            utils.addClass('MapMenuItems', 'mainMenuOpen');
             utils.hide(`${this.id}Close`);
         } else {
             let menu =  this.getMenuOptionById(this.currentTab);
             if (menu) {
                 lbl = menu.label;
             }
-            utils.hide('MapMenuItems');
+            utils.removeClass('MapMenuItems', 'mainMenuOpen');
             utils.show(`${this.id}Close`);
         }
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;

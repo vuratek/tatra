@@ -20,26 +20,6 @@
 				"wrapX"				: true
 		    	}
 	},{
-		"id"		: "street_old",
-		"type"		: "xyz",
-		"category"	: "basemap",
-		"tag"		: "basemap",
-		"title"		: "Streets",
-		"iconMatrix": [0,1], 
-		"props" 	: {
-				"maxZoom"			: 16,
-				"projection"		: "EPSG:4326",
-		        "tileSize"			: 512,
-		        "tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return 'https://services.arcgisonline.com/arcgis/rest/services/ESRI_StreetMap_World_2D/MapServer/tile/{z}/{y}/{x}'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', tileCoord[2].toString());}"
-		                                ],
-				"wrapX"				: true
-		    	}
-	},{
 		"id"		: "street",
 		"type"		: "esri_vector_tile",
 		"category"	: "basemap",
@@ -60,8 +40,10 @@
 		"props" 	: {
 				"maxZoom"			: 16,
 				"projection"		: "EPSG:4326",
-		         "tileSize"			: 256,
-		         "tileUrlFunction"	: [	
+				"tileSize"			: 256,
+				"url"				: "https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+				"tileUrlHandler"	: "basic",
+		        "tileUrlFunction"	: [	
 										 "function(tileCoord) {",
 		              					"return 'https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'",
 		              					".replace('{z}', (tileCoord[0] - 1).toString())",
@@ -165,6 +147,7 @@
 				"layer"			: "#layer#",
 				"format"		: "image/png",
 				"matrixSet"		: "15.625m",
+				"tileUrlHandler" : "gibs",
 				"tileGrid"		: {
 							"origin": [-180, 90],
 							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313, 0.000137329101563],
@@ -188,7 +171,8 @@
 				"maxZoom"			: 12,
 				"projection"		: "EPSG:4326",
 				"url"				: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&VERSION=1.1.1&SRS=EPSG%3A4326&SERVICE=WMS&LAYERS=#layer#",
-		        "tileSize"			: 256,
+				"tileSize"			: 256,
+				"tileUrlHandler" 	: "orbit",
 		        "tileUrlFunction"	: [	
  						"function(tileCoord) {",
  						"return updateOrbitUrl('#id#', tileCoord);}"
@@ -206,9 +190,10 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_global/",
-				"tileSize"			: 512,
-				"tileUrlFunction"	: [	
+			"url"				: "/layers/pa_global/{z}/{y}/{x}",
+			"tileSize"			: 512,
+			"tileUrlHandler"	: "basic",
+			"tileUrlFunction"	: [	
 									"function(tileCoord) {",
 									"return updateBasicTileUrl('#id#', tileCoord);}"
 									],
@@ -228,8 +213,9 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_regional/",
+			"url"				: "/layers/pa_regional/{z}/{y}/{x}",
 				"tileSize"			: 512,
+				"tileUrlHandler"	: "basic",
 				"tileUrlFunction"	: [	
 									"function(tileCoord) {",
 									"return updateBasicTileUrl('#id#', tileCoord);}"

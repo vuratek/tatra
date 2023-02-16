@@ -49,6 +49,7 @@ export class LayerSource {
     wrapX       : boolean = true;
     imageSize   : number = 512;
     layer       : string | null = null;
+    tileUrlHandler : string | null = null;
     query       : string | null = null;
     imageExtent : Array <number> = [-180,-90,180,90];
     selectHandler : string | null = null;
@@ -91,6 +92,7 @@ export class Layer {
     public type             : string = "wmts"; // WMTS, WMS, XYZ
     public _layer           : olLayer | null = null; // holds the actual layer once defined
     public source           : LayerSource | null = null;
+    // in the future remove? category
     public _category        : string = layerCategories.LAYER; // basemap, layer or overlay
     public time             : Date = new Date();
     public _alpha           : number = 1;

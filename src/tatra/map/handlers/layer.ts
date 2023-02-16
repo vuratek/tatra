@@ -20,6 +20,7 @@ import RasterSource from "ol/source/Raster";
 import WebGLTile from 'ol/layer/WebGLTile';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 import { vectorLayers } from "./vectorLayers";
+import { tileUrlHandler } from "./tileUrlHandler";
 
 export class layer {
         
@@ -108,9 +109,9 @@ export class layer {
     
     public static addWMTSLayer (lo : Layer) {
 
-        let input = [];
+        let input = {};
         // parse layer object properties from config; and set open layers layer object
-        let properties = Object.keys(lo.source);
+        let properties = (lo.source) ? Object.keys(lo.source) : [];
         for (let i = 0; i < properties.length; i++) {
             let key = properties[i];
             let value = lo.source[key];
@@ -125,7 +126,7 @@ export class layer {
             // tileGrid needs to be parse as function declaration is needed
             if (key == "tileGrid") {
                 let properties2 = Object.keys(value);
-                let input2 = [];
+                let input2 = {};
                 for (let j = 0; j < properties2.length; j++) {
                     let key2 = properties2[j];
                     let value2 = value[key2];
@@ -140,6 +141,13 @@ export class layer {
                 input[key] = value;
             }
         }
+        if (lo.source && lo.source.tileUrlHandler) {
+            let func2 = tileUrlHandler.getTileLoadHandler(lo.source.tileUrlHandler, lo.id);
+            if (func2) {
+                input["tileLoadFunction"] = func2;
+            }
+        }
+
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
 
@@ -387,6 +395,12 @@ export class layer {
 //                input[key] = eval("(" + all + ")"); // needs () around the function definition
             } else {
                 input[key] = value;
+            }
+        }
+        if (lo.source && lo.source.tileUrlHandler) {
+            let func2 = tileUrlHandler.getTileUrlHandler(lo.source.tileUrlHandler, lo.id);
+            if (func2) {
+                func = func2;
             }
         }
         input["crossOrigin"] = "anonymous";

@@ -18,6 +18,7 @@ import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
 import { layerInfo } from './layerInfo';
+import { tileUrlFunctions } from './handlers/tileUrlFunctions';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -49,6 +50,8 @@ export class map {
             view: new View(options),
             target: "map"
         });
+
+        tileUrlFunctions.init();
 
         coreUtils.addScaleLine();
 
