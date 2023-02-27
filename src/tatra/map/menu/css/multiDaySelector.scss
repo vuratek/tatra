@@ -1,9 +1,7 @@
 .mds {
 	font-size:1.2rem; 
-	left:1%; 
-	width:98%;
+	width:100%;
 	color:#F0F0F0;
-	padding:1rem 0.5rem;
 	font-weight:500;
 	cursor:default;
 	/*height:65px;*/
@@ -12,8 +10,9 @@
 .mds_content {
 	width:100%;
 	position:relative;
-	display:inline-block;
-	padding-top:0.2rem;
+    display:inline-block;
+    margin: 3.5rem 0 0.5rem 0;
+    line-height: 1.4rem;
 }
 .mds_content input {
 	width:10.5rem;
@@ -31,7 +30,28 @@
 .mds_content select {
 	font-size: 1.6rem;
 }
-
+.mds_tab {
+    width: 50%;
+    height: 2.7rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #444;
+    cursor: pointer;
+    background: #777;
+    font-size: 1.7rem;
+    font-family: 'TitilliumSB',Tahoma, sans-serif;
+    margin: 0;
+    padding: 0.5rem 0;
+    position: absolute;
+}
+.mds_tab:last-child {
+    left:50%;
+}
+.active {
+    font-family: 'TitilliumSB',Tahoma, sans-serif;
+    background: #202020;
+    color: #bbbab8;
+}
 .mds_time_btn {
     background: #777;
     color: #222;
@@ -70,15 +90,49 @@
     color: #000;
     background: linear-gradient(180deg,#30aaf2,#155b82);
 }
+#mdsHistorical {
+    font-size:1.6rem; 
+    line-height:2.4rem;
+    width: 100%;
+    padding: 1rem 0;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+}
+#mdsCalendar {
+    cursor: pointer;
+    font-size: 1.7rem;
+}
+#mdsHistorical input {
+    width: 10.5rem;
+    padding: 0.2rem;
+    font-size: 1.6rem;
+}
+#mdsHistorical select {
+    font-size: 1.6rem;
+}
 
+#mdsDateRange {
+    color: #7fc7f8;
+    width: 10rem;
+    background: #222222f2;
+    border: none;
+    outline: none;
+}
+#mds_date {
+    color: #7fc7f8;
+    background: 0 0;
+    border: none;
+    outline: none;
+}
 #mdsTimePeriodStatement {
     color: #ccc;
+    width: 45%;
     padding: 0.3rem;
     font-size: 1.1rem;
-    width: 40%;
-    position: absolute;
-    top: .7rem;
-    left: 55%;
+    display:inline-block;
+    top: 0rem;
+    left: 50%;
 }
 #mdsTimePeriodStatement a {
     color: #65b2e3;

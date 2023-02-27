@@ -8,6 +8,7 @@ import { layerCategories } from '../../obj/Layer';
 export class Module {
     public props : IMenuModule;
     public _isActive : boolean = false;
+    public _hasGroup : boolean = true;
 
     public constructor(props : IMenuModule) {
         this.props = props;
@@ -27,7 +28,7 @@ export class Module {
         } else {
             GroupContent.create( {id : this.props.id, label : this.props.label, parent: div, opened : this.props.opened} );
         }
-        this.activate();
+        //this.activate();
     }
 
     public isActive() : boolean {

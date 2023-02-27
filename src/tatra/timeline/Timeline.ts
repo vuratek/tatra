@@ -104,6 +104,10 @@ export class Timeline {
         let hourly = false;
         for (let i=0; i < props.layers.length; i++) {
             let lo = props.layers[i];
+            if (lo.visible && lo.hasTime && lo.timeStep) {
+                hourly = true;
+            }
+            // remove ??
             if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits') && lo.visible && lo.timeStep) {
                 hourly = true;
             }
@@ -503,6 +507,10 @@ export class Timeline {
         }
         for (let i=0; i < props.layers.length; i++) {
             let lo = props.layers[i];
+            if (lo.visible && lo.hasTime) {
+                visible = true;
+            }
+            // remove ???
             if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits' || lo.handler == "sentinel") && lo.visible) {
                 visible = true;
             }

@@ -9,6 +9,7 @@ export class mainMenu {
     private static id : string = '';
 
     public static render(id: string) {
+        console.log(props.layers);
         this.id = id;
         let header = document.getElementById(`${this.id}Header`) as HTMLDivElement;
         if (! header) { return; }
@@ -188,6 +189,12 @@ export class mainMenu {
                 let mod = cfg.menuOptions[m];
                 if (mod.modules) {
                     // render all menuOptions
+                    for (let i=0; i<mod.modules.length; i++) {
+                        let key = mod.modules[i];
+                        if (props.menuModules[key]) {
+                            props.menuModules[key].activate();
+                        }
+                    }
                     for (let i=0; i<mod.modules.length; i++) {
                         let key = mod.modules[i];
                         let _div = (props.menuModules[key].props.noGroup) ? topDiv : div;

@@ -42,12 +42,35 @@ export class mapUtils {
     }
 
     public static updateImageryLayers (date:Date) {
+        let _short = flatpickr.formatDate(date, 'Y-m-d');
+        let _full = flatpickr.formatDate(date, 'Y-m-d H:i');
 	    for (let i=0; i<props.layers.length; i++) {
-            let lo =props.layers[i];
+            let lo = props.layers[i];
             if (!lo) { continue; }
-            lo.time = date;
-            if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
-                lo.refresh();
+            if (props.version > '1.0.0' ) {
+                let refresh = false;
+                // only time refresh layers that use time and when time has changed enough
+                // so don't change daily when only hours or minutes changed
+                if (lo.timeStep) {
+                    if (lo.timeStep == "30m") {
+                        if (flatpickr.formatDate(lo.time, 'Y-m-d H:i') != _full) {
+                            refresh = true;
+                        }
+                    }
+                } else {
+                    if (flatpickr.formatDate(lo.time, 'Y-m-d') != _short) {
+                        refresh = true;
+                    }
+                }
+                lo.time = date;
+                if (lo.visible && lo.hasTime && refresh) {
+                    lo.refresh();
+                }
+            } else {
+                lo.time = date;
+                if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
+                    lo.refresh();
+                }
             }
         }
         events.dispatch(events.EVENT_LAYER_DATE_UPDATE);
