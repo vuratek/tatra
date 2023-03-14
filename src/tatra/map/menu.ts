@@ -9,6 +9,7 @@ import { mainMenu } from "./menu/mainMenu";
 import { IConfigDef, IMenuModule } from './defs/ConfigDef';
 import { Basemaps } from './menu/components/Basemaps';
 import { Basic } from './menu/components/Basic';
+import { FilterLayers } from './menu/components/FilterLayers';
 import { MultiDaySelector } from './menu/components/MultiDaySelector';
 import { Module } from './menu/components/Module';
 export class menu {
@@ -41,6 +42,7 @@ export class menu {
 				switch (m.module) {
 					case "basemaps" : props.menuModules[m.id] = new Basemaps(m); break;
                     case "basic" : props.menuModules[m.id] = new Basic(m); break;
+                    case "filterlayers" : props.menuModules[m.id] = new FilterLayers(m); break;
                     case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
                 }
                 if (props.menuModules[m.id]) {

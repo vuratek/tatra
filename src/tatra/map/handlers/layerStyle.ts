@@ -377,7 +377,7 @@ export class layerStyle {
     public static _fireAlertUSA_info(feature : Feature) : string {
         let date = new Date();
         date.setTime(Number(feature.get("FireDiscoveryDateTime")));
-        let areas = layerStyle.getAreas(feature.get("DailyAcres"), false);
+        let areas = layerStyle.getAreas(feature.get("IncidentSize"), false);
         let ii = new IncidentInfo();
         ii.IncidentManagementOrganization = feature.get("IncidentManagementOrganization");
         ii.PercentContained = feature.get("PercentContained");

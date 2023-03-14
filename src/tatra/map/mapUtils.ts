@@ -13,6 +13,7 @@ import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
 import { IMenuModule, IConfigDef } from "./defs/ConfigDef";
+import { utils } from "../utils";
 
 export interface ICoordinates {
     xmin : number;
@@ -41,36 +42,48 @@ export class mapUtils {
         return null;
     }
 
-    public static updateImageryLayers (date:Date) {
+    public static onSystemDateUpdate() {
+        props.time.quickTime = 0;
+		if (flatpickr.formatDate(utils.getGMTTime(new Date()),'Y-m-d') == flatpickr.formatDate(props.time.date, 'Y-m-d')) {
+			if (props.time.range == 0) { props.time.quickTime = 1; }
+			else if (props.time.range == 1) { props.time.quickTime = 24; }
+			else if (props.time.range == 6) { props.time.quickTime = 168; }
+		}
+
+        let date = props.time.imageryDate;
         let _short = flatpickr.formatDate(date, 'Y-m-d');
         let _full = flatpickr.formatDate(date, 'Y-m-d H:i');
 	    for (let i=0; i<props.layers.length; i++) {
             let lo = props.layers[i];
             if (!lo) { continue; }
-            if (props.version > '1.0.0' ) {
-                let refresh = false;
-                // only time refresh layers that use time and when time has changed enough
-                // so don't change daily when only hours or minutes changed
-                if (lo.timeStep) {
-                    if (lo.timeStep == "30m") {
-                        if (flatpickr.formatDate(lo.time, 'Y-m-d H:i') != _full) {
-                            refresh = true;
-                        }
-                    }
-                } else {
-                    if (flatpickr.formatDate(lo.time, 'Y-m-d') != _short) {
+            let refresh = false;
+            // only time refresh layers that use time and when time has changed enough
+            // so don't change daily when only hours or minutes changed
+            if (lo.timeStep) {
+                if (lo.timeStep == "30m") {
+                    if (flatpickr.formatDate(lo.time, 'Y-m-d H:i') != _full) {
                         refresh = true;
                     }
                 }
-                lo.time = date;
-                if (lo.visible && lo.hasTime && refresh) {
-                    lo.refresh();
-                }
             } else {
-                lo.time = date;
-                if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
-                    lo.refresh();
+                if (flatpickr.formatDate(lo.time, 'Y-m-d') != _short) {
+                    refresh = true;
                 }
+            }
+            lo.time = date;
+            if (lo.visible && lo.hasTime && refresh) {
+                lo.refresh();
+            }
+        }
+    }
+
+    public static updateImageryLayers (date:Date) {
+	    for (let i=0; i<props.layers.length; i++) {
+            let lo = props.layers[i];
+            if (!lo) { continue; }
+            lo.time = date;
+            if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
+                lo.refresh();            
             }
         }
         events.dispatch(events.EVENT_LAYER_DATE_UPDATE);

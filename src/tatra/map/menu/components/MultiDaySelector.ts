@@ -6,7 +6,6 @@ import { mapUtils } from '../../mapUtils';
 import { bookmark } from "../features/bookmark";
 import { time_info } from "../features/time_info";
 import { BasicMenuDates, BasicMenuDateValues } from '../../defs/Times';
-import { hash } from '../../hash';
 import { rangePicker } from "../../../timeline/rangePicker"; 
 import { props } from '../../props';
 import flatpickr from 'flatpickr';
@@ -63,7 +62,7 @@ export class MultiDaySelector extends Module {
 		this.currentTab = tab;
 		Timeline.delete();
 		utils.addClass(`mds_tab_${this.currentTab}`,'active');
-		if (this.currentTab == "current") {
+		if (this.currentTab == MDSTabs.CURRENT) {
 			this.render_current();
 		} else {
 			this.render_historical();
@@ -98,7 +97,7 @@ export class MultiDaySelector extends Module {
 		utils.setClick(`${this.props.id}_mds_btn_24`, () => this.setTime(BasicMenuDateValues.HRS_24));
 		utils.setClick(`${this.props.id}_mds_btn_7d`, () => this.setTime(BasicMenuDateValues.DAY_7));
 		utils.setClick(`${this.props.id}_mds_btn_bookmark`, () => this.bookmark());
-		if (this.previousBtn > 0) {
+		if (this.previousBtn > 0 && this.previousBtn <= 24) {
 			this.setTime(this.previousBtn);
 		} else {
 			this.setTime(BasicMenuDateValues.HRS_24);
@@ -180,6 +179,7 @@ export class MultiDaySelector extends Module {
 		props.time.date = this.calendar.selectedDates[0];
 		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
 		props.time.quickTime = 0;
+		console.log("SETTING", props.time.date, props.time.range);
 		Timeline.setDate(props.time.date, props.time.range);
 		//
         //this.updateHash();
@@ -187,16 +187,12 @@ export class MultiDaySelector extends Module {
     }
 
 	public setTime ( time : number ) {
-		props.time.quickTime = time;
 		if (time == BasicMenuDateValues.DAY_7) {
-			props.time.date = utils.getGMTTime(new Date());
+			props.time.date = utils.sanitizeDate(new Date(), true);
 			props.time.imageryDate = utils.addDay(props.time.date, -1);
 			props.time.range = 6;
-			mapUtils.updateImageryLayers(props.time.imageryDate);
-			//localUtils.analyticsTab(`tab-${this.menuId}-${time}`);
-			
-//			model.cacheObj.date = CacheLayerDate.DAY_7;
-//			menuCommon.tab(TabType.HISTORICAL);
+			events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+			//localUtils.analyticsTab(`tab-${this.menuId}-${time}`);			
 			this.tab(MDSTabs.HISTORICAL);
 			return;
 		}
@@ -247,6 +243,7 @@ export class MultiDaySelector extends Module {
 			//hash.dates({start :start, end : end}); ** not needed?
 //			hash.dates({start: model.cacheObj.date});
 //			localUtils.analyticsTab(`tab-${this.menuId}-${time}`);
+		props.time.quickTime = time;
 		this.updateImageryDate();
 		mapUtils.setImageryInfo();
 	}
@@ -262,10 +259,8 @@ export class MultiDaySelector extends Module {
 	private timelineUpdate () {
         let obj = Timeline.getDates();
 		if (! obj) { return; }
-        if (props.time.imageryDate == obj["single"].start) { return; }
-        props.time.imageryDate = obj["single"].start;
-        mapUtils.updateImageryLayers(props.time.imageryDate);
-		mapUtils.setImageryInfo();
+		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, true);
+		console.log("after", obj["single"].start);
 		
         if (Timeline.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -274,7 +269,7 @@ export class MultiDaySelector extends Module {
         }
         utils.setSelectValue('mdsDateRange', Timeline.advancedRange.toString());
         let _dt = utils.addDay(obj["range"].end,-1);
-        let _range = Timeline.advancedRange;
+		let _range = Timeline.advancedRange;
         let _refresh = false;
         if (flatpickr.formatDate(_dt, 'Y-m-d') != flatpickr.formatDate(props.time.date, 'Y-m-d')) {
             _refresh = true;
@@ -283,11 +278,12 @@ export class MultiDaySelector extends Module {
         if (_range != props.time.range) {
             _refresh = true;
             props.time.range = _range;
-        }
+		}
 /*		if (!_refresh) {
             return;
         }
-        this.refreshLayers();*/
+		this.refreshLayers();*/
+		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }
 
 	private updateImageryDate () {
@@ -301,7 +297,8 @@ export class MultiDaySelector extends Module {
 //			props.time.imageryDate.setTime(props.time.imageryDate.getTime() - 1000*60*60*24);
 			props.time.range = 1;
 		}
-	    mapUtils.updateImageryLayers(props.time.imageryDate);
+//	    mapUtils.updateImageryLayers(props.time.imageryDate);
+		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }
 
 	private setTimeInfoLabel () {

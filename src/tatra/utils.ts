@@ -222,7 +222,7 @@ export class utils {
         let y = (isUTC) ? d.getUTCFullYear() : d.getFullYear();
         let m = (isUTC) ? d.getUTCMonth() : d.getMonth();
         let day = (isUTC) ? d.getUTCDate() : d.getDate();
-        day--;
+        //day--; ?? why; possibly result of Timeline js adding extra day as rounding.
         return new Date(y, m, day, 23, 59, 59, 0);
     }
 

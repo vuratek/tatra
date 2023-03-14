@@ -36,7 +36,7 @@ export class LayerGroup extends Module {
 			if (lo.parent) { continue; }
 //			if (! showAll && ! lo.isBasicLayer) { continue; }
 			let go = false;
-			if (! lo.clandestine && lo.tag == this.props.tag) {                 
+			if (! lo.clandestine && lo.tag == this.props.tag && this.props.layer_refs) {                 
                 go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 			}
 			else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {

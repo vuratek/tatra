@@ -14,6 +14,7 @@ import { authentication } from '../aux/authentication';
 import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
 import './css/main.scss';
 import './css/breadcrumb.scss';
+import './css/layerInfo.scss';
 import './css/content.scss';
 import './css/footer.scss';
 import './css/header.scss';

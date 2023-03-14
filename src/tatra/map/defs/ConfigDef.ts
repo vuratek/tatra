@@ -45,6 +45,10 @@ export interface IMenuModule {
     layer_refs?     : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
     handler         : Module | null;        // module handler pointer
     descriptionText? : string;              // passing description text for ex bookmarks
+    menuDescription? : string;              // description used in menu selection
+    skipMenuDisplay? : boolean;
+    menuLabel?       : string | null;
+    localRedirect?   : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)
 }
 export interface ISupportFiles {
     files       : Array <string>;

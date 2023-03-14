@@ -118,7 +118,6 @@
 		"altTitle1"	: "Title 1",
 		"altTitle2"	: "Title 2",
 		"type"		: "wmts",
-		"category" 	: "dynamic",
 		"handler"	: "imagery",
 		"tag"		: "imagery",
 		"hasTime"	: "true",

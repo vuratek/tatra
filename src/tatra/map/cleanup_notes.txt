@@ -8,6 +8,7 @@ Layer: isBasicLayer - remove
 Layer: fireLayerType - remove ?
 Layer: noDateRefresh
 
+mapUtils remove updateImageryLayers
 
 layerStyle, remove WMSTime and Orbit stuff
 

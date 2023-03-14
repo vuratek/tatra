@@ -56,6 +56,9 @@ export class map {
         coreUtils.addScaleLine();
 
         mapEvent.init();
+        if (props.version > '1.0.0' ) {
+            document.addEventListener(events.EVENT_SYSTEM_DATE_UPDATE, mapUtils.onSystemDateUpdate);
+        }
 
         if (! (window as Window)["setWMTSTime"]) { (window as Window)["setWMTSTime"] = layerStyle.setWMTSTime; }
         if (! (window as Window)["updateOrbitUrl"]) { (window as Window)["updateOrbitUrl"] = layerStyle.updateOrbitUrl;}
