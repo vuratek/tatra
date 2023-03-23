@@ -17,6 +17,7 @@ export interface IModuleHandlers {
 }
 export interface IMenuOption {
     modules         : Array <string> | null;
+    isDefault?      : boolean;
     id              : string;
     label           : string;
     icon            : string;

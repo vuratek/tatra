@@ -2,6 +2,7 @@ import { props } from "../props";
 import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
+import { hash } from "../hash";
 
 export class mainMenu {
 
@@ -137,6 +138,8 @@ export class mainMenu {
             props.allowMultipleDynamicLayers = false;
             mapUtils.resetDynamicLayers();
         }
+        let _tb = ((menu.isDefault)) ? null : tab;
+        hash.newMode(_tb, true);
     }
 
     private static closeMapMenuItems(evt:Event) {

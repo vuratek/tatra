@@ -16,3 +16,4 @@ noDateRefresh - remove
 cloneHasTime - remove
 
 Timeline.ts - look for remove
+hash - mode could be simplified by converting to string from Array<string>

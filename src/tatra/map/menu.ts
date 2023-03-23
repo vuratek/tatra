@@ -11,6 +11,7 @@ import { Basemaps } from './menu/components/Basemaps';
 import { Basic } from './menu/components/Basic';
 import { FilterLayers } from './menu/components/FilterLayers';
 import { MultiDaySelector } from './menu/components/MultiDaySelector';
+import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
 import { Module } from './menu/components/Module';
 export class menu {
 
@@ -32,6 +33,21 @@ export class menu {
         } 
         this.setMenu();
         this.presetDefaultLayerVisibility();
+        let _mode = hash.getMode();
+        let mode = '';
+        if (! _mode) {
+            let cfg = (props.config as IConfigDef);
+            if (cfg.menuOptions) {
+                for (let i=0; i<cfg.menuOptions.length; i++) {
+                    if (cfg.menuOptions[i].isDefault) {
+                        mode = cfg.menuOptions[i].id;
+                    }
+                }
+            }
+        } else {
+            mode = _mode[0];
+        }
+        this.setTab(mode);
     }
 
     private static setDefaultMenuModules() {
@@ -44,6 +60,7 @@ export class menu {
                     case "basic" : props.menuModules[m.id] = new Basic(m); break;
                     case "filterlayers" : props.menuModules[m.id] = new FilterLayers(m); break;
                     case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
+                    case "multidaytimeselector" : props.menuModules[m.id] = new MultiDayTimeSelector(m); break;
                 }
                 if (props.menuModules[m.id]) {
                     m.handler = props.menuModules[m.id];

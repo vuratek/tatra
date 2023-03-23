@@ -102,6 +102,7 @@ export class MultiDaySelector extends Module {
 		} else {
 			this.setTime(BasicMenuDateValues.HRS_24);
 		}
+	
 	}
 	public deactivate() {
 		super.deactivate();
