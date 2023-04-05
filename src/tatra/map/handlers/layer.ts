@@ -36,6 +36,9 @@ export class layer {
         case "tile_wms":
             this.addTile_WMSLayer(lo);
             break;
+        case "mvt":
+            this.addXYZVectorLayer(lo);
+            break;
         case "esri_vector_tile":
             vectorLayers.addESRILayer(lo);
             break;

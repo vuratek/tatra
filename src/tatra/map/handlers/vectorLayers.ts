@@ -4,7 +4,7 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
 import { Layer } from '../obj/Layer';
 import { Style } from "ol/style";
-import { EsriJSON } from "ol/format";
+import { EsriJSON, MVT } from "ol/format";
 
 export class vectorLayers {
 
@@ -46,7 +46,7 @@ export class vectorLayers {
             maxZoom: 22,
         });
 
-        let format = new EsriJSON();
+        let format = (lo.type == "mvt") ? new MVT()  : new EsriJSON();
 
         lo._layer = new VectorTileLayer({
             declutter: true,

@@ -28,7 +28,7 @@ export class tileUrlFunctions {
             .replace('#id#', lo.id)
             .replace('{z}', (tileCoord[0] - off).toString())
             .replace('{x}', tileCoord[1].toString())
-            .replace('{y}', (tileCoord[2]).toString());	    
+            .replace('{y}', tileCoord[2].toString());
     }
 
     /**
