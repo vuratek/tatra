@@ -11,10 +11,10 @@ export class helper {
         let scale = 'day';
         let step = 1;
         let editable = true;
-        if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+        if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
             scale = 'hour';
             step = 6;
-            editable = false;
+            editable = (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) ? true : false;
         }
         let zoomMax = (1000 * 60 * 60 * 24 * this.currentZoomMaxLevel);
         let zoomMin = (1000 * 60 * 60 * 24 * this.currentZoomMinLevel);
@@ -33,7 +33,7 @@ export class helper {
 
     private static setZoomLevel () {
         let w = window.innerWidth;
-        if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+        if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
             if (w < 700) { 
                 this.currentZoomMinLevel = 1; 
                 this.currentZoomMaxLevel = 1; 

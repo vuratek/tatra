@@ -190,7 +190,7 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_global/{z}/{y}/{x}",
+			"url"				: "/layers/pa_global/{z}/{y}/{x}.png",
 			"tileSize"			: 512,
 			"tileUrlHandler"	: "basic",
 			"tileUrlFunction"	: [	
@@ -213,7 +213,7 @@
 		"props" 	: {
 			"maxZoom"			: 16,
 			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_regional/{z}/{y}/{x}",
+			"url"				: "/layers/pa_regional/{z}/{y}/{x}.png",
 				"tileSize"			: 512,
 				"tileUrlHandler"	: "basic",
 				"tileUrlFunction"	: [	

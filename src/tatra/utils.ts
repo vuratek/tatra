@@ -33,6 +33,7 @@ export class utils {
                 divId = '#' + divId; 
             } 
         }
+        if (divId == '#') { return; }
         let els = document.querySelectorAll(divId);
         for (let i=0; i < els.length; i++) {
             els[i].classList.add(className);
@@ -264,6 +265,20 @@ export class utils {
         }
       
         return JSON.stringify(obj) === JSON.stringify({});
+    }
+
+    // convert mins into hours when possible (60 mins = 1 hour, but 75 mins = 75 mins)
+    public static getMinHourValue(mins:number) : string {
+        let str = '';
+        if (mins % 60 == 0) {
+            str = (mins/60).toString() + ' hr';
+            if (mins / 60 > 1) { 
+                str += 's';
+            }
+        } else {
+            str = mins + ' mins'
+        }
+        return str;
     }
 
     public static isJson(str : string) {

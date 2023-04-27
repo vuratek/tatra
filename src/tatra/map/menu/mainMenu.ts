@@ -10,7 +10,6 @@ export class mainMenu {
     private static id : string = '';
 
     public static render(id: string) {
-        console.log(props.layers);
         this.id = id;
         let header = document.getElementById(`${this.id}Header`) as HTMLDivElement;
         if (! header) { return; }
@@ -113,6 +112,7 @@ export class mainMenu {
         }
         if (this.currentTab != '') {
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
+            utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
             for (let key in props.menuModules) {
                 props.menuModules[key].presetLayers();
             }
@@ -124,6 +124,7 @@ export class mainMenu {
         }
         this.currentTab = tab;
         utils.addClass(`MapMenuItem_${this.currentTab}`, 'selected');
+        utils.addClass(`${this.id}`, `tab_${this.currentTab}`);
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (! el) { return; }
         el.innerHTML = menu.label;

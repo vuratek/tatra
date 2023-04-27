@@ -1,5 +1,4 @@
 //import {Main} from '../../main/index';
-import './css/*.scss';
 import { INavConfigMenuItems } from '../page/navConfigDef';
 import { utils } from '../utils';
 import { HomeMenuButton } from './HomeMenuButton';

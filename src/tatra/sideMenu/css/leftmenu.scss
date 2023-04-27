@@ -175,8 +175,11 @@
     color: rgba(256,256,256,0.95);
     font-weight: bold;
 }
-.leftNavBarMenu a {
+.leftNavBarMenu a, .leftNavBarMenu a:visited, .leftNavBarMenu a:link {
     color:#ccc;
+}
+.leftNavBarMenu a:hover {
+    text-decoration: none;
 }
 .leftNavBarMenu a > li > span, .leftNavBarMenu li > span {
     margin-left: 6.5rem;
@@ -258,11 +261,15 @@
     z-index: 20;
     background:none;
     border-radius: 0;
+    display:none;
 }
 #leftNavBarMapResize:hover {
     color: #eee;
     background: #ec6111;
     border-radius: .5rem;
+}
+.isMap #leftNavBarMapResize {
+    display:block;
 }
 .leftNavBarActive #leftNavBarClose {
     position: absolute;

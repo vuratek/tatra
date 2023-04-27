@@ -15,6 +15,7 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
         faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt, faCog, faSearchLocation, faGraduationCap, faCogs, faFlask,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
+        faClock,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
@@ -36,7 +37,7 @@ export class fontAwesome {
         // corporate icons    
         library.add(faRedditAlien, faTwitter, faFacebook);
         // timeline 
-        library.add(faFastBackward, faFastForward, faStepBackward, faStepForward);
+        library.add(faFastBackward, faFastForward, faStepBackward, faStepForward, faClock);
         // firms
         library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog, faQuoteRight,
             faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff, faCloud);

@@ -115,7 +115,7 @@ export class MultiDaySelector extends Module {
 		document.removeEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
 		Timeline.init("timeline", TimelineType.RANGE_TIED);
         Timeline.singleDate = props.time.imageryDate;
-        Timeline.advancedRange = props.time.range;
+		Timeline.advancedRange = props.time.range;
         controls.enableBtn("timeline");
 		controls.setItem("timeline", true);		
 		
@@ -131,7 +131,7 @@ export class MultiDaySelector extends Module {
 				<span class="mdsCalendar">
 					<i class="fa fa-calendar-minus fa-lg" style="margin-left:1rem;"></i>
 				</span>
-				<select id="mdsDateRange">
+				<select id="mdsDateRange" class="mdsDateRange">
 					${rangePicker.getRangeOptions()}
 				</select>
 			</div>
@@ -189,7 +189,7 @@ export class MultiDaySelector extends Module {
 
 	public setTime ( time : number ) {
 		if (time == BasicMenuDateValues.DAY_7) {
-			props.time.date = utils.sanitizeDate(new Date(), true);
+			props.time.date = utils.sanitizeDate(new Date(), false);
 			props.time.imageryDate = utils.addDay(props.time.date, -1);
 			props.time.range = 6;
 			events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
@@ -212,7 +212,7 @@ export class MultiDaySelector extends Module {
 			let info = (time == 24) ? 'Last 24hrs' : 'Today';
 			txt.innerHTML = 'Fires: ' + info;
 		}
-		let date = utils.sanitizeDate(new Date(), true);
+		let date = utils.sanitizeDate(new Date(), false);
 		let end = flatpickr.formatDate(date, 'Y-m-d');
 		
 		let start = (time == 24) ? flatpickr.formatDate(utils.addDay(date,-1), 'Y-m-d') : end;
@@ -260,7 +260,7 @@ export class MultiDaySelector extends Module {
 	private timelineUpdate () {
         let obj = Timeline.getDates();
 		if (! obj) { return; }
-		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, true);
+		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		console.log("after", obj["single"].start);
 		
         if (Timeline.isPartialDate(obj["range"].end)) {
@@ -306,7 +306,7 @@ export class MultiDaySelector extends Module {
 		let txt = (props.time.quickTime == 1)  ? BasicMenuDates.TODAY : BasicMenuDates.HRS_24;
 		let label = `<span class="mds_btn_timeInfoTitle">${txt}</span><br/>`;
 		label += (props.time.quickTime == 1) ? "From [Today 00:00:00 GMT] to present" : "From [Yesterday 00:00:00 GMT] to present";
-		label += `<span id="mds_btn_timeInfo" class="colorBlue"> <i class="fa fa-info-circle" aria-hidden="true"></i></span>`;
+		label += `<span id="mds_btn_timeInfo"> <i class="fa fa-info-circle" aria-hidden="true"></i></span>`;
 //        label += '<br><a target="_blank" rel="noopener" href="https://greenwichmeantime.com/uk/time/">Current Date/Time in GMT</a>';
         let el = document.getElementById('mdsTimePeriodStatement');
         if (el) {

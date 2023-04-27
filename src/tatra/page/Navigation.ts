@@ -12,6 +12,7 @@ import { quickSearch } from "../aux/quickSearch";
 import { RightMenu } from '../sideMenu/RightMenu';
 import { authentication } from '../aux/authentication';
 import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
+import '../sideMenu/css/*.scss';
 import './css/main.scss';
 import './css/breadcrumb.scss';
 import './css/layerInfo.scss';
