@@ -116,7 +116,14 @@ export class mapUtils {
             }
         }
         this.setCountryLabel();
-        if (update) { events.dispatch(events.EVENT_BASEMAP_CHANGE); }
+        if (update) { 
+            for (let i = 0; i < props.layers.length; i++) {
+                if (props.layers[i].tag == "imagery" && props.layers[i].visible) {
+                    props.layers[i].visible = false;
+                }
+            }
+            events.dispatch(events.EVENT_BASEMAP_CHANGE); 
+        }
     }
 
     public static setMapCursor(type?:string | null) {

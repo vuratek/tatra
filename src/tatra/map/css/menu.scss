@@ -150,7 +150,7 @@
 .mapMenuItems .option {
     width: 32%;
     vertical-align: top;
-    min-height: 9rem;
+    min-height: 9.5rem;
     color: #0c2e3e;
     cursor: pointer;
 	background: #f2f2f2;
@@ -161,25 +161,23 @@
 }
 .mapMenuItems .selected, .mapMenuItems .option:hover {
 	opacity: 1;
-	background: linear-gradient(180deg,#30aaf2,#1e81b9);
+	background: linear-gradient(#3bee62, #1e8434);
 }
 .mapMenuItems .icon {
-	color: #0c2e3e;
-    width: 98%;
+	width: 98%;
     text-align: center;
     font-size: 3.8rem;
     display: inline-block;
     position: absolute;
-    top: .7rem;
+    top: 0.7rem;
+    color: #1d1d1d;
 }
-
 .mapMenuItems .label {
-/*	font-size: 1.5rem; */
+	text-align: center;
+    width: 100%;
+    margin-top: 4.9rem;
+    font-family: Titillium Web;
     display: inline-block;
-    text-align: center;
-	margin-top: 4.9rem;
-	width:100%;
-	font-family: 'Titillium Web';
 }
 .mapMenuItems .label span:first-child {
 	text-transform: uppercase;

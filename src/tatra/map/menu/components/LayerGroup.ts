@@ -145,7 +145,14 @@ export class LayerGroup extends Module {
 			extraBtn = `
 				<div id="layerExtra_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerMenu">					
 				</div>`;
-		}
+        }
+        let zoomTo = '';
+        if (lo.zoomTo) {
+            zoomTo = `
+                <div id="layerZoomTo_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsZoomTo">
+                    <span><i class="fa fa-search-plus" aria-hidden="true"></i></span>
+                </div>`;
+        }
 
 		let tileBtn = '';
 		if (lo.tileErrorUrl) {
@@ -171,7 +178,8 @@ export class LayerGroup extends Module {
 				</div>				
 			</div>
 			${extraBtn}
-			${tileBtn}
+            ${tileBtn}
+            ${zoomTo}
 			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
 			${disTxt}
 			${lvlTxt}
@@ -196,8 +204,11 @@ export class LayerGroup extends Module {
 		utils.setClick(`${baseId}_${lo.id}`, () => this.selectLayer(lo.id));
 		this.setLayerInfoField(`layerInfo_${baseId}_${lo.id}`, lo);
 		utils.setClick(`layerExtra_${baseId}_${lo.id}`, () => this.showExtraOption(lo.id));
-		utils.setChange(`layerShowMissingTile_${baseId}_${lo.id}`, ()=> this.refreshMissingTile(baseId, lo.id));
-		let el = document.getElementById(`layerShowMissingTile_${baseId}_${lo.id}`) as HTMLInputElement;
+        utils.setChange(`layerShowMissingTile_${baseId}_${lo.id}`, ()=> this.refreshMissingTile(baseId, lo.id));
+        if (lo.zoomTo) {
+            utils.setClick(`layerZoomTo_${lo.id}`, ()=>this.zoomTo(lo.id));
+        }
+        let el = document.getElementById(`layerShowMissingTile_${baseId}_${lo.id}`) as HTMLInputElement;        
 		if (el) {
 			el.checked = lo.showTileError;
 		}
@@ -213,7 +224,17 @@ export class LayerGroup extends Module {
 		if (!el) { return; }
 		lo.showTileError = el.checked;
 		lo.refresh();
-	}
+    }
+    
+    private zoomTo(id:string) {
+        let lo = mapUtils.getLayerById(id);
+        if (lo && lo.zoomTo) {
+            let arr = lo.zoomTo.split(',');
+            if (arr.length == 3) {
+                mapUtils.zoomTo(Number(arr[0]), Number(arr[1]), Number(arr[2]));
+            }
+        }
+    }
 
 	private showExtraOption(id : string) {
 		let lo = mapUtils.getLayerById(id);

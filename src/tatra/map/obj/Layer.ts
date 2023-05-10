@@ -158,6 +158,7 @@ export class Layer {
     public trackLoading     : boolean = false;
     public type             : string = "wmts"; // WMTS, WMS, XYZ
     public variableRange    : IVariableRange = {};
+    public zoomTo           : string | null = null; // lon, lat, zoom level
  
     public addFeature (coord : Coord) {
         if (!this.boxSource) {
