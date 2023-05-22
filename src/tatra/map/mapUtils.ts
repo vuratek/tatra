@@ -71,7 +71,7 @@ export class mapUtils {
                 }
             }
             lo.time = date;
-            if (lo.visible && lo.hasTime && refresh) {
+            if (lo.visible && lo.hasTime === true && refresh) {
                 lo.refresh();
             }
         }
@@ -154,16 +154,25 @@ export class mapUtils {
 
     public static setOverlay (id : string) {
         for (let i = 0; i < props.layers.length; i++) {
-            let layer = props.layers[i];
-            if (layer.category != "overlay") {
+            let lo = props.layers[i];
+            if (lo.category != "overlay") {
                 continue;
             }
-            if (id == layer.id) {
-                layer.visible = !layer._visible;
+            if (id == lo.id) {
+                lo.visible = !lo._visible;
                 this.setLabel(id);
             }
-            if (id == layer.id && layer.isLabel) {
+            if (id == lo.id && lo.isLabel) {
             	this.setCountryLabel();
+            }
+            if (lo.exclusive && lo.visible) {
+                let arr = lo.exclusive.split(',');
+                for (let j=0; j<arr.length; j++) {
+                    let lo2 = this.getLayerById(arr[j]);
+                    if (lo2) {
+                        lo2.visible = false;
+                    }
+                }
             }
         }
     }

@@ -127,8 +127,13 @@ export class screenshot extends baseComponent {
                 height: image.height,
                 width: image.width,
                 GeographicTypeGeoKey:4326,
+                PhotometricInterpretation:2,
                 ModelPixelScale: [dx, dy, 0],
-                ModelTiepoint: [0, 0, 0, extent[0], extent[3], 0]
+                ModelTiepoint: [0, 0, 0, extent[0], extent[3], 0],
+                GeoAsciiParams: 'WGS 84',
+                GTModelTypeGeoKey: 2,
+                GTRasterTypeGeoKey: 1,
+                GeogCitationGeoKey: 'WGS 84'
             };
 
             let arrayBuffer = writeArrayBuffer(values, metadata);

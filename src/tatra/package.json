@@ -29,7 +29,7 @@
     "coordinate-parser": "^1.0.7",
     "elm-pep": "^1.0.6",
     "events": "^3.3.0",
-    "flatpickr": "^4.6.9",
+    "flatpickr": "^4.6.13",
     "nouislider": "^14.6.3",
     "ol": "^7.2.2",
     "ol-mapbox-style": "^9.4.0"

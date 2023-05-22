@@ -105,6 +105,7 @@ export class Layer {
     public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
+    public exclusive        : string | null = null;
     public extent           : Array <number> = [-180, -90, 180, 90];
     public fireLayerType    : FireLayerType | null = null;      // remove?
     public handler          : string = "";

@@ -18,7 +18,7 @@ export class MultiDayTimeSelector extends Module {
 
     private lastRangeMins                : number = 240;
     private lastRangeDays                : number = 1;
-    private currentDayMode              : string = '';
+    private currentDayMode               : string = '';
 
 	public constructor(props : IMenuModule) {
 		super(props);
@@ -80,6 +80,9 @@ export class MultiDayTimeSelector extends Module {
         utils.setClick('ql_info', ()=>this.displayTimeInfoDetail());
         utils.setClick(`mmm_${this.props.id}-btn-daily`, ()=>this.onDailySubDaily('daily'));
         utils.setClick(`mmm_${this.props.id}-btn-sub-daily`, ()=>this.onDailySubDaily('subdaily'));
+        if (flatpickr.formatDate(props.time.date, "Y-m-d") == flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d')) {
+            props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
+        }
 		this.initDatePicker(props.time.date);
         rangePicker.timelineUpdate();	
         this.onDailySubDaily('daily');
@@ -181,7 +184,8 @@ export class MultiDayTimeSelector extends Module {
         this.setDates();
     }
     private onQuickLinksUpdate(val : string) {
-        let dt = utils.sanitizeDate(utils.getGMTTime(new Date()));
+        let dt = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
+        props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
         if (val == 'today') {
             this.setLastMinValues(0);
         } else if (val == '24h') {
@@ -211,6 +215,8 @@ export class MultiDayTimeSelector extends Module {
         }
         props.time.rangeMins  = val;
         this.setDailySubDailyOption('subdaily');
+        this.clock.selectedDates.push(props.time.date);
+        this.clock.setDate(props.time.date);
     }
     private setQuickLinks() {
         let dt = utils.sanitizeDate(utils.getGMTTime(new Date()));
@@ -226,11 +232,13 @@ export class MultiDayTimeSelector extends Module {
                 utils.addClass('ql_24h', 'selected');
             } else if (props.time.range == 6 && props.time.rangeMins == 0) {
                 utils.addClass('ql_7d', 'selected');
-            } else if (props.time.range == 0 && props.time.rangeMins == 60) {
-                utils.addClass('ql_1h', 'selected');
-            } else if (props.time.range == 0 && props.time.rangeMins == 240) {
-                utils.addClass('ql_4h', 'selected');
-            }
+            } else if (this.getClockMaxTime(utils.getGMTTime(new Date())) == flatpickr.formatDate(props.time.date, 'H:i')) {
+                if (props.time.range == 0 && props.time.rangeMins == 60) {
+                    utils.addClass('ql_1h', 'selected');
+                } else if (props.time.range == 0 && props.time.rangeMins == 240) {
+                    utils.addClass('ql_4h', 'selected');
+                }                    
+            }   
         }
         this.renderSubDailyMenu();
     }
@@ -239,9 +247,11 @@ export class MultiDayTimeSelector extends Module {
 		document.addEventListener(Timeline.EVENT_TIMELINE_UPDATED, this.timelineHandler);
     }
     public deactivate() {
+        Timeline.setTimelineRangeMode(TimelineType.RANGE_TIED);
 		super.deactivate();
 		Timeline.delete();
-		document.removeEventListener(Timeline.EVENT_TIMELINE_UPDATED, this.timelineHandler);
+        document.removeEventListener(Timeline.EVENT_TIMELINE_UPDATED, this.timelineHandler);
+        this.currentDayMode = '';
 	}
 
     private initDatePicker (d : Date) {
@@ -265,14 +275,7 @@ export class MultiDayTimeSelector extends Module {
 		if (this.clock) {
 			this.clock.destroy();
         }
-        let dt = utils.getGMTTime(new Date());
-        let hrs = dt.getHours();
-        let mins = Math.ceil(dt.getMinutes() / 10) * 10;
-        if (mins == 60) {
-            hrs++;
-            mins = 0;
-        }
-        let max = utils.padFill(hrs.toString(), 2) + ':' + utils.padFill(mins.toString(),2);
+        let max = this.getClockMaxTime(utils.getGMTTime(new Date()));
         this.clock = flatpickr("#mds_clock", {
             dateFormat : 'H:i',
             enableTime: true,
@@ -280,29 +283,50 @@ export class MultiDayTimeSelector extends Module {
             time_24hr: true,
             minuteIncrement: 10,
             minTime : "00:00",
-            maxTime : max,
+            maxTime : '23:50',
             defaultDate : max,
             onChange : function () {
                 option.setClock();
             }
         }) as Instance;
+        this.clock.selectedDates.push(props.time.date);
+//        this.clock.setDate(props.time.date);
+            
 //        this.clock.selectedDates.push(d);
+    }
+    private getClockMaxTime(date : Date) : string {
+        let dt = utils.getGMTTime(new Date());
+        if (flatpickr.formatDate(date,'Y-m-d') == flatpickr.formatDate(dt, 'Y-m-d')) {            
+            let hrs = dt.getHours();
+            let mins = Math.ceil(dt.getMinutes() / 10) * 10;
+            if (mins == 60) {
+                hrs++;
+                mins = 0;
+            }
+            return utils.padFill(hrs.toString(), 2) + ':' + utils.padFill(mins.toString(),2);
+        } else {
+            return '23:50';
+        }
+
     }
     private setClock() {
     }
 	private setDates () {
-        console.log("setDates");
         let range = (document.getElementById('mdsDateRange')) ? utils.getSelectValue(`mdsDateRange`) : utils.getSelectValue(`mdsSubDateRange`);
-        console.log("RANGE", range);
+        props.time.date = this.calendar.selectedDates[0];
+
         if (range[0] == 'm') {
             props.time.rangeMins = Number(range.replace('m', ''));
             props.time.range = 0;
+            props.time.date.setHours((this.clock.selectedDates[0] as Date).getHours());
+            props.time.date.setMinutes((this.clock.selectedDates[0] as Date).getMinutes());
+            props.time.date.setSeconds(0);
         } else {
             props.time.rangeMins = 0;
             props.time.range = Number(range);
+            props.time.date = utils.sanitizeTime(props.time.date);
         }
 
-		props.time.date = this.calendar.selectedDates[0];
 		props.time.quickTime = 0;
         Timeline.setDate(props.time.date, props.time.range, props.time.rangeMins);
         
@@ -319,30 +343,59 @@ export class MultiDayTimeSelector extends Module {
 
     private timelineUpdate () {
         let obj = Timeline.getDates();
-		if (! obj) { return; }
+        if (! obj) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-		
-        if (Timeline.isPartialDate(obj["range"].end)) {
-            this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
-        } else {
-            this.calendar.setDate(utils.addDay(obj["range"].end,-1));
-        }
-        utils.setSelectValue('mdsDateRange', Timeline.advancedRange.toString());
-        let _dt = utils.addDay(obj["range"].end,-1);
-		let _range = Timeline.advancedRange;
+        
         let _refresh = false;
-        if (flatpickr.formatDate(_dt, 'Y-m-d') != flatpickr.formatDate(props.time.date, 'Y-m-d')) {
-            _refresh = true;
-            props.time.date = _dt;
+
+        if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+//            console.log("END", obj["range"].end);
+            let _dt = obj["range"].end;
+            this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
+            this.clock.maxTime = this.getClockMaxTime(_dt);
+            this.clock.setDate(obj["range"].end);
+            if (flatpickr.formatDate(_dt, 'Y-m-d H:i') != flatpickr.formatDate(props.time.date, 'Y-m-d H:i')) {
+                _refresh = true;
+                props.time.date = utils.sanitizeTime(_dt);
+            }
+            let _rangeMin = Timeline.advancedMinuteRange;
+            if (_rangeMin != props.time.rangeMins) {
+                _refresh = true;
+                props.time.rangeMins = _rangeMin;
+            }
+            let el = document.getElementById('mdsSubDateRange') as HTMLSelectElement;
+            if (el) {
+                el.innerHTML = `${rangePicker.getSubdailyRangeOptions(props.time.rangeMins)}`
+            }
+            utils.setSelectValue('mdsSubDateRange', 'm' + props.time.rangeMins);
+
+
+//            this.clock.setDate(end);
+            //utils.setSelectValue('mdsSubDateRange', 'm' + Timeline.advancedMinuteRange.toString());
+
+        } else {
+            if (Timeline.isPartialDate(obj["range"].end)) {
+                this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
+            } else {
+                this.calendar.setDate(utils.addDay(obj["range"].end,-1));
+            }
+
+            utils.setSelectValue('mdsDateRange', Timeline.advancedRange.toString());
+            let _dt = utils.addDay(obj["range"].end,-1);
+            let _range = Timeline.advancedRange;
+            if (flatpickr.formatDate(_dt, 'Y-m-d') != flatpickr.formatDate(props.time.date, 'Y-m-d')) {
+                _refresh = true;
+                props.time.date = _dt;
+            }
+            if (_range != props.time.range) {
+                _refresh = true;
+                props.time.range = _range;
+            }
         }
-        if (_range != props.time.range) {
-            _refresh = true;
-            props.time.range = _range;
-		}
-/*		if (!_refresh) {
+		if (!_refresh) {
             return;
         }
-        this.refreshLayers();*/
+//        this.refreshLayers();
         this.setQuickLinks();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }

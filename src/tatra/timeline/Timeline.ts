@@ -66,6 +66,8 @@ export class Timeline {
 
     public static MAX_DAYS              : number = 31;
     public static advancedRange         : number = 2;
+    public static MAX_MINUTES           : number = 24*60;   // 1 day
+    public static advancedMinuteRange   : number = 240; // 4 hours
     public static singleDate            : Date = utils.getGMTTime(new Date());
     public static singleTime            : Date = utils.getGMTTime(new Date());
 
@@ -103,7 +105,6 @@ export class Timeline {
 
     public static setTimelineRangeMode(mode:TimelineType) {
         if (this.type == mode) { return; }
-        console.log("SETTING mode", mode);
         if (mode == TimelineType.RANGE_TIED) {
             this.setModeRangeTied();
         } else if (mode == TimelineType.RANGE_SUBHOUR_TIED) {
@@ -128,8 +129,10 @@ export class Timeline {
         if (this.type == TimelineType.RANGE_TIED && hourly) {
             this.setModeRangeHourMinTied();
             //rangePicker.timelineUpdate();
-        } else if ((this.type == TimelineType.RANGE_HOUR_MIN_TIED && ! hourly) || this.type == TimelineType.RANGE_SUBHOUR_TIED) {
+        } else if (this.type == TimelineType.RANGE_HOUR_MIN_TIED && ! hourly) {
             this.setModeRangeTied();
+        } else if (this.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            this.setModeRangeSubHourTied();
         }
         
     }
@@ -151,9 +154,10 @@ export class Timeline {
 
     // used for daily but with GOES 15 min imagery
     private static setModeRangeHourMinTied() {
+        if (this.type == TimelineType.RANGE_HOUR_MIN_TIED) { return; }
         this.type = TimelineType.RANGE_HOUR_MIN_TIED;
         let maxdate = utils.getGMTTime(new Date());
-        maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0 - 30);
+        maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0 + 10);
         maxdate.setSeconds(0);
         Timeline.maxDate = maxdate;
         let mindate = new Date(Timeline.maxDate.getTime());
@@ -171,18 +175,24 @@ export class Timeline {
 
     // used for sub daily (2, 4 hours)
     private static setModeRangeSubHourTied() {
-        this.type = TimelineType.RANGE_HOUR_MIN_TIED;
+        if (this.type == TimelineType.RANGE_SUBHOUR_TIED) { return; }
+        this.type = TimelineType.RANGE_SUBHOUR_TIED;
+
         let maxdate = utils.getGMTTime(new Date());
-        maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0);
+        maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0 + 10);
         maxdate.setSeconds(0);
         Timeline.maxDate = maxdate;
+
         let mindate = new Date(Timeline.maxDate.getTime());
-        rangePicker.initDatePicker(mindate);
         mindate.setMinutes(mindate.getMinutes() - 10);
+        rangePicker.initDatePicker(mindate);
+        this.timeKeeper["single"] = { start: mindate, end : maxdate};
+        this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, -this.advancedMinuteRange), end : maxdate};
         if (this.timeKeeper) {
-            this.timeKeeper["single"].start == mindate;
+            Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end, content : "<div></div>"});
+            Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
         }
-        Timeline.items.update({id: 'single', start:  mindate, end: Timeline.maxDate});
+
         let zoomDate = new Date(mindate.getTime());
         zoomDate.setMinutes(-120);
 
@@ -236,7 +246,7 @@ export class Timeline {
             
             snap: function (date : Date, scale : string, step : number) {
                 let d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-                if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
                     d.setHours(date.getHours());
                     let min = Math.floor(date.getMinutes() / 10.0);
                     d.setMinutes(min * 10);
@@ -289,19 +299,35 @@ export class Timeline {
 
     private static setSingleTimeKeeper() {
         if (this.timeKeeper) {
-            this.timeKeeper["single"] = { start: utils.sanitizeDate(this.singleDate), end : utils.sanitizeDate(utils.addDay(this.singleDate))};
+            if (this.type == TimelineType.RANGE_SUBHOUR_TIED) {
+        
+                let maxdate = new Date(this.singleDate.getTime());
+                maxdate.setMinutes(this.singleDate.getMinutes() + this.advancedMinuteRange);
+                this.timeKeeper["single"] = { start: this.singleDate, end : maxdate};
+            } else {
+                this.timeKeeper["single"] = { start: utils.sanitizeDate(this.singleDate), end : utils.sanitizeDate(utils.addDay(this.singleDate))};
+            }
         }
     }
 
     private static render() {
         this.timeKeeper = {};
         this.setSingleTimeKeeper();
-        if (this.type == TimelineType.RANGE_TIED || this.type == TimelineType.RANGE_HOUR_MIN_TIED || this.type == TimelineType.RANGE_SUBHOUR_TIED) {
+        if (this.type == TimelineType.RANGE_TIED || this.type == TimelineType.RANGE_HOUR_MIN_TIED ) {
             this.timeKeeper["range"] = { start: utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date()), this.advancedRange)), end : utils.maximizeDate(utils.addDay(utils.getGMTTime(new Date())))};
             //this.timeKeeper["range"] = { start: utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date())), - this.advancedRange), end : utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date()),false))};
             rangePicker.render(this.id)
         } else if (this.type == TimelineType.SINGLE) {
             singleDate.render(this.id);
+        } else if (this.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            let maxdate = utils.getGMTTime(new Date());
+            maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0);
+            maxdate.setSeconds(0);
+
+            let mindate = new Date(maxdate.getTime());
+            mindate.setMinutes(mindate.getMinutes() - 10);
+            this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, this.advancedMinuteRange), end : maxdate};
+            rangePicker.render(this.id)
         }
         this.renderTimelineWrap(this.id);
         this.container = document.createElement("div");
@@ -361,16 +387,94 @@ export class Timeline {
         }
     }
 
-    private static onChanged() {
-        if (! Timeline.items) {
-            return;
-        }
-//        console.log("CALLED", Timeline.maxDate, Timeline.advancedRange);
+    private static onChangedHourMin() {
         let iSingle = this._getTimelineCloneValue('single');
         let iRange = this._getTimelineCloneValue('range');
         let origSingle = this._getTimelineCloneValue('single');
         let origRange = this._getTimelineCloneValue('range');
-        if (iRange && iSingle && (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED)) {
+
+        if (iRange && iSingle) {
+            if (iRange.start > utils.addMinutes(Timeline.maxDate, -Timeline.advancedMinuteRange)) {
+                iRange.start = utils.addMinutes(Timeline.maxDate, -Timeline.advancedMinuteRange);
+                iRange.end = Timeline.maxDate;
+            } 
+            if (iSingle.start > Timeline.maxDate) {
+                iSingle.start = utils.addMinutes(Timeline.maxDate, -10);
+                iSingle.end =  Timeline.maxDate;
+            }     
+            let diff = utils.getMinuteDiff(iRange.start, iRange.end);
+            let setMins = Timeline.MAX_MINUTES;
+            if (diff < 10) { setMins = 10;}
+            if (diff > Timeline.MAX_MINUTES || diff < 10) {
+
+                iRange.end = utils.addMinutes(iRange.start, setMins);
+                if (Timeline.minusDragDirection) {
+                    iRange.end =  utils.addMinutes(iRange.start, setMins);
+                } else {
+                    iRange.start = utils.addMinutes(iRange.end, -setMins);
+                }
+            }
+  
+            if (iRange.start > iSingle.start) {
+                if (Timeline.draggedId == 'single') {
+                    iRange.start = iSingle.start;
+                    iRange.end = utils.addMinutes(iSingle.start, diff);
+                } else {
+                    iSingle.start = iRange.start;
+                    iSingle.end = utils.addMinutes(iRange.start, 10);
+                }
+            }
+            else if (iRange.end < iSingle.end) { 
+                if (Timeline.draggedId == 'single') {
+                    iRange.start = utils.addMinutes(iSingle.end, -diff);
+                    iRange.end = iSingle.end;
+                } else {
+                    iSingle.start = utils.addMinutes(iRange.end, -10)
+                    iSingle.end = iRange.end;
+                }
+            }
+
+            if (iRange.end > Timeline.maxDate) {
+                iRange.start = utils.addMinutes(Timeline.maxDate, -Timeline.advancedMinuteRange);
+                iRange.end = Timeline.maxDate;
+
+                iSingle.start = utils.addMinutes(Timeline.maxDate, -10);
+                iSingle.end = Timeline.maxDate;
+            }
+            if (helper.isDiff(iSingle, origSingle as ITimelineRanges)) {
+                Timeline.items.update(
+                    {id: 'single', start: iSingle.start, end: iSingle.end},
+                    {id: 'range', start: iRange.start, end: iRange.end}
+                );
+            } else if (helper.isDiff(iRange, origRange as ITimelineRanges)) {
+                Timeline.items.update({id: 'range', start: iRange.start, end: iRange.end});
+            }
+        }
+
+        let obj = Timeline.getDates();
+        if (obj) {
+            let diff = utils.getMinuteDiff(obj["range"].start, obj["range"].end);
+            Timeline.singleDate = obj["single"].start;
+            Timeline.advancedMinuteRange = diff;
+            helper.eventTimelineUpdate();
+        }
+    }
+
+    private static onChanged() {
+        if (! Timeline.items) {
+            return;
+        }
+        if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            this.onChangedHourMin();
+            return;
+        }
+
+        let iSingle = this._getTimelineCloneValue('single');
+        let iRange = this._getTimelineCloneValue('range');
+        let origSingle = this._getTimelineCloneValue('single');
+        let origRange = this._getTimelineCloneValue('range');
+        
+        if (iRange && iSingle && (Timeline.type != TimelineType.SINGLE)) {
             if (iRange.start > utils.addDay(Timeline.maxDate, -1)) {
                 iRange.start = utils.addDay(Timeline.maxDate,-Timeline.advancedRange -1);
                 iRange.end = Timeline.maxDate;
@@ -380,8 +484,8 @@ export class Timeline {
                 if (iSingle.start > utils.addDay(Timeline.maxDate, -1)) {
                     iSingle.start = utils.addDay(Timeline.maxDate,-1);
                     iSingle.end =  Timeline.maxDate;
-                }     
-            }
+                }
+            }     
 
             let diff = utils.getDayDiff(iRange.start, iRange.end);
             let setDate = Timeline.MAX_DAYS;
@@ -496,32 +600,60 @@ export class Timeline {
             return;
         }
         let range = Timeline.items.get('range');
-        let adjust = (time >= range.start && time <= range.end) ? true : false;
-        let diff = utils.getDayDiff(new Date(range.start), new Date(range.end));
-        if (this.isPartialDate(range.end)) { diff++; }
+        if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            let time = event.time as Date;
+            time.setMinutes(Math.floor(time.getMinutes() / 10) * 10);
+            time.setSeconds(0);
 
-        if (time >= range.end) { Timeline.minusDragDirection = false; }
-        else { Timeline.minusDragDirection = true;}
+            let adjust = (time >= range.start && time <= range.end) ? true : false;
+            let diff = utils.getMinuteDiff(new Date(range.start), new Date(range.end));
+            if (time >= range.end) { Timeline.minusDragDirection = false; }
+            else { Timeline.minusDragDirection = true;}
+            if (Timeline.actionType == ActionType.CLICK) {
+                if (time < range.start) {
+                    Timeline.items.update({id: 'range', start: utils.addMinutes(time, - diff), end: time});
+    //                Timeline.items.update({id: 'range', start: time, end: utils.addDay(time, diff)});
+                } else if (time > range.end) {
+                    Timeline.items.update({id: 'range', start: time, end: utils.addMinutes(time, diff)});
+                }   
+            }    
+            if (range.start > single.start || range.end < single.end) { 
+                adjust = true;
+            }
 
-        if (Timeline.actionType == ActionType.CLICK) {
-            if (time < range.start) {
-                Timeline.items.update({id: 'range', start: utils.addDay(time, - diff + 1), end: utils.addDay(time)});
-//                Timeline.items.update({id: 'range', start: time, end: utils.addDay(time, diff)});
-            } else if (time >  utils.addDay(range.end, -1)) {
-                Timeline.items.update({id: 'range', start: utils.addDay(time, - diff + 1), end: utils.addDay(time)});
-            }            
-        } 
-
-        if (range.start > single.start || range.end < single.end) { 
-            adjust = true;
-        }
-
-        if (Timeline.actionType == ActionType.CLICK || adjust) {
-            if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+            if (Timeline.actionType == ActionType.CLICK || adjust) {
                 let sanTime = event.snappedTime;
                 Timeline.items.update({id: 'single', start: sanTime, end: utils.addMinutes(sanTime,10)});
-            } else {
-                Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
+            }     
+
+        } else {
+            let adjust = (time >= range.start && time <= range.end) ? true : false;
+            let diff = utils.getDayDiff(new Date(range.start), new Date(range.end));
+            if (this.isPartialDate(range.end)) { diff++; }
+
+            if (time >= range.end) { Timeline.minusDragDirection = false; }
+            else { Timeline.minusDragDirection = true;}
+
+            if (Timeline.actionType == ActionType.CLICK) {
+                if (time < range.start) {
+                    Timeline.items.update({id: 'range', start: utils.addDay(time, - diff + 1), end: utils.addDay(time)});
+    //                Timeline.items.update({id: 'range', start: time, end: utils.addDay(time, diff)});
+                } else if (time >  utils.addDay(range.end, -1)) {
+                    Timeline.items.update({id: 'range', start: utils.addDay(time, - diff + 1), end: utils.addDay(time)});
+                }            
+            } 
+
+            if (range.start > single.start || range.end < single.end) { 
+                adjust = true;
+            }
+
+            if (Timeline.actionType == ActionType.CLICK || adjust) {
+                if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
+                    let sanTime = event.snappedTime;
+                    Timeline.items.update({id: 'single', start: sanTime, end: utils.addMinutes(sanTime,10)});
+                } else {
+                    Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
+                }
             }
         }
 
@@ -591,12 +723,12 @@ export class Timeline {
                 return null;
             }
             obj["single"] = this.timeKeeper["single"];
-            if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            if (Timeline.type != TimelineType.SINGLE) {
                 obj["range"] = this.timeKeeper["range"];
             }        
         } else {
             obj["single"] = { start: Timeline.items.get("single").start, end : Timeline.items.get("single").end};
-            if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            if (Timeline.type != TimelineType.SINGLE) {
                 obj["range"] = { start: Timeline.items.get("range").start, end : Timeline.items.get("range").end};
             }
         }
@@ -653,7 +785,7 @@ export class Timeline {
 
     public static setDate (endDay : Date, range : number, mins : number = 0) {
         this.advancedRange = range;
-        console.log("DATETIME", range, mins);
+        this.advancedMinuteRange = mins;
         let time = utils.sanitizeDate(endDay, false);
         if (! Timeline.items) { 
             if (! this.timeKeeper) {
@@ -663,7 +795,6 @@ export class Timeline {
                 this.timeKeeper["single"] = {start: time, end: utils.addDay(time)};
             } else if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED )  {
                 this.timeKeeper["range"] = {start: utils.addDay(time, - range), end: utils.addDay(time)};
-                console.log("setDate", this.timeKeeper["range"]);
             } else if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
                 this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: utils.addDay(time)};                
             }
@@ -685,16 +816,18 @@ export class Timeline {
                     {id: 'single', start: startDay, end: endDay}
                 );
             } else if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
-                console.log("ADJUST", endDay, range, mins);
                 if (endDay > Timeline.maxDate) { 
                     endDay = Timeline.maxDate; 
                 }
                 let startDay = utils.addMinutes(endDay, -mins);
                 Timeline.items.update(
-                    {id: 'range', start: utils.addMinutes(time, -mins), end: utils.addDay(time)}
+                    {id: 'range', start: startDay, end: endDay}
                 );
+                let mindate = new Date(endDay.getTime());
+                mindate.setMinutes(mindate.getMinutes() - 10);
+    
                 Timeline.items.update(
-                    {id: 'single', start: startDay, end: endDay}
+                    {id: 'single', start: mindate, end: endDay}
                 );
             }
             if (this.timeline) {

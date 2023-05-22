@@ -34,6 +34,8 @@ export class MultiDaySelector extends Module {
 	}
 
 	public render(par : HTMLDivElement) {
+		props.time.rangeMins = 0;
+		props.time.range = 1;
 		super.render(par);
 		if (this.props.descriptionText) {
 			bookmark.setDescriptionText(this.props.descriptionText);

@@ -201,7 +201,7 @@ export class mainMenu {
                     }
                     for (let i=0; i<mod.modules.length; i++) {
                         let key = mod.modules[i];
-                        let _div = (props.menuModules[key].props.noGroup) ? topDiv : div;
+                        let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
                         if (props.menuModules[key]) {
                             props.menuModules[key].render(_div);
                         }

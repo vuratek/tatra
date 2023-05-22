@@ -13,7 +13,7 @@ export class helper {
         let editable = true;
         if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
             scale = 'hour';
-            step = 6;
+            step = 1;
             editable = (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) ? true : false;
         }
         let zoomMax = (1000 * 60 * 60 * 24 * this.currentZoomMaxLevel);
