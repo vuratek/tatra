@@ -16,7 +16,6 @@ export class Module {
             props.opened = false;
         }
         this.setLayerRefs();
-
     }
 
     // create initial div component; customization done in a child class
