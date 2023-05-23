@@ -74,6 +74,16 @@ export class hash {
         return null;
     }
 
+    public static newMode(id:string | null, update:boolean) {
+        if (id) {
+            this.values.mode = [];
+            this.values.mode.push(id);
+        } else {
+            this.values.mode = undefined;
+        }
+        if (update) { this.update(); }
+    }
+
     public static mode (id : string, update : boolean = true) {
         if (! this.values.mode) {
             this.values.mode = [];

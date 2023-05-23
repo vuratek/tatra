@@ -6,26 +6,21 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
-import VectorTileSrc from 'ol/source/VectorTile';
-import VectorTileLayer from 'ol/layer/VectorTile';
 import { events } from "../events";
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import { GeoJSON, MVT, EsriJSON } from "ol/format";
+import { GeoJSON, EsriJSON } from "ol/format";
 import { unByKey } from "ol/Observable";
 import { get as projGet } from "ol/proj";
 import { layerStyle} from "./layerStyle";
-import { ajax } from "../../ajax";
-import TileGrid from "ol/tilegrid/TileGrid";
-import {getWidth} from 'ol/extent';
-import {get as getProjection} from 'ol/proj';
 import { Feature, Graticule } from "ol";
 import Stroke from "ol/style/Stroke";
-import Fill from "ol/style/Fill";
 import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
+import { vectorLayers } from "./vectorLayers";
+import { tileUrlHandler } from "./tileUrlHandler";
 
 export class layer {
         
@@ -41,8 +36,11 @@ export class layer {
         case "tile_wms":
             this.addTile_WMSLayer(lo);
             break;
-        case "vector_tile":
-            this.addVectorTileLayer(lo);
+        case "mvt":
+            this.addXYZVectorLayer(lo);
+            break;
+        case "esri_vector_tile":
+            vectorLayers.addESRILayer(lo);
             break;
         case "geotiff" :
             this.addGeoTIFFLayer(lo);
@@ -114,9 +112,9 @@ export class layer {
     
     public static addWMTSLayer (lo : Layer) {
 
-        let input = [];
+        let input = {};
         // parse layer object properties from config; and set open layers layer object
-        let properties = Object.keys(lo.source);
+        let properties = (lo.source) ? Object.keys(lo.source) : [];
         for (let i = 0; i < properties.length; i++) {
             let key = properties[i];
             let value = lo.source[key];
@@ -131,7 +129,7 @@ export class layer {
             // tileGrid needs to be parse as function declaration is needed
             if (key == "tileGrid") {
                 let properties2 = Object.keys(value);
-                let input2 = [];
+                let input2 = {};
                 for (let j = 0; j < properties2.length; j++) {
                     let key2 = properties2[j];
                     let value2 = value[key2];
@@ -146,10 +144,18 @@ export class layer {
                 input[key] = value;
             }
         }
+        if (lo.source && lo.source.tileUrlHandler) {
+            let func2 = tileUrlHandler.getTileLoadHandler(lo.source.tileUrlHandler, lo.id);
+            if (func2) {
+                input["tileLoadFunction"] = func2;
+            }
+        }
+
         input["crossOrigin"] = "anonymous";
         input["imageSmoothing"] = false;
 
-        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
+//        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
+        if (lo.paletteUrl || lo.paletteColorDef) {        
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
@@ -231,37 +237,6 @@ export class layer {
         lo._layer = new TileLayer({
             source: new TileWMS(input),
         });
-    }
-    
-    public static addVectorTileLayer (lo : Layer) {
-        let input = [];
-        // parse layer object properties from config; and set open layers layer object
-
-        let properties = Object.keys(lo.source);
-        for (let i = 0; i < properties.length; i++) {
-            let key = properties[i];
-            let value = lo.source[key];
-            input[key] = value;
-        }
-        input["crossOrigin"] = "anonymous";
-        input["format"] = new MVT();
-        lo._layer = new VectorTileLayer({
-            source: new VectorTileSrc (input)
-        });
-
-        if (lo.style) {
-            fetch(lo.style)
-            .then(response => {
-                return response.json();
-            })
-            .then (data => {
-                lo.styleJSON = data;
-                lo.applyStyle();
-            })
-            .catch(error => {
-                console.error("Error processing ", lo.style);
-            });
-        }
     }
     
     public static addWMSLayer(lo : Layer) {        
@@ -425,32 +400,19 @@ export class layer {
                 input[key] = value;
             }
         }
+        if (lo.source && lo.source.tileUrlHandler) {
+            let func2 = tileUrlHandler.getTileUrlHandler(lo.source.tileUrlHandler, lo.id);
+            if (func2) {
+                func = func2;
+            }
+        }
         input["crossOrigin"] = "anonymous";
         if (type == "xyz_vector") {
-            input["format"] = new EsriJSON();
             if (func) {
-                input["loader"] = func;
+//                input["loader"] = func;
             }
-            let projExtent = getProjection('EPSG:4326').getExtent();
-            let startResolution = getWidth(projExtent) / 512;
-            let resolutions = new Array(14);
-            for (let i = 0; i < resolutions.length; i++) {
-                resolutions[i] = startResolution / Math.pow(2, i);
-            }
-            input["tileGrid"] = new TileGrid({
-                extent: projGet('EPSG:4326').getExtent(),
-                resolutions: resolutions,
-                tileSize: 512,
-            });
-            let func2 = layerStyle['_' + lo.source.style];
-            
-            lo._layer = new VectorTileLayer({
-                source: new VectorTileSrc (input),
-                style: func2
-            });
-            //console.log((lo._layer.getSource() as VectorTileSrc).getTileGrid());
+            vectorLayers.addVectorLayer(lo, layerStyle['_' + lo.source.style]);
 //            (lo._layer.getSource() as VectorTileSrc).setTileLoadFunction(func);
-
         } else {
             lo._layer = new TileLayer({
                 source: new XYZ(input),

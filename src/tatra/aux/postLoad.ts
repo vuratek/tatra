@@ -1,5 +1,3 @@
-import { ajax } from "../ajax";
-
 export class postLoad {
 
     public static update () {

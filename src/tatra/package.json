@@ -1,8 +1,7 @@
 {
   "name": "tatra",
-  "version": "1.3.3",
+  "version": "1.3.7",
   "description": "Transcending Application Tool for Research and Analysis",
-  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel watch navigation.ts -d ./dev  --public-url ./navigation --global lnav",
@@ -30,9 +29,10 @@
     "coordinate-parser": "^1.0.7",
     "elm-pep": "^1.0.6",
     "events": "^3.3.0",
-    "flatpickr": "^4.6.9",
+    "flatpickr": "^4.6.13",
     "nouislider": "^14.6.3",
-    "ol": "^7.1.0"
+    "ol": "^7.2.2",
+    "ol-mapbox-style": "^9.4.0"
   },
   "devDependencies": {
     "cssnano": "^5.1.9",

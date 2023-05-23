@@ -65,8 +65,8 @@ export class basePicker {
             this.calendar.destroy();
         }
         let handler = () => this.setDates();
-        let format = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) ? 'M d Y H:i' : 'M d Y';
-        let hasTime = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED) ? true : false;
+        let format = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.getTimelineType() == TimelineType.RANGE_SUBHOUR_TIED) ? 'M d Y H:i' : 'M d Y';
+        let hasTime = (Timeline.getTimelineType() == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.getTimelineType() == TimelineType.RANGE_SUBHOUR_TIED) ? true : false;
         this.calendar = flatpickr(`#${this.id}_date`, {
             enableTime: hasTime,
             dateFormat : format,
@@ -79,8 +79,31 @@ export class basePicker {
 
     public static setDates () {
         if (this.calendar) {
-            Timeline.setDate(this.calendar.selectedDates[0], Number(utils.getSelectValue(`${this.id}_DR`)));
+            let opt = utils.getSelectValue(`${this.id}_DR`);
+            if (opt[0] == 'm') {
+                opt = opt.replace('m', '');
+                Timeline.setDate(this.calendar.selectedDates[0], 0, Number(opt));
+            } else {
+                Timeline.setDate(this.calendar.selectedDates[0], Number(utils.getSelectValue(`${this.id}_DR`)));
+            }
         }
+    }
+    public static getSubdailyRangeOptions(_custom:number | null = null) : string {
+        let options = [10,20,30,40,50,60,120,180,240,360,480,600,720,1080,1440];
+        let select = '';
+        let custom = _custom;
+        for (let i=0; i<options.length; i++) {
+            if (custom) {
+                if (custom < options[i]) {
+                    select += `<option value="m${custom.toString()}">${utils.getMinHourValue(custom)}</option>`;
+                    custom = null;
+                } else if (custom == options[i]) {
+                    custom = null;
+                }
+            }
+            select += `<option value="m${options[i].toString()}">${utils.getMinHourValue(options[i])}</option>`;
+        }
+        return select;
     }
 
     public static getRangeOptions() : string {

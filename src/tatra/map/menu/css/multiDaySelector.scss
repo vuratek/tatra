@@ -1,21 +1,59 @@
 .mds {
-	text-align:center;
-	font-size:1.3rem; 
-	left:1%; 
-	width:98%;
-	margin-bottom:0.7rem;
+	font-size:1.2rem; 
+	width:100%;
 	color:#F0F0F0;
-	padding:0 0.5rem;
 	font-weight:500;
 	cursor:default;
 	/*height:65px;*/
 	position:relative;
 }
-.mds_content, #fmmTimeCustomContent {
+.mds_content {
 	width:100%;
 	position:relative;
-	display:inline-block;
-	padding-top:0.2rem;
+    display:inline-block;
+    margin: 0;
+    line-height: 1.4rem;
+    margin: 3.5rem 0 0 0;
+}
+#mdts_content {
+    margin: 0 0 0.5rem 0;
+}
+#mdts_content .fmmModeWrap {
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+}
+.mdtsQuickLinks {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    border-bottom: 0.1rem solid #777;
+    font-size: 0;
+}
+.mdtsQuickLinks div {
+    color: #aaa;
+    width: 18%;
+    font-size: 1.4rem;
+    padding: .2rem 0;
+    display: inline-block;
+    cursor:pointer;
+}
+.mdtsQuickLinks div:last-child {
+    width:9%;
+}
+.daily {
+    display:inline-block;
+}
+.subdaily {
+    display: block;
+    margin-top: 0.5rem;
+}
+.mdtsQuickLinks div:hover, .mdtsQuickLinks .selected {
+    background: #448e4e;
+    color: #eee;
+    border-radius: 1rem;
+}
+.dailyOption {
+    width: 11rem;
+    display: inline-block;
 }
 .mds_content input {
 	width:10.5rem;
@@ -33,69 +71,148 @@
 .mds_content select {
 	font-size: 1.6rem;
 }
-
-.mds_time_btn {
+.mds_tab {
+    width: 50%;
+    height: 2.7rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #444;
+    cursor: pointer;
+    background: #777;
+    font-size: 1.7rem;
+    font-family: 'TitilliumSB',Tahoma, sans-serif;
+    margin: 0;
+    padding: 0.5rem 0;
+    position: absolute;
+}
+.mds_tab:last-child {
+    left:50%;
+}
+.active {
+    background: #202020;
+    color: #bbbab8;
+}
+.mds_subdaily_time {
+    display: inline-block;
+    font-size: 1.4rem;
+    margin: 0 2rem 0 2rem;
+    border-radius: 1rem;
     background: #555;
-    background: #6a6966;
-    color: #EEE;
-    font-size: 1.3rem;
-    padding: 1rem 0;
+    color:#AAA;
+    padding: 0 1rem;
+    line-height: 1.8rem;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+.mds_subdaily_time:hover {
+    background: #448e4e;
+    color: white;
+}
+.disabled {
+    background: #333;
+    color: #555;
+    cursor: default;
+}
+.disabled:hover {
+    background: #333;
+    color: #555;
+}
+.mds_time_btn {
+    background: #777;
+    color: #222;
+    font-size: 1.5rem;
+    font-family: 'Titillium Web';
+    padding: 1.8rem 0 0 0.1rem;
     line-height: 1em;
-    /*border:0.1rem solid #AAA;*/
     border-radius:2.5rem;
+    text-align: center;
     width:5rem; 
     height:5rem;
-    margin:0 1.5rem;
+    margin:0 .7rem;
     display:inline-block;
     /*float:left;*/
     cursor:pointer;
     text-transform: uppercase;
-    font-weight: 600;
 }
 .mds_time_btn:hover {
-    /*background:#555;*/
-    background:#4acb62;
-    color:#222;
-    opacity:0.7;
+    font-weight: 600;
+    background: linear-gradient(180deg,#30aaf2,#155b82);
+    color: #000;
 }
 .mds_time_btn div {
 	position:absolute;
 	width:4.8rem;
 }
-.mds_time_btn.first {
-    padding: 1.9rem 0 0 0.1rem;
-}
 .mds_bookmark_btn {
 	position:absolute;
-	top:.5rem;
+	top:0;
 	right:0.8rem;
 	color:#999;
 	cursor:pointer;
 	font-size:1.6rem;
 }
+.mmTimeBtnSelected {
+    color: #000;
+    background: linear-gradient(180deg,#30aaf2,#155b82);
+}
+#mdsHistorical {
+    font-size:1.6rem; 
+    line-height:2.4rem;
+    width: 100%;
+    padding: 1rem 0;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+}
+#mdsCalendar {
+    cursor: pointer;
+    font-size: 1.7rem;
+}
+#mdsCalendar2 {
+    display: inline-block;
+}
+#mdsHistorical input {
+    width: 10.5rem;
+    padding: 0.2rem;
+    font-size: 1.6rem;
+}
+#mdsHistorical select {
+    font-size: 1.6rem;
+}
 
-.fmmTimeBtnSelected {
-	/*background: rgb(43, 103, 141);
-    color:#F0F0F0;
-    border:0.2rem solid yellow;*/
-    background:#4acb62;
-    color:#222;
+.mdsDateRange {
+    color: #7fc7f8;
+    width: 10rem;
+    background: #222222f2;
+    border: none;
+    outline: none;
 }
-.fmmDNButtonActive:hover {
-    background: #073f63;
-    /*background:#4acb62;	*/
+#mds_date, #mds_clock {
+    color: #7fc7f8;
+    background: 0 0;
+    border: none;
+    outline: none;
 }
-.fmmTimeBtnSelected:hover {
-    /*background:rgb(43, 103, 141);*/
-    background:#4acb62;
+#mdsTimePeriodStatement {
+    color: #ccc;
+    width: 45%;
+    padding: 0.3rem;
+    font-size: 1.1rem;
+    display:inline-block;
+    top: 0rem;
+    left: 50%;
 }
-
-#fmmTimePeriodStatement {
-    padding:0.3rem;
-    color:#CCC;
-    font-size:1.1rem;
-    display:none;
-}
-#fmmTimePeriodStatement a {
+#mdsTimePeriodStatement a {
     color: #65b2e3;
+}
+.mds_btn_timeInfoTitle {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: #aaa;
+    font-weight: 600;
+}
+#mds_btn_timeInfo {
+    font-size:1.6rem;
 }

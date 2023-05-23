@@ -1,0 +1,19 @@
+remove TileLoadFunctions from config
+remove basicTileUrlHandler from config
+remove orbit tile url from config
+
+mapUtils:updateImageryLayers - remove old time handling
+
+Layer: isBasicLayer - remove
+Layer: fireLayerType - remove ?
+Layer: noDateRefresh
+
+mapUtils remove updateImageryLayers
+
+layerStyle, remove WMSTime and Orbit stuff
+
+noDateRefresh - remove
+cloneHasTime - remove
+
+Timeline.ts - look for remove
+hash - mode could be simplified by converting to string from Array<string>

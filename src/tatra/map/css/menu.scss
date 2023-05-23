@@ -11,6 +11,7 @@
 	border-radius:0.7rem 0 0 0.7rem;
 	border-right:none;
 	opacity:0.95;
+	min-height: 35rem;
 }
 
 .mapMenu:hover {
@@ -23,10 +24,10 @@
 }
 .mapMenuClose {
 	right: 0;
-    top: 0;
+    top: 0rem;
     height: 3.2rem;
     width: 10%;
-	padding: 0.2rem 0.7rem;
+	padding: 0.3rem 0.5rem;
     position: absolute;
 	cursor: pointer;
 	font-weight:500;
@@ -35,7 +36,6 @@
 	font-size:2.5rem;
 }
 .mapMenuTopContent {
-	padding:1rem 0;
 	overflow-x: hidden;
 }
 .mapMenuContent {
@@ -116,6 +116,119 @@
 .mapOptionTab_3 {
 	width:30%;
 }
+.mapMenuOptions {
+	cursor: pointer;
+    border-radius: 0.6rem 0 0;
+    padding: 0.3rem 0.5rem;
+    font-size: 2.5rem;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.1rem;
+}
+.mapMenuOptions .selected {
+	color: red;
+}
+.mapMenuOptions:hover {
+	background: linear-gradient(180deg,#4acb62,#0d3d16);
+}
+.mapMenuItems {
+	background: linear-gradient(45deg, #030303c7, #000000c7);
+    position: absolute;
+    top: 4rem; 
+    bottom: 0;
+	width: 100%;
+	padding-left: 0.4rem;
+	padding-bottom: 1rem;
+	border-radius: 0 0 0 0.7rem;
+	overflow: auto;
+	display:none;
+}
+.mainMenuOpen {
+	animation: mainMenuOpen .3s;
+	display:block;
+}
+.mapMenuItems .option {
+    width: 32%;
+    vertical-align: top;
+    min-height: 9.5rem;
+    color: #0c2e3e;
+    cursor: pointer;
+	background: #f2f2f2;
+    border-radius: 0.3rem;
+    margin: 0.3rem 0.1rem 0.2rem 0.1rem;
+    display: inline-block;
+    position: relative;
+}
+.mapMenuItems .selected, .mapMenuItems .option:hover {
+	opacity: 1;
+	background: linear-gradient(#3bee62, #1e8434);
+}
+.mapMenuItems .icon {
+	width: 98%;
+    text-align: center;
+    font-size: 3.8rem;
+    display: inline-block;
+    position: absolute;
+    top: 0.7rem;
+    color: #1d1d1d;
+}
+.mapMenuItems .label {
+	text-align: center;
+    width: 100%;
+    margin-top: 4.9rem;
+    font-family: Titillium Web;
+    display: inline-block;
+}
+.mapMenuItems .label span:first-child {
+	text-transform: uppercase;
+	font-size: 1.7rem;
+	font-weight: bold;
+}
+.mapMenuTitle {
+	text-align: left;
+	position: absolute;
+	text-transform: uppercase;
+    top: .7rem;
+    left: 5rem;
+    font-weight: 600;
+	font-size: 2.2rem;
+	font-family: 'Titillium Web';
+}
+.mapMenuIcons {
+	position: absolute;
+	right: 5rem;
+	top:.4rem;
+	font-size: 2.4rem;
+	cursor:pointer;
+}
+.mapMenuIcons span {
+	margin-right: .5rem;
+}
+.mapMenuItems .noAction {
+	background:#888;
+}
+.mapMenuItems .sublabel {
+	color: red;
+    text-transform: uppercase;
+    background: white;
+	text-align: center;
+	border-radius: 0 0 0.3rem 0.3rem;
+    width: 100%;
+    padding: 0.3rem 0;
+    margin-top: 0.3rem;
+}
+
+.mmHeader {
+	background: linear-gradient(#555,#000);
+	color: #4fdc69;
+	border-radius: .7rem 0 0 0;
+	text-align: center;
+    width: 100%;
+    height: 3.2rem;
+    cursor: default;
+    font-size: 1.8rem;
+    position: relative;
+}
 @keyframes menuMoveClose {
 	from {  }
 	to { right: -40.1rem; }
@@ -123,6 +236,10 @@
 @keyframes menuMoveOpen {
 	from { right: -40.1rem; }
 	to { right: 0; }
+}
+@keyframes mainMenuOpen {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 @media screen and (max-width: 700px) {
 	.mapMenuBtns {

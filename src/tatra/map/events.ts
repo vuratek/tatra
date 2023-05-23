@@ -27,6 +27,7 @@ export class events {
     public static readonly EVENT_MENU_RESIZE            : string = "menu_resize";
     public static readonly EVENT_SELECTION_UPDATE       : string = "selection_update";
     public static readonly EVENT_SET_CONTROL_ITEM       : string = "set_control_item";
+    public static readonly EVENT_SYSTEM_DATE_UPDATE     : string = "system_date_update";
     public static readonly EVENT_TOOL_RESULT_UPDATE     : string = "tool_result_update";
     public static readonly EVENT_UI_LAYER_UPDATE        : string = "ui_layer_update"; 
     

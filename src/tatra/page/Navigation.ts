@@ -12,8 +12,10 @@ import { quickSearch } from "../aux/quickSearch";
 import { RightMenu } from '../sideMenu/RightMenu';
 import { authentication } from '../aux/authentication';
 import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
+import '../sideMenu/css/*.scss';
 import './css/main.scss';
 import './css/breadcrumb.scss';
+import './css/layerInfo.scss';
 import './css/content.scss';
 import './css/footer.scss';
 import './css/header.scss';
@@ -37,6 +39,7 @@ export class Navigation {
         }
 
         navProps.header = utils.cc('header', body, true);
+        navProps.content = utils.cc('content', body);
         navProps.main = utils.cc('main', body);
 
         if (! navProps.header || ! navProps.main) { 
@@ -123,13 +126,10 @@ export class Navigation {
     private static addMainComponents () {
         if (! navProps.main) { return; }
         let str = `<div id="modalWrap" class="modalWrap"></div>`;
-        if (navProps.settings.sideMenu) {
-            str += `
-                <div class="topMenuCloak" id="topMenuCloak"></div>
-                <div id="rightNavBarShell">
-                    <div id="rightNavBarWrap" class="sideNavBarWrap"></div>
-                    <div id="rightNavBar" class="rightNavBar"></div>
-                </div>
+        if (navProps.settings.sideMenu || navProps.settings.app.mobileMenu) {
+            let sideMenu = '';
+            if (navProps.settings.sideMenu) {
+                sideMenu = `
                 <div id="leftNavBarShell">
                     <div id="leftNavBarWrap" class="sideNavBarWrap"></div>
                     <div id="leftNavBar" class="leftNavBar"></div>
@@ -137,6 +137,21 @@ export class Navigation {
                 <div id="leftNavBarMapResize" class="mapCircleBtn">
                     <i class="fa fa-bars"></i>
                 </div>
+                `;
+            }
+            let rightMenu = '';
+            if (navProps.settings.app.mobileMenu) {
+                rightMenu = `
+                    <div id="rightNavBarShell">
+                        <div id="rightNavBarWrap" class="sideNavBarWrap"></div>
+                        <div id="rightNavBar" class="rightNavBar"></div>
+                    </div>
+                `;
+            }
+            str += `
+                <div class="topMenuCloak" id="topMenuCloak"></div>
+                ${rightMenu}
+                ${sideMenu}
                 <div id="notifications">
                 </div>
             `;

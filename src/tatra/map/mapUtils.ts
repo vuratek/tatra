@@ -12,6 +12,8 @@ import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
+import { IMenuModule, IConfigDef } from "./defs/ConfigDef";
+import { utils } from "../utils";
 
 export interface ICoordinates {
     xmin : number;
@@ -31,7 +33,7 @@ export class mapUtils {
 
     public static featureLabelAuto : boolean = true;
 
-    public static getLayerById (id : string) {
+    public static getLayerById (id : string) : Layer | null {
         for (let i = 0; i < props.layers.length; i++) {
             if (props.layers[i].id == id) {
                 return props.layers[i];
@@ -40,13 +42,48 @@ export class mapUtils {
         return null;
     }
 
+    public static onSystemDateUpdate() {
+        props.time.quickTime = 0;
+		if (flatpickr.formatDate(utils.getGMTTime(new Date()),'Y-m-d') == flatpickr.formatDate(props.time.date, 'Y-m-d')) {
+			if (props.time.range == 0) { props.time.quickTime = 1; }
+			else if (props.time.range == 1) { props.time.quickTime = 24; }
+			else if (props.time.range == 6) { props.time.quickTime = 168; }
+		}
+
+        let date = props.time.imageryDate;
+        let _short = flatpickr.formatDate(date, 'Y-m-d');
+        let _full = flatpickr.formatDate(date, 'Y-m-d H:i');
+	    for (let i=0; i<props.layers.length; i++) {
+            let lo = props.layers[i];
+            if (!lo) { continue; }
+            let refresh = false;
+            // only time refresh layers that use time and when time has changed enough
+            // so don't change daily when only hours or minutes changed
+            if (lo.timeStep) {
+                if (lo.timeStep == "30m") {
+                    if (flatpickr.formatDate(lo.time, 'Y-m-d H:i') != _full) {
+                        refresh = true;
+                    }
+                }
+            } else {
+                if (flatpickr.formatDate(lo.time, 'Y-m-d') != _short) {
+                    refresh = true;
+                }
+            }
+            lo.time = date;
+            if (lo.visible && lo.hasTime === true && refresh) {
+                lo.refresh();
+            }
+        }
+    }
+
     public static updateImageryLayers (date:Date) {
 	    for (let i=0; i<props.layers.length; i++) {
-            let lo =props.layers[i];
+            let lo = props.layers[i];
             if (!lo) { continue; }
             lo.time = date;
             if (lo.handler && (lo.handler == "imagery" || lo.handler == "orbits" || lo.tag == "sentinel") && ! lo.noDateRefresh) {
-                lo.refresh();
+                lo.refresh();            
             }
         }
         events.dispatch(events.EVENT_LAYER_DATE_UPDATE);
@@ -79,7 +116,14 @@ export class mapUtils {
             }
         }
         this.setCountryLabel();
-        if (update) { events.dispatch(events.EVENT_BASEMAP_CHANGE); }
+        if (update) { 
+            for (let i = 0; i < props.layers.length; i++) {
+                if (props.layers[i].tag == "imagery" && props.layers[i].visible) {
+                    props.layers[i].visible = false;
+                }
+            }
+            events.dispatch(events.EVENT_BASEMAP_CHANGE); 
+        }
     }
 
     public static setMapCursor(type?:string | null) {
@@ -90,18 +134,45 @@ export class mapUtils {
         }
     }
 
+    public static resetDynamicLayers() {
+		if (!props.allowMultipleDynamicLayers) {
+			let counter = 0;
+			for (let i=props.layers.length-1; i>=0; i--) {
+				let lo = props.layers[i];
+				if (lo.category == 'dynamic' && lo.visible) {
+					if (counter > 0) {
+						lo.visible = false;
+					}
+					counter++;
+				}
+			}
+			if (counter > 0) {
+				events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+			}
+		}
+	}
+
     public static setOverlay (id : string) {
         for (let i = 0; i < props.layers.length; i++) {
-            let layer = props.layers[i];
-            if (layer.category != "overlay") {
+            let lo = props.layers[i];
+            if (lo.category != "overlay") {
                 continue;
             }
-            if (id == layer.id) {
-                layer.visible = !layer._visible;
+            if (id == lo.id) {
+                lo.visible = !lo._visible;
                 this.setLabel(id);
             }
-            if (id == layer.id && layer.isLabel) {
+            if (id == lo.id && lo.isLabel) {
             	this.setCountryLabel();
+            }
+            if (lo.exclusive && lo.visible) {
+                let arr = lo.exclusive.split(',');
+                for (let j=0; j<arr.length; j++) {
+                    let lo2 = this.getLayerById(arr[j]);
+                    if (lo2) {
+                        lo2.visible = false;
+                    }
+                }
             }
         }
     }

@@ -33,6 +33,7 @@ export class utils {
                 divId = '#' + divId; 
             } 
         }
+        if (divId == '#') { return; }
         let els = document.querySelectorAll(divId);
         for (let i=0; i < els.length; i++) {
             els[i].classList.add(className);
@@ -191,7 +192,15 @@ export class utils {
     public static getDayDiff (s : Date, e : Date ) : number {
         return Math.floor((e.getTime() - s.getTime()) / 86400000);
     }
-
+    /**
+     * Get integer value of minute difference between @s and @e. Uses Math.floor() for rounding 
+     * 
+     * @param s 
+     * @param e 
+     */
+    public static getMinuteDiff (s : Date, e : Date) : number {
+        return Math.floor((e.getTime() - s.getTime()) / (1000 * 60));   
+    } 
 
     /** 
     *   Sanitizes date by setting hour, mins, sec and miliseconds to 0.
@@ -206,23 +215,24 @@ export class utils {
         return new Date(y, m, day, 0, 0, 0, 0);
     }
 
-/*    public static sanitizeTime ( d : Date , _mins:number, isUTC : boolean = false) : Date {
-        let y = (isUTC) ? d.getUTCFullYear() : d.getFullYear();
-        let m = (isUTC) ? d.getUTCMonth() : d.getMonth();
-        let day = (isUTC) ? d.getUTCDate() : d.getDate();
-        let hour = (isUTC) ? d.getUTCHours() : d.getDate();
-        let min = (isUTC) ? d.getUTCMinutes() : d.getDate();
-        let a = Math.floor(min / _mins) * _mins;
-        console.log(d, hour, a);
-        return new Date(y, m, day, hour, a, 0, 0);
+    public static sanitizeTime ( d : Date , is_max : boolean = false, _mins : number = 10) : Date {
+        let y = d.getFullYear();
+        let m = d.getMonth();
+        let day = d.getDate();
+        let hour = d.getHours();
+        let min = d.getMinutes();
+        let a = (is_max) ? Math.ceil ( min / _mins) * _mins :  Math.floor( min / _mins) * _mins;
+        let dt = new Date(y, m, day, hour, 0, 0, 0);
+        dt.setMinutes(a);
+        return dt;
     }
-*/
+
 
     public static maximizeDate ( d : Date , isUTC : boolean = false) : Date {
         let y = (isUTC) ? d.getUTCFullYear() : d.getFullYear();
         let m = (isUTC) ? d.getUTCMonth() : d.getMonth();
         let day = (isUTC) ? d.getUTCDate() : d.getDate();
-        day--;
+        //day--; ?? why; possibly result of Timeline js adding extra day as rounding.
         return new Date(y, m, day, 23, 59, 59, 0);
     }
 
@@ -264,6 +274,20 @@ export class utils {
         }
       
         return JSON.stringify(obj) === JSON.stringify({});
+    }
+
+    // convert mins into hours when possible (60 mins = 1 hour, but 75 mins = 75 mins)
+    public static getMinHourValue(mins:number) : string {
+        let str = '';
+        if (mins % 60 == 0) {
+            str = (mins/60).toString() + ' hr';
+            if (mins / 60 > 1) { 
+                str += 's';
+            }
+        } else {
+            str = mins + ' mins'
+        }
+        return str;
     }
 
     public static isJson(str : string) {
@@ -371,4 +395,15 @@ export class utils {
           cancelFullScreen.call(doc);
         }
     }
+    
+    public static isDeclaredFunction (func : string) {
+		let win = Object.getOwnPropertyNames(window);
+		for (let i=win.length-1; i>=0; i--) {
+			if (win[i] == func) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

@@ -5,7 +5,14 @@ import { animation } from "../aux/animation";
 import { closeable } from "../aux/closeable";
 import { events } from "./events";
 import { hash } from "./hash";
-//import { mainMenu } from "./menu/mainMenu";
+import { mainMenu } from "./menu/mainMenu";
+import { IConfigDef, IMenuModule } from './defs/ConfigDef';
+import { Basemaps } from './menu/components/Basemaps';
+import { Basic } from './menu/components/Basic';
+import { FilterLayers } from './menu/components/FilterLayers';
+import { MultiDaySelector } from './menu/components/MultiDaySelector';
+import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
+import { Module } from './menu/components/Module';
 export class menu {
 
     private static id : string = '';
@@ -14,6 +21,7 @@ export class menu {
         this.id = id;
         window.addEventListener("resize", () => this.resize());
         animation.init();
+        this.setDefaultMenuModules();
         this.render();
         this.resize();
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
@@ -24,10 +32,83 @@ export class menu {
             props.windowIsOpened = true;
         } 
         this.setMenu();
+        this.presetDefaultLayerVisibility();
+        let _mode = hash.getMode();
+        let mode = '';
+        if (! _mode) {
+            let cfg = (props.config as IConfigDef);
+            if (cfg.menuOptions) {
+                for (let i=0; i<cfg.menuOptions.length; i++) {
+                    if (cfg.menuOptions[i].isDefault) {
+                        mode = cfg.menuOptions[i].id;
+                    }
+                }
+            }
+        } else {
+            mode = _mode[0];
+        }
+        this.setTab(mode);
+    }
+
+    private static setDefaultMenuModules() {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+				let m = cfg.modules[i];
+				switch (m.module) {
+					case "basemaps" : props.menuModules[m.id] = new Basemaps(m); break;
+                    case "basic" : props.menuModules[m.id] = new Basic(m); break;
+                    case "filterlayers" : props.menuModules[m.id] = new FilterLayers(m); break;
+                    case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
+                    case "multidaytimeselector" : props.menuModules[m.id] = new MultiDayTimeSelector(m); break;
+                }
+                if (props.menuModules[m.id]) {
+                    m.handler = props.menuModules[m.id];
+                }
+			}
+        }
+        console.log(cfg.modules);
+    }
+    public static getMenuModuleById (id:string) : IMenuModule | null {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+                let m = cfg.modules[i];
+                if (m.module == id) {
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+    public static addModule(module : Module) {
+        let m = this.getMenuModuleById(module.props.module);
+        if (m) {
+            props.menuModules[m.id] = module;
+            m.handler = props.menuModules[m.id];
+        }
+    }
+
+    // if URL doesn't override the default visible layers, check which ones are set as default in the menu module config
+    public static presetDefaultLayerVisibility() {
+        let cfg = (props.config as IConfigDef);
+        if (cfg.modules) {
+			for (let i=0; i<cfg.modules.length; i++) {
+                let m = cfg.modules[i];
+                if (m.handler) {
+                    m.handler.presetDefaultLayerVisibility();
+                }
+            }
+        }
+    }
+
+    public static setTab (tab : string) {
+        mainMenu.tab(tab);
     }
     
     private static render () {
         let cont = document.getElementById(`lmvMenus${this.id}`) as HTMLElement;
+        
         if (! cont) { 
             console.log("Parent container " + cont + ' not found.');
             return;
@@ -40,6 +121,9 @@ export class menu {
         let header = document.createElement("div");
         header.setAttribute("id", this.id + "Header");
         div.appendChild(header);
+        if (props.version > '1.0.0') {
+            header.setAttribute('class', 'mmHeader');
+        }
         let close = document.createElement("div");
         close.setAttribute("id", this.id + "Close");
         close.setAttribute("class",  "mapMenuClose");
@@ -61,8 +145,19 @@ export class menu {
         div.appendChild(content);
         this.renderMenuBtnHolder(div);
 
+        if (props.version > '1.0.0') {
+            content = document.createElement("div");
+            content.setAttribute("id", "MapMenuItems");
+            //content.setAttribute("id", this.id + "_content");
+            content.setAttribute("class",  "mapMenuItems");        
+            div.appendChild(content);
+        }
+        
+
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
-        //mainMenu.render(this.id);
+        if (props.version > '1.0.0') {
+            mainMenu.render(this.id);
+        }
     }
 
     public static registerMenu (id : string) {

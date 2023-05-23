@@ -1,35 +1,55 @@
 import { configProps } from "../support/configProps";
-import { MenuModule } from "../obj/MenuModule";
 import { Layer } from "../obj/Layer";
 import { Tool } from "../obj/Tool";
-import { MenuOption } from "../menu/MenuOption";
 import { Module } from "../menu/components/Module";
 
 export interface IConfigDef {
     components          : IComponents;
-    modules             : Array <MenuModule> | null;
+    modules             : Array <IMenuModule> | null;
     layers              : Array <Layer>;
     mapControls         : IMapControls;
     menuOptions         : Array <IMenuOption> | null;
     properties          : configProps;
     tools               : ITools;
 }
-export enum MenuOptionCategory {
-    MENU        = "menu",
-    TAB         = "tab"
-}
-
 export interface IModuleHandlers {
     [key:string]    : Module;
 }
 export interface IMenuOption {
-    category        : MenuOptionCategory | null;
     modules         : Array <string> | null;
+    isDefault?      : boolean;
     id              : string;
     label           : string;
-    options         : Array <IMenuOption> | null;
-    _handler        : MenuOption | null;
-    _moduleHandlers : IModuleHandlers;
+    icon            : string;
+    icon_fab?       : string;
+    icon_color?     : string | null;
+    description     : string;
+    noAction?       : boolean;
+}
+export interface IMenuModuleLayers {
+    id              : string;
+    visible         : boolean;
+    _defaultVisible : boolean | null;
+}
+export interface IMenuModule {
+    id              : string;
+    label           : string;
+    icon            : string | null;
+    description?    : string | null;        // module description
+    module          : string;
+    opened?         : boolean;
+    tag             : string | null;        // used for matching layers in the config
+    defaultLayers   : Array<string> | null; // default layers that should load unless URL overrides it
+    noGroup?        : boolean;              // if set, doesn't show +/- for expansion; default is false
+    isTopModule?    : boolean;              // this is top part of map menu and the sroll doesn't apply to this
+    hasMultiLayer?  : boolean | null;       // dynamic iamagery by default only allows 1 layer, but this will show a checkbox and allow multiple
+    layer_refs?     : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
+    handler         : Module | null;        // module handler pointer
+    descriptionText? : string;              // passing description text for ex bookmarks
+    menuDescription? : string;              // description used in menu selection
+    skipMenuDisplay? : boolean;
+    menuLabel?       : string | null;
+    localRedirect?   : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)
 }
 export interface ISupportFiles {
     files       : Array <string>;

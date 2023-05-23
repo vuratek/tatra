@@ -49,8 +49,11 @@ export class Carousel {
             el.style.backgroundImage=`url('${item.image}')`;
             el.style.backgroundRepeat = 'no-repeat';
             el.style.backgroundSize = 'cover';
+            if (item.offsetY) {
+                el.style.backgroundPositionY = item.offsetY;
+            }
             el.style.zIndex = (i*10).toString();
-            if (this.showLabels) {
+            if (this.showLabels && item.label && item.label != '') {
                 let el2 = document.createElement("div");
                 el2.setAttribute("id", `${this.parentDiv}_slidelabel_${i}`);
                 el.appendChild(el2);

@@ -5,10 +5,8 @@ import { Circle, Polygon} from 'ol/geom';
 import { Feature } from 'ol';
 import { layer } from '../handlers/layer';
 import { events } from '../events';
-import { mapboxStyle } from "../handlers/mapboxStyle";
 import RasterSource from 'ol/source/Raster';
 import { mapUtils } from '../mapUtils';
-//import { applyStyle } from 'ol-mapbox-style';
 
 export enum layerCategories {
     LAYER = "layer",
@@ -47,16 +45,19 @@ export enum FireLayerType {
 }
 
 export class LayerSource {
-    url         : string | null = null;
-    wrapX       : boolean = true;
-    imageSize   : number = 512;
-    layer       : string | null = null;
-    query       : string | null = null;
-    imageExtent : Array <number> = [-180,-90,180,90];
-    selectHandler : string | null = null;
-    style        : string | null = null;
-    format      : string | null = null;
-    matrixSet   : string | null = null;
+    url             : string | null = null;
+    wrapX           : boolean = true;
+    maxZoom         : number = 16;
+    imageSize       : number = 512;
+    layer           : string | null = null;
+    tileUrlHandler  : string | null = null;
+    query           : string | null = null;
+    projection      : string = 'EPSG:4326';
+    imageExtent     : Array <number> = [-180,-90,180,90];
+    selectHandler   : string | null = null;
+    style           : string | null = null;
+    format          : string | null = null;
+    matrixSet       : string | null = null;
     templateUrl?    : string;
 }
 
@@ -81,81 +82,84 @@ export interface ILayerData {
         6   - 2km
 */
 export class Layer {
-    public id               : string = "";
-    public cloneId          : string = "";  // used for duplicate layers
-    public cloneLevel       : number = 9;  // 6-13  -- only applies to imagery_template
-    public cloneHasTime     : boolean = true;
-    public cloneFormat      : string = "image/png";
-    public title            : string = "";
-    public _visible         : boolean = false;
-    public initVisibility   : boolean = false;
-    public initData         : string | null = null;
-    public type             : string = "wmts"; // WMTS, WMS, XYZ
-    public _layer           : olLayer | null = null; // holds the actual layer once defined
-    public source           : LayerSource | null = null;
-    public _category        : string = layerCategories.LAYER; // basemap, layer or overlay
-    public time             : Date = new Date();
     public _alpha           : number = 1;
-    public clandestine      : boolean = false;
-    public minDate          : string | null = null;
-    public maxDate          : string | null = null;
-    public timeStep         : String | null = null;
-    public minLevel         : number = -1;
-    public maxLevel         : number = -1;
-    public handler          : string = "";
-    public tag              : string = ""; // optional to help identify layer group
-    public hasVariable      : string = "";
-    public info             : string | null = null;     // info-id for layerInfo modal if different from id
-    public hasLegend        : boolean = false;
-    public needsLegendIcon  : boolean = false;
-    public variableRange    : IVariableRange = {};
-    public symbol           : string = '';
-    public props            : ILayerProps | null = null;
-    public style            : string | null = null;
-    public _tile            = null;
-    public jsonHandler      : Function | null = null;
-    public jsonSubsetHandler: Function | null = null;
-    public isSelect         : boolean = false;
-    public isJSONIdentify   : boolean = false;
-    public isBasicIdentify  : boolean = false;
-    public limitExtent      : [number, number, number, number] | null = null;
-    public icon             : string | null = null;
-    public iconLabel        : string | null = null;
-    public iconMatrix       : Array <number> | null = null;
-    public iconHasBorder    : boolean = true;
-    public isBasicLayer     : boolean = false;
-    public boxSource        : Vector | null = null;
-    public paletteUrl       : string | null = null;
-    public paletteColorDef  : string | null = null;
-    public colorPaletteId   : string | null = null;
-    public fireLayerType    : FireLayerType | null = null;
-    public dateFormat       : string = 'Y-m-d';
-    public listItemHandler  : Function | null = null;
-    public hasMenuExpanded  : boolean = false;
-    public parent           : string | null = null;
-    public parser           : Function | null = null;
-    public replace          : Array <string> | null = null;
-    public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
-    public extent           : Array <number> = [-180, -90, 180, 90];
-    public identifyUrl      : string | null = null;
-    public identifyHandler  : string | null = null;
+    // in the future remove? category
+    public _category        : string = layerCategories.LAYER; // basemap, layer or overlay
     public _identifyRead    : Function | null = null;
     public _identifySubmit  : Function | null = null;
-    public noDateRefresh    : boolean = false;
-    public _refreshRate     : number = 0;       // value in mins
     public _lastRefresh     : number = 0;
-    public styleJSON        : JSON | null = null;
-    public isLabel          : boolean = false;
-    public styleBackground  : string = '';
-    public serversLimit     : Array <string> | null = null;
-    public color            : Array <number> | null = null;
-    public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
-    public pixelSize        : number = 0;
+    public _layer           : olLayer | null = null; // holds the actual layer once defined
+    public _refreshRate     : number = 0;       // value in mins
+    public _tile            = null;
+    public _visible         : boolean = false;
     public altTitle1        : string | null = null;
     public altTitle2        : string | null = null;
-    public tileErrorUrl     : string | null = null;
-    public trackLoading     : boolean = false;
+    public boxSource        : Vector | null = null;
+    public clandestine      : boolean = false;
+    public cloneFormat      : string = "image/png";
+    public cloneId          : string = "";  // used for duplicate layers
+    public cloneLevel       : number = 9;  // 6-13  -- only applies to imagery_template
+    public cloneHasTime     : boolean = true;   // remove?
+    public color            : Array <number> | null = null;
+    public colorPaletteId   : string | null = null;
+    public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
+    public dateFormat       : string = 'Y-m-d';
+    public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
+    public exclusive        : string | null = null;
+    public extent           : Array <number> = [-180, -90, 180, 90];
+    public fireLayerType    : FireLayerType | null = null;      // remove?
+    public handler          : string = "";
+    public hasLegend        : boolean = false;
+    public hasMenuExpanded  : boolean = false;
+    public hasTime          : boolean = false;  // assume all layers are static with no time component
+    public hasVariable      : string = "";
+    public icon             : string | null = null;
+    public iconHasBorder    : boolean = true;
+    public iconLabel        : string | null = null;
+    public iconMatrix       : Array <number> | null = null;
+    public id               : string = "";
+    public identifyHandler  : string | null = null;
+    public identifyUrl      : string | null = null;
+    public info             : string | null = null;     // info-id for layerInfo modal if different from id
+    public initData         : string | null = null;
+    public initVisibility   : boolean = false;
+    public isBasicIdentify  : boolean = false;
+    public isBasicLayer     : boolean = false;  // remove ??
+    public isJSONIdentify   : boolean = false;
+    public isLabel          : boolean = false;
+    public isSelect         : boolean = false;
+    public jsonHandler      : Function | null = null;
+    public jsonSubsetHandler: Function | null = null;
+    public limitExtent      : [number, number, number, number] | null = null;
+    public listItemHandler  : Function | null = null;
+    public maxDate          : string | null = null;
+    public maxLevel         : number = -1;
+    public minDate          : string | null = null;
+    public minLevel         : number = -1;
+    public needsLegendIcon  : boolean = false;
+    public noDateRefresh    : boolean = false; //remove ???
+    public paletteUrl       : string | null = null;
+    public paletteColorDef  : string | null = null;
+    public parent           : string | null = null;
+    public parser           : Function | null = null;
+    public pixelSize        : number = 0;
+    public replace          : Array <string> | null = null;
+    public serversLimit     : Array <string> | null = null;
     public showTileError    : boolean = false;
+    public source           : LayerSource | null = null;
+    public style            : string | null = null;
+    public styleBackground  : string = '';
+    public styleJSON        : JSON | null = null;
+    public symbol           : string = '';
+    public tag              : string = ""; // optional to help identify layer group
+    public tileErrorUrl     : string | null = null;
+    public time             : Date = new Date();
+    public timeStep         : String | null = null;
+    public title            : string = "";
+    public trackLoading     : boolean = false;
+    public type             : string = "wmts"; // WMTS, WMS, XYZ
+    public variableRange    : IVariableRange = {};
+    public zoomTo           : string | null = null; // lon, lat, zoom level
  
     public addFeature (coord : Coord) {
         if (!this.boxSource) {
@@ -262,7 +266,7 @@ export class Layer {
                 for (let i=0; i< (src as RasterSource)["layers_"].length; i++) {
                     (src as RasterSource)["layers_"][i].getSource().refresh();
                 }                
-            } else {
+            } else if (src) {
                 src.refresh();
             }
         }
@@ -294,40 +298,49 @@ export class Layer {
     public getCurrentTime () : number {
         return Math.floor(Date.now() / (1000 * 60) - 1); // subtract one minute
     }
-    
-    public applyStyle () {
-    	if (this.type == "vector_tile" && this.styleJSON) {
-            mapboxStyle.apply(this);
-        }	
-    }
 
     public set visible(vis) {
         //loader.start();
         let current = this._visible;
         if (this._layer) {
-            if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+            this._layer.setVisible(vis); // set actual layer in open layers
+        } else {
+            if (vis) {
+                layer.addLayer(this);
+            }
+        }
+        this._visible = vis;
+        if (vis && ! current) { this.notify(true); }
+        else if (!vis && current) { this.notify(false); }
+        this.lastRefresh = this.getCurrentTime();
+    }
+
+/*    public set visible(vis) {
+        //loader.start();
+        let current = this._visible;
+        if (this._layer) {
+            if (vis && this.type == "vector_tile" && ! this.style) {
                 this._layer.setVisible(false);
             } else {
                 this._layer.setVisible(vis); // set actual layer in open layers
-                if (vis) { this.applyStyle();}
             }
         } else {
             if (vis) {
                 layer.addLayer(this);
-                if (this.type == "vector_tile" && ! this.styleJSON) {
-                    this._layer.setVisible(false);
-                }
+//                if (this.type == "vector_tile" && ! this.styleJSON) {
+//                    this._layer.setVisible(false);
+//                }
             }
         }
         this._visible = vis;
-        if (vis && this.type == "vector_tile" && ! this.styleJSON) {
+        if (vis && this.type == "vector_tile" && ! this.style && this._layer) {
             this._layer.setVisible(false);
         } else {
             if (vis && ! current) { this.notify(true); }
             else if (!vis && current) { this.notify(false); }
             this.lastRefresh = this.getCurrentTime();
         }
-    }
+    }*/
 
     public notify(vis:boolean) {
         let evt = (vis) ? events.EVENT_LAYER_VISIBLE : events.EVENT_LAYER_HIDDEN;

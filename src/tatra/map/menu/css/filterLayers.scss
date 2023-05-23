@@ -1,0 +1,158 @@
+.flMain {
+    color: #222;
+    background: #777;
+    font-weight: 600;
+    padding: 0.3rem 1rem;
+    font-size: 1.8rem;
+    cursor:pointer;
+}
+.flMain:hover {
+    background: linear-gradient(180deg,#30aaf2,#155b82);
+}
+#modal_filerLayers_header {
+    background:#000;
+}
+#modal_filerLayers_window {
+    background: #3c3d3e;
+    inset: 5.7rem 1rem 0.2rem;
+}
+#modal_filerLayers_content {
+    inset: 5.7rem 1rem 0.2rem;
+}
+.modalFilterLayers {
+    max-width: 120rem;
+    max-height: 120rem;
+    background: #666;
+    border: 0.1rem solid #5e5e5e;
+}
+.flLColumn {
+    width: 45rem;
+    height: 100%;
+    position: absolute;
+    overflow: auto;
+}
+.flRColumn {
+    position: absolute;
+    inset: 0 0 0 48rem;
+    overflow-y: auto;
+}
+.fl_modules {
+    color: #555;
+    cursor: pointer;
+    background: #ccc;
+    border-left: 1rem solid #777;
+    margin: 0 0 1rem;
+    padding: 0.3rem 0 0.3rem 1rem;
+    font-family: Titillium Web,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-size: 2rem;
+    position: relative;
+}
+.fl_modules:hover {
+    background: #aaa;
+}
+#fl_module_list .selected {
+    color: #222;
+    background: #00db09;
+    border-left: 1rem solid #0aa305;
+}
+.flGroupElementMainLbl {
+    color: #222;
+    background: #0adb09;
+    padding: 0.7rem 1.6rem;
+    font-family: Titillium Web,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-size: 2.2rem;
+}
+.flGroupElementContent {
+    margin-bottom: 1.5rem;
+    padding: 0;
+}
+.flGroupElementContent>div {
+    color: #fcf9f9;
+    width: 100%;
+    background: linear-gradient(#4e4e4e4d,#050505cc);
+    margin: 0;
+    padding: 2rem 2rem 2.2rem 3rem;
+    font-family: Titillium Web;
+    font-size: 1.7rem;
+}
+.flProductItem {
+    color: #222;
+    background: #eee;
+    margin: 0.1rem 0;
+    padding: 0.3rem 0 0.7rem 1rem;
+    font-size: 1.6rem;
+    position: relative;
+}
+/* The container */
+.llCheckbox {
+    display: block;
+    position: relative;
+    padding-left: 4.5rem;
+    padding-right: 7rem;
+/*  margin-bottom: 12px;*/
+    margin-top:.5rem;
+    cursor: pointer;
+    font-size: 1.6rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.llCheckbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  margin-top:.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3rem;
+  width: 3rem;
+  background-color: #eee;
+/*  border:3px solid #2b678d;*/
+  border:.2rem solid #AAA;
+}
+
+/* On mouse-over, add a grey background color */
+.llCheckbox input ~ .checkmark {
+/*  background-color: #ccc;*/
+  background-color: #EEE;
+}
+
+/* When the checkbox is checked, add a blue background */
+.llCheckbox input:checked ~ .checkmark {
+  background-color: #0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.llCheckbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.llCheckbox .checkmark:after {
+  left: .8rem;
+  top: .2rem;
+  width: 1rem;
+  height: 1.8rem;
+  border: solid #555657;
+  border-width: 0 .3rem .3rem 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

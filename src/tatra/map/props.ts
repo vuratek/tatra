@@ -3,10 +3,12 @@ import { Layer } from './obj/Layer';
 import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
 import { ColorPalette } from './obj/ColorPalette';
+import { Module } from './menu/components/Module';
+import { MapTime } from "./obj/MapTime";
 
 export class props  {
     
-    public static config                : IConfigDef | any = {};
+    public static config                : IConfigDef | null = null;
     public static data                  = {};
     public static isIE                  : boolean = false;
     public static server                : string = '';
@@ -16,6 +18,8 @@ export class props  {
     public static mapPinUrl             : string = '/images/map-pin.png';    
     public static ignoreResize          : boolean = false;
     public static imageryDate 		    : Date = new Date();
+    public static version               : string = '1.0.0';
+    public static mapMenuOpened         : boolean = false;
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];
@@ -34,17 +38,23 @@ export class props  {
     public static windowIsOpened            : boolean = false;
     public static window                    : boolean = false;
 
+    public static menuModules           : IMenuModuleLoader = {};
+
     public static colorPalettes         : IColorPalettes = {};
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
     public static tileLoadActive        : ITileLoadTracker = {};
+    public static time                  : MapTime = new MapTime();
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
 
     public static getApplicationName () : string {
-        return props.config.properties.applicationName;
+        if (props.config) {
+            return props.config.properties.applicationName;
+        }
+        return '';
     }
 }
 
@@ -60,4 +70,8 @@ export interface IColorLookupItem {
 }
 export interface ITileLoadTracker {
     [layer_id:string] : number;
+}
+
+export interface IMenuModuleLoader {
+    [menu_module_id : string] : Module;
 }

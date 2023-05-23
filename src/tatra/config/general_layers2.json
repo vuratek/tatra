@@ -7,18 +7,12 @@
 		"title"		: "Streets",
 		"iconMatrix": [0,1], 
 		"props" 	: {
-				"maxZoom"			: 16,
-				"projection"		: "EPSG:3857",
-		        "tileSize"			: 256,
-		        "tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'",
-		              					".replace('{z}', (tileCoord[0]).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', tileCoord[2].toString());}"
-		                                ],
-				"wrapX"				: true
-		    	}
+			"projection"		: "EPSG:3857",
+			"tileSize"			: 256,
+			"url"				: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+			"tileUrlHandler"	: "basic",	
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "street",
 		"type"		: "esri_vector_tile",
@@ -38,20 +32,11 @@
 		"iconMatrix": [0,0], 
 		"styleBackground" : "#333",
 		"props" 	: {
-				"maxZoom"			: 16,
-				"projection"		: "EPSG:4326",
-				"tileSize"			: 256,
-				"url"				: "https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-				"tileUrlHandler"	: "basic",
-		        "tileUrlFunction"	: [	
-										 "function(tileCoord) {",
-		              					"return 'https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', tileCoord[2].toString());}"
-		                                ],
-				"wrapX"				: true
-		    	}
+			"tileSize"			: 256,
+			"url"				: "https://wi.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+			"tileUrlHandler"	: "basic",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "topo",
 		"type"		: "esri_vector_tile",
@@ -70,16 +55,11 @@
 		"title"		: "Topographic",
 		"parent"	: "topo",
 		"props" 	: {
-				"projection"		: "EPSG:4326",
-				"tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return 'https://whi.maptiles.arcgis.com/arcgis/rest/services/World_Hillshade/MapServer/tile/{z}/{y}/{x}'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', tileCoord[2].toString());}"
-		                                ],
-				"wrapX"				: true
-		    	}
+			"projection"		: "EPSG:4326",
+			"url"				: "https://whi.maptiles.arcgis.com/arcgis/rest/services/World_Hillshade/MapServer/tile/{z}/{y}/{x}",
+			"tileUrlHandler"	: "basic",
+			"wrapX"				: true
+		}
 	},{
 		"id"		: "dark_gray",
 		"type"		: "esri_vector_tile",
@@ -128,6 +108,7 @@
 		"category"	: "overlay",
 		"tag"		: "overlay",
 		"title"		: "Countries, Regions and Roads",
+		"exclusive" : "country-outline",
 		"iconMatrix": [1,0], 
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson",
@@ -138,47 +119,40 @@
 		"altTitle1"	: "Title 1",
 		"altTitle2"	: "Title 2",
 		"type"		: "wmts",
-		"category" 	: "dynamic",
 		"handler"	: "imagery",
+		"tag"		: "imagery",
+		"hasTime"	: "true",
 		"replace"	: ["layer", "?"],
 		"clandestine": false,
 		"props"		: {
-				"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
-				"layer"			: "#layer#",
-				"format"		: "image/png",
-				"matrixSet"		: "15.625m",
-				"tileUrlHandler" : "gibs",
-				"tileGrid"		: {
-							"origin": [-180, 90],
-							"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313, 0.000137329101563],
-							"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-							"tileSize": 512
-		       				}, 
-				"tileLoadFunction"	: [	
-									"function(imageTile, src) {",
-									"imageTile.getImage().src = setWMTSTime(imageTile, src, '#id#');}"
-	                                ]	
-					}
+			"url"			: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?",
+			"layer"			: "#layer#",
+			"format"		: "image/png",
+			"matrixSet"		: "15.625m",
+			"tileUrlHandler" : "gibs",
+			"tileGrid"		: {
+				"origin": [-180, 90],
+				"resolutions": [0.5625, 0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313, 0.000137329101563],
+				"matrixIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+				"tileSize": 512
+			}
+		}
 	}, {
 		"id"		: "orbit_template",
 		"title"		: "Orbit Template",
 		"type"		: "xyz",
 		"handler"	: "orbits",
 		"tag"		: "orbits",
+		"hasTime"	: "true",
 		"clandestine": false,
 		"replace"	: ["layer", "?" ],
 		"props" 	: {
-				"maxZoom"			: 12,
-				"projection"		: "EPSG:4326",
-				"url"				: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&VERSION=1.1.1&SRS=EPSG%3A4326&SERVICE=WMS&LAYERS=#layer#",
-				"tileSize"			: 256,
-				"tileUrlHandler" 	: "orbit",
-		        "tileUrlFunction"	: [	
- 						"function(tileCoord) {",
- 						"return updateOrbitUrl('#id#', tileCoord);}"
-                        ],
-				"wrapX"				: true
-		    	}				
+			"maxZoom"			: 12,
+			"url"				: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&VERSION=1.1.1&SRS=EPSG%3A4326&SERVICE=WMS&LAYERS=#layer#",
+			"tileSize"			: 256,
+			"tileUrlHandler" 	: "orbit",
+			"wrapX"				: true
+		}				
 	}, {
 		"id"		: "protected_areas",
 		"type"		: "xyz",
@@ -188,15 +162,8 @@
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"maxZoom"			: 16,
-			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_global/{z}/{y}/{x}.png",
-			"tileSize"			: 512,
+			"url"				: "/layers/pa_global/{z}/{y}/{x}",
 			"tileUrlHandler"	: "basic",
-			"tileUrlFunction"	: [	
-									"function(tileCoord) {",
-									"return updateBasicTileUrl('#id#', tileCoord);}"
-									],
 			"wrapX"				: true
 		},
 		"isBasicIdentify" : true,
@@ -211,16 +178,8 @@
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"maxZoom"			: 16,
-			"projection"		: "EPSG:4326",
-			"url"				: "/layers/pa_regional/{z}/{y}/{x}.png",
-				"tileSize"			: 512,
-				"tileUrlHandler"	: "basic",
-				"tileUrlFunction"	: [	
-									"function(tileCoord) {",
-									"return updateBasicTileUrl('#id#', tileCoord);}"
-									],
-			"wrapX"				: true
+			"url"				: "/layers/pa_regional/{z}/{y}/{x}",
+			"tileUrlHandler"	: "basic"
 		},
 		"isBasicIdentify" : true,
 		"identifyUrl" 		: "/php/get_db_pas.php?",
@@ -234,18 +193,13 @@
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.8,
 		"props" 	: {
-				"maxZoom"			: 14,
-				"projection"		: "EPSG:4326",
-				 "tileSize"			: 512,
-		         "tileUrlFunction"	: [	
-		         						"function(tileCoord) {",
-		              					"return '/layers/#id#/{z}/{y}/{x}.png'",
-		              					".replace('{z}', (tileCoord[0] - 1).toString())",
-		                                ".replace('{x}', tileCoord[1].toString())",
-		                                ".replace('{y}', (tileCoord[2]).toString());}"
-		                                ],
-				"wrapX"				: true
-		    }
+			"maxZoom"			: 14,
+			"projection"		: "EPSG:4326",
+			"url"				: "/layers/#id#/{z}/{y}/{x}.png",
+			"tileSize"			: 512,
+			"tileUrlHandler"	: "basic",
+			"wrapX"				: true
+		}
 	}, {
 		"id"		: "selCountry",
 		"type"		: "geojson",
