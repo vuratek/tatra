@@ -99,6 +99,7 @@ export class mapUtils {
             }
             if (layer.visible && id != layer.id) {
                 layer.visible = false;
+                this.restoreExclusiveLayer(layer.id);
             }
         }
         for (let i = 0; i < props.layers.length; i++) {
@@ -117,11 +118,13 @@ export class mapUtils {
         }
         this.setCountryLabel();
         if (update) { 
+            // hide imagery layers so it is clear basemap was changed
             for (let i = 0; i < props.layers.length; i++) {
                 if (props.layers[i].tag == "imagery" && props.layers[i].visible) {
                     props.layers[i].visible = false;
                 }
             }
+            this.processExclusiveLayer(props.currentBasemap);
             events.dispatch(events.EVENT_BASEMAP_CHANGE); 
         }
     }
@@ -146,9 +149,7 @@ export class mapUtils {
 					counter++;
 				}
 			}
-			if (counter > 0) {
-				events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
-			}
+			this.callUILayerUpdate(counter);
 		}
 	}
 
@@ -164,17 +165,55 @@ export class mapUtils {
             }
             if (id == lo.id && lo.isLabel) {
             	this.setCountryLabel();
+            }   
+            this.processExclusiveLayer(id);
+        }
+    }
+
+    public static restoreExclusiveLayer(targetId:string) {
+        let counter= 0;
+        let lo = this.getLayerById(targetId);
+        if (lo && lo.exclusiveSaved) {
+            let arr = lo.exclusiveSaved.split(',');
+            for (let j=0; j<arr.length; j++) {
+                let lo2 = this.getLayerById(arr[j]);
+                if (lo2 && ! lo2.visible) {
+                    lo2.visible = true;
+                    counter++;
+                }
             }
-            if (lo.exclusive && lo.visible) {
-                let arr = lo.exclusive.split(',');
-                for (let j=0; j<arr.length; j++) {
-                    let lo2 = this.getLayerById(arr[j]);
-                    if (lo2) {
-                        lo2.visible = false;
+            lo.exclusiveSaved = null;
+        }
+        this.callUILayerUpdate(counter);
+    }
+
+    private static callUILayerUpdate(counter:number) {
+        if (counter > 0) {
+            events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+        }
+    }
+
+    public static processExclusiveLayer(targetId:string) {
+        let counter= 0;
+        let lo = this.getLayerById(targetId);
+        if (lo && lo.exclusive && lo.visible) {
+            let arr = lo.exclusive.split(',');
+            for (let j=0; j<arr.length; j++) {
+                let lo2 = this.getLayerById(arr[j]);
+                if (lo2 && lo2.visible) {
+                    lo2.visible = false;
+                    if (lo.exclusiveSaved) {
+                        let arr = lo.exclusiveSaved.split(',');
+                        arr.push(lo2.id);
+                        lo.exclusiveSaved = arr.join(',');
+                    } else {
+                        lo.exclusiveSaved = lo2.id;
                     }
+                    counter++;
                 }
             }
         }
+        this.callUILayerUpdate(counter);
     }
 
     public static setCountryLabel () {

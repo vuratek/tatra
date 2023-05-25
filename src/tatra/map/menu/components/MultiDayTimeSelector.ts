@@ -95,6 +95,7 @@ export class MultiDayTimeSelector extends Module {
             this.setLastDayValues(this.lastRangeMins);
         }
         this.setDates();
+        Timeline.setSelectOption();
     }
     public setDailySubDailyOption(option:string) {
         if (this.currentDayMode == option) { 

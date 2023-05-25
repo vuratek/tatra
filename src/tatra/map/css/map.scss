@@ -565,7 +565,16 @@ body::-webkit-scrollbar {
 .supp_lyrs_lyr_click_legend {
 	right:9rem;
 }
-
+.lmvBottomLogo {
+	position:absolute;
+	bottom: .7rem;
+	right:1rem;
+	z-index: 1000;
+}
+.lmvBottomLogo img {
+	width: 5rem;
+	height:4.2rem;
+}
 @media screen and (max-width: 1180px) {
 	#mapControlBar {
 		left:15%;

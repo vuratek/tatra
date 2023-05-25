@@ -23,8 +23,8 @@ export enum ActionType {
 
 export enum TimelineAdjustType {
     BACK_RANGE  = "backrange",      // jump entire length of timerange
-    BACK_DAY    = "backday",       // move one day forward
-    FRONT_DAY   = "frontday",
+//    BACK_DAY    = "backday",       // move one day forward
+//    FRONT_DAY   = "frontday",
     FRONT_RANGE = "frontrange"
 }
 
@@ -197,6 +197,10 @@ export class Timeline {
         zoomDate.setMinutes(-120);
 
         this._finalizeRangeLoading(zoomDate);
+    }
+
+    public static setSelectOption() {
+        rangePicker.setRangeSelect();
     }
 
     private static _finalizeRangeLoading(date : Date) {
@@ -740,23 +744,33 @@ export class Timeline {
         if (! dates) { return null;}
         let start = dates.start;
         let end = dates.end;
-        let range = this.advancedRange;
+        let range = (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) ? this.advancedMinuteRange : this.advancedRange;
         switch (type) {
             case TimelineAdjustType.BACK_RANGE:
-                start = utils.addDay(start, - range -1);
-                end = utils.addDay(end, - range -1);
+                if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+                    start = utils.addMinutes(start, -range);
+                    end = utils.addMinutes(end, -range);
+                } else {
+                    start = utils.addDay(start, - range -1);
+                    end = utils.addDay(end, - range -1);
+                }
                 break;
-            case TimelineAdjustType.BACK_DAY:
+/*            case TimelineAdjustType.BACK_DAY:
                 start = utils.addDay(start, - 1);
                 end = utils.addDay(end, - 1);
                 break;
             case TimelineAdjustType.FRONT_DAY:
                 start = utils.addDay(start, 1);
                 end = utils.addDay(end, 1);
-                break;
+                break;*/
             case TimelineAdjustType.FRONT_RANGE:
-                start = utils.addDay(start, range + 1);
-                end = utils.addDay(end, range + 1);
+                if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+                    start = utils.addMinutes(start, range);
+                    end = utils.addMinutes(end, range);
+                } else {
+                    start = utils.addDay(start, range + 1);
+                    end = utils.addDay(end, range + 1);
+                }
                 break;
         }
         if (end > this.maxDate || start < this.minDate) { return; }

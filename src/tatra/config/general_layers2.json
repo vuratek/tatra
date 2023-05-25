@@ -19,6 +19,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Streets",
+		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/cc8072363d614d96b08b2361a09979a5/resources/styles/root.json?f=pjson",
 		"iconMatrix": [0,1],
 		"styleBackground" : "#1c2325"
@@ -44,6 +45,7 @@
 		"tag"		: "basemap",
 		"title"		: "Topographic",
 		"iconMatrix": [0,2], 
+		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/670c2a9ee3b949a8991b99df425abd0d/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#FFF",
 		"isLabel"	: true
@@ -67,6 +69,7 @@
 		"tag"		: "basemap",
 		"title"		: "Dark Gray",
 		"iconMatrix": [0,4], 
+		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/55253142ea534123882314f0d880ddab/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#1c2325"
 	},{
@@ -84,6 +87,7 @@
 		"tag"		: "basemap",
 		"title"		: "Light Gray",
 		"iconMatrix": [0,3], 
+		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/fe92de877afe498fa62a5ae4c5b6c8ba/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#ced3d4"
 	},{

@@ -106,6 +106,7 @@ export class Layer {
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
     public exclusive        : string | null = null;
+    public exclusiveSaved   : string | null = null; // save exclusive layers if they were ON before turnging them off
     public extent           : Array <number> = [-180, -90, 180, 90];
     public fireLayerType    : FireLayerType | null = null;      // remove?
     public handler          : string = "";
