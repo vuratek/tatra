@@ -24,19 +24,22 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@jaames/iro": "^5.5.2",
+    "@petamoriken/float16": "^3.8.1",
     "@types/nouislider": "^9.0.9",
     "@types/ol": "^6.5.3",
+    "buffer": "^6.0.3",
     "coordinate-parser": "^1.0.7",
     "elm-pep": "^1.0.6",
     "events": "^3.3.0",
     "flatpickr": "^4.6.13",
+    "geotiff": "^2.0.7",
     "nouislider": "^14.6.3",
-    "ol": "^7.2.2",
+    "ol": "^7.4.0",
     "ol-mapbox-style": "^9.4.0"
   },
   "devDependencies": {
-    "cssnano": "^5.1.9",
-    "sass": "^1.32.5",
+    "cssnano": "^5.1.15",
+    "sass": "^1.63.4",
     "typescript": "^4.3.5"
   }
 }

@@ -27,7 +27,6 @@ export class mainMenu {
                 <span><i class="fas fa-graduation-cap"></i></span>
             </div>
         `;
-
         
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
@@ -203,7 +202,11 @@ export class mainMenu {
                         let key = mod.modules[i];
                         let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
                         if (props.menuModules[key]) {
-                            props.menuModules[key].render(_div);
+                            try {
+                                props.menuModules[key].render(_div);
+                            } catch (e) {
+                                console.log(`Module ${key} not defined.`);
+                            }
                         }
                     }
                 }

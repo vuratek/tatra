@@ -1,5 +1,5 @@
-import './css/*.scss';
 import 'ol/ol.css';
+import './css/*.scss';
 import { props } from "./props";
 import { configProps } from "./support/configProps";
 import { coreUtils } from "./support/coreUtils";

@@ -270,6 +270,15 @@ export class mapUtils {
         }
     }
 
+    public static getDateTimeRange(separator : string = ',') : string {
+        if (props.time.rangeMins != 0) {
+            let start = flatpickr.formatDate(utils.addMinutes(props.time.date,-props.time.rangeMins), 'Y-m-d H:i');
+            let end = flatpickr.formatDate(props.time.date, 'Y-m-d H:i');
+            return start + separator + end;
+        } 
+        return flatpickr.formatDate(utils.addDay(props.time.date, - props.time.range),'Y-m-d') + separator + flatpickr.formatDate(props.time.date, 'Y-m-d');
+    }
+
     public static formatPolygon (f:Feature) : string {
         let format = new WKT();
         return format.writeFeature(f);

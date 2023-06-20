@@ -67,7 +67,6 @@ export class menu {
                 }
 			}
         }
-        console.log(cfg.modules);
     }
     public static getMenuModuleById (id:string) : IMenuModule | null {
         let cfg = (props.config as IConfigDef);

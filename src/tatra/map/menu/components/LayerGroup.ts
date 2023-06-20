@@ -249,6 +249,7 @@ export class LayerGroup extends Module {
     
     private selectLayer (id : string) {
 		let lo = mapUtils.getLayerById(id);
+		console.log(lo);
 		if (lo) {
 			if (lo.category == 'overlay') {
 				mapUtils.setOverlay(id);
@@ -278,6 +279,9 @@ export class LayerGroup extends Module {
 			else {
 				if (lo.handler && (lo.handler == "orbits" || lo.handler == "imagery" || lo.tag != "")) {
 					lo.visible = ! lo.visible;
+					if (lo.exclusive) {
+						mapUtils.processExclusiveLayer(lo.id);
+					}
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
 			}
