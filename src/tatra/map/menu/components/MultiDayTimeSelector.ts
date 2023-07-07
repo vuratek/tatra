@@ -345,7 +345,9 @@ export class MultiDayTimeSelector extends Module {
     private timelineUpdate () {
         let obj = Timeline.getDates();
         if (! obj) { return; }
-		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+        let pastImageryDate = props.time.imageryDate;
+        //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+        props.time.imageryDate = obj["single"].start;
         
         let _refresh = false;
 
@@ -392,6 +394,9 @@ export class MultiDayTimeSelector extends Module {
                 _refresh = true;
                 props.time.range = _range;
             }
+        }
+        if (pastImageryDate != props.time.imageryDate) {
+            _refresh = true;
         }
 		if (!_refresh) {
             return;

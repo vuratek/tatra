@@ -139,6 +139,7 @@
 		"altTitle2"	: "Title 2",
 		"type"		: "wmts",
 		"category" 	: "dynamic",
+		"hasTime"	: true,
 		"handler"	: "imagery",
 		"replace"	: ["layer", "?"],
 		"clandestine": false,

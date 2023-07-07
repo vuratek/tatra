@@ -12,8 +12,11 @@ export class Module {
 
     public constructor(props : IMenuModule) {
         this.props = props;
-        if (! props.opened) {
+        if (props.opened == undefined) {
             props.opened = false;
+        }
+        if (props.usePresetLayers == undefined) {
+            props.usePresetLayers = true;
         }
         this.setLayerRefs();
     }

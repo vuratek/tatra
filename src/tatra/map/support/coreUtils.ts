@@ -160,7 +160,7 @@ export class coreUtils {
             lo.source.matrixSet = ms[lo.cloneLevel - 6];
             //lo.maxLevel = lo.cloneLevel + .5;
             lo.source.format = lo.cloneFormat;
-            if (lo.cloneHasTime || lo.hasTime) {
+            if (lo.hasTime === true) {
                 lo.source.url += 'TIME=*TIME*';
             } else {
                 lo.noDateRefresh = true;

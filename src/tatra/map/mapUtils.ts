@@ -55,7 +55,7 @@ export class mapUtils {
         let _full = flatpickr.formatDate(date, 'Y-m-d H:i');
 	    for (let i=0; i<props.layers.length; i++) {
             let lo = props.layers[i];
-            if (!lo) { continue; }
+//            if (!lo) { continue; }
             let refresh = false;
             // only time refresh layers that use time and when time has changed enough
             // so don't change daily when only hours or minutes changed
@@ -71,7 +71,7 @@ export class mapUtils {
                 }
             }
             lo.time = date;
-            if (lo.visible && lo.hasTime === true && refresh) {
+            if (lo.visible && refresh && lo.hasTime === true) {
                 lo.refresh();
             }
         }

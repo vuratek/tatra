@@ -3,6 +3,7 @@ import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
+import { Module } from "./components/Module";
 
 export class mainMenu {
 
@@ -113,7 +114,9 @@ export class mainMenu {
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
             for (let key in props.menuModules) {
-                props.menuModules[key].presetLayers();
+                if (props.menuModules[key].props.usePresetLayers) {
+                    props.menuModules[key].presetLayers();
+                }
             }
             for (let key in props.menuModules) {
                 if (props.menuModules[key].isActive()) {

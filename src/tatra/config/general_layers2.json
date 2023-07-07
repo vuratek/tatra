@@ -125,7 +125,7 @@
 		"type"		: "wmts",
 		"handler"	: "imagery",
 		"tag"		: "imagery",
-		"hasTime"	: "true",
+		"hasTime"	: true,
 		"replace"	: ["layer", "?"],
 		"clandestine": false,
 		"props"		: {
@@ -147,7 +147,7 @@
 		"type"		: "xyz",
 		"handler"	: "orbits",
 		"tag"		: "orbits",
-		"hasTime"	: "true",
+		"hasTime"	: true,
 		"clandestine": false,
 		"replace"	: ["layer", "?" ],
 		"props" 	: {

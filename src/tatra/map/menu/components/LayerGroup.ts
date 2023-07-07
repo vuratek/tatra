@@ -28,7 +28,8 @@ export class LayerGroup extends Module {
         base.appendChild(ul);
         let baseId = this.props.id;
         if (this.props.hasMultiLayer) {
-            this.appendDynamicLayerSelector(ul); 
+			this.appendDynamicLayerSelector(ul); 
+			this.props.isMultiLayerActive = false;
         }
 //		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
@@ -60,7 +61,7 @@ export class LayerGroup extends Module {
         document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, () => this.updateLayers());
         document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
         document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
-        document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, () => this.updateDisabled());
+		document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, () => this.updateDisabled());
 	}
 	
 	private checkLayerRef(lo:Layer, layers:Array<IMenuModuleLayers> | null, tag : string | null) : boolean {
@@ -249,7 +250,6 @@ export class LayerGroup extends Module {
     
     private selectLayer (id : string) {
 		let lo = mapUtils.getLayerById(id);
-		console.log(lo);
 		if (lo) {
 			if (lo.category == 'overlay') {
 				mapUtils.setOverlay(id);
@@ -275,12 +275,22 @@ export class LayerGroup extends Module {
 					lo.visible = true;
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
-			}
-			else {
+			} else {
 				if (lo.handler && (lo.handler == "orbits" || lo.handler == "imagery" || lo.tag != "")) {
 					lo.visible = ! lo.visible;
+					lo.refresh();
 					if (lo.exclusive) {
 						mapUtils.processExclusiveLayer(lo.id);
+					} else {
+						// if layer is in container that limits multiple layers turned on, check whether it is active
+						if (this.props.layer_refs && lo.visible && this.props.isMultiLayerActive === false && this.props.tag == lo.tag) {
+							for (let i=0; i<this.props.layer_refs.length; i++) {
+								let lo2 = mapUtils.getLayerById(this.props.layer_refs[i].id);
+								if (lo2 && lo2.visible && lo2.id != lo.id ) {
+									lo2.visible = false;
+								}
+							}
+						}
 					}
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
@@ -438,7 +448,22 @@ export class LayerGroup extends Module {
 		let el = document.getElementById(`ll_dynamic_multi_${this.props.id}`) as HTMLInputElement;
 		if (el) {
 			props.allowMultipleDynamicLayers = el.checked;
-			mapUtils.resetDynamicLayers();
+			this.props.isMultiLayerActive = el.checked;
+			mapUtils.resetDynamicLayers(); // old style; remove at some point
+			// if multilayer is deactivate, turn off all layers
+			if (! this.props.isMultiLayerActive && this.props.layer_refs) {
+				let count = 0;
+				for (let i=0; i<this.props.layer_refs.length; i++) {
+					let lo2 = mapUtils.getLayerById(this.props.layer_refs[i].id);
+					if (lo2 && lo2.visible) {
+						lo2.visible = false;
+						count++;
+					}
+				}
+				if (count > 0) {
+					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+				}
+			}
 		}
     }
 
@@ -447,5 +472,5 @@ export class LayerGroup extends Module {
 		if (el) {
 			el.checked = props.allowMultipleDynamicLayers;
 		}
-    }
+	}
 }

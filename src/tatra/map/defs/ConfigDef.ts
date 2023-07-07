@@ -42,8 +42,10 @@ export interface IMenuModule {
     defaultLayers   : Array<string> | null; // default layers that should load unless URL overrides it
     noGroup?        : boolean;              // if set, doesn't show +/- for expansion; default is false
     isTopModule?    : boolean;              // this is top part of map menu and the sroll doesn't apply to this
-    hasMultiLayer?  : boolean | null;       // dynamic iamagery by default only allows 1 layer, but this will show a checkbox and allow multiple
+    hasMultiLayer?  : boolean | null;       // dynamic imagery by default only allows 1 layer, but this will show a checkbox and allow multiple
+    isMultiLayerActive? : boolean | null;   // whether the multilayer option is turned on; ties with hasMultiLayer
     layer_refs?     : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
+    usePresetLayers : boolean;              // when switching tabs, do you maintain viewable layers. Applicable to modules that are persistent
     handler         : Module | null;        // module handler pointer
     descriptionText? : string;              // passing description text for ex bookmarks
     menuDescription? : string;              // description used in menu selection

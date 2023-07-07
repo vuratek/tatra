@@ -400,10 +400,11 @@ export class Layer {
         for (let k = 0; k < properties.length; k++) {
             let key = properties[k];
             let value = input[key];
+            let outVal = output[key];
             if (Array.isArray(value)) {
                 value = input[key].slice(0);
             }
-            if (!output[key]) {
+            if (outVal == null) {
                 output[key] = value;
             }
         }
