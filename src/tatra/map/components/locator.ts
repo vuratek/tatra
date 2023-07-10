@@ -284,6 +284,7 @@ export class locator extends baseComponent {
             `;
             utils.setUIAction("keyup", "locator-search", () => this.search());
             utils.setClick('locator-search-clear', ()=>this.clearSearch());
+            utils.setFocus('locator-search');
         } else {
             this.refreshSaved();
         }
