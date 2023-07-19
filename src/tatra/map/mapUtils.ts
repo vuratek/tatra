@@ -548,7 +548,8 @@ export class mapUtils {
     }
 
     public static readColorMap (lo : Layer) {
-        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.initData) {
+//        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.initData) {
+        if (lo.initData) {
             var arr = lo.initData.split("..");
             if (arr.length == 2) {
                 let a1 = Number(arr[0]);
