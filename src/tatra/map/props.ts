@@ -49,6 +49,7 @@ export class props  {
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on
+    public static ignoreBasemapUpdate : boolean = false;
 
     public static getApplicationName () : string {
         if (props.config) {

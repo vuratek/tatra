@@ -31,6 +31,11 @@ export interface IMenuModuleLayers {
     visible         : boolean;
     _defaultVisible : boolean | null;
 }
+export interface IGroupBreaker {
+    id              : string;
+    layers          : Array<string>;
+    label           : string;
+}
 export interface IMenuModule {
     id              : string;
     label           : string;
@@ -47,6 +52,7 @@ export interface IMenuModule {
     layer_refs?     : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
     usePresetLayers : boolean;              // when switching tabs, do you maintain viewable layers. Applicable to modules that are persistent
     handler         : Module | null;        // module handler pointer
+    groupBreakers?  : Array<IGroupBreaker> | null;        // creates all on/off button for group of layers
     descriptionText? : string;              // passing description text for ex bookmarks
     menuDescription? : string;              // description used in menu selection
     skipMenuDisplay? : boolean;

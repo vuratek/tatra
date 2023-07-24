@@ -143,11 +143,29 @@ export class hash {
         if (update) { this.update(); }
     }
 
+    public static hashLayerToString(layers : Array<IHashLayer>) : string | null {
+        let lyrs:Array<string> = [];
+        for (let i=0; i< layers.length; i++) {
+            let lyr = layers[i];
+            if (lyr.layerId) {
+                let str = lyr.layerId;
+                if (lyr.classifier) {
+                    str += `=${lyr.classifier}`;
+                }
+                lyrs.push(str);
+            }
+        }
+        if (lyrs.length > 0) {
+            return lyrs.join(',');
+        }
+        return null;
+    }
+
     public static layersToString () : string | null {
         if (! this.values.layers || this.values.layers.length == 0) {
             return null;
         }
-        let lyrs = [];
+        /*let lyrs:Array<string> = [];
         for (let i=0; i< this.values.layers.length; i++) {
             let lyr = this.values.layers[i];
             if (lyr.layerId) {
@@ -160,6 +178,10 @@ export class hash {
         }
         if (lyrs.length > 0) {
             return `l:${lyrs.join(',')}`;
+        }*/
+        let str = this.hashLayerToString(this.values.layers);
+        if (str) {
+            return `l:${str}`;
         }
         return null;
     }

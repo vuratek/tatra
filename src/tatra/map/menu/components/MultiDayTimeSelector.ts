@@ -200,6 +200,8 @@ export class MultiDayTimeSelector extends Module {
         }     
         this.calendar.selectedDates[0] = dt;
         this.setDates();
+        Timeline.setSelectOption();
+        events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }
     private setLastMinValues(val : number) {
         if (props.time.rangeMins > 0) {

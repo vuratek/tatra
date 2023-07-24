@@ -117,7 +117,7 @@ export class mapUtils {
             }
         }
         this.setCountryLabel();
-        if (update) { 
+        if (update && ! props.ignoreBasemapUpdate) { 
             // hide imagery layers so it is clear basemap was changed
             for (let i = 0; i < props.layers.length; i++) {
                 if (props.layers[i].tag == "imagery" && props.layers[i].visible) {
