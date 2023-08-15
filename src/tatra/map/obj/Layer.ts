@@ -130,6 +130,7 @@ export class Layer {
     public isJSONIdentify   : boolean = false;
     public isLabel          : boolean = false;
     public isSelect         : boolean = false;
+    public isTileIdentify   : boolean = false;
     public jsonHandler      : Function | null = null;
     public jsonSubsetHandler: Function | null = null;
     public limitExtent      : [number, number, number, number] | null = null;

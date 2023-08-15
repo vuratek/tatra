@@ -464,6 +464,25 @@ export class layerStyle {
         return layerStyle.symbols[key].cache[flag];
     }
 
+    public static _firePerimeterUSA_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
+    }
+    public static _firePerimeterUSA_info(feature : Feature) : string {
+        let irwinid = feature.get('poly_IRWINID');
+        let fireid = feature.get('attr_UniqueFireIdentifier');
+        let name = feature.get('poly_IncidentName');
+        return `
+            <span class="faLbl"><img src="/images/US-flag.jpg">Fire Perimeter</span><br/>
+            <div class="faSize">
+                <table>
+                    <tr><td>Name</td><td>${name}</td></tr>
+                    <tr><td>Fire ID</td><td>${fireid}</td></tr>
+                    <tr><td colspan="2">IRWIN ID<br/>${irwinid}</td></tr>
+                </table>
+            </div>
+        `;
+    }
+
     public static _geographicAreasUSA ( feature : Feature, resolution: number) : Style | null {
         let key = "borders-usa";
         let flag = "default";
