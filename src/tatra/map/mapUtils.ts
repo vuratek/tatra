@@ -90,6 +90,16 @@ export class mapUtils {
 //	    ui.setInfoStatement();
     }
 
+    public static isImageryOn () : boolean {
+        for (let i=0; i<props.layers.length; i++) {
+            let lo = props.layers[i];
+            if (lo.visible && lo.hasTime === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static setBasemap (id : string) {
         let update = false;
         for (let i = 0; i < props.layers.length; i++) {

@@ -188,6 +188,7 @@ export class Timeline {
         rangePicker.initDatePicker(mindate);
         this.timeKeeper["single"] = { start: mindate, end : maxdate};
         this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, -this.advancedMinuteRange), end : maxdate};
+        //console.log(">>> ", this.timeKeeper);
         if (this.timeKeeper) {
             Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end, content : "<div></div>"});
             Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
@@ -270,7 +271,11 @@ export class Timeline {
         this.timeline = new vis.Timeline(this.container, this.items, this.options);
         if (this.timeline) {
             this.timeline.zoomOut(1);
-            this.timeline.moveTo(utils.sanitizeDate(this.singleDate));
+            if (this.advancedMinuteRange > 0) {
+                this.timeline.moveTo(this.singleDate);
+            } else {
+                this.timeline.moveTo(utils.sanitizeDate(this.singleDate));
+            }
             if (Timeline.type == TimelineType.SINGLE) {
                 this.timeline.on('click', (evt) => this.onClick(evt));
             } else if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {

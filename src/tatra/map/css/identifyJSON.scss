@@ -103,11 +103,14 @@
     position: relative;
     border-radius: 0.4rem;
     padding: 1rem 0.5rem;
-    opacity: 0.9;
+    opacity: 0.8;
     white-space: nowrap;
     font-size: 1.6rem;
     line-height: 2.2rem;
     cursor: default;
+}
+.ol-identify:hover {
+    opacity:1.0;
 }
 .identifyJSONLabel .close {
     color: #244153;

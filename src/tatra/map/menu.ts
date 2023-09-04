@@ -168,12 +168,18 @@ export class menu {
 
         if (props.version > '1.0.0') {
             content = document.createElement("div");
-            content.setAttribute("id", "MapMenuItems");
-            //content.setAttribute("id", this.id + "_content");
-            content.setAttribute("class",  "mapMenuItems");        
+            content.setAttribute("id", "MapMenuWrapItems");
+            content.setAttribute("class",  "mapMenuWrapItems");        
             div.appendChild(content);
+            let content2 = document.createElement("div");
+            content2.setAttribute("id", "MapMenuInfo");
+            content2.setAttribute("class",  "mapMenuInfo");        
+            content.appendChild(content2);
+            content2 = document.createElement("div");
+            content2.setAttribute("id", "MapMenuItems");
+            content2.setAttribute("class",  "mapMenuItems");        
+            content.appendChild(content2);
         }
-        
 
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
         if (props.version > '1.0.0') {
@@ -252,7 +258,8 @@ export class menu {
     public static resize () {
         let el = document.getElementById(`${this.id}Content`);
         //let el = document.getElementById(`${this.id}_content`);
-		if (! el) { return; }
+        if (! el) { return; }
+        
 		let controls = (document.getElementById('bottomBar') as HTMLDivElement) ? (document.getElementById('bottomBar') as HTMLDivElement).clientHeight : 0;
         let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
 //		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;

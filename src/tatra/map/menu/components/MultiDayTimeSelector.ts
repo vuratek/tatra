@@ -8,6 +8,8 @@ import { events } from "../../events";
 import { controls } from "../../components/controls";
 import { rangePicker } from "../../../timeline/rangePicker";
 import { time_info } from "../features/time_info";
+import { hash } from "../../hash";
+import { hashHandler } from "../hashHandler";
 
 export class MultiDayTimeSelector extends Module {
 
@@ -27,6 +29,16 @@ export class MultiDayTimeSelector extends Module {
     
     public render(par : HTMLDivElement) {
         super.render(par);
+
+        let dates = hash.getDates();
+        props.time.rangeMins = 0;
+		props.time.range = 1;
+
+        if (dates) {
+            hashHandler.processDateTime(dates);		
+//            this.lastRangeDays = props.time.range;
+        }
+        
         controls.createControlItem('time_info', time_info);
 		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
 		let th = document.createElement("div");
@@ -62,14 +74,15 @@ export class MultiDayTimeSelector extends Module {
                 </div>
             </div>
         `;
-        
-        Timeline.init("timeline", TimelineType.RANGE_TIED);
+        let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
+        console.log(props.time.rangeMins, props.time.range);
         Timeline.singleDate = props.time.imageryDate;
         Timeline.advancedRange = props.time.range;
+        Timeline.advancedMinuteRange = props.time.rangeMins;
+        Timeline.init("timeline");
         controls.enableBtn("timeline");
 		controls.setItem("timeline", true);		
 		
-        document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
         
         utils.setClick('mdsCalendar', () => this.openCalendar());
         utils.setClick('ql_1h', ()=>this.onQuickLinksUpdate('1h'));
@@ -80,14 +93,26 @@ export class MultiDayTimeSelector extends Module {
         utils.setClick('ql_info', ()=>this.displayTimeInfoDetail());
         utils.setClick(`mmm_${this.props.id}-btn-daily`, ()=>this.onDailySubDaily('daily'));
         utils.setClick(`mmm_${this.props.id}-btn-sub-daily`, ()=>this.onDailySubDaily('subdaily'));
-        if (flatpickr.formatDate(props.time.date, "Y-m-d") == flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d')) {
-            props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
+        let format = (props.time.rangeMins > 0) ? 'Y-m-d' : 'Y-m-d H:i';
+        if (flatpickr.formatDate(props.time.date, format) == flatpickr.formatDate(utils.getGMTTime(new Date()), format)) {
+            if (props.time.rangeMins > 0) {
+                props.time.date = utils.getGMTTime(new Date());
+            } else {
+                props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
+            }
         }
 		this.initDatePicker(props.time.date);
-        rangePicker.timelineUpdate();	
-        this.onDailySubDaily('daily');
+        //rangePicker.timelineUpdate();
+        if (props.time.rangeMins > 0) {
+            this.onDailySubDaily('subdaily');
+        } else {
+            this.onDailySubDaily('daily');
+        }
+        document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+        console.log("DONE");
     }
     public onDailySubDaily(option:string) {
+//        console.log(option, this.lastRangeDays);
         if (this.currentDayMode == option) { return; }
         if (option == 'daily') {
             this.setLastMinValues(this.lastRangeDays);

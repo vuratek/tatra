@@ -3,6 +3,8 @@ import { mapUtils } from '../mapUtils';
 import { Layer } from '../obj/Layer';
 import flatpickr from 'flatpickr';
 import TileLayer from 'ol/layer/Tile';
+import { props } from '../props';
+import { utils } from '../../utils';
 
 export class tileUrlFunctions {
 
@@ -24,11 +26,17 @@ export class tileUrlFunctions {
         let str = lo.source.url.slice();
         // zoom level is one off for EPSG:4326
         let off = (lo.source.projection == 'EPSG:3857') ? 0 : 1;
-        return str
+        if (lo.hasTime) {
+            let start = utils.addDay(props.time.date, - props.time.range);
+            str = str.replace('{START_Y-M-D}',flatpickr.formatDate(start, 'Y-m-d'))
+                    .replace('{END_Y-M-D}',flatpickr.formatDate(utils.addDay(utils.sanitizeDate(props.time.date),1), 'Y-m-d'));
+        }
+        str = str
             .replace('#id#', lo.id)
             .replace('{z}', (tileCoord[0] - off).toString())
             .replace('{x}', tileCoord[1].toString())
             .replace('{y}', tileCoord[2].toString());
+        return str;
     }
 
     /**
@@ -70,15 +78,15 @@ export class tileUrlFunctions {
     }
 
     public static _esri_vector (id : string, tileCoord : Array <number>) : string {
+        
 		let lo = mapUtils.getLayerById(id);
-
-		if (!lo || !lo.source || lo.source.url) { return ''; }
+        if (!lo || !lo.source || ! lo.source.url) { return ''; }
 	
 		let url = lo.source.url as string;
 		let x = tileCoord[1];
 		let y = tileCoord[2];
 		let z = tileCoord[0]-1;
-		if (lo.minLevel >=0 && z < lo.minLevel) { return ''; }
+        if (lo.minLevel >=0 && z < lo.minLevel) { return ''; }
 		let precision = 1;
 		if (z > 9) {
 			precision = 4;
@@ -93,12 +101,13 @@ export class tileUrlFunctions {
 		let minx = mapUtils.tile2long(x,z);
 		let miny = mapUtils.tile2lat(y+1,z)
 		let maxx = mapUtils.tile2long(x+1,z);
-		let maxy = mapUtils.tile2lat(y,z);
+        let maxy = mapUtils.tile2lat(y,z);
+        let outf = (url.indexOf('outFields') > 0) ? '' : 'outFields=&';
 		url += `&geometry={"spatialReference":{"latestWkid":4326,"wkid":4326},"xmin":${minx},"ymin":${miny},"xmax":${maxx},"ymax":${maxy}}`;
-		url += `&maxRecordCountFactor=3&outFields=&outSR=4326`;
+		url += `&maxRecordCountFactor=3&${outf}outSR=4326`;
 		url += `&resultType=tile&returnExceededLimitFeatures=false`;
 		url += `&spatialRel=esriSpatialRelIntersects&where=1=1&geometryType=esriGeometryEnvelope&inSR=4326`;
-		url += `&geometryPrecision=${precision}`;
+        url += `&geometryPrecision=${precision}`;
 		return url;
 	}
 		

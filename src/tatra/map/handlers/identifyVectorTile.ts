@@ -137,6 +137,7 @@ export class identifyVectorTile {
                     for (let i=0; i<features.length; i++) {
                         let feature = features[i];
                         let p = feature.getProperties();
+                        //console.log(p);
                         if (p[lo.id]) {
                             let style = '_' + ((lo as Layer).source as LayerSource).style + '_select';
                             let info = '_' + ((lo as Layer).source as LayerSource).style + '_info';

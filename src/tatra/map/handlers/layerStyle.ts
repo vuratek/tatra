@@ -7,6 +7,7 @@ import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
+import { utils } from "../../utils";
 
 
 class AreaLabels {
@@ -25,6 +26,8 @@ class IncidentInfo {
     public Name : string = '';
     public IncidentManagementOrganization : string | null = null;
     public PercentContained : string | null = null;
+    public IrwinID : string | null = null;
+    public UniqueFireIdentifier : string | null = null;
 }
 export class layerStyle {
     public static symbols       = [];
@@ -382,6 +385,8 @@ export class layerStyle {
         ii.IncidentManagementOrganization = feature.get("IncidentManagementOrganization");
         ii.PercentContained = feature.get("PercentContained");
         ii.Name = feature.get("IncidentName");
+        ii.IrwinID = feature.get("IrwinID");
+        ii.UniqueFireIdentifier = feature.get("UniqueFireIdentifier");
         return layerStyle.fireAlertTemplate(ii, '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
     }
 
@@ -392,9 +397,16 @@ export class layerStyle {
         if (ii.PercentContained) {
             incident += `<tr><td>% Contained</td><td>${ii.PercentContained} %</td></tr>`;
         }
+        
         if (ii.IncidentManagementOrganization) {
             incident += `<tr><td>Incident Mgmt Org</td><td>${ii.IncidentManagementOrganization}</td></tr>`;
             incidentLink = '<a href="https://www.nps.gov/articles/wildland-fire-incident-command-system-levels.htm" target="_blank" rel="noopener">Incident Command System Levels <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>';
+        }
+        if (ii.UniqueFireIdentifier) {
+            incident += `<tr><td>Fire ID</td><td>${ii.UniqueFireIdentifier}</td></tr>`;
+        }
+        if (ii.IrwinID) {
+            incident += `<tr><td colspan="2">IRWIN ID<br/>${ii.IrwinID}</td></tr>`;
         }
         if (ii.Country == "USA") {
             stReportLink = `<a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>`;
@@ -482,6 +494,64 @@ export class layerStyle {
             </div>
         `;
     }
+
+    public static eisColors(diff : number) : string {
+        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
+        if (diff < 0 || diff > 10) {
+            return colors[9];
+        }
+        return colors[diff];
+    }
+
+    public static _firePerimeterEIS ( feature : Feature, resolution: number) : Style | null {
+        let key = "perimeter-eis";
+        let flag = "default";
+        let p = feature.getProperties();
+        let at = p.t.split(' ');
+        let t = flatpickr.parseDate(at[0], 'Y-m-d');
+        let color = "#00000055";
+        if (t) {
+            let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
+            flag = "color" + diff;
+            color = layerStyle.eisColors(diff);
+        }
+        
+        if (!layerStyle.symbols[key]) {
+            layerStyle.symbols[key] = new Object();
+            layerStyle.symbols[key].cache = [] as Array<Style>;
+        }
+        if (!layerStyle.symbols[key].cache[flag]) {
+            layerStyle.symbols[key].cache[flag] = new Style({
+                fill: new Fill({
+                    color: color
+                }),
+                stroke: new Stroke({
+                    color: "#222",
+                    width: 1
+                }),
+                zIndex: 1,
+            });
+        }
+        return layerStyle.symbols[key].cache[flag];
+    }
+/*    public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
+    }
+    public static _firePerimeterEIS_info(feature : Feature) : string {
+        let irwinid = feature.get('poly_IRWINID');
+        let fireid = feature.get('attr_UniqueFireIdentifier');
+        let name = feature.get('poly_IncidentName');
+        return `
+            <span class="faLbl"><img src="/images/US-flag.jpg">Fire Perimeter</span><br/>
+            <div class="faSize">
+                <table>
+                    <tr><td>Name</td><td>${name}</td></tr>
+                    <tr><td>Fire ID</td><td>${fireid}</td></tr>
+                    <tr><td colspan="2">IRWIN ID<br/>${irwinid}</td></tr>
+                </table>
+            </div>
+        `;
+    }*/
 
     public static _geographicAreasUSA ( feature : Feature, resolution: number) : Style | null {
         let key = "borders-usa";
