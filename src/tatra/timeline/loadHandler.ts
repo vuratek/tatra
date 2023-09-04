@@ -5,6 +5,7 @@ import { navProps } from "../page/navProps";
 export class loadHandler {
     private static loaded : boolean = false;
     private static loading : boolean = false;
+    private static readonly EVENT_LOAD_TIMELINE_LIBRARY : string = "load_timeline_library";
 
     public static load () {
         if (this.loaded) {
@@ -13,9 +14,8 @@ export class loadHandler {
         } else {
             if (! this.loading) {
                 this.loading = true;
-                if (navProps.settings.app.timelineURL) {
-                    library.load(navProps.settings.app.timelineURL, () => this.callBack());
-                }
+                document.addEventListener(this.EVENT_LOAD_TIMELINE_LIBRARY, ()=>this.loadLibrary());
+                document.dispatchEvent(new CustomEvent(this.EVENT_LOAD_TIMELINE_LIBRARY));      
             }
         }
     }
@@ -23,5 +23,11 @@ export class loadHandler {
     private static callBack () {
         this.loaded = true;
         Timeline.eventTimelineLoaded();
+    }
+
+    private static loadLibrary() {
+        if (navProps.settings.app.timelineURL) {
+            library.load(navProps.settings.app.timelineURL, () => this.callBack());
+        }
     }
 }
