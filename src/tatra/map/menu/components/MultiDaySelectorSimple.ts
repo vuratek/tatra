@@ -17,7 +17,7 @@ export class MultiDaySelectorSimple extends Module {
 
 	public calendar         		: any;
 	public readonly df              : string = 'M d Y';
-	private timelineHandler 		: (evt: Event) => void;
+	public timelineHandler 		: (evt: Event) => void;
 
 	public constructor(props : IMenuModule) {
 		super(props);
@@ -34,19 +34,7 @@ export class MultiDaySelectorSimple extends Module {
 			hashHandler.processDateTime(dates);		
 		}
 		super.render(par);
-		if (this.props.descriptionText) {
-			bookmark.setDescriptionText(this.props.descriptionText);
-		}
-		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
-		let th = document.createElement("div");
-        th.setAttribute("class", "mds");
-        el.appendChild(th);
-		th.innerHTML = `
-            <div id="mds_content" class="mds_content">
-            </div>
-		`;
-		Timeline.delete();
-		this.render_historical();
+		this.renderMenu();
 	}
 
 	public deactivate() {
@@ -54,7 +42,7 @@ export class MultiDaySelectorSimple extends Module {
 		Timeline.delete();
 		document.removeEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
 	}
-	private render_historical() {
+	public render_historical() {
 		Timeline.init("timeline", TimelineType.RANGE_TIED);
 		timelineController.time.imageryDate = props.time.imageryDate;
 		timelineController.time.date = props.time.imageryDate;
@@ -85,13 +73,24 @@ export class MultiDaySelectorSimple extends Module {
 		utils.setSelectValue('mdsDateRange', props.time.range.toString());
 		this.initDatePicker(props.time.date);
 		rangePicker.timelineUpdate();		
-
 	}
+	public renderMenu() {
+		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
+		let th = document.createElement("div");
+		th.setAttribute("class", "mds");
+		el.appendChild(th);
+		th.innerHTML = `
+			<div id="mds_content" class="mds_content">
+			</div>
+		`;
+		this.render_historical();
+	}
+
 	public openCalendar() {
 		this.calendar.open();
 	}
 
-	private initDatePicker (d : Date) {
+	public initDatePicker (d : Date) {
 		let option = this;
 		if (this.calendar) {
 			this.calendar.destroy();
@@ -108,7 +107,7 @@ export class MultiDaySelectorSimple extends Module {
         this.calendar.selectedDates.push(d);
         this.setDates();
 	}
-	private setDates () {
+	public setDates () {
 		props.time.date = this.calendar.selectedDates[0];
 		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
 		props.time.quickTime = 0;
@@ -126,15 +125,11 @@ export class MultiDaySelectorSimple extends Module {
 		super.activate();
 		document.addEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
 	}
-    private bookmark() {
-		controls.activateControlItem('bookmark');
-	}
 
-	private timelineUpdate () {
+	public timelineUpdate () {
         let obj = Timeline.getDates();
 		if (! obj) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-//		console.log("after", obj["single"].start);
 		
         if (Timeline.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -159,5 +154,5 @@ export class MultiDaySelectorSimple extends Module {
 		this.refreshLayers();*/
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
-    }
+	}
 }

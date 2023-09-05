@@ -9,39 +9,35 @@ import { BasicMenuDates, BasicMenuDateValues } from '../../defs/Times';
 import { props } from '../../props';
 import flatpickr from 'flatpickr';
 import { Timeline } from '../../../timeline/Timeline2';
-import { rangePicker } from "../../../timeline/rangePicker2"; 
-import { timeline } from '../../components/timeline';
+import { rangePicker } from "../../../timeline/rangePicker2";
+import { timeline } from '../../components/timeline'; 
 import { events } from '../../events';
 import { IMenuModule } from '../../defs/ConfigDef';
 import { hash, IHashDates } from '../../hash';
 import { hashHandler } from '../hashHandler';
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
+import { MultiDaySelectorSimple } from './MultiDaySelectorSimple';
+
 
 export enum MDSTabs {
 	CURRENT 		= "current",
 	HISTORICAL	 	= "historical"
 }
-export class MultiDaySelector extends Module {
+export class MultiDaySelector extends MultiDaySelectorSimple {
 
 	public calendar         		: any;
 	public currentTab				: string = '';
 	public readonly df              : string = 'M d Y';
 	public previousBtn				: number = 0;
 	private timelineBtnHandler 		: (evt: Event) => void;
-	private timelineHandler 		: (evt: Event) => void;
 
 	public constructor(props : IMenuModule) {
 		super(props);
 		this.timelineBtnHandler = (evt) => this.timelineBtnClick(evt as CustomEvent);
-		this.timelineHandler = () => this.timelineUpdate();
 	}
-
 	public render(par : HTMLDivElement) {
-		let dates = hash.getDates();
 		let startTab = MDSTabs.HISTORICAL;
-		props.time.rangeMins = 0;
-		props.time.range = 1;
-//		this.previousBtn = BasicMenuDateValues.HRS_24;
+		let dates = hash.getDates();
 
 		if (dates) {
 			if (dates.start == 'today') {
@@ -51,9 +47,12 @@ export class MultiDaySelector extends Module {
 			else if (dates.start == '24hrs') {
 				startTab = MDSTabs.CURRENT;
 			}
-			hashHandler.processDateTime(dates);		
 		}
 		super.render(par);
+		this.tab(startTab);
+	}
+	public renderMenu() {	
+		
 		if (this.props.descriptionText) {
 			bookmark.setDescriptionText(this.props.descriptionText);
 		}
@@ -73,7 +72,6 @@ export class MultiDaySelector extends Module {
 		`;
 		utils.setClick(`mds_tab_${MDSTabs.CURRENT}`, ()=> this.tab(MDSTabs.CURRENT));
 		utils.setClick(`mds_tab_${MDSTabs.HISTORICAL}`, ()=> this.tab(MDSTabs.HISTORICAL));
-		this.tab(startTab);
 	}
 	public tab(tab:string) {
 		if (this.currentTab == tab) { return; }
@@ -121,53 +119,16 @@ export class MultiDaySelector extends Module {
 		} else {
 			this.setTime(BasicMenuDateValues.HRS_24);
 		}
-	
+	}
+	public render_historical() {
+		document.removeEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
+		super.render_historical();
 	}
 	public deactivate() {
 		super.deactivate();
-		Timeline.delete();
 		document.removeEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
-		document.removeEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
 		this.currentTab = '';
 	}
-	private render_historical() {
-		document.removeEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
-		Timeline.init("timeline", TimelineType.RANGE_TIED);
-		timelineController.time.imageryDate = props.time.imageryDate;
-		timelineController.time.date = props.time.imageryDate;
-		timelineController.time.range = props.time.range;
-		timelineController.time.rangeMins = props.time.rangeMins;
-        controls.enableBtn("timeline");
-		controls.setItem("timeline", true);		
-		
-		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
-
-		let el = document.getElementById("mds_content") as HTMLDivElement;
-		el.innerHTML = `
-			<div id="mdsHistorical">
-				<span id="mdsCalendar" class="mdsCalendar">
-					<i class="fa fa-calendar-alt fa-lg"></i>
-				</span>
-				<input type="text" id="mds_date" readonly>
-				<span class="mdsCalendar">
-					<i class="fa fa-calendar-minus fa-lg" style="margin-left:1rem;"></i>
-				</span>
-				<select id="mdsDateRange" class="mdsDateRange">
-					${rangePicker.getRangeOptions()}
-				</select>
-			</div>
-		`;
-		utils.setClick('mdsCalendar', () => this.openCalendar());
-		utils.setChange('mdsDateRange', () => this.setDates());
-		utils.setSelectValue('mdsDateRange', props.time.range.toString());
-		this.initDatePicker(props.time.date);
-		rangePicker.timelineUpdate();		
-
-	}
-	public openCalendar() {
-		this.calendar.open();
-	}
-
 	private timelineBtnClick (evt : CustomEvent) {
 		if (evt.detail.id == "timeline" && this.currentTab == MDSTabs.CURRENT) {
 			if (props.time.quickTime == 24) {
@@ -180,37 +141,7 @@ export class MultiDaySelector extends Module {
 			this.tab(MDSTabs.HISTORICAL);
 		}
 	}
-	private initDatePicker (d : Date) {
-		let option = this;
-		if (this.calendar) {
-			this.calendar.destroy();
-		}
-        this.calendar = flatpickr("#mds_date", {
-            dateFormat : this.df,
-            defaultDate : d,
-            minDate : new Date(2000,11-1, 11),
-            maxDate : utils.getGMTTime(new Date()),
-            onChange : function () {
-                option.setDates();
-            }
-        }) as Instance;
-        this.calendar.selectedDates.push(d);
-        this.setDates();
-	}
-	private setDates () {
-		props.time.date = this.calendar.selectedDates[0];
-		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
-		props.time.quickTime = 0;
-		//console.log("SETTING", props.time.date, props.time.range);
-		timelineController.time.range = props.time.range;
-		timelineController.time.rangeMins = 0;
-		timelineController.time.date = props.time.date;
-		timelineController.refreshTimelineDate();
-
-        //this.updateHash();
-        //this.checkBAYearMismatch();
-    }
-
+	
 	public setTime ( time : number ) {
 		if (time == BasicMenuDateValues.DAY_7) {
 			props.time.date = utils.sanitizeDate(new Date(), false);
@@ -276,42 +207,10 @@ export class MultiDaySelector extends Module {
 	public activate () {
 		super.activate();
 		document.addEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
-		document.addEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
 	}
-    private bookmark() {
+	private bookmark() {
 		controls.activateControlItem('bookmark');
 	}
-
-	private timelineUpdate () {
-        let obj = Timeline.getDates();
-		if (! obj) { return; }
-		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-//		console.log("after", obj["single"].start);
-		
-        if (Timeline.isPartialDate(obj["range"].end)) {
-            this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
-        } else {
-            this.calendar.setDate(utils.addDay(obj["range"].end,-1));
-        }
-        utils.setSelectValue('mdsDateRange', timelineController.time.range.toString());
-        let _dt = utils.addDay(obj["range"].end,-1);
-		let _range = timelineController.time.range;
-        let _refresh = false;
-        if (flatpickr.formatDate(_dt, 'Y-m-d') != flatpickr.formatDate(props.time.date, 'Y-m-d')) {
-            _refresh = true;
-            props.time.date = _dt;
-        }
-        if (_range != props.time.range) {
-            _refresh = true;
-            props.time.range = _range;
-		}
-/*		if (!_refresh) {
-            return;
-        }
-		this.refreshLayers();*/
-		hashHandler.setDateTime();
-		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
-    }
 
 	private updateImageryDate () {
         if (props.time.quickTime == 1) {
@@ -328,8 +227,6 @@ export class MultiDaySelector extends Module {
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 	}
-	
-	
 
 	private setTimeInfoLabel () {
 		let txt = (props.time.quickTime == 1)  ? BasicMenuDates.TODAY : BasicMenuDates.HRS_24;
