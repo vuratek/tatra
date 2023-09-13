@@ -2,7 +2,6 @@ import '../css/multiDaySelector.scss';
 import { Module } from "./Module";
 import { utils } from "../../../utils";
 import { controls } from "../../components/controls";
-import { bookmark } from "../features/bookmark";
 import { props } from '../../props';
 import flatpickr from 'flatpickr';
 import { Timeline } from '../../../timeline/Timeline2';
@@ -127,11 +126,11 @@ export class MultiDaySelectorSimple extends Module {
 	}
 
 	public timelineUpdate () {
-        let obj = Timeline.getDates();
-		if (! obj) { return; }
+        let obj = timelineController.obj;
+		if (! obj || !obj["range"]) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		
-        if (Timeline.isPartialDate(obj["range"].end)) {
+        if (timelineController.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
         } else {
             this.calendar.setDate(utils.addDay(obj["range"].end,-1));

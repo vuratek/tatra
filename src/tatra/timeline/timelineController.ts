@@ -1,5 +1,6 @@
 import { MapTime } from "../map/obj/MapTime";
 import { utils } from "../utils";
+import flatpickr from "flatpickr";
 
 export enum TimelineType {
     SINGLE      = "single",
@@ -58,4 +59,8 @@ export class timelineController {
         document.dispatchEvent(new CustomEvent(this.EVENT_REFRESH_TIMELINE_DATE));
     }
 
+    public static isPartialDate(date:Date) : boolean {
+        if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED && flatpickr.formatDate(date, 'H:i') != '00:00') return true;
+        return false;
+    }
 }

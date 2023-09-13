@@ -20,6 +20,7 @@ export interface ITopMenuItemObj {
     smallImage?     : boolean;
     article?        : boolean;
     ext?            : boolean;
+    ignoreLoad?     : boolean;      // only for notifications
 }
 export abstract class TopMenuItem {
     public static prefix = "topbar";
@@ -123,8 +124,11 @@ export abstract class TopMenuItem {
     private static setNotifications (obj : ITopMenuItemObj) {
         for (let i = 0; i<obj.subMenu.length; i++) {
             let item = obj.subMenu[i];
-            utils.hide(`${this.prefix}_${item.id}`);
-            Notifications.load(item.url, item);
+            // unless ignoreLoad is set, handle as identification
+            if (!(item.ignoreLoad && item.ignoreLoad === true)) {
+                utils.hide(`${this.prefix}_${item.id}`);
+                Notifications.load(item.url, item);
+            }
         }
     }
 
@@ -179,7 +183,7 @@ export abstract class TopMenuItem {
             }
             let ext = (item.ext && item.ext == true) ? 'class="ext" target="_blank" rel="noopener"' : '';
             let article = (item.article === true) ? 'class="article"' : '';
-            let url = (item.url && obj.id != "notifications") ? item.url : 'javascript:void(0);';
+            let url = (item.url && (obj.id != "notifications" || (item.ignoreLoad && item.ignoreLoad === true))) ? item.url : 'javascript:void(0);';
             let icon = '';
             if (item.icon) {
                 let color = (item.color) ? `style="color:${item.color};"` : '';

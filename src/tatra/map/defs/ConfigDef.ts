@@ -26,10 +26,17 @@ export interface IMenuOption {
     description     : string;
     noAction?       : boolean;
 }
+export interface IMenuModuleLayerSettings {
+    opened          : boolean;
+    day_selected    : boolean;
+    night_selected  : boolean;
+    has_daynight    : boolean;
+}
 export interface IMenuModuleLayers {
     id              : string;
     visible         : boolean;
     _defaultVisible : boolean | null;
+    settings        : IMenuModuleLayerSettings | null;
 }
 export interface IGroupBreaker {
     id              : string;

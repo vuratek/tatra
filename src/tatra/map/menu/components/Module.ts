@@ -88,7 +88,7 @@ export class Module {
             for (let i=0; i<props.layers.length; i++) {
                 let lo = props.layers[i];
                 if (lo.tag == this.props.tag) { 
-                    let obj : IMenuModuleLayers = { id: lo.id, visible : lo.visible, _defaultVisible : null};
+                    let obj : IMenuModuleLayers = { id: lo.id, visible : lo.visible, _defaultVisible : null, settings : null};
                     this.props.layer_refs.push(obj);
                 }
             }

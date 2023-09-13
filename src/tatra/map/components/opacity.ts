@@ -14,7 +14,7 @@ export class opacity extends baseComponent {
 	public static className : string = 'transparentWindow';
 	public static showHeader : boolean = false;
 
-	public static currentLayer : Layer | null = null; // lmv LayerObject 
+	public static currentLayers : Array<Layer> | null = null; // lmv LayerObject 
 	private static currentLayerTitle : string = '';
 	private static slider	: Slider | null = null;
 
@@ -29,11 +29,17 @@ export class opacity extends baseComponent {
 	}
 
 	private static layerUpdate (evt : Event | CustomEvent) {
-		if (opacity.currentLayer) {
-			if ((evt as CustomEvent).detail.id == opacity.currentLayer.id) {
-				opacity.currentLayer = null;
-				opacity.close();				
+		if (this.currentLayers) {
+//			let lid = (evt as CustomEvent).detail.id;
+			let vis = 0;
+			for (let i=0; i < this.currentLayers.length; i++) {
+				if (this.currentLayers[i].visible) {
+					vis ++;
+				} 
 			}
+			if (vis == 0)
+			this.currentLayers = null;
+			this.close();
 		}
 	}
 
@@ -42,13 +48,37 @@ export class opacity extends baseComponent {
 		events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
 	}
 
-	public static setLayer (id : string, title : string | null = null) {
-		this.currentLayer = mapUtils.getLayerById(id);
-		if (! this.currentLayer) { return; }
+	private static saveId(id:string) {
+		let lo = mapUtils.getLayerById(id);
+		if (this.currentLayers && lo) {
+			this.currentLayers.push(lo);
+		}
+	}
+
+	/**
+	 * 
+	 * @param ids - single layer id or Array of layer ids 
+	 * @param title - title for the opacity window to show
+	 */
+
+	public static setLayer (ids : string | Array<string>, title : string | null = null) {		
+		this.currentLayers = [];
+		if (! Array.isArray(ids)) {
+			this.saveId(ids);
+		} else {
+			for (let i=0; i<ids.length; i++) {
+				this.saveId(ids[i]);
+			}
+		}
+		// if no layer match for id/s return
+		if (this.currentLayers.length == 0) {
+			this.currentLayers = null;
+			return;
+		}
 		if (title) {
 			this.currentLayerTitle = title;
 		} else {
-			this.currentLayerTitle = this.currentLayer.title;
+			this.currentLayerTitle = this.currentLayers[0].title;
 		}
 		controls.activateControlItem('opacity');
 		opacity.open();
@@ -77,35 +107,38 @@ export class opacity extends baseComponent {
 		`;
 		super.setDraggable(`lmvDragLbl_${this.id}`);
 		this.slider = new Slider({divId: `lmvControls_${this.id}_Slider`, slide : (val) => this.updateOpacity (val), value: 100});
-
     }
 
 	public static render () {
 		if (! controls.items[this.id].visible) { return; }
 
-		if (this.currentLayer) {
+		if (this.currentLayers) {
 			(document.getElementById(`lmvControls_${this.id}_Layer`) as HTMLDivElement).innerHTML = this.currentLayerTitle;
 
 			if (this.slider) {
 				this.slider.value = this.getAlpha();
 			}
-			if (opacity.currentLayer) {
-				this.updateOpacity(Math.round(opacity.currentLayer.alpha * 100.0));
+			if (this.currentLayers) {
+				this.updateOpacity(Math.round(this.currentLayers[0].alpha * 100.0));
 			}
 		} 
 	}
 	
 	private static getAlpha () {
 		let alpha = 100;
-		if ( this.currentLayer ) {
-			if (this.currentLayer.alpha) { alpha = Math.round(this.currentLayer.alpha * 100.0);}	
+		if ( this.currentLayers) {
+			if (this.currentLayers[0].alpha) { 
+				alpha = Math.round(this.currentLayers[0].alpha * 100.0);
+			}	
 		}
 	    return alpha;
 	}
 	
 	private static updateOpacity (alpha : number) {
-		if ( opacity.currentLayer ) {
-			opacity.currentLayer.alpha = (alpha / 100.0);
+		if ( this.currentLayers) {
+			for (let i=0; i<this.currentLayers.length; i++) {
+				this.currentLayers[i].alpha = (alpha / 100.0);
+			}
 			(document.getElementById(`lmvControls_${this.id}_Value`) as HTMLSpanElement).innerHTML = alpha + '%';
 		}
 	}
@@ -130,7 +163,10 @@ export class opacity extends baseComponent {
 
 	private static renderLayerMenu () {
 		let el = document.getElementById(`lmvControls_${this.id}_SliderMenu`) as HTMLDivElement;
-		let lo = this.currentLayer as Layer;
+		if (! this.currentLayers) {
+			return;
+		}
+		let lo = this.currentLayers[0] as Layer;
 		if (!lo || !lo.colorPaletteId) { 
 			el.innerHTML = '';
 			return; 

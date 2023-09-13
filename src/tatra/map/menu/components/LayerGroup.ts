@@ -239,7 +239,7 @@ export class LayerGroup extends Module {
 	private showExtraOption(id : string) {
 		let lo = mapUtils.getLayerById(id);
 		if (!lo) { return; }
-		if (lo.visible && opacity.isOpened && opacity.currentLayer && opacity.currentLayer.id == lo.id) {
+		if (lo.visible && opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
 			opacity.close();
 			return;
 		}
@@ -387,7 +387,7 @@ export class LayerGroup extends Module {
 		let el = document.getElementById(`layerExtra_${menu}_${lo.id}`) as HTMLDivElement;
 		if (!el) { return; }
 		let type = 'plus';
-		if (opacity.isOpened && opacity.currentLayer && opacity.currentLayer.id == lo.id) {
+		if (opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
 			type = 'minus';
 		}
 		el.innerHTML = `<i class="fa fa-${type}-circle" aria-hidden="true"></i>`;

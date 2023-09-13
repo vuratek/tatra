@@ -1,5 +1,4 @@
 import '../css/multiDaySelector.scss';
-import { Module } from "./Module";
 import { utils } from "../../../utils";
 import { controls } from "../../components/controls";
 import { mapUtils } from '../../mapUtils';
@@ -9,13 +8,11 @@ import { BasicMenuDates, BasicMenuDateValues } from '../../defs/Times';
 import { props } from '../../props';
 import flatpickr from 'flatpickr';
 import { Timeline } from '../../../timeline/Timeline2';
-import { rangePicker } from "../../../timeline/rangePicker2";
 import { timeline } from '../../components/timeline'; 
 import { events } from '../../events';
 import { IMenuModule } from '../../defs/ConfigDef';
 import { hash, IHashDates } from '../../hash';
 import { hashHandler } from '../hashHandler';
-import { TimelineType, timelineController } from '../../../timeline/timelineController';
 import { MultiDaySelectorSimple } from './MultiDaySelectorSimple';
 
 

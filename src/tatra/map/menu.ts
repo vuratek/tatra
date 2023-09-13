@@ -12,7 +12,7 @@ import { Basic } from './menu/components/Basic';
 import { FilterLayers } from './menu/components/FilterLayers';
 import { MultiDaySelector } from './menu/components/MultiDaySelector';
 import { MultiDaySelectorSimple } from './menu/components/MultiDaySelectorSimple';
-//import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
+import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
 import { Module } from './menu/components/Module';
 import { hashHandler } from './menu/hashHandler';
 export class menu {
@@ -64,7 +64,7 @@ export class menu {
                     case "filterlayers" : props.menuModules[m.id] = new FilterLayers(m); break;
                     case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
                     case "multidayselectorsimple" : props.menuModules[m.id] = new MultiDaySelectorSimple(m); break;
-//                    case "multidaytimeselector" : props.menuModules[m.id] = new MultiDayTimeSelector(m); break;
+                    case "multidaytimeselector" : props.menuModules[m.id] = new MultiDayTimeSelector(m); break;
                 }
                 if (props.menuModules[m.id]) {
                     m.handler = props.menuModules[m.id];
