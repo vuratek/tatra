@@ -25,39 +25,47 @@ export class basePicker {
         div.appendChild(cont);
 
         let str = `<input type="text" id="${id}_date" readonly><br>`;
-        if (! this.isSingle) {
-            str += `<span id="${id}_${TimelineAdjustType.BACK_RANGE}" class="timelineCtrlBtn"><i class="fa fa-fast-backward fa-lg"></i></span>`;
-        }
         str += `
-            <span id="${id}_${TimelineAdjustType.BACK_DAY}" class="timelineCtrlBtn"><i class="fa fa-step-backward fa-lg"></i></span>
+            <span id="${id}_${TimelineAdjustType.BACK_RANGE}" class="timelineCtrlBtn"><i class="fa fa-step-backward fa-lg"></i></span>
         `;
         if (! this.isSingle) {
             str += `               
                 <select id="${id}_DR">
-                    ${this.getRangeOptions()}
                 </select>
             `;
         }
-            str += `<span id="${id}_${TimelineAdjustType.FRONT_DAY}" class="timelineCtrlBtn"><i class="fa fa-step-forward fa-lg"></i></span>`;
-        if (! this.isSingle) {
-            str += `<span id="${id}_${TimelineAdjustType.FRONT_RANGE}" class="timelineCtrlBtn"><i class="fa fa-fast-forward fa-lg"></i></span>`;
-        }
+        str += `<span id="${id}_${TimelineAdjustType.FRONT_RANGE}" class="timelineCtrlBtn"><i class="fa fa-step-forward fa-lg"></i></span>`;
             
         cont.innerHTML = str;
 
-        utils.setClick(`${id}_${TimelineAdjustType.BACK_DAY}`, () => Timeline.adjustTimeline(TimelineAdjustType.BACK_DAY));
-        utils.setClick(`${id}_${TimelineAdjustType.FRONT_DAY}`, () => Timeline.adjustTimeline(TimelineAdjustType.FRONT_DAY));
+        this.setRangeSelect();
+
+        utils.setClick(`${id}_${TimelineAdjustType.BACK_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.BACK_RANGE));
+        utils.setClick(`${id}_${TimelineAdjustType.FRONT_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.FRONT_RANGE));
 
         if (! this.isSingle) {
-            utils.setClick(`${id}_${TimelineAdjustType.BACK_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.BACK_RANGE));
-            utils.setClick(`${id}_${TimelineAdjustType.FRONT_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.FRONT_RANGE));
+  //          utils.setClick(`${id}_${TimelineAdjustType.BACK_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.BACK_RANGE));
+//            utils.setClick(`${id}_${TimelineAdjustType.FRONT_RANGE}`, () => Timeline.adjustTimeline(TimelineAdjustType.FRONT_RANGE));
             utils.setChange(`${id}_DR`, () => this.setDates());
         }
 
 //        utils.setClick(`${id}_date`, () => this.openCalendar());
-
         this.initDatePicker(utils.getGMTTime(new Date()));
         this.timelineUpdate();
+    }
+
+    public static setRangeSelect() {
+        let id = `${this.id}_DR`
+        let select = document.getElementById(id);
+        if (! select) { return; }
+        if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            select.innerHTML = this.getSubdailyRangeOptions(Timeline.advancedMinuteRange);
+            console.log(">>>", id, 'm' + Timeline.advancedMinuteRange.toString());
+            utils.setSelectValue(id, 'm' + Timeline.advancedMinuteRange.toString());
+        } else {
+            select.innerHTML = this.getRangeOptions();
+            utils.setSelectValue(id, Timeline.advancedRange.toString());
+        }
     }
 
     public static initDatePicker (d : Date) {
@@ -122,7 +130,8 @@ export class basePicker {
 
     public static timelineUpdate() {
         let obj = Timeline.getDates();
-        utils.setSelectValue(`${this.id}_DR`, Timeline.advancedRange.toString());
+        let range = (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) ? 'm' + Timeline.advancedMinuteRange.toString() : Timeline.advancedRange.toString();
+        utils.setSelectValue(`${this.id}_DR`, range);
 //        $(`#${this.id}_DR`).val(Timeline.advancedRange);
         if (obj && this.calendar) {
             let type = (this.isSingle) ? 'single' : 'range';
@@ -143,20 +152,12 @@ export class basePicker {
         //timelineCtrlBtnDisabled
         let range = Timeline.getCurrentRange();
         if (! range) { return; }
-        let max1 = utils.addDay(range.end);
         let max2 = utils.addDay(range.end, Timeline.advancedRange + 1);
-        let min1 = utils.addDay(range.start, -1);
         let min2 = utils.addDay(range.start, - Timeline.advancedRange - 1);
-        if (max1 > Timeline.maxDate) { this.setBtn(TimelineAdjustType.FRONT_DAY, true);} 
-        else { this.setBtn(TimelineAdjustType.FRONT_DAY, false); }
-        if (min1 < Timeline.minDate) { this.setBtn(TimelineAdjustType.BACK_DAY, true);} 
-        else { this.setBtn(TimelineAdjustType.BACK_DAY, false); }
-        if (!this.isSingle) {
-            if (max2 > Timeline.maxDate) { this.setBtn(TimelineAdjustType.FRONT_RANGE, true); } 
-            else { this.setBtn(TimelineAdjustType.FRONT_RANGE, false); }
-            if (min2 < Timeline.minDate) { this.setBtn(TimelineAdjustType.BACK_RANGE, true); } 
-            else { this.setBtn(TimelineAdjustType.BACK_RANGE, false); }
-        }
+        if (max2 > Timeline.maxDate) { this.setBtn(TimelineAdjustType.FRONT_RANGE, true); } 
+        else { this.setBtn(TimelineAdjustType.FRONT_RANGE, false); }
+        if (min2 < Timeline.minDate) { this.setBtn(TimelineAdjustType.BACK_RANGE, true); } 
+        else { this.setBtn(TimelineAdjustType.BACK_RANGE, false); }
 
     }
 

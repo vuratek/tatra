@@ -50,6 +50,29 @@
 	background:#575757;
 	color:#f0f0f0;
 } 
+.lmvControlsLayerMsg {
+	border-bottom: none;
+	color: #aaa;
+}
+.lmvControlsLayerMsg.date_range {
+	background: #4f4f00;
+}
+.lmvControlsLayerMsg.extent {
+	background: #553a0a;
+}
+.lmvControlsLayerMessage > div {
+	text-align: center;
+	text-transform: uppercase;
+    color: black;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+.lmvControlsLayerMessage.date_range > div {
+	background: #c0c000;
+}
+.lmvControlsLayerMessage.extent > div {
+	background:#dfa335;
+}
 .lmvControlsMultiLayer {
 	min-height: 3.3rem;
 	height:auto;
@@ -68,6 +91,9 @@
 	/*background: #041b2e;*/
 	color:#FFF;
 	opacity:1;
+}
+.lmvControlsLayerMsg.extent.lmvControlsLayerSelected {
+	background:#102638;
 }
 .lmvControlsLayerSelected {
 	color:#ddd;
@@ -249,12 +275,18 @@
 	left:0;
 	background: rgba(119, 119, 119, 0.85);
 	width: 100%;
-	color: yellow;
 	text-align: center;
 	padding-top: 1rem;
 	display:none;
 	cursor:default;
 	font-size:1.6rem;
+}
+.lmvControlsLayerDisabledLbl {
+	background: #cdcd42;
+    color: black;
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 600;
 }
 .lmvControlsLayerLevelDisabled {
 	color: #ffc964;	

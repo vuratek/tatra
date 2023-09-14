@@ -13,6 +13,7 @@ import { FilterLayers } from './menu/components/FilterLayers';
 import { MultiDaySelector } from './menu/components/MultiDaySelector';
 import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
 import { Module } from './menu/components/Module';
+import { hashHandler } from './menu/hashHandler';
 export class menu {
 
     private static id : string = '';
@@ -32,7 +33,6 @@ export class menu {
             props.windowIsOpened = true;
         } 
         this.setMenu();
-        this.presetDefaultLayerVisibility();
         let _mode = hash.getMode();
         let mode = '';
         if (! _mode) {
@@ -47,7 +47,9 @@ export class menu {
         } else {
             mode = _mode[0];
         }
+        this.presetDefaultLayerVisibility(mode);
         this.setTab(mode);
+        hashHandler.init();
     }
 
     private static setDefaultMenuModules() {
@@ -67,7 +69,6 @@ export class menu {
                 }
 			}
         }
-        console.log(cfg.modules);
     }
     public static getMenuModuleById (id:string) : IMenuModule | null {
         let cfg = (props.config as IConfigDef);
@@ -90,20 +91,40 @@ export class menu {
     }
 
     // if URL doesn't override the default visible layers, check which ones are set as default in the menu module config
-    public static presetDefaultLayerVisibility() {
+    public static presetDefaultLayerVisibility(mode : string) {
+
         let cfg = (props.config as IConfigDef);
         if (cfg.modules) {
 			for (let i=0; i<cfg.modules.length; i++) {
                 let m = cfg.modules[i];
                 if (m.handler) {
-                    m.handler.presetDefaultLayerVisibility();
+                    m.handler.presetDefaultLayerVisibility(false, []);
+                }
+            }
+        }
+        
+        let lyrs = hash.getLayers();
+        if (cfg.menuOptions && lyrs) {
+            for (let m =0; m<cfg.menuOptions.length; m++) {
+                if (cfg.menuOptions[m].id == mode) {
+                    let mod = cfg.menuOptions[m];
+                    if (mod.modules) {
+                        for (let i=0; i<mod.modules.length; i++) {
+                            let key = mod.modules[i];
+                            if (props.menuModules[key]) {
+                                props.menuModules[key].presetDefaultLayerVisibility(true, lyrs);
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     public static setTab (tab : string) {
+        props.ignoreBasemapUpdate = true;
         mainMenu.tab(tab);
+        props.ignoreBasemapUpdate = false;
     }
     
     private static render () {
@@ -147,12 +168,18 @@ export class menu {
 
         if (props.version > '1.0.0') {
             content = document.createElement("div");
-            content.setAttribute("id", "MapMenuItems");
-            //content.setAttribute("id", this.id + "_content");
-            content.setAttribute("class",  "mapMenuItems");        
+            content.setAttribute("id", "MapMenuWrapItems");
+            content.setAttribute("class",  "mapMenuWrapItems");        
             div.appendChild(content);
+            let content2 = document.createElement("div");
+            content2.setAttribute("id", "MapMenuInfo");
+            content2.setAttribute("class",  "mapMenuInfo");        
+            content.appendChild(content2);
+            content2 = document.createElement("div");
+            content2.setAttribute("id", "MapMenuItems");
+            content2.setAttribute("class",  "mapMenuItems");        
+            content.appendChild(content2);
         }
-        
 
         div.addEventListener(window["animationEnd"], () => this.animationEnd(), false);
         if (props.version > '1.0.0') {
@@ -231,7 +258,8 @@ export class menu {
     public static resize () {
         let el = document.getElementById(`${this.id}Content`);
         //let el = document.getElementById(`${this.id}_content`);
-		if (! el) { return; }
+        if (! el) { return; }
+        
 		let controls = (document.getElementById('bottomBar') as HTMLDivElement) ? (document.getElementById('bottomBar') as HTMLDivElement).clientHeight : 0;
         let header = (document.querySelector('header') as HTMLDivElement).clientHeight;
 //		let footer = ((document.querySelector('footer') as HTMLDivElement)) ? (document.querySelector('footer') as HTMLDivElement).clientHeight : 0;

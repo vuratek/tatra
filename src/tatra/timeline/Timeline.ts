@@ -3,7 +3,7 @@ import { utils } from '../utils';
 import { events } from '../map/events';
 import { props } from '../map/props';
 import { rangePicker } from './rangePicker';
-import { singleDate } from './singleDate';
+import { singleDatePicker } from './singleDatePicker';
 import { loadHandler } from "./loadHandler";
 import flatpickr from 'flatpickr';
 import { helper } from './helper';
@@ -23,8 +23,8 @@ export enum ActionType {
 
 export enum TimelineAdjustType {
     BACK_RANGE  = "backrange",      // jump entire length of timerange
-    BACK_DAY    = "backday",       // move one day forward
-    FRONT_DAY   = "frontday",
+//    BACK_DAY    = "backday",       // move one day forward
+//    FRONT_DAY   = "frontday",
     FRONT_RANGE = "frontrange"
 }
 
@@ -188,6 +188,7 @@ export class Timeline {
         rangePicker.initDatePicker(mindate);
         this.timeKeeper["single"] = { start: mindate, end : maxdate};
         this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, -this.advancedMinuteRange), end : maxdate};
+        //console.log(">>> ", this.timeKeeper);
         if (this.timeKeeper) {
             Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end, content : "<div></div>"});
             Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
@@ -197,6 +198,10 @@ export class Timeline {
         zoomDate.setMinutes(-120);
 
         this._finalizeRangeLoading(zoomDate);
+    }
+
+    public static setSelectOption() {
+        rangePicker.setRangeSelect();
     }
 
     private static _finalizeRangeLoading(date : Date) {
@@ -266,7 +271,11 @@ export class Timeline {
         this.timeline = new vis.Timeline(this.container, this.items, this.options);
         if (this.timeline) {
             this.timeline.zoomOut(1);
-            this.timeline.moveTo(utils.sanitizeDate(this.singleDate));
+            if (this.advancedMinuteRange > 0) {
+                this.timeline.moveTo(this.singleDate);
+            } else {
+                this.timeline.moveTo(utils.sanitizeDate(this.singleDate));
+            }
             if (Timeline.type == TimelineType.SINGLE) {
                 this.timeline.on('click', (evt) => this.onClick(evt));
             } else if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
@@ -318,7 +327,7 @@ export class Timeline {
             //this.timeKeeper["range"] = { start: utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date())), - this.advancedRange), end : utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date()),false))};
             rangePicker.render(this.id)
         } else if (this.type == TimelineType.SINGLE) {
-            singleDate.render(this.id);
+            singleDatePicker.render(this.id);
         } else if (this.type == TimelineType.RANGE_SUBHOUR_TIED) {
             let maxdate = utils.getGMTTime(new Date());
             maxdate.setMinutes(Math.floor(maxdate.getMinutes() / 10) * 10.0);
@@ -382,7 +391,7 @@ export class Timeline {
 
     private static updateTimelineTime(){
         if (Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED) {
-            console.log("UPDATE");
+            //console.log("UPDATE");
             
         }
     }
@@ -685,11 +694,11 @@ export class Timeline {
         }
         for (let i=0; i < props.layers.length; i++) {
             let lo = props.layers[i];
-            if (lo.visible && lo.hasTime) {
+            if (lo.visible && lo.hasTime === true) {
                 visible = true;
             }
             // remove ???
-            if (((lo.handler == "imagery" && ! lo.noDateRefresh)|| lo.handler == 'orbits' || lo.handler == "sentinel") && lo.visible) {
+            if (((lo.handler == "imagery" && lo.noDateRefresh !== true)|| lo.handler == 'orbits' || lo.handler == "sentinel") && lo.visible) {
                 visible = true;
             }
         }
@@ -740,23 +749,33 @@ export class Timeline {
         if (! dates) { return null;}
         let start = dates.start;
         let end = dates.end;
-        let range = this.advancedRange;
+        let range = (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) ? this.advancedMinuteRange : this.advancedRange;
         switch (type) {
             case TimelineAdjustType.BACK_RANGE:
-                start = utils.addDay(start, - range -1);
-                end = utils.addDay(end, - range -1);
+                if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+                    start = utils.addMinutes(start, -range);
+                    end = utils.addMinutes(end, -range);
+                } else {
+                    start = utils.addDay(start, - range -1);
+                    end = utils.addDay(end, - range -1);
+                }
                 break;
-            case TimelineAdjustType.BACK_DAY:
+/*            case TimelineAdjustType.BACK_DAY:
                 start = utils.addDay(start, - 1);
                 end = utils.addDay(end, - 1);
                 break;
             case TimelineAdjustType.FRONT_DAY:
                 start = utils.addDay(start, 1);
                 end = utils.addDay(end, 1);
-                break;
+                break;*/
             case TimelineAdjustType.FRONT_RANGE:
-                start = utils.addDay(start, range + 1);
-                end = utils.addDay(end, range + 1);
+                if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+                    start = utils.addMinutes(start, range);
+                    end = utils.addMinutes(end, range);
+                } else {
+                    start = utils.addDay(start, range + 1);
+                    end = utils.addDay(end, range + 1);
+                }
                 break;
         }
         if (end > this.maxDate || start < this.minDate) { return; }
@@ -863,7 +882,7 @@ export class Timeline {
         if (Timeline.type == TimelineType.RANGE_TIED || Timeline.type == TimelineType.RANGE_HOUR_MIN_TIED || Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
             rangePicker.delete();
         } else if (Timeline.type == TimelineType.SINGLE) {
-            singleDate.delete();
+            singleDatePicker.delete();
         }
         this.rendered = false;
     }

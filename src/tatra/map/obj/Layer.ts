@@ -106,6 +106,7 @@ export class Layer {
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
     public exclusive        : string | null = null;
+    public exclusiveSaved   : string | null = null; // save exclusive layers if they were ON before turnging them off
     public extent           : Array <number> = [-180, -90, 180, 90];
     public fireLayerType    : FireLayerType | null = null;      // remove?
     public handler          : string = "";
@@ -118,6 +119,7 @@ export class Layer {
     public iconLabel        : string | null = null;
     public iconMatrix       : Array <number> | null = null;
     public id               : string = "";
+    public identifyGroup    : Array <string> | null = null; // used by firms_cache that performs identify on multiple layers
     public identifyHandler  : string | null = null;
     public identifyUrl      : string | null = null;
     public info             : string | null = null;     // info-id for layerInfo modal if different from id
@@ -128,6 +130,7 @@ export class Layer {
     public isJSONIdentify   : boolean = false;
     public isLabel          : boolean = false;
     public isSelect         : boolean = false;
+    public isTileIdentify   : boolean = false;
     public jsonHandler      : Function | null = null;
     public jsonSubsetHandler: Function | null = null;
     public limitExtent      : [number, number, number, number] | null = null;
@@ -398,10 +401,11 @@ export class Layer {
         for (let k = 0; k < properties.length; k++) {
             let key = properties[k];
             let value = input[key];
+            let outVal = output[key];
             if (Array.isArray(value)) {
                 value = input[key].slice(0);
             }
-            if (!output[key]) {
+            if (outVal == null) {
                 output[key] = value;
             }
         }

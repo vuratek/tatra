@@ -31,7 +31,7 @@ export class time_info extends baseComponent {
                 <table>
                     <tr>
                         <td>Today</td>
-                        <td>from 0000 GMT today to present</td>
+                        <td>from 00:00 GMT today to present</td>
                     </tr>
                     <tr>
                         <td>GMT</td>
@@ -46,7 +46,7 @@ export class time_info extends baseComponent {
                 <table>
                     <tr>
                         <td>24 hours</td>
-                        <td>from 0000 GMT yesterday to present</td>
+                        <td>from 00:00 GMT yesterday to present</td>
                     </tr>
                     <tr>
                         <td>GMT</td>

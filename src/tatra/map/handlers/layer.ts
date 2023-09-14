@@ -395,7 +395,6 @@ export class layer {
             	let all = value.join("");
                 all = all.replace ("#id#", lo.id);
                 func = eval("(" + all + ")");
-//                input[key] = eval("(" + all + ")"); // needs () around the function definition
             } else {
                 input[key] = value;
             }
@@ -408,9 +407,6 @@ export class layer {
         }
         input["crossOrigin"] = "anonymous";
         if (type == "xyz_vector") {
-            if (func) {
-//                input["loader"] = func;
-            }
             vectorLayers.addVectorLayer(lo, layerStyle['_' + lo.source.style]);
 //            (lo._layer.getSource() as VectorTileSrc).setTileLoadFunction(func);
         } else {
@@ -418,11 +414,10 @@ export class layer {
                 source: new XYZ(input),
             });
         }
-        if (func) {
+        if (lo._layer && func) {
             (lo._layer.getSource() as XYZ).setTileUrlFunction(func);
-            //ajax.get(lo.style as string, null, (data : any) => this.setLayerStyle(data, lo));
         }
-        if (lo.trackLoading) {
+        if ( lo._layer && lo.trackLoading) {
             (lo._layer.getSource() as XYZ).on(TileEventType.TILELOADSTART, function (e) {
                 props.tileLoadActive[lo.id] = 1;
                 events.dispatchLayer(events.EVENT_LAYER_LOAD_TRACK, lo.id);
@@ -433,7 +428,7 @@ export class layer {
             });
         }
 
-        if (lo.tileErrorUrl) {
+        if (lo._layer && lo.tileErrorUrl) {
             (lo._layer.getSource() as XYZ).on( TileEventType.TILELOADERROR, function (e) {
                 layer.loadErrorTile(e, lo.tileErrorUrl as string, lo.showTileError);
             });
@@ -547,8 +542,8 @@ export class layer {
     
     public static inRange (lo : Layer) {
         let level = props.map.getView().getZoom();
-        if (level < lo.minLevel) return false;
-        if (lo.maxLevel >=0 && level > lo.maxLevel) return false;
+        if (level && level < lo.minLevel) return false;
+        if (level && lo.maxLevel >=0 && level > lo.maxLevel) return false;
         return true;
     }
 }

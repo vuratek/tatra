@@ -15,6 +15,13 @@ export class utils {
         }
     }
 
+    public static setFocus(divId:string) {
+        let inp = document.getElementById(divId);
+        if (inp) {
+            inp.focus();
+        }
+    }
+
     public static removeClass (divId : string, className : string, regular : boolean = true) {
         if (regular) {
             if (!(divId[0] == '.' || divId[0] == '#')) {

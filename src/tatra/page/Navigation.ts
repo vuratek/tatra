@@ -12,14 +12,13 @@ import { quickSearch } from "../aux/quickSearch";
 import { RightMenu } from '../sideMenu/RightMenu';
 import { authentication } from '../aux/authentication';
 import { HomeMenuButton } from '../sideMenu/HomeMenuButton';
-import '../sideMenu/css/*.scss';
-import './css/main.scss';
-import './css/breadcrumb.scss';
-import './css/layerInfo.scss';
-import './css/content.scss';
-import './css/footer.scss';
 import './css/header.scss';
-
+import './css/footer.scss';
+import './css/content.scss';
+import './css/layerInfo.scss';
+import './css/breadcrumb.scss';
+import './css/main.scss';
+import '../sideMenu/css/*.scss';
 
 export class Navigation {
     
@@ -162,6 +161,7 @@ export class Navigation {
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="timeline" class="timeline"></div>
+                <div id="bottomLogo" class="lmvBottomLogo"></div>
             `;
         }
 

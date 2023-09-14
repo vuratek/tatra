@@ -1,4 +1,4 @@
-.flMain {
+/*.flMain {
     color: #222;
     background: #777;
     font-weight: 600;
@@ -83,13 +83,12 @@
     font-size: 1.6rem;
     position: relative;
 }
-/* The container */
+
 .llCheckbox {
     display: block;
     position: relative;
     padding-left: 4.5rem;
     padding-right: 7rem;
-/*  margin-bottom: 12px;*/
     margin-top:.5rem;
     cursor: pointer;
     font-size: 1.6rem;
@@ -99,7 +98,6 @@
     user-select: none;
 }
 
-/* Hide the browser's default checkbox */
 .llCheckbox input {
     position: absolute;
     opacity: 0;
@@ -108,7 +106,6 @@
     width: 0;
 }
 
-/* Create a custom checkbox */
 .checkmark {
   margin-top:.5rem;
   position: absolute;
@@ -117,34 +114,22 @@
   height: 3rem;
   width: 3rem;
   background-color: #eee;
-/*  border:3px solid #2b678d;*/
   border:.2rem solid #AAA;
 }
-
-/* On mouse-over, add a grey background color */
 .llCheckbox input ~ .checkmark {
-/*  background-color: #ccc;*/
   background-color: #EEE;
 }
-
-/* When the checkbox is checked, add a blue background */
 .llCheckbox input:checked ~ .checkmark {
   background-color: #0000;
 }
-
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the checkmark when checked */
 .llCheckbox input:checked ~ .checkmark:after {
   display: block;
 }
-
-/* Style the checkmark/indicator */
 .llCheckbox .checkmark:after {
   left: .8rem;
   top: .2rem;
@@ -156,3 +141,4 @@
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+*/

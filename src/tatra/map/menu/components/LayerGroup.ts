@@ -6,18 +6,31 @@ import { utils } from "../../../utils";
 import { mapUtils } from "../../mapUtils";
 import { events } from "../../events";
 import { opacity } from "../../components/opacity";
-import { IMenuModuleLayers } from "../../defs/ConfigDef";
+import { IMenuModuleLayers, IMenuModule } from "../../defs/ConfigDef";
+import flatpickr from 'flatpickr';
 
 export enum MenuLayerGroup {
 	TYPE_BASEMAPS	= "basemap",
 	TYPE_BASIC		= "basic",
 	TYPE_CUSTOM		= "custom"
 }
-
+export enum LAYER_MESSAGE_TYPE {
+	DATE_RANGE 		= "date_range",
+	EXTENT 			= "zoom_level",
+	NONE 			= "none"
+}
 export class LayerGroup extends Module {
 
 	// TYPE_CUSTOM will use props.layer_refs to determine which layers to show
 	public type	: MenuLayerGroup = MenuLayerGroup.TYPE_CUSTOM; 
+	public layerUpdateHandler : (evt: Event) => void;
+	public disabledUpdateHandler : (evt: Event) => void;
+
+	public constructor(props : IMenuModule) {
+		super(props);
+		this.layerUpdateHandler = () => this.updateLayers();
+		this.disabledUpdateHandler = () => this.updateDisabled();
+	}
 
     public render(par : HTMLDivElement) {
         super.render(par);
@@ -28,7 +41,8 @@ export class LayerGroup extends Module {
         base.appendChild(ul);
         let baseId = this.props.id;
         if (this.props.hasMultiLayer) {
-            this.appendDynamicLayerSelector(ul); 
+			this.appendDynamicLayerSelector(ul); 
+			this.props.isMultiLayerActive = false;
         }
 //		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
 		for (let i = props.layers.length-1; i>=0; i--) {
@@ -54,13 +68,13 @@ export class LayerGroup extends Module {
         if (this.props.hasMultiLayer) {
             this.setMultiDynamicLayer();
         }
-        document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.updateLayers());
-        document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.updateLayers());
-        document.addEventListener(events.EVENT_COLOR_PALETTE_LOADED, () => this.updateLayers());
-        document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, () => this.updateLayers());
-        document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, () => this.updateLayers());
-        document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
-        document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, () => this.updateDisabled());
+        document.addEventListener(events.EVENT_LAYER_VISIBLE, this.layerUpdateHandler);
+        document.addEventListener(events.EVENT_LAYER_HIDDEN, this.layerUpdateHandler);
+        document.addEventListener(events.EVENT_COLOR_PALETTE_LOADED, this.layerUpdateHandler);
+        document.addEventListener(events.EVENT_LAYER_RANGE_UPDATE, this.layerUpdateHandler);
+        document.addEventListener(events.EVENT_GROUP_CONTENT_CHANGE, this.layerUpdateHandler);
+//        document.addEventListener(events.EVENT_LAYER_DATE_UPDATE, () => this.updateDisabled());
+		document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, this.disabledUpdateHandler);
 	}
 	
 	private checkLayerRef(lo:Layer, layers:Array<IMenuModuleLayers> | null, tag : string | null) : boolean {
@@ -81,6 +95,10 @@ export class LayerGroup extends Module {
 			}
 		}
 		return false;
+	}
+
+	public onSystemDateUpdate () {
+		this.updateDisabled();
 	}
 
     /**
@@ -117,25 +135,8 @@ export class LayerGroup extends Module {
 				legIcon = 'supp_lyrs_lyr_click_extra';
 			}
 		}
-		let disTxt = '';
-		if (lo.minDate || lo.maxDate) {
-			let start = (lo.minDate) ? lo.minDate : '...';
-			let end = (lo.maxDate) ? lo.maxDate : 'present';
-			disTxt = `
-				<div id="layerInfo_disabled_${baseId}_${lo.id}" class="lmvControlsLayerDisabled">
-					AVAILABLE<br/>
-					${start} - ${end}
-				</div>
-			`;
-		}
-		let lvlTxt = '';
-		if (lo.minLevel != -1 || lo.maxLevel != -1) {
-			lvlTxt = `
-				<div id="layerInfo_level_disabled_${baseId}_${lo.id}" class="lmvControlsLayerLevelDisabled">
-					Current zoom level not supported
-				</div>
-			`;
-		}
+		let msgTxt = `<div id="layerInfo_msg_${baseId}_${lo.id}" class="lmvControlsLayerMessage"></div>`;
+
 		let expandMenu = '';
 		if (lo.paletteUrl) {
 			expandMenu = `<div id="layerMenu_${baseId}_${lo.id}" class="lmvLayerMenu"></div>`;
@@ -180,9 +181,8 @@ export class LayerGroup extends Module {
 			${extraBtn}
             ${tileBtn}
             ${zoomTo}
+			${msgTxt}
 			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
-			${disTxt}
-			${lvlTxt}
 			${expandMenu}
 		`;
 		if (lo.needsLegendIcon) { 
@@ -274,10 +274,23 @@ export class LayerGroup extends Module {
 					lo.visible = true;
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
-			}
-			else {
+			} else {
 				if (lo.handler && (lo.handler == "orbits" || lo.handler == "imagery" || lo.tag != "")) {
 					lo.visible = ! lo.visible;
+					lo.refresh();
+					if (lo.exclusive) {
+						mapUtils.processExclusiveLayer(lo.id);
+					} else {
+						// if layer is in container that limits multiple layers turned on, check whether it is active
+						if (this.props.layer_refs && lo.visible && this.props.isMultiLayerActive === false && this.props.tag == lo.tag) {
+							for (let i=0; i<this.props.layer_refs.length; i++) {
+								let lo2 = mapUtils.getLayerById(this.props.layer_refs[i].id);
+								if (lo2 && lo2.visible && lo2.id != lo.id ) {
+									lo2.visible = false;
+								}
+							}
+						}
+					}
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
 			}
@@ -380,39 +393,66 @@ export class LayerGroup extends Module {
 		el.innerHTML = `<i class="fa fa-${type}-circle" aria-hidden="true"></i>`;
 	}
 
+	public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {
+		let id = `layerInfo_msg_${this.props.id}_${_id}`;
+		let parentId = `bb_${this.props.id}_${_id}`;
+		utils.removeClass(parentId, 'date_range');
+		utils.removeClass(parentId, 'extent');
+		if (type == LAYER_MESSAGE_TYPE.NONE) {
+			utils.hide(id);
+			utils.html(id,'');
+			utils.removeClass(parentId, 'lmvControlsLayerMsg');
+		} else {
+			let str = `<div>${text as string}</div>`;
+			utils.html(id, str);
+			utils.removeClass(id, 'date_range');
+			utils.removeClass(id, 'extent');
+			let cls = (type == LAYER_MESSAGE_TYPE.DATE_RANGE) ? 'date_range' : 'extent';
+			utils.addClass(parentId, 'lmvControlsLayerMsg');
+			utils.addClass(parentId, cls);
+			utils.addClass(id, cls);
+			utils.show(id);
+		}
+	}
+
 	public updateDisabled() {
 		let update = false;
 		let level = props.map.getView().getZoom();
-/*		for (let menu in this.menus) {
-            for (let i=0; i<props.layers.length; i++) {
-				let lo = props.layers[i];
-				let isDisabled = false;
+		if (this.props.layer_refs && level) {
+			for (let i=0; i<this.props.layer_refs.length; i++) {
+				let msg:string | null = null;
+				let msgType = LAYER_MESSAGE_TYPE.NONE;
+				let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
 				if (lo.minDate || lo.maxDate) {
 					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
 						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
-						utils.show(`layerInfo_disabled_${menu}_${lo.id}`);
-						isDisabled = true;
+						let start = (lo.minDate) ? lo.minDate : '...';
+						let end = (lo.maxDate) ? lo.maxDate : 'present';
+						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
+						msg = `AVAILABLE: ${start} .. ${end}`;				
 						if (props.currentBasemap == lo.id) {
 							update = true;
 						}
 						if (lo.category != "basemap") {
 							lo.visible = false;
 						}
-					} else {
-						utils.hide(`layerInfo_disabled_${menu}_${lo.id}`);
 					}
 				}
-				if (!isDisabled && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
-					utils.show(`layerInfo_level_disabled_${menu}_${lo.id}`);
-				} else {
-					utils.hide(`layerInfo_level_disabled_${menu}_${lo.id}`);
+				// secondary check for zoom level. Data range supersedes zoom level
+				if (msgType == LAYER_MESSAGE_TYPE.NONE && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
+					let txt = (level < lo.minLevel) ? 'Zoom IN (+)' : 'Zoom OUT (-)';
+					msg = `Zoom level not supported. ${txt}`;
+					msgType = LAYER_MESSAGE_TYPE.EXTENT;
 				}
+				this.setLayerMessage(msg, lo.id, msgType);
 			}
-		}*/
+		}
+		// update basemap if basemap is tied to date range and is out of range
 		if (update) {
 			mapUtils.setBasemap('earth');
 		}
 	}
+
     private appendDynamicLayerSelector(ul : HTMLUListElement) {
 		let li = document.createElement("li");
 		li.setAttribute("id", `bb_layer_multi_${this.props.id}`);
@@ -429,12 +469,28 @@ export class LayerGroup extends Module {
 		`;
         utils.setChange(`ll_dynamic_multi_${this.props.id}`, ()=> this.updateMultiDynamicLayer());
         props.allowMultipleDynamicLayersSelection = true;
-    }
+	}
+	
     private updateMultiDynamicLayer() {
 		let el = document.getElementById(`ll_dynamic_multi_${this.props.id}`) as HTMLInputElement;
 		if (el) {
 			props.allowMultipleDynamicLayers = el.checked;
-			mapUtils.resetDynamicLayers();
+			this.props.isMultiLayerActive = el.checked;
+			mapUtils.resetDynamicLayers(); // old style; remove at some point
+			// if multilayer is deactivate, turn off all layers
+			if (! this.props.isMultiLayerActive && this.props.layer_refs) {
+				let count = 0;
+				for (let i=0; i<this.props.layer_refs.length; i++) {
+					let lo2 = mapUtils.getLayerById(this.props.layer_refs[i].id);
+					if (lo2 && lo2.visible) {
+						lo2.visible = false;
+						count++;
+					}
+				}
+				if (count > 0) {
+					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, '');
+				}
+			}
 		}
     }
 
@@ -443,5 +499,14 @@ export class LayerGroup extends Module {
 		if (el) {
 			el.checked = props.allowMultipleDynamicLayers;
 		}
-    }
+	}
+	public deactivate() {
+		super.deactivate();
+		document.removeEventListener(events.EVENT_LAYER_VISIBLE, this.layerUpdateHandler);
+        document.removeEventListener(events.EVENT_LAYER_HIDDEN, this.layerUpdateHandler);
+        document.removeEventListener(events.EVENT_COLOR_PALETTE_LOADED, this.layerUpdateHandler);
+        document.removeEventListener(events.EVENT_LAYER_RANGE_UPDATE, this.layerUpdateHandler);
+		document.removeEventListener(events.EVENT_GROUP_CONTENT_CHANGE, this.layerUpdateHandler);
+		document.removeEventListener(events.EVENT_MAP_EXTENT_CHANGE, this.disabledUpdateHandler);
+	}
 }

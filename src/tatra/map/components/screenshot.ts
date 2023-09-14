@@ -46,9 +46,11 @@ export class screenshot extends baseComponent {
                 </tr>
             </table>
             <a id="lmvControlsBtn_${this.id}_a" href="" style="color:#eee;" download="screenshot.jpg"></a>
+            <div style="display:none;" id="save_screen"></div>
         `;
 //        utils.setClick(`lmvControlsBtn_${this.id}_whole`, () => this.saveImage());
         utils.setClick(`lmvControlsBtn_${this.id}_whole`, () => this.saveImage());
+        this.updateSaveScreen();
     }
 
 
@@ -189,6 +191,10 @@ export class screenshot extends baseComponent {
             this.writeTranparentText(ctx, text, x, y);
         }
     } 
+
+    private static updateSaveScreen() {
+        
+    }
 
     public static addLogo (canvas : HTMLCanvasElement) {
         let ctx = canvas.getContext('2d');

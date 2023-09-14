@@ -131,17 +131,27 @@
 .mapMenuOptions:hover {
 	background: linear-gradient(180deg,#4acb62,#0d3d16);
 }
-.mapMenuItems {
+.mapMenuWrapItems {
 	background: linear-gradient(45deg, #030303c7, #000000c7);
     position: absolute;
-    top: 4rem; 
+    top: 3rem; 
     bottom: 0;
 	width: 100%;
-	padding-left: 0.4rem;
-	padding-bottom: 1rem;
+	padding: 1rem 0.4rem;
 	border-radius: 0 0 0 0.7rem;
-	overflow: auto;
 	display:none;
+}
+.mapMenuInfo {
+	display: none;
+	background: #f2f2f2;
+    padding: 0.5rem;
+    font-family: Titillium web;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+.mapMenuItems {
+	position: relative;
+	overflow: auto;
 }
 .mainMenuOpen {
 	animation: mainMenuOpen .3s;
@@ -196,7 +206,7 @@
 }
 .mapMenuIcons {
 	position: absolute;
-	right: 5rem;
+	right: 4rem;
 	top:.4rem;
 	font-size: 2.4rem;
 	cursor:pointer;

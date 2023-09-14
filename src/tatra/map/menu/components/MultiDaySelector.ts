@@ -6,13 +6,15 @@ import { mapUtils } from '../../mapUtils';
 import { bookmark } from "../features/bookmark";
 import { time_info } from "../features/time_info";
 import { BasicMenuDates, BasicMenuDateValues } from '../../defs/Times';
-import { rangePicker } from "../../../timeline/rangePicker"; 
 import { props } from '../../props';
 import flatpickr from 'flatpickr';
 import { Timeline, TimelineType } from '../../../timeline/Timeline';
+import { rangePicker } from "../../../timeline/rangePicker"; 
 import { timeline } from '../../components/timeline';
 import { events } from '../../events';
 import { IMenuModule } from '../../defs/ConfigDef';
+import { hash, IHashDates } from '../../hash';
+import { hashHandler } from '../hashHandler';
 
 export enum MDSTabs {
 	CURRENT 		= "current",
@@ -34,8 +36,22 @@ export class MultiDaySelector extends Module {
 	}
 
 	public render(par : HTMLDivElement) {
+		let dates = hash.getDates();
+		let startTab = MDSTabs.HISTORICAL;
 		props.time.rangeMins = 0;
 		props.time.range = 1;
+//		this.previousBtn = BasicMenuDateValues.HRS_24;
+
+		if (dates) {
+			if (dates.start == 'today') {
+				startTab = MDSTabs.CURRENT;
+				this.previousBtn = BasicMenuDateValues.TODAY;
+			}
+			else if (dates.start == '24hrs') {
+				startTab = MDSTabs.CURRENT;
+			}
+			hashHandler.processDateTime(dates);		
+		}
 		super.render(par);
 		if (this.props.descriptionText) {
 			bookmark.setDescriptionText(this.props.descriptionText);
@@ -56,7 +72,7 @@ export class MultiDaySelector extends Module {
 		`;
 		utils.setClick(`mds_tab_${MDSTabs.CURRENT}`, ()=> this.tab(MDSTabs.CURRENT));
 		utils.setClick(`mds_tab_${MDSTabs.HISTORICAL}`, ()=> this.tab(MDSTabs.HISTORICAL));
-		this.tab(MDSTabs.CURRENT);
+		this.tab(startTab);
 	}
 	public tab(tab:string) {
 		if (this.currentTab == tab) { return; }
@@ -182,7 +198,7 @@ export class MultiDaySelector extends Module {
 		props.time.date = this.calendar.selectedDates[0];
 		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
 		props.time.quickTime = 0;
-		console.log("SETTING", props.time.date, props.time.range);
+		//console.log("SETTING", props.time.date, props.time.range);
 		Timeline.setDate(props.time.date, props.time.range);
 		//
         //this.updateHash();
@@ -194,6 +210,7 @@ export class MultiDaySelector extends Module {
 			props.time.date = utils.sanitizeDate(new Date(), false);
 			props.time.imageryDate = utils.addDay(props.time.date, -1);
 			props.time.range = 6;
+			hashHandler.setDateTime();
 			events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 			//localUtils.analyticsTab(`tab-${this.menuId}-${time}`);			
 			this.tab(MDSTabs.HISTORICAL);
@@ -206,7 +223,6 @@ export class MultiDaySelector extends Module {
 
 //			if (time == '24') { model.cacheObj.date = CacheLayerDate.HRS_24;}
 //			else { model.cacheObj.date = CacheLayerDate.TODAY; }
-		this.setTimeInfoLabel();
 //			this.validateLayers();
 //			this.forceRefreshLayers();
 		let txt = document.getElementById('lmvFeatureInfo1');
@@ -247,6 +263,7 @@ export class MultiDaySelector extends Module {
 //			hash.dates({start: model.cacheObj.date});
 //			localUtils.analyticsTab(`tab-${this.menuId}-${time}`);
 		props.time.quickTime = time;
+		this.setTimeInfoLabel();
 		this.updateImageryDate();
 		mapUtils.setImageryInfo();
 	}
@@ -263,7 +280,7 @@ export class MultiDaySelector extends Module {
         let obj = Timeline.getDates();
 		if (! obj) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-		console.log("after", obj["single"].start);
+//		console.log("after", obj["single"].start);
 		
         if (Timeline.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -286,6 +303,7 @@ export class MultiDaySelector extends Module {
             return;
         }
 		this.refreshLayers();*/
+		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }
 
@@ -301,8 +319,11 @@ export class MultiDaySelector extends Module {
 			props.time.range = 1;
 		}
 //	    mapUtils.updateImageryLayers(props.time.imageryDate);
+		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
-    }
+	}
+	
+	
 
 	private setTimeInfoLabel () {
 		let txt = (props.time.quickTime == 1)  ? BasicMenuDates.TODAY : BasicMenuDates.HRS_24;

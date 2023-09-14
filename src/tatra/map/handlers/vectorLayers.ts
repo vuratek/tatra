@@ -45,8 +45,8 @@ export class vectorLayers {
             maxResolution: 180 / 256,
             maxZoom: 22,
         });
-
-        let format = (lo.type == "mvt") ? new MVT()  : new EsriJSON();
+        
+        let format = (lo.type == "mvt") ? new MVT({idProperty: lo.id})  : new EsriJSON({geometryName: lo.id});
 
         lo._layer = new VectorTileLayer({
             declutter: true,

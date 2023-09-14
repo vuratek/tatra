@@ -24,6 +24,7 @@ interface IHash {
     mode?           : Array<string>;
     tool?           : string;
 }
+
 export class hash {
 
     private static values : IHash = {};
@@ -32,6 +33,24 @@ export class hash {
     private static previousHash : string = '';
 
     public static EVENT_HASH_CHANGE : string = 'hash_changed';
+
+    public static minuteConversion = {
+        "15mins"    : 15,
+        "30mins"    : 30,
+        "45mins"    : 45,
+        "1hr"       : 60,
+        "2hrs"      : 120,
+        "3hrs"      : 180,
+        "4hrs"      : 240,
+        "5hrs"      : 300,
+        "6hrs"      : 360,
+        "7hrs"      : 420,
+        "8hrs"      : 480,
+        "9hrs"      : 540,
+        "10hrs"     : 600,
+        "11hrs"     : 660,
+        "12hrs"     : 720
+    };
 
     public static init() {
         window.addEventListener("hashchange", (evt)=> this.updateHash(evt));
@@ -143,11 +162,29 @@ export class hash {
         if (update) { this.update(); }
     }
 
+    public static hashLayerToString(layers : Array<IHashLayer>) : string | null {
+        let lyrs:Array<string> = [];
+        for (let i=0; i< layers.length; i++) {
+            let lyr = layers[i];
+            if (lyr.layerId) {
+                let str = lyr.layerId;
+                if (lyr.classifier) {
+                    str += `=${lyr.classifier}`;
+                }
+                lyrs.push(str);
+            }
+        }
+        if (lyrs.length > 0) {
+            return lyrs.join(',');
+        }
+        return null;
+    }
+
     public static layersToString () : string | null {
         if (! this.values.layers || this.values.layers.length == 0) {
             return null;
         }
-        let lyrs = [];
+        /*let lyrs:Array<string> = [];
         for (let i=0; i< this.values.layers.length; i++) {
             let lyr = this.values.layers[i];
             if (lyr.layerId) {
@@ -160,6 +197,10 @@ export class hash {
         }
         if (lyrs.length > 0) {
             return `l:${lyrs.join(',')}`;
+        }*/
+        let str = this.hashLayerToString(this.values.layers);
+        if (str) {
+            return `l:${str}`;
         }
         return null;
     }
@@ -224,13 +265,11 @@ export class hash {
             return null;
         }
         let dt = this.values.dates;
+        // if dt.single, it means imagery is turned on
         if (!dt.start && dt.single) {
             return `d:${dt.single}`;
         }
         if (dt.start && dt.end && dt.single) {
-            if (dt.start == dt.end && dt.single == dt.start) {
-                return `d:${dt.single}`;
-            }
             if (dt.start != dt.end) {
                 return `d:${dt.start}..${dt.end},${dt.single}`;
             }
@@ -253,29 +292,102 @@ export class hash {
     private static parseDates ( str : string ) {
         let arr = str.split(',');
         let arr2 = arr[0].split('..');
-        let start = arr2[0];
-        let end = (arr2.length == 2) ? arr2[1] : start;
-        if (start == "today" || start == "24hrs" || start == "48hrs" || start == "72hrs" || start == "7days") {
-            if (start == "24hrs") {
-                start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -1), 'Y-m-d');
-            } else if (start =="48hrs") {
-                start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -2), 'Y-m-d');
-            } else if (start =="72hrs") {
-                start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -3), 'Y-m-d');
-            } else if (start =="7days") {
-                start = flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -6), 'Y-m-d');
-            } else {
-                start = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
+        let dates:IHashDates = {};
+        dates.start = arr2[0];
+        dates.end = (arr2.length == 2) ? arr2[1] : dates.start;
+        dates.single = (arr.length == 2) ? arr[1] : dates.start;
+        dates = this.validateDates(dates);
+        if (props.version > '1.0.0') {
+            this.values.dates = dates;
+        } else {
+            this.values.dates = this.convertDates(dates);
+        }        
+    }
+
+    public static getNumDays(days:string) : number {
+        switch (days) {
+            case "24hrs" : return 1;
+            case "48hrs" : return 2;
+            case "72hrs" : return 3;
+            case "7days" : return 6;
+        }
+        return 0;
+    }
+
+    private static validateDates(dates:IHashDates) : IHashDates {
+        if ((dates.start as string).length > 10 || (dates.end as string).length > 10 || (dates.single as string).length > 10) {
+            dates.start = "today";
+            dates.end = "today";
+            dates.single = "today";
+        }
+        return dates;
+    }
+
+    private static getDateValue(val: string) : string {
+        let date = utils.getGMTTime(new Date());
+        if (val == "today"){
+           return flatpickr.formatDate(date, 'Y-m-d');
+        } else if (val == "24hrs" || val == "48hrs" || val == "72hrs" || val == "7days") {
+            return flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), - this.getNumDays(val)), 'Y-m-d');
+        } else if (val.indexOf('hr') > 0 || val.indexOf('mins') > 0) {
+            let mins = this.getMinutesValue(val);
+            date.setMinutes(Math.floor(date.getMinutes() / 10) * 10.0);
+            date.setSeconds(0);
+            date = utils.addMinutes(date, -mins);
+            return flatpickr.formatDate(date, 'Y-m-d H:i');
+        }
+        // this should be in YYYY-MM-DD format
+        return val;
+    }
+
+    public static getMinutesValue(val : string) : number {
+        let mins = 0;
+        if (val.indexOf('hr') > 0 || val.indexOf('mins') > 0) {
+            // checking for subdaily pre-set values
+            for (let m in hash.minuteConversion) {
+                if (m == val) {
+                    mins = hash.minuteConversion[m];
+                    break;
+                }
             }
-            end = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
+            if (mins == 0 && val.indexOf('mins') > 0) {
+                mins = parseInt(val.replace('mins', ''));
+                if (mins < 1 || mins > 1440) {
+                    mins = 10;
+                }
+            }
         }
-        let single = (arr.length == 2) ? arr[1] : start;
-        if (start.length > 10 || end.length > 10 || single.length > 10) {
-            start = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
-            end = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
-            single = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
+        return mins;
+    }
+
+    // transcribe dates if they contain 'today', '24hrs', ...
+    public static convertDates(dates:IHashDates) : IHashDates {
+        let hd:IHashDates = {};
+        let start = dates.start;
+        hd.start = this.getDateValue(dates.start as string);
+        hd.end = dates.end;
+        let mins = this.getMinutesValue(dates.end);
+        if (start == "today" || start == "24hrs" || start == "48hrs" || start == "72hrs" || start == "7days") {
+            hd.end = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
+        } else if (mins > 0) {
+            let date = utils.getGMTTime(new Date());
+            date.setMinutes(Math.floor(date.getMinutes() / 10) * 10.0);
+            date.setSeconds(0);
+            hd.end = flatpickr.formatDate(date, 'Y-m-d H:i');
         }
-        this.values.dates = {start : start, end : end, single : single};
+        if (dates.single) {
+            let smins = this.getMinutesValue(dates.single);
+            if (smins > 0) {
+                let date = utils.getGMTTime(new Date());
+                date.setMinutes(Math.floor(date.getMinutes() / 10) * 10.0);
+                date.setSeconds(0);
+                date = utils.addMinutes(date, -smins);
+                hd.single = flatpickr.formatDate(date, 'Y-m-d H:i');
+            } else {
+                hd.single = this.getDateValue(dates.single as string);
+            }
+        }
+        return hd;
     }
 
     public static getDates() : IHashDates | null {
@@ -287,7 +399,7 @@ export class hash {
         if (zoom) {
             let c = props.map.getView().getCenter();
             if (c == undefined || isNaN(c[0]) || isNaN(c[1])) { return ''; }
-            return `@${c[0].toFixed(1)},${c[1].toFixed(1)},${zoom.toFixed(0)}z`;
+            return `@${c[0].toFixed(1)},${c[1].toFixed(1)},${zoom.toFixed(1)}z`;
         }
         return '@0,0,2';
     }
@@ -346,8 +458,8 @@ export class hash {
                     configProps.center = [Number(x),Number(y)];
                     if (points[2].indexOf('z')) {
                         let z = points[2].replace('z','');
-                        if (parseInt(z) >= configProps.minZoom && parseInt(z) <= configProps.maxZoom) { 
-                            configProps.zoom = parseInt(z); 
+                        if (parseFloat(z) >= configProps.minZoom && parseFloat(z) <= configProps.maxZoom) { 
+                            configProps.zoom = parseFloat(z); 
                         }
                     }
                     zoomSet = true;

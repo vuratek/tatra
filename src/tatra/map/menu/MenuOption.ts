@@ -18,7 +18,6 @@ export class MenuOption {
     }
 
     public close() {
-        console.log("CLOSE", this.id);
         let divId = mainMenu.getId();
         let mainDiv = document.getElementById(`${divId}_content`) as HTMLDivElement;
         mainDiv.innerHTML = '';
@@ -29,7 +28,6 @@ export class MenuOption {
     }
 
     public open() {
-        console.log("OPEN", this.id);
         this.render();
     }
 
@@ -45,7 +43,6 @@ export class MenuOption {
     }
 
     public timelineUpdate () {
-        console.log("TIMELINEUPDATE", this.id);
         let obj = Timeline.getDates();
         if (! obj) { return; }
         if (props.imageryDate == obj["single"].start) { return; }

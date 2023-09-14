@@ -55,9 +55,14 @@ export class components {
 		this._menus();
 		menu.registerMenu(id);
 		menu.init(id);
-	
 	}
-	
+	public static _bottomLogo() {
+		let el = document.getElementById("bottomLogo");
+		if (!el) { return; }
+		if (props.config.components["bottomLogo"]["image"]) { 
+			el.innerHTML = `<img src="${props.config.components["bottomLogo"]["image"]}">`;
+		}
+	}
 	public static _menus () {
 		components.createElement("lmvMenus");
 	}

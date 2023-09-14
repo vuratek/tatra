@@ -3,6 +3,7 @@ import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
+import { Module } from "./components/Module";
 
 export class mainMenu {
 
@@ -24,10 +25,9 @@ export class mainMenu {
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
             <div class="mapMenuIcons">
                 <span><i class="fas fa-info-circle"></i></span>
-                <span><i class="fas fa-graduation-cap"></i></span>
             </div>
         `;
-
+//                <span><i class="fas fa-graduation-cap"></i></span>
         
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
@@ -114,7 +114,9 @@ export class mainMenu {
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
             for (let key in props.menuModules) {
-                props.menuModules[key].presetLayers();
+                if (props.menuModules[key].props.usePresetLayers) {
+                    props.menuModules[key].presetLayers();
+                }
             }
             for (let key in props.menuModules) {
                 if (props.menuModules[key].isActive()) {
@@ -141,6 +143,7 @@ export class mainMenu {
         }
         let _tb = ((menu.isDefault)) ? null : tab;
         hash.newMode(_tb, true);
+        this.setMapInfo(menu.description);
     }
 
     private static closeMapMenuItems(evt:Event) {
@@ -154,30 +157,37 @@ export class mainMenu {
         }
     }
 
+    private static setMapInfo(info:string) {
+        let el = document.getElementById('MapMenuInfo') as HTMLDivElement;
+        if (el) {
+            el.innerHTML = info;
+        }
+    }
+
     private static setMapMenuOptionBar () {
         props.mapMenuOpened = ! props.mapMenuOpened;
         this.updateMapMenuOptionBar();
     }
 
+
     private static updateMapMenuOptionBar() {
         let lbl = '';
         if (props.mapMenuOpened) {
             lbl = 'Main Map Menu';
-            utils.addClass('MapMenuItems', 'mainMenuOpen');
-            utils.hide(`${this.id}Close`);
+            utils.addClass('MapMenuWrapItems', 'mainMenuOpen');
+//            utils.hide(`${this.id}Close`);
         } else {
             let menu =  this.getMenuOptionById(this.currentTab);
             if (menu) {
                 lbl = menu.label;
             }
-            utils.removeClass('MapMenuItems', 'mainMenuOpen');
-            utils.show(`${this.id}Close`);
+            utils.removeClass('MapMenuWrapItems', 'mainMenuOpen');
+//            utils.show(`${this.id}Close`);
         }
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (el) {
             el.innerHTML = lbl;
         }
-
     }
     private static renderMenuOptions() {
         let cfg = (props.config as IConfigDef);
@@ -203,7 +213,11 @@ export class mainMenu {
                         let key = mod.modules[i];
                         let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
                         if (props.menuModules[key]) {
-                            props.menuModules[key].render(_div);
+                            try {
+                                props.menuModules[key].render(_div);
+                            } catch (e) {
+                                console.log(`Module ${key} not defined.`);
+                            }
                         }
                     }
                 }
