@@ -56,6 +56,7 @@ export class basePicker {
 
     public static setRangeSelect() {
         let id = `${this.id}_DR`
+        console.log("setRangeSelect", timelineController.type);
         let select = document.getElementById(id);
         if (! select) { return; }
         if (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {

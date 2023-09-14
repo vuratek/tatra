@@ -5,7 +5,6 @@ import { props } from '../map/props';
 import { rangePicker } from './rangePicker2';
 import { singleDatePicker } from './singleDatePicker2';
 import { loadHandler } from "./loadHandler";
-import flatpickr from 'flatpickr';
 import { helper } from './helper2';
 import { TimelineType, ITimelineItem, timelineController, TimelineAdjustType, ITimelineRanges } from './timelineController';
 
@@ -151,7 +150,7 @@ export class Timeline {
         this.timeKeeper["single"] = { start: mindate, end : maxdate};
         this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, -timelineController.time.rangeMins), end : maxdate};
         //console.log(">>> ", this.timeKeeper);
-        if (this.timeKeeper) {
+        if (this.timeKeeper && Timeline.items) {
             Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end, content : "<div></div>"});
             Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
         }
@@ -179,6 +178,7 @@ export class Timeline {
         let arr = [];
         //use this.timeKeeper
         if (!this.timeKeeper) { return; }
+        if (! loadHandler.isLoaded()) { return; }
         if (! this.items) {
             arr.push({id: 'single', content: '', start: this.timeKeeper["single"].start, end: this.timeKeeper["single"].end, type: 'range', className: 'vis-time-slider-single' });
             if (timelineController.type== TimelineType.RANGE_TIED || timelineController.type== TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {
@@ -307,7 +307,7 @@ export class Timeline {
         wrap.appendChild(this.container); 
     
         utils.addClass('timeline', 'timelineMissing');
-        loadHandler.load();        
+        //loadHandler.load();        
     }
 
 
@@ -344,11 +344,6 @@ export class Timeline {
             return null;
         }
         return item;
-    }
-
-    public static isPartialDate(date:Date) : boolean {
-        if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED && flatpickr.formatDate(date, 'H:i') != '00:00') return true;
-        return false;
     }
 
     private static updateTimelineTime(){

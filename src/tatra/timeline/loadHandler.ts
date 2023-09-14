@@ -30,4 +30,7 @@ export class loadHandler {
             library.load(navProps.settings.app.timelineURL, () => this.callBack());
         }
     }
+    public static isLoaded():boolean {
+        return this.loaded;
+    }
 }

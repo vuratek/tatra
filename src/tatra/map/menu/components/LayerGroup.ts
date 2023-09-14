@@ -429,7 +429,7 @@ export class LayerGroup extends Module {
 						let start = (lo.minDate) ? lo.minDate : '...';
 						let end = (lo.maxDate) ? lo.maxDate : 'present';
 						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
-						msg = `AVAILABLE: ${start} .. ${end}`;				
+						msg = `DATA AVAILABLE: ${start} .. ${end}`;				
 						if (props.currentBasemap == lo.id) {
 							update = true;
 						}

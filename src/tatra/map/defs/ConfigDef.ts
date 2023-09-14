@@ -31,6 +31,10 @@ export interface IMenuModuleLayerSettings {
     day_selected    : boolean;
     night_selected  : boolean;
     has_daynight    : boolean;
+    pixelSize       : string;
+    variable        : string;
+    has_frp         : boolean;
+    has_confidence  : boolean;
 }
 export interface IMenuModuleLayers {
     id              : string;
