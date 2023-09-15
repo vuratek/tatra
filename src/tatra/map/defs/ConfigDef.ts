@@ -35,6 +35,7 @@ export interface IMenuModuleLayerSettings {
     variable        : string;
     has_frp         : boolean;
     has_confidence  : boolean;
+    is_confidence_type : boolean;
 }
 export interface IMenuModuleLayers {
     id              : string;
