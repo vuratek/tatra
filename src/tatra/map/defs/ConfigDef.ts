@@ -47,6 +47,7 @@ export interface IGroupBreaker {
     id              : string;
     layers          : Array<string>;
     label           : string;
+    opened          : boolean;
 }
 export interface IMenuModule {
     id              : string;

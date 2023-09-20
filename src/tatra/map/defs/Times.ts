@@ -1,7 +1,8 @@
 export enum BasicMenuDates {
     TODAY   = "today",
     HRS_24  = "24hrs",
-    DAY_7   = "7days"
+    DAY_7   = "7days",
+    CUSTOM  = "custom"
 }
 export enum BasicMenuDateValues {
     TODAY   = 1,

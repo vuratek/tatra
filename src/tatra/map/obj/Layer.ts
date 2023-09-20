@@ -39,11 +39,6 @@ enum TileSizes {
     large = 512
 }
 
-export enum FireLayerType {
-    STANDARD = "standard",
-    EXTRA = "extra"
-}
-
 export class LayerSource {
     url             : string | null = null;
     wrapX           : boolean = true;
@@ -108,7 +103,6 @@ export class Layer {
     public exclusive        : string | null = null;
     public exclusiveSaved   : string | null = null; // save exclusive layers if they were ON before turnging them off
     public extent           : Array <number> = [-180, -90, 180, 90];
-    public fireLayerType    : FireLayerType | null = null;      // remove?
     public handler          : string = "";
     public hasLegend        : boolean = false;
     public hasMenuExpanded  : boolean = false;

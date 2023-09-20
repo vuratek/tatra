@@ -10,6 +10,7 @@ import { events } from "../events";
 export class hashHandler {
     private static initialized : boolean = false;
     private static layerHash : string = '-1';   // set default to -1
+    public static allowAbbreviatedDates : boolean = false;
 
     public static init() {
         if (this.initialized) { return; }
@@ -140,20 +141,24 @@ export class hashHandler {
             dates.end = end;
             dates.start = start;
         } else {    // handle days
-/*            if (now == end && props.time.range == 0) {
-                start = "today";
-            } else if (now == end && props.time.range == 1) {
-                start = "24hrs";
-            } else if (now == end && props.time.range == 2) {
-                start = "48hrs";
-            } else if (now == end && props.time.range == 3) {
-                start = "72hrs";
-            } else if (now == end && props.time.range == 6) {
-                start = "7days";
+            if (this.allowAbbreviatedDates) {
+                if (now == end && props.time.range == 0) {
+                    start = "today";
+                } else if (now == end && props.time.range == 1) {
+                    start = "24hrs";
+                } else if (now == end && props.time.range == 2) {
+                    start = "48hrs";
+                } else if (now == end && props.time.range == 3) {
+                    start = "72hrs";
+                } else if (now == end && props.time.range == 6) {
+                    start = "7days";
+                } else {
+                    dates.end = end;
+                }
             } else {
                 dates.end = end;
-            }*/
-            dates.end = end;
+            }
+//            dates.end = end;
             dates.start = start;
         }
 		if (mapUtils.isImageryOn()) {

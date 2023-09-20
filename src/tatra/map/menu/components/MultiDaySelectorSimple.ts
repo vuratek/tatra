@@ -33,7 +33,16 @@ export class MultiDaySelectorSimple extends Module {
 			hashHandler.processDateTime(dates);		
 		}
 		super.render(par);
-		this.renderMenu();
+		Timeline.delete();
+		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
+		let th = document.createElement("div");
+		th.setAttribute("class", "mds");
+		el.appendChild(th);
+		th.innerHTML = `
+			<div id="mds_content" class="mds_content">
+			</div>
+		`;
+		this.render_menu();
 	}
 
 	public deactivate() {
@@ -41,20 +50,31 @@ export class MultiDaySelectorSimple extends Module {
 		Timeline.delete();
 		document.removeEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
 	}
-	public render_historical() {
-		Timeline.init("timeline", TimelineType.RANGE_TIED);
+	public setTimelineController() {
 		timelineController.time.imageryDate = props.time.imageryDate;
 		timelineController.time.date = props.time.imageryDate;
 		timelineController.time.range = props.time.range;
 		timelineController.time.rangeMins = props.time.rangeMins;
+
+	}
+	public render_menu() {
+		Timeline.init("timeline", TimelineType.RANGE_TIED);
         controls.enableBtn("timeline");
 		controls.setItem("timeline", true);		
-		
-		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+		this.setTimelineController();
 
 		let el = document.getElementById("mds_content") as HTMLDivElement;
-		el.innerHTML = `
-			<div id="mdsHistorical">
+		el.innerHTML = MultiDaySelectorSimple.renderCalendarConent();
+		utils.setClick('mdsCalendar', () => this.openCalendar());
+		utils.setChange('mdsDateRange', () => this.setDates());
+		utils.setSelectValue('mdsDateRange', props.time.range.toString());
+		this.initDatePicker(props.time.date);
+		rangePicker.timelineUpdate();		
+		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+	}
+	public static renderCalendarConent() {
+		return `
+			<div id="mdsCalendarContent" class="mdsCalendarContent">
 				<span id="mdsCalendar" class="mdsCalendar">
 					<i class="fa fa-calendar-alt fa-lg"></i>
 				</span>
@@ -67,24 +87,7 @@ export class MultiDaySelectorSimple extends Module {
 				</select>
 			</div>
 		`;
-		utils.setClick('mdsCalendar', () => this.openCalendar());
-		utils.setChange('mdsDateRange', () => this.setDates());
-		utils.setSelectValue('mdsDateRange', props.time.range.toString());
-		this.initDatePicker(props.time.date);
-		rangePicker.timelineUpdate();		
 	}
-	public renderMenu() {
-		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
-		let th = document.createElement("div");
-		th.setAttribute("class", "mds");
-		el.appendChild(th);
-		th.innerHTML = `
-			<div id="mds_content" class="mds_content">
-			</div>
-		`;
-		this.render_historical();
-	}
-
 	public openCalendar() {
 		this.calendar.open();
 	}
