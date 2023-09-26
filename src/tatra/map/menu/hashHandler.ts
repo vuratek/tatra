@@ -162,7 +162,7 @@ export class hashHandler {
             dates.start = start;
         }
 		if (mapUtils.isImageryOn()) {
-/*			if (props.time.rangeMins == 0) {
+			if (props.time.rangeMins == 0 && this.allowAbbreviatedDates) {
                 if (single == now) {
                     single = "today";
                 } else if (single == flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -1), 'Y-m-d')) {
@@ -174,7 +174,7 @@ export class hashHandler {
                 } else if (single == flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -6), 'Y-m-d')) {
                     single = "7days";
                 }
-            }*/
+            }
 			dates.single = single;
 		}
 		hash.dates(dates);

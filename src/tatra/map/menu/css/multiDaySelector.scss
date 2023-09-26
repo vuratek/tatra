@@ -59,6 +59,13 @@
     text-align: center;
     padding: 1rem;
 }
+.mdsCalendarContent.isSmall {
+    width: 14rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.5rem;
+    padding: 0 1rem;
+}
 .mds_content input {
 	width:10.5rem;
 	font-size:1.6rem;
@@ -134,7 +141,7 @@
     text-align: center;
     width:5rem; 
     height:5rem;
-    margin:0 1.8rem;
+    margin:0 .4rem;
     display:inline-block;
     /*float:left;*/
     cursor:pointer;
@@ -200,13 +207,10 @@
     outline: none;
 }
 #mdsTimePeriodStatement {
-    color: #ccc;
-    width: 90%;
-    padding: 0.3rem 0 0.3rem 3%;
-    display:inline-block;
-    text-align: center;
-    top: 0rem;
-    left: 50%;
+    color: rgb(204, 204, 204);
+    width: 35%;
+    padding: 0.3rem;
+    font-size: 1.1rem;
 }
 #mdsTimePeriodStatement a {
     color: #65b2e3;
@@ -216,7 +220,6 @@
     font-size: 1.4rem;
     color: #aaa;
     font-weight: 600;
-    display:none;
 }
 #mds_btn_timeInfo {
     font-size:1.6rem;

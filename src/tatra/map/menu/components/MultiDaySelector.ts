@@ -1,17 +1,13 @@
 import { utils } from "../../../utils";
 import { controls } from "../../components/controls";
 import { props } from '../../props';
-import { Timeline } from '../../../timeline/Timeline2';
-import { rangePicker } from "../../../timeline/rangePicker2"; 
 import { events } from '../../events';
-import { hash, IHashDates } from '../../hash';
+import { hash } from '../../hash';
 import { hashHandler } from '../hashHandler';
-import { TimelineType, timelineController } from '../../../timeline/timelineController';
-//import { bookmark } from "../features/bookmark";
 import { time_info } from "../features/time_info";
 import { MultiDaySelectorSimple } from "./MultiDaySelectorSimple";
 import { BasicMenuDates, BasicMenuDateValues } from "../../defs/Times";
-import flatpickr from "flatpickr";
+import { timelineController } from "../../../timeline/timelineController";
 
 export class MultiDaySelector extends MultiDaySelectorSimple {
 	public currentSelection			: BasicMenuDates = BasicMenuDates.HRS_24;
@@ -23,6 +19,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 //		}
 //		controls.createControlItem('bookmark', bookmark);
 		controls.createControlItem('time_info', time_info);
+
 	}
 	public render_menu() {
 		// check for preset URL hash values
@@ -34,16 +31,10 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 				type = BasicMenuDates.TODAY;
 			} else if (dates.start == '24hrs') {
 				type = BasicMenuDates.HRS_24;
-				console.log("IMA", props.time.imageryDate);
 			} else {
 				type = BasicMenuDates.CUSTOM;
 			} 
 		}
-		Timeline.init("timeline", TimelineType.RANGE_TIED);
-        controls.enableBtn("timeline");
-		controls.setItem("timeline", true);		
-		this.setTimelineController();
-		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
 
 		let el = document.getElementById("mds_content") as HTMLDivElement;
 		el.innerHTML = this.renderMenu();
@@ -59,10 +50,13 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		this.initDatePicker(props.time.date);
 		
 		this.setTab(type);
-		rangePicker.timelineUpdate();		
+		this.setTimelineController();
+		timelineController.refreshTimelineDate();
+		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+
 	}
 	public renderMenu () : string {
-		let cal = MultiDaySelectorSimple.renderCalendarConent();
+		let cal = MultiDaySelectorSimple.renderCalendarConent(false);
 		return `
 			<div id="${this.props.id}_mds_btn_${BasicMenuDates.TODAY}" class="mds_time_btn">
 				<div>${BasicMenuDates.TODAY}</div>
@@ -124,17 +118,17 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
             if (props.time.range == 0) {
 				props.time.quickTime == BasicMenuDateValues.TODAY;
 				props.time.imageryDate = utils.getGMTTime(new Date());
-				timelineController.time.imageryDate = props.time.imageryDate;
+//				timelineController.time.imageryDate = props.time.imageryDate;
 				showCalendar = false;
             } else if (props.time.range == 1) {
 				props.time.quickTime == BasicMenuDateValues.HRS_24;
 				props.time.imageryDate = utils.addDay(utils.getGMTTime(new Date()), -1);
-				timelineController.time.imageryDate = props.time.imageryDate;
+//				timelineController.time.imageryDate = props.time.imageryDate;
 				showCalendar = false;
 			} else if (props.time.range == 6) {
 				props.time.quickTime == BasicMenuDateValues.DAY_7;
 				props.time.imageryDate = utils.addDay(utils.getGMTTime(new Date()), -1);
-				timelineController.time.imageryDate = props.time.imageryDate;
+//				timelineController.time.imageryDate = props.time.imageryDate;
 			} else {
 				this.currentSelection = BasicMenuDates.CUSTOM;
 			}
@@ -152,6 +146,8 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		}
 		this.setTimeInfoLabel();
 		hashHandler.setDateTime();
+		let show = (this.currentSelection == BasicMenuDates.CUSTOM || this.currentSelection == BasicMenuDates.DAY_7) ? true : false;
+		this.displayTimeline(show);
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 	}
 	private setTimeInfoLabel () {
@@ -160,7 +156,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 			return;
 		}
 		let txt = (props.time.quickTime == 1)  ? BasicMenuDates.TODAY : BasicMenuDates.HRS_24;
-		let label = `<span class="mds_btn_timeInfoTitle">${txt}</span>`;
+		let label = `<span class="mds_btn_timeInfoTitle">${txt}</span><br/>`;
 		label += (props.time.quickTime == 1) ? "From [Today 00:00:00 GMT] to present" : "From [Yesterday 00:00:00 GMT] to present";
 		label += `<span id="mds_btn_timeInfo"> <i class="fa fa-info-circle" aria-hidden="true"></i></span>`;
 //        label += '<br><a target="_blank" rel="noopener" href="https://greenwichmeantime.com/uk/time/">Current Date/Time in GMT</a>';
@@ -169,7 +165,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 			el.innerHTML = label;
 			utils.setClick('mds_btn_timeInfo', () => this.displayTimeInfoDetail());
 		}
-		utils.show('mdsTimePeriodStatement');
+		utils.showCustom('mdsTimePeriodStatement','inline-block');
 	}
 	private displayTimeInfoDetail() {
 		controls.activateControlItem('time_info');
@@ -178,5 +174,12 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	public timelineUpdate () {
 		super.timelineUpdate();
 		this.setQuickLinks();
+	}
+	public timelineBtnClick (evt : CustomEvent) {
+		if (evt.detail.id == "timeline") {
+			if (this.currentSelection != BasicMenuDates.CUSTOM) {
+				this.setTab(BasicMenuDates.CUSTOM);
+			}
+		}
 	}
 }

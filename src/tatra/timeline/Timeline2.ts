@@ -61,7 +61,7 @@ export class Timeline {
             this.timeUpdateHandler = this.updateTimelineTime;
             setInterval(this.timeUpdateHandler,1000*60);
         }
-        this.rendered = false;
+        //this.rendered = false;
     }
 
     public static setTimelineRangeMode(mode:TimelineType) {
@@ -307,7 +307,7 @@ export class Timeline {
         wrap.appendChild(this.container); 
     
         utils.addClass('timeline', 'timelineMissing');
-        //loadHandler.load();        
+        loadHandler.load();        
     }
 
 
@@ -511,12 +511,12 @@ export class Timeline {
                     iSingle.end = timelineController.maxDate;
                 }
             }
-            if (this.isPartialDate(iRange.start)) {
+            if (timelineController.isPartialDate(iRange.start)) {
                 iRange.start = utils.sanitizeDate(utils.addDay(iRange.start));
             }
             if (helper.isDiff(iSingle, origSingle as ITimelineRanges)) {
                 let diff = utils.getDayDiff(iRange.start, iRange.end) - 1;
-                if (this.isPartialDate(iRange.end)) {
+                if (timelineController.isPartialDate(iRange.end)) {
                     diff ++;
                     timelineController.time.range = diff;
                 }
@@ -528,7 +528,7 @@ export class Timeline {
             }
             if (helper.isDiff(iRange, origRange as ITimelineRanges)) {
                 let diff = utils.getDayDiff(iRange.start, iRange.end) - 1;
-                if (this.isPartialDate(iRange.end)) {
+                if (timelineController.isPartialDate(iRange.end)) {
                     diff ++;
                     timelineController.time.range = diff;
                 }
@@ -539,7 +539,7 @@ export class Timeline {
         let obj = Timeline.getDates();
         if (obj) {
             let diff = utils.getDayDiff(obj["range"].start, obj["range"].end) - 1;
-            if (this.isPartialDate(obj["range"].end)) {
+            if (timelineController.isPartialDate(obj["range"].end)) {
                 diff ++;
             }
             timelineController.time.imageryDate = obj["single"].start;
@@ -601,7 +601,7 @@ export class Timeline {
         } else {
             let adjust = (time >= range.start && time <= range.end) ? true : false;
             let diff = utils.getDayDiff(new Date(range.start), new Date(range.end));
-            if (this.isPartialDate(range.end)) { diff++; }
+            if (timelineController.isPartialDate(range.end)) { diff++; }
 
             if (time >= range.end) { Timeline.minusDragDirection = false; }
             else { Timeline.minusDragDirection = true;}
@@ -704,6 +704,7 @@ export class Timeline {
                 obj["range"] = { start: Timeline.items.get("range").start, end : Timeline.items.get("range").end};
             }
         }
+        console.log(obj);
         return obj;
     }
 
@@ -750,21 +751,20 @@ export class Timeline {
             }
             if (timelineController.type == TimelineType.RANGE_TIED || timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) { 
                 this.timeKeeper["range"] = {start: start, end: end}; 
-            } else {
-                this.timeKeeper["single"] = {start: start, end: end}; 
-            }
+            } 
+            this.timeKeeper["single"] = {start: start, end: end}; 
             this.notifyTimelineUpdate();
         } else {
             if (timelineController.type == TimelineType.RANGE_TIED || timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) { 
                 this.items.update({id: "range", start: start, end: end});
-            } else {
-                this.items.update({id: "single", start: start, end: end});
-            }
+            } 
+            this.items.update({id: "single", start: start, end: end});
+
             if (this.timeline) {
                 this.timeline.moveTo(start);
-                this.notifyTimelineUpdate();
             }
         }
+        this.notifyTimelineUpdate();
     }
 
     private static refreshDate () {
@@ -783,6 +783,10 @@ export class Timeline {
             } else if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
                 this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: utils.addDay(time)};                
             }
+            if (timelineController.type != TimelineType.SINGLE) {
+                this.timeKeeper["single"] = {start: time, end: utils.addDay(time)};
+            }
+
             this.notifyTimelineUpdate();
         } else {
             if (timelineController.type == TimelineType.SINGLE) {
