@@ -715,6 +715,7 @@ export class Timeline {
         if (! dates) { return null;}
         let start = dates.start;
         let end = dates.end;
+        let end_simple = utils.addDay(start);
         let range = (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) ? timelineController.time.rangeMins : timelineController.time.range;
         switch (type) {
             case TimelineAdjustType.BACK_RANGE:
@@ -724,6 +725,7 @@ export class Timeline {
                 } else {
                     start = utils.addDay(start, - range -1);
                     end = utils.addDay(end, - range -1);
+                    end_simple = utils.addDay(start);
                 }
                 break;
 /*            case TimelineAdjustType.BACK_DAY:
@@ -741,6 +743,7 @@ export class Timeline {
                 } else {
                     start = utils.addDay(start, range + 1);
                     end = utils.addDay(end, range + 1);
+                    end_simple = utils.addDay(start);
                 }
                 break;
         }
@@ -752,13 +755,13 @@ export class Timeline {
             if (timelineController.type == TimelineType.RANGE_TIED || timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) { 
                 this.timeKeeper["range"] = {start: start, end: end}; 
             } 
-            this.timeKeeper["single"] = {start: start, end: end}; 
+            this.timeKeeper["single"] = {start: start, end: end_simple}; 
             this.notifyTimelineUpdate();
         } else {
             if (timelineController.type == TimelineType.RANGE_TIED || timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) { 
                 this.items.update({id: "range", start: start, end: end});
             } 
-            this.items.update({id: "single", start: start, end: end});
+            this.items.update({id: "single", start: start, end: end_simple});
 
             if (this.timeline) {
                 this.timeline.moveTo(start);

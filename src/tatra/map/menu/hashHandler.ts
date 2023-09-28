@@ -14,7 +14,7 @@ export class hashHandler {
 
     public static init() {
         if (this.initialized) { return; }
-        setInterval(()=>this.checkModuleHash(), 1500);
+        setInterval(()=>this.checkModuleHash(), 750);
         this.initialized = true;
     }
 

@@ -23,12 +23,13 @@ export class mainMenu {
                 <span><i class="fas fa-bars"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
+        `;
+//                <span><i class="fas fa-graduation-cap"></i></span>
+/*
             <div class="mapMenuIcons">
                 <span><i class="fas fa-info-circle"></i></span>
             </div>
-        `;
-//                <span><i class="fas fa-graduation-cap"></i></span>
-        
+*/
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
         this.updateMapMenuOptionBar();
@@ -216,6 +217,7 @@ export class mainMenu {
                             try {
                                 props.menuModules[key].render(_div);
                             } catch (e) {
+                                console.log(e);
                                 console.log(`Module ${key} not defined.`);
                             }
                         }

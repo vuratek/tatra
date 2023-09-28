@@ -148,7 +148,7 @@ export class MultiDaySelectorSimple extends Module {
         let obj = timelineController.obj;
 		if (! obj || !obj["range"]) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-		console.log("tiMELINE UPDATE", props.time.imageryDate );
+		//console.log("tiMELINE UPDATE", props.time.imageryDate );
 		
         if (timelineController.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));

@@ -163,7 +163,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
         let el = document.getElementById('mdsTimePeriodStatement');
         if (el) {
 			el.innerHTML = label;
-			utils.setClick('mds_btn_timeInfo', () => this.displayTimeInfoDetail());
+			utils.setClick('mdsTimePeriodStatement', () => this.displayTimeInfoDetail());
 		}
 		utils.showCustom('mdsTimePeriodStatement','inline-block');
 	}

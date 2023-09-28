@@ -3,7 +3,7 @@ import { IMenuModule, IMenuModuleLayers } from '../../defs/ConfigDef';
 import { GroupContent } from '../../../aux/GroupContent';
 import { props } from '../../props';
 import { mapUtils } from '../../mapUtils';
-import { layerCategories } from '../../obj/Layer';
+import { layerCategories, Layer } from '../../obj/Layer';
 import { IHashLayer } from '../../hash';
 import { events } from '../../events';
 
@@ -158,6 +158,10 @@ export class Module {
             // set only active module to URL hash layers if they are defined
             if (isActiveModule && hashLayers.length > 0) {
                 arr[j].visible = this.isHashLayer(arr[j].id, hashLayers);
+                let info = this.getHashLayerId(arr[j].id, hashLayers);
+                if (arr[j].visible && info) {
+                    this.setAdditionalLayerInfo(arr[j], info);
+                }
             } else {
                 arr[j].visible = this.isDefaultLayer(arr[j].id);
             }
@@ -173,6 +177,17 @@ export class Module {
         return false;
     }
 
+    public setAdditionalLayerInfo(lyr : IMenuModuleLayers, info:string) {}
+
+    private getHashLayerId(id:string, hashLayers:Array<IHashLayer>) : string | null {
+        for (let i=0; i<hashLayers.length; i++) {
+            if (hashLayers[i].layerId == id && hashLayers[i].classifier != undefined) {
+                return hashLayers[i].classifier as string;
+            }
+        }
+        return null;
+    }
+
     // check if the layer is defined in url hash
     private isHashLayer(id:string, hashLayers:Array<IHashLayer>) : boolean {
         for (let i=0; i<hashLayers.length; i++) {
@@ -183,6 +198,10 @@ export class Module {
         return false;
     }
 
+    public getLayerHashValue(lo : Layer) : string {
+        return lo.id;
+    }
+
     // provide list of all visible layers within the module
     public getHashLayerInformation() : Array <IHashLayer> | null {
         if (! this.isActive() || ! this.props.layer_refs) { return null;}
@@ -190,7 +209,7 @@ export class Module {
         for (let i=0; i<this.props.layer_refs.length; i++) {
             let lo = mapUtils.getLayerById(this.props.layer_refs[i].id)
             if (lo && ! lo.clandestine && lo.visible) {
-                arr.push(lo.id);
+                arr.push(this.getLayerHashValue(lo));
             }
         }
         if (arr.length > 0) {

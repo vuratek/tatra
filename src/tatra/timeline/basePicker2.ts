@@ -99,6 +99,7 @@ export class basePicker {
             timelineController.time.range = rangeDays;
             timelineController.time.rangeMins = rangeMins;
             timelineController.time.date = this.calendar.selectedDates[0];
+            timelineController.time.imageryDate = this.calendar.selectedDates[0];
             timelineController.refreshTimelineDate();
         }
     }
@@ -135,11 +136,11 @@ export class basePicker {
     }
 
     public static timelineUpdate() {
-        let range = (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) ? 'm' + timelineController.time.rangeMins.toString() : timelineController.time.range.toString();
-        utils.setSelectValue(`${this.id}_DR`, range);
 //        $(`#${this.id}_DR`).val(timelineController.time.range);
         if (timelineController.obj && this.calendar) {
-            let type = (this.isSingle) ? 'single' : 'range';
+            let range = (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) ? 'm' + timelineController.time.rangeMins.toString() : timelineController.time.range.toString();
+            utils.setSelectValue(`${this.id}_DR`, range);
+                let type = (this.isSingle) ? 'single' : 'range';
             if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED) {
                 this.calendar.setDate(timelineController.obj['single'].start);
                 console.log('setting', timelineController.obj['single'].start);
@@ -147,8 +148,8 @@ export class basePicker {
                 console.log('setting2', utils.addDay(timelineController.obj[type].end,-1));
                 this.calendar.setDate(utils.addDay(timelineController.obj[type].end,-1));
             }
+            this.setCtrlBtns();
         }
-        this.setCtrlBtns();
     }
 
     public static openCalendar() {

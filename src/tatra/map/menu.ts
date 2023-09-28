@@ -36,18 +36,21 @@ export class menu {
         this.setMenu();
         let _mode = hash.getMode();
         let mode = '';
-        if (! _mode) {
-            let cfg = (props.config as IConfigDef);
-            if (cfg.menuOptions) {
-                for (let i=0; i<cfg.menuOptions.length; i++) {
-                    if (cfg.menuOptions[i].isDefault) {
-                        mode = cfg.menuOptions[i].id;
-                    }
+        let defMode = '';
+        let cfg = (props.config as IConfigDef);
+        if (cfg.menuOptions) {
+            for (let i=0; i<cfg.menuOptions.length; i++) {
+                if (cfg.menuOptions[i].isDefault) {
+                    defMode = cfg.menuOptions[i].id;
+                }
+                if (_mode && _mode.length > 0 && cfg.menuOptions[i].id == _mode[0]) {
+                    mode = _mode[0];
                 }
             }
-        } else {
-            mode = _mode[0];
         }
+        // set default mode if mode was not found or not defined
+        if (mode == '') { mode = defMode;}
+
         this.presetDefaultLayerVisibility(mode);
         this.setTab(mode);
         hashHandler.init();

@@ -133,6 +133,7 @@ export class Layer {
     public maxLevel         : number = -1;
     public minDate          : string | null = null;
     public minLevel         : number = -1;
+    public mode             : string | null = null;     // set value if custom layer modifiers in place so url hash updates correctly
     public needsLegendIcon  : boolean = false;
     public noDateRefresh    : boolean = false; //remove ???
     public paletteUrl       : string | null = null;
