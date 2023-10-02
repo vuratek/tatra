@@ -55,10 +55,14 @@
 	color: #aaa;
 }
 .lmvControlsLayerMsg.date_range {
-	background: #610a09;
+	border:solid 0.2rem #dfa335;
 }
 .lmvControlsLayerMsg.extent {
-	background: #553a0a;
+	border:solid 0.2rem #dfa335;
+	border-bottom:none;
+}
+.lmvControlsLayerMessage.extent > div {
+	background:#dfa335;
 }
 .lmvControlsLayerMessage > div {
 	text-align: center;
@@ -66,12 +70,15 @@
     color: black;
     font-weight: 600;
     font-size: 1.4rem;
+	background:#dfa335;
 }
 .lmvControlsLayerMessage.date_range > div {
-	background: #ea7777;
+	background: #dfa335;
 }
-.lmvControlsLayerMessage.extent > div {
-	background:#dfa335;
+
+.lmvControlsLayerMessage.date_range {
+	border:solid 0.2rem #dfa335;
+	border-bottom:none;
 }
 .lmvControlsMultiLayer {
 	min-height: 3.3rem;
@@ -86,7 +93,6 @@
 .lmvControlsLayerLegend {
 	margin-top: 1rem;
 }
-
 .lmvControlsLayer:hover {
 	/*background: #041b2e;*/
 	color:#FFF;
@@ -154,13 +160,13 @@
 	left:0.5rem;
 	font-size: 0.75em;
 }
-
 .lmvControlsLayerSelected:hover img, .lmvControlsLayerSelected:hover .lmControlsIconDiv {
 	opacity: 1;
 }
 #lmvControls_support_layers_Content .navGCContainer {
 	margin :0;
 }
+
 /*#lmvControls_support_layers_Content .navGCHeader {
 	background: rgba(187, 187, 187, 0.9);
 	border-top: 1px solid #777;
@@ -168,6 +174,23 @@
 #lmvControls_support_layers_Content .navGCCtrl {
 	color:#333;
 }*/
+
+.navGCContainer:hover .navGCCtrl  {
+	color: #57f173;
+   }
+
+.lmvControlsLayer:hover, .lmvControlsMultiLayer:hover, .fmmGroupBreakerItem:hover {
+	opacity: 0.7;
+   }
+
+.lmvControlsLayer:hover .lmvControlsLayerInfoBtns, .lmvControlsLayerMenu:hover {
+		color: #57f173;
+}
+
+.fmmGroupBreaker:hover .fmmSupportIcons  {
+	color: #57f173;
+}
+   
 .lmvSupportLayersContent {
 	background: #767676;
 }
@@ -408,15 +431,16 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 .lmvControlsWindow {
 	position:absolute;
 	width:32rem;
-	top: 5rem;
-	left:0;
+	top: 1.7rem;
+	left: 7rem;
 	color:#BBB;
-    left: 0;
     border: 0.1rem solid #878787;
     background: #222;
     border-radius: 0.7rem;
     z-index: 200;
 	display:none;
+	height:9rem;
+	width:35rem;
 }
 .lmvControlsWindow ul {
 	padding: 0;
@@ -466,7 +490,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	box-shadow: rgba(20, 20, 20, 0.4) 0.2rem 0.2rem 0.2rem;
 	border: 0.1rem solid #999;
 	border-radius: .7rem;
-	font-size: 1.4rem;
+	/*font-size: 1.4rem;*/
+}
+.transparentWindow #opacityContainerWidthBG {
+	width: 100%;
 }
 .transparentWindow .lmvControlsWindowContent {
 	overflow: hidden;
@@ -509,7 +536,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 }
 #lmvControls_opacity_Value {
 	float:right;
-	font-weight: 600;
+	/*font-weight: 600;*/
 }
 .windowToolbar {
     display: inline-flex;

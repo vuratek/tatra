@@ -67,11 +67,12 @@ export class map {
             coreUtils.loadConfigFile("layers", layers[i]);
         }
 
-        components.load();
+        components.load(true);
         coreUtils.updateFromHash();
         coreUtils.loadLayers();
-        mapUtils.setInfoBar();
         controls.init();
+        components.load(false);
+        mapUtils.setInfoBar();
         coreUtils.setAOI();
         controls.setStartTool();
         events.dispatch(events.EVENT_MAPVIEWER_READY);

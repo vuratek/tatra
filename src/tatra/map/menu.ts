@@ -201,7 +201,7 @@ export class menu {
     private static animationEnd() {
         if (!props.window) {
             utils.addClass(this.id, 'mapMenuHidden');
-            utils.show('mapMenuClosed');
+            //utils.show('mapMenuClosed');
             utils.hide(this.id + 'Header');
             utils.hide(this.id + 'Close');
             (document.getElementById(this.id) as HTMLDivElement).style.right='0px';
@@ -250,7 +250,7 @@ export class menu {
             props.window = true;
             utils.removeClass(this.id, 'menuAnimClose');
             utils.addClass(this.id, 'menuAnimOpen');
-            utils.hide('mapMenuClosed');
+            //utils.hide('mapMenuClosed');
             utils.show(this.id + 'Header');
             utils.show(this.id + 'Close');
             utils.removeClass(this.id, 'mapMenuHidden');

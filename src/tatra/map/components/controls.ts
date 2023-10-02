@@ -13,6 +13,7 @@ import { help } from "./help";
 import { measure } from "./measure";
 import { select } from "./select";
 import { locator } from "./locator";
+import { commandCenter } from "./commandCenter";
 import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
 import { quickSearch } from "../../aux/quickSearch";
@@ -57,6 +58,9 @@ export class controls  {
         ctrl.appendChild(utils.ae("lmvControls_share"));
         let isNavbar = false;
         this.backfillKnownTypes();
+        this.createControlItem('commandCenter', commandCenter);
+        this.activateControlItem('commandCenter');
+
         for (let control in (props.config as IConfigDef).mapControls) {
             switch (control) {
                 case "firmsInfo":

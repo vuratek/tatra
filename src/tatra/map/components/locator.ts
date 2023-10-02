@@ -52,7 +52,7 @@ export class locator extends baseComponent {
         let mh = (document.getElementById('map') as HTMLDivElement).clientHeight - 400;
         let mw = ((document.getElementById('map') as HTMLDivElement).clientWidth - 400) / 2 - 40;
         if (mh < 0) { mh = 0;}
-        else { mh = 25;} // mh=50
+        else { mh = 125;} // mh=50
         if (mw < 0) { mw = 0;}
         else { mw = 60; } // mw=150
         this.position(mw, mh);

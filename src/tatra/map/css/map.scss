@@ -60,7 +60,7 @@ body::-webkit-scrollbar {
 	position: absolute;
 	left: 1rem;
 	top:0.2rem;
-	width: 17rem;
+	width: 22rem;
 }
 #lmvFeatureInfo1 {
 	position:absolute; 
@@ -138,54 +138,14 @@ body::-webkit-scrollbar {
 	width:100%;
 	white-space:nowrap;
 }
-.ol-control button {
-	background: rgba(140,140,140,0.5);
-	color: #e3e3e3;
-	width:2.7rem;
-	font-size:2.3rem;
-	height:2.8rem;
-	margin: 0.1rem;
-    padding: 0;
-    font-weight: 700;
-    border-radius: 0.2rem 0.2rem 0 0;
-    border-width:0;
-}
-.ol-control button:hover {
-	background:#ec6112;
-}
-.ol-control button:focus {
-/*	background-color: rgba(0,60,136,.7);*/
-	background-color: #ec6112;
-	outline:none;
-}
-.ol-zoom, .ol-locator {
-	top: 2.5rem;
-	left: 1.5rem;
-	width:3.5rem;
-    background: none;
-    border: 0.1rem solid #CCC;
-    position:absolute;
-    border-radius:0.4rem;
-    padding:0.2rem;
-}
-.ol-locator {
-	top: 9.5rem;
-}
-.resize .ol-zoom {
-	top: 6.5rem;
-}
-.resize .ol-locator {
-	top: 13.5rem;
-}
-.leftMenuActive .ol-zoom, .leftMenuActive .ol-locator {
-    left: 8.5rem;
-}
+/* ----------------- CSS CUT PLEASE SEE MODIFICATIONS.SCSS FILE ------------------------ */
+
 .ol-zoomClosed {
     top: 2.5rem;
     left: 0.5rem;	
 }
 .ol-zoom:hover, .ol-locator:hover {
-	background-color: rgba(255,255,255,.6);
+	/*background-color: rgba(255,255,255,.6);*/
 }
 .ol-zoom:focus, ol-locator:focus {
 	background:default;
@@ -366,10 +326,8 @@ body::-webkit-scrollbar {
 .bottomBarMenuItemSelected .bottomBarIcon{
 	color: #eee;
 }
-
 .bottomBarMenuItemList {
 	width:9.5rem;
-	
 }
 #bottomBarFirmsInfo {
 	float: left;
@@ -382,8 +340,9 @@ body::-webkit-scrollbar {
 	position:absolute;
 	left: 1rem;
 	text-align:center;
+	position:fixed; top:11rem; left:40rem;
 }
-.mapCircleBtn {
+/*.mapCircleBtn {
     width: 4.8rem;
 	height: 4.8rem;
 	color: #e3e3e3;
@@ -395,11 +354,11 @@ body::-webkit-scrollbar {
 	display: none;
 	cursor:pointer;
 	text-align: center;
-}
+} 
 .mapCircleBtn:hover {
     color: #eee;
     background: #ec6111;
-}
+} */
 .bottomBarBtnLabel {
 	font-size: 2.7rem;
 	padding:0.3rem 0 0.1rem 0;
@@ -588,6 +547,24 @@ body::-webkit-scrollbar {
 	width: 5rem;
 	height:4.2rem;
 }
+
+/* ------------ MAP MULTIFUNCTION TOOL BAR START -----------------*/
+/*#multiFunctionTool {
+	position:absolute; top:10rem; left:20rem;
+	width:80rem;
+	height: 8rem;
+	background-color: rgba(10,10,10,0.7);
+	z-index:1000;
+	border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+} 
+#multiFunctionTool hr {
+	height:0.1rem;
+	color:rgba(250,250,250,0.5);
+	position: relative; top:5rem;
+	width:95%;
+}*/
+/* ------------ MAP MULTIFUNCTION TOOL BAR END -------------------*/
+
 @media screen and (max-width: 1180px) {
 	#mapControlBar {
 		left:15%;
@@ -777,7 +754,7 @@ body::-webkit-scrollbar {
 		margin:0;
 		padding:0 0.1rem;
 	}
-	.mapCircleBtn {
+	/*.mapCircleBtn {
 		position: relative; 
 		bottom:0.2rem;
 		margin: 0; 
@@ -786,7 +763,7 @@ body::-webkit-scrollbar {
 		border-radius: 2rem;
 		font-size: 2.8rem;
 		padding-top: .6rem;
-	}
+	}*/
 	#bb_toggle_btn.bottomBarMenuItem {
 		padding: 0rem;
 	  }

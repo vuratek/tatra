@@ -15,10 +15,11 @@
     overflow: auto;
 }
 .topNavBar ul {
-    margin: -0.2rem 0 0 0;
+    position:fixed;
+   /* margin: -0.2rem 0 0 0;*/
     padding: 0;
     list-style: none;
-    float: right;
+   /* float: right; */
     font-size:1.6rem;
 }
 .isMap .topNavBar{
@@ -43,12 +44,14 @@
     vertical-align: top;
     display: table-cell;
     white-space: nowrap;
-    border-top: 0.5rem solid transparent;
+    /*border-top: 0.5rem solid transparent;*/
+    border:none;
     line-height:1.4rem;
     padding:2.2rem 1rem 0;
     cursor:pointer;
     height:6rem;
 }
+
 .isMap .topNavBar li {
     height: 5.3rem;
     padding: 1.5rem 1rem 0;
@@ -71,10 +74,7 @@
     display:block;
 }
 .topNavBar li:hover {
-    /*border-top: 5px solid #6cb4e2;*/
-    /*border-top: 5px solid #CCC;*/
-    border-top: 0.5rem solid #00ffff;
-    background:rgba(0,0,0,.9);
+    border-top:none;
 }
 .topNavBar li a {
     font-size: 1.5rem;
@@ -102,21 +102,22 @@
 
 .topNavBar ul>li>ul {
     font-weight: 600;
-    margin-left: -1rem;
+    /*margin-left: -1rem;*/
     width: 25rem;
-    top: 5.9rem;
+    /*top: 5.9rem;*/
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     padding: 1rem;
     background: rgba(0,0,0,.95);
     box-shadow: 0 0.2rem 0.2rem 0 rgba(50,50,50,.25);
     display: none;
-    position: absolute;
+    /*position: absolute;*/
     z-index: 100;
     border-radius: 0.3rem;
 }
+
 .isMap .topNavBar ul>li>ul {
-    top:5.3rem;
+    /*top:5.3rem;*/
     max-height: 80vh;
     overflow: auto;
 }
@@ -149,10 +150,10 @@
     opacity:0.7;
 }
 .topNavBar ul > li:last-child > ul {
-    margin-left: -7rem;
+   /* margin-left: -7rem;*/
 }
 .topNavBar ul > li:nth-last-child(2) > ul {
-    margin-left: -7rem;
+    /*margin-left: -7rem;*/
 }
 /*.topNavBar ul > li:nth-last-child(3) > ul {
     margin-left: -12rem;
@@ -392,6 +393,47 @@
     border-bottom: solid .1rem #EEE6;
     color: #cccc;
 }
+
+/*----------------  Modifications to Top Nav Bar START ---------------------*/
+
+.topNavBar ul {
+    margin:0;
+}
+#navBarList li#topbar_quickSearch {
+    position:fixed;
+    top: 16rem;
+	left: 12rem;
+    background:none;
+    border:none;
+}
+#navBarList li #topbar_lbl_quickSearch {
+    display:none;
+}
+#navBarList li#topbar_notifications {
+    position:fixed;
+    top: 15.7rem;
+	left: 29.5rem;
+    height:1rem;
+    /*background:#000;*/
+    display:none;
+}
+#navBarList li#topbar_notifications:hover {
+    display:block;
+}
+/*#topbar_notifications ul {
+    position: fixed;
+    top: 16.5rem;
+    left: 15.4rem;
+}*/
+#navBarList li #topbar_lbl_notifications {
+    display:none;
+}
+#navBarList ul #topbar_lbl_notifications:hover {
+    display:block;
+}
+
+/*----------------  Modifications to Top Nav Bar FINISH ---------------------*/
+
 @media screen and (max-width:1000px) {
 	.notif-item {
 		top: 0.7rem;

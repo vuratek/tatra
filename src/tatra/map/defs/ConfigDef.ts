@@ -87,6 +87,7 @@ export interface IComponents {
 }
 export class ComponentInfoBar {
     mapCursor       : string = "enabled";
+    useCommandCenter : boolean = false;
     feature1    	: string = "enabled";
     feature2    	: string = "enabled";
 }

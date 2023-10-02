@@ -94,7 +94,7 @@ export class opacity extends baseComponent {
 			<div id="lmvDragLbl_${this.id}" class="transparentWindowLabel">
 				<span id="lmvControls_${this.id}_Layer" class="opacityTitleLbl"></span>
 			</div>
-			<div style="width:100%;">
+			<div id="opacityContainerWidthBG">
 				<div class="opacityLabel">
 					Opacity
 					<span id="lmvControls_${this.id}_Value"></span>

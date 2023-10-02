@@ -19,11 +19,63 @@ body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
 }
+header, .isMap header {
+    border-bottom: .1rem solid #111;
+    border-radius: 10rem 2rem 20rem 10rem;
+    box-shadow: .5rem .2rem .5rem #111;
+    border-right: 2rem solid #500102;
+    width: 58rem;
+    height: 6.5rem;
+    padding-top: .3rem;
+    /*margin: 1rem 1rem 0rem 2rem;*/
+  }
+
+.isMap header {
+    position: fixed;
+    z-index: 1000;
+    left:7rem; top:1.5rem;
+}
+.isMap .headerLabelShort {
+    text-transform: uppercase;
+    font-size: 3.2rem;
+    font-weight: 600;
+    position:absolute; top:1.5rem; left:8rem;
+    
+}
+.isMap .headerLabel {
+    margin-top:0rem;
+}
+
+.isMap .headerTxtLabel {
+    margin: -3.7rem 0 0 2rem; 
+    line-height: 1.6rem;
+    width:100%;
+}
+.isMap #headerLogo, #mapMaxLabelLogo {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+.isMap .topMenu-logo img {
+    margin: 0.2rem 0.5rem 0 -4.3rem;
+}
+
+.header-wrap {
+    width: 100%;
+    height: 100%;
+    padding: 0 0 0 6rem;
+  }
+.isMap .leftNavBarMenuWrap {
+    top: 6.5rem;
+  }
+
 .font {
     font-family: 'Titillium Web', sans-serif;
 }
 .isMap body {
     background: #222;
+}
+#map {
+    top:0
 }
 *,
 *:before,
@@ -50,13 +102,12 @@ a.ext::after{
 h4 {
     font-size: 1.8rem;
 }
-
 main {
     flex: 1;
     display: block;
 }
 body header, body .leftNavBarTop {
-    height: 6.5rem;    
+    height: 5rem;    
 }
 body .leftNavBarHomeBtn {
     height:6.4rem;
@@ -64,7 +115,6 @@ body .leftNavBarHomeBtn {
 body .leftNavBarMenuWrap {
     top: 6.4rem;
 }
-
 .isMap main {
     position:absolute;
     overflow: hidden;
@@ -84,28 +134,155 @@ body .leftNavBarMenuWrap {
 .resize #lmvMenus, .resize #lmvTools {
     top: 0;
 }
-#lmvInfoBar {
-	position: fixed;
-    top: 5.5rem;
-	left: 0;
-	right:0;
-	margin:auto;
-	max-width: 77rem;
-	width: 85%;
-    padding-left: 2rem;
-    padding-top: 0.4rem;
-    height: 2.4rem;
-    font-size: 1.2rem;
-	border-radius: 0 0 0.5rem 0.5rem;
-	background: rgba(50, 50, 50, 0.8);
-	border-left: 0.1rem solid #EEE3;
-    border-right: 0.1rem solid #EEE3;
-    border-bottom: 0.1rem solid #EEE3;
-    color: #DDD;
+
+#lmvInfoBar .mouseCursorPosition {
+    font: normal 1.98rem Titillium Web, sans-serif;
+    /*background: linear-gradient(#30aaf2, #0e3b55); */
+    background: linear-gradient(#555, #000);
+    /*border: .12rem solid #e8e6e4; */
+    border: .12rem solid #222;
+    border-radius: 0.4rem;
+    color: #4fdc69;
+    top: .2rem;
+	left: .5rem;
+	width:30rem;
+    padding: 0 1rem 0 1.2rem;
 }
+
 .resize #lmvInfoBar {
     top: 0;
 }
+
+#lmv_commandCenter_CloseBtn.lmvControlsWindowCloseBtn {
+    font-size: 1.9rem;
+    position: absolute;
+    top: .35rem;
+    right: .5rem;
+    color: #4fdc69;
+    cursor: pointer;
+    background:transparent;
+    background: linear-gradient(#555, #000);
+    padding: .3rem .7rem;
+    border-radius: 5rem;
+  }
+
+#lmvControls_commandCenter.lmvControlsWindow {
+    background: transparent;
+    border:none;
+    top:20rem;
+}
+
+#CommandCenterContainer #tatraLocation, #CommandCenterContainer #topMenu-icon_quickSearch, #CommandCenterContainer #topMenu-icon_notifications, #CommandCenterContainer #topMenu-icon_feedback, #CommandCenterContainer #mapMenuCloseHolder, #CommandCenterContainer .mapCircleBtn  {
+    color: #eae5e4;
+    background: linear-gradient(#30aaf2, #0e3b55);
+    background: linear-gradient(#555, #000);
+    border: .15em solid #e8e6e4;
+    border: .15em solid #222;
+    border-radius: 2rem;
+    font-size: 1.8rem;
+    position: absolute; 
+    font-weight: 700;
+    width:4.2rem;
+    height:4rem;
+  }
+
+  #CommandCenterContainer #mapMenuClosed.mapMenuBtns {
+    position: absolute;
+    top: 5.2rem;
+    left:29rem;
+    color: #eae5e4;
+    /*background: linear-gradient(#30aaf2, #0e3b55); */
+    background: linear-gradient(#555, #000);
+    border: .15em solid #e8e6e4;
+    border: .15em solid #222;
+    border-radius: 2rem;
+    padding: .7rem .9rem 0rem 0.9rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    width:4.2rem;
+    height:4rem;
+  }
+
+  #CommandCenterContainer #tatraLocation:hover, #CommandCenterContainer #mapMenuClosed.mapMenuBtns:hover, #CommandCenterContainer #topMenu-icon_quickSearch:hover, #CommandCenterContainer #topMenu-icon_notifications:hover, #CommandCenterContainer #topMenu-icon_feedback:hover {
+    color:#4fdc69;
+  }
+
+  #CommandCenterContainer #tatraLocation {
+    padding: 0 0 0 0;
+    top:0rem;
+    left:7rem;
+  }
+
+  #CommandCenterContainer #topMenu-icon_quickSearch.topMenu-icon {
+    background: linear-gradient(#555, #000);
+    top: 4.3rem;
+    left: 13rem;
+    padding: 0.7rem 0rem 0rem 1rem;
+  }
+
+  #CommandCenterContainer #topMenu-icon_notifications {
+    top: 4.3rem;
+    left: 18rem;
+    padding: 0.6rem 0 0 0.8rem;
+  } 
+
+  #CommandCenterContainer #topbar_notifications  ul {
+    position:absolute; top:9rem; left:1rem;
+    z-index: 100;
+  }
+
+  #CommandCenterContainer #topbar_notifications ul li {
+   /* display:block;*/
+    font: normal 1.95rem Titillium Web, sans-serif;
+    background: rgba(0,0,0,0.8);
+    border-radius: .4rem;
+    /*width: 25rem;*/
+    padding: 0.5rem 1rem;
+    margin-bottom:0.5rem;
+    /*display: none;*/
+    box-shadow: 0 .2rem .2rem #32323240;
+  }
+
+  #CommandCenterContainer .topMenuNotificationsCount {
+    color: #000;
+    background: #ffd800;
+    border-radius: 2rem;
+    float: right;
+    padding: 0 .8rem;
+    font-size: .8em;
+    font-weight: 600;
+    /*display: none;*/
+  }
+
+  #CommandCenterContainer #topMenu-icon_feedback {
+    top: 4.3rem;
+    left: 23rem;
+    padding: 0.6rem;
+    font-size: 2.1rem;
+  }
+  
+  #tatraLocation:hover, #topMenu-icon_quickSearch:hover, #topMenu-icon_notifications:hover, #topMenu-icon_feedback:hover, .mapCircleBtn:hover  {
+    color:#4fdc69;
+    background: linear-gradient(#555, #000);
+} 
+
+.mapMenuBtns:hover {
+    color:#4fdc69;
+    background: linear-gradient(#555, #000);
+} 
+
+#CommandCenterContainer .mapCircleBtn {
+    top:4.3rem;
+    left:33.2rem;
+    font-size:2.1rem;
+    padding:0.6rem 0rem 0rem 0.8rem;
+}
+
+#CommandCenterContainer .mapCircleBtn:hover {
+    color:#4fdc69;
+    background: linear-gradient(#555, #000);
+} 
+
 #lmvBETA {
     background: #fff;
     padding: .1rem .4rem 0 .4em;
@@ -116,6 +293,82 @@ body .leftNavBarMenuWrap {
     border-radius: 0.3em;
     color: #b939d4;
     display:none;
+}
+
+/*
+.mapCircleBtn {
+    font-size:2rem;
+    padding:.5rem 0 .3rem 0;
+}
+#bottomBarLeftInfo {
+	position:absolute;
+	left: 1rem;
+	text-align:center;
+	position:fixed; top:11rem; left:40rem;
+}*/
+
+#CommandCenterContainer .ol-control {
+	position:absolute; left:1rem; top:4.2rem;
+    border: .15rem solid #222;
+}
+
+.ol-locator {
+    position:absolute; top:4.2rem; left:4rem;  
+}
+
+.ol-control button {
+	/*background: rgba(140,140,140,0.5);
+	color: #e3e3e3; */
+	color: #eae5e4;
+  	background: linear-gradient(#30aaf2, #0e3b55);
+	background: linear-gradient(#555, #000);
+	width: 3rem;
+	height: 3.5rem;
+	margin: 0;
+	padding: 0.2rem 0 0.5rem 0;
+	font-size: 2.2rem;
+	font-weight: 700;
+}
+
+.ol-control button:hover {
+	/*background:#ec6112;*/
+	color:#4fdc69;
+}
+.ol-control button:focus {
+/*	background-color: rgba(0,60,136,.7);*/
+/*	background-color: #ec6112;*/
+    color:#4fdc69;
+	outline:none;
+}
+
+#CommandCenterContainer .ol-zoom {
+    width:3.5rem;
+    border-radius:0.4rem;
+	border: .15rem solid #222;
+	width: 6.4rem;
+	height: 3.8rem;
+    background-color: #222;
+}
+
+.ol-zoom .ol-zoom-in {
+	border-radius: 2px 0 2px 0;
+}
+
+.ol-zoom .ol-zoom-out {
+	border-radius: 0 2px 2px 0;
+	position: relative;
+  	top: -3.5rem;
+  	left: 3.1rem;
+}
+
+.resize .ol-zoom {
+	top: 6.5rem;
+}
+.resize .ol-locator {
+	top: 13.5rem;
+}
+.leftMenuActive .ol-zoom, .leftMenuActive .ol-locator {
+    /*left: 8.5rem;*/
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -129,6 +382,18 @@ body .leftNavBarMenuWrap {
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: #555A;
 }
+
+#CommandCenterContainer li#topbar_feedback::marker {
+    unicode-bidi: isolate;
+    font-variant-numeric: tabular-nums;
+    text-transform: none;
+    text-indent: 0px !important;
+    text-align: start !important;
+    text-align-last: start !important;
+    color:transparent;
+    display:none;
+}
+
 @media screen and (max-height: 750px), screen and (max-width: 1520px) {
     html {
         font-size:9.5px;

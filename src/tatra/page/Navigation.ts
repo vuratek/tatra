@@ -158,6 +158,7 @@ export class Navigation {
         if (navProps.settings.app.useMap === true) {
             str += `
                 <div id="map" class="map"></div>
+                <div id="multiFunctionTool" class="lmvInfoBar"><span class="ol-locator-btn"></span></div>
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="timeline" class="timeline"></div>

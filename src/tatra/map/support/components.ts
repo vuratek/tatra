@@ -8,10 +8,13 @@ import { Navigation } from "../../page/Navigation";
 export class components {
 	private static container 	: HTMLDivElement | null = null;
 	
-	public static load () {
+	public static load (primary : boolean) {
 		components.container = document.getElementById('lmvWrapper') as HTMLDivElement;
 		for (let component in (props.config as IConfigDef).components) {
-			eval('this._' + component + '()');
+			let info = props.config.components[component];
+			if ((primary && info.useCommandCenter !== true )|| (!primary && info.useCommandCenter === true)) {
+				eval('this._' + component + '()');
+			}
 		}
 	}
 	
@@ -27,10 +30,14 @@ export class components {
 	}
 	
 	public static _infoBar () {
-		components.createElement("lmvInfoBar");
-		let el = document.getElementById("lmvInfoBar");
-		if (!el) { return; }
 		let info = props.config.components["infoBar"];
+		if (info.useCommandCenter !== true) {
+			components.createElement("lmvInfoBar");
+		}
+		let el = document.getElementById("lmvInfoBar");
+		console.log(el);
+		if (!el) { return; }
+		console.log(info);
 		if (info["mapCursor"] == "enabled") { el.appendChild(components.createAnyElement('div', 'lmvMousePosition')); }
 		if (info["feature1"] == "enabled") { 
 			el.appendChild(components.createAnyElement('div', 'lmvFeatureInfo1'));
@@ -69,6 +76,15 @@ export class components {
 	
 	public static _tools () {
 		components.createElement("lmvTools");		
+	}
+	public static _commandCenter () {
+		components.createElement("lmvCommandCenter");
+		let el = document.getElementById("bottomLogo");
+		if (!el) { return; }
+		el.innerHTML = `
+			<div id="lmvInfoBar" class="lmvInfoBar"></div>	
+		`;
+		console.log("COMMAND");
 	}
 	
 	public static _maxLabel () {
