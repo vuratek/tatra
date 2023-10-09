@@ -39,6 +39,23 @@
 			"wrapX"				: true
 		}
 	},{
+		"id"		: "firefly",
+		"type"		: "xyz",
+		"category"	: "basemap",
+		"tag"		: "basemap",
+		"title"		: "Firefly",
+		"altTitle1"	: "Altered Blue Marble (no clouds)",
+		"iconMatrix": [0,0], 
+		"styleBackground" : "#000",
+		"props" 	: {
+				"maxZoom"			: 16,
+				"projection"		: "EPSG:3857",
+				"tileSize"			: 256,
+				"url"				: "https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}",
+				"tileUrlHandler"	: "basic",
+				"wrapX"				: true
+		    	}
+	},{
 		"id"		: "topo",
 		"type"		: "esri_vector_tile",
 		"category"	: "basemap",

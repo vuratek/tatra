@@ -102,7 +102,7 @@ export class MultiDaySelectorSimple extends Module {
 			rangePicker.timelineUpdate();		
 		} else {
 			timeline.close();
-//			document.addEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
+			document.addEventListener(events.EVENT_CONTROL_DISABLED, this.timelineBtnHandler);
 			controls.disableBtn("timeline");
 		}
 	}

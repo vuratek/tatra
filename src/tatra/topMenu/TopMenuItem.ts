@@ -25,12 +25,17 @@ export interface ITopMenuItemObj {
 export abstract class TopMenuItem {
     public static prefix = "topbar";
     private static menuOpened : boolean = false;
+    private static server = 'firms';
 
     public static render (obj : ITopMenuItemObj, pEl : HTMLUListElement) {
     
         let item = document.createElement('li');
         item.setAttribute("id", `${this.prefix}_${obj.id}`);
         pEl.appendChild(item);
+        if (window.location.host.indexOf('firms2') >=0 ) {
+            this.server = 'firms2';
+        }
+
     
         let icon = this.getIcon(obj.id);
         let isJScall = (obj.url && obj.url.indexOf('javascript') == 0) ? true : false;
@@ -124,6 +129,7 @@ export abstract class TopMenuItem {
     private static setNotifications (obj : ITopMenuItemObj) {
         for (let i = 0; i<obj.subMenu.length; i++) {
             let item = obj.subMenu[i];
+            item.url = item.url.replace('#HOST#', this.server);
             // unless ignoreLoad is set, handle as identification
             if (!(item.ignoreLoad && item.ignoreLoad === true)) {
                 utils.hide(`${this.prefix}_${item.id}`);
@@ -184,6 +190,7 @@ export abstract class TopMenuItem {
             let ext = (item.ext && item.ext == true) ? 'class="ext" target="_blank" rel="noopener"' : '';
             let article = (item.article === true) ? 'class="article"' : '';
             let url = (item.url && (obj.id != "notifications" || (item.ignoreLoad && item.ignoreLoad === true))) ? item.url : 'javascript:void(0);';
+            url = url.replace('#HOST#', this.server);
             let icon = '';
             if (item.icon) {
                 let color = (item.color) ? `style="color:${item.color};"` : '';

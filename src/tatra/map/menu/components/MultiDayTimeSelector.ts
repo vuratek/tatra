@@ -97,7 +97,6 @@ export class MultiDayTimeSelector extends Module {
         controls.enableBtn("timeline");
 		controls.setItem("timeline", true);				
         
-        
         let format = (props.time.rangeMins > 0) ? 'Y-m-d' : 'Y-m-d H:i';
         if (flatpickr.formatDate(props.time.date, format) == flatpickr.formatDate(utils.getGMTTime(new Date()), format)) {
             if (props.time.rangeMins > 0) {
@@ -115,7 +114,6 @@ export class MultiDayTimeSelector extends Module {
             this.onDailySubDaily('daily');
         }
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
-        console.log("DONE");
     }
     public onDailySubDaily(option:string) {
 //        console.log(option, this.lastRangeDays);
@@ -123,6 +121,7 @@ export class MultiDayTimeSelector extends Module {
         if (option == 'daily') {
             this.setLastMinValues(this.lastRangeDays);
         } else {
+            props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
             this.setLastDayValues(this.lastRangeMins);
         }
         this.setDates();
@@ -209,6 +208,7 @@ export class MultiDayTimeSelector extends Module {
                 }
                 utils.setSelectValue('mdsSubDateRange', 'm' + props.time.rangeMins);
                 this.setDates();
+                rangePicker.setRangeSelect();
             }
         }
     }
@@ -344,6 +344,7 @@ export class MultiDayTimeSelector extends Module {
 
     }
     private setClock() {
+        this.setDates();
     }
 	private setDates () {
         let range = (document.getElementById('mdsDateRange')) ? utils.getSelectValue(`mdsDateRange`) : utils.getSelectValue(`mdsSubDateRange`);
@@ -363,7 +364,7 @@ export class MultiDayTimeSelector extends Module {
 
         props.time.quickTime = 0;
         timelineController.time.range = props.time.range;
-		timelineController.time.rangeMins = 0;
+		timelineController.time.rangeMins = props.time.rangeMins;
 		timelineController.time.date = props.time.date;
 		timelineController.refreshTimelineDate();
         
@@ -438,7 +439,6 @@ export class MultiDayTimeSelector extends Module {
 		if (!_refresh) {
             return;
         }
-//        this.refreshLayers();
         this.setQuickLinks();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }

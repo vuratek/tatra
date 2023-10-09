@@ -95,13 +95,15 @@ export class opacity extends baseComponent {
 				<span id="lmvControls_${this.id}_Layer" class="opacityTitleLbl"></span>
 			</div>
 			<div style="width:100%;">
-				<div class="opacityLabel">
-					Opacity
-					<span id="lmvControls_${this.id}_Value"></span>
-				</div>
-				<div id="lmvControls_${this.id}_Slider" class="opacitySlider" >
-				</div>
-				<div id="lmvControls_${this.id}_SliderMenu">
+				<div id="opacityContainerWidthBG">
+					<div class="opacityLabel">
+						Opacity
+						<span id="lmvControls_${this.id}_Value"></span>
+					</div>
+					<div id="lmvControls_${this.id}_Slider" class="opacitySlider" >
+					</div>
+					<div id="lmvControls_${this.id}_SliderMenu">
+					</div>
 				</div>
 			</div>	
 		`;

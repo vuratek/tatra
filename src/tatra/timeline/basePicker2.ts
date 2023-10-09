@@ -56,12 +56,10 @@ export class basePicker {
 
     public static setRangeSelect() {
         let id = `${this.id}_DR`
-        console.log("setRangeSelect", timelineController.type);
         let select = document.getElementById(id);
         if (! select) { return; }
         if (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {
             select.innerHTML = this.getSubdailyRangeOptions(timelineController.time.rangeMins);
-            console.log(">>>", id, 'm' + timelineController.time.rangeMins.toString());
             utils.setSelectValue(id, 'm' + timelineController.time.rangeMins.toString());
         } else {
             select.innerHTML = this.getRangeOptions();
@@ -76,12 +74,17 @@ export class basePicker {
         let handler = () => this.setDates();
         let format = (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) ? 'M d Y H:i' : 'M d Y';
         let hasTime = (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) ? true : false;
+        let maxDate = utils.getGMTTime(new Date());
+        if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
+            let mins = 10 - maxDate.getMinutes() % 10;
+            maxDate = utils.addMinutes(maxDate, mins);
+        }
         this.calendar = flatpickr(`#${this.id}_date`, {
             enableTime: hasTime,
             dateFormat : format,
             defaultDate : d,
             minDate : new Date(2000,11-1, 11),
-            maxDate : utils.getGMTTime(new Date()),
+            maxDate : maxDate,
             onChange : handler
         }) as Instance;
     }
@@ -143,9 +146,10 @@ export class basePicker {
                 let type = (this.isSingle) ? 'single' : 'range';
             if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED) {
                 this.calendar.setDate(timelineController.obj['single'].start);
-                console.log('setting', timelineController.obj['single'].start);
-            } else {
-                console.log('setting2', utils.addDay(timelineController.obj[type].end,-1));
+            } else if (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {
+                this.calendar.setDate(timelineController.obj[type].end);
+            }
+            else {
                 this.calendar.setDate(utils.addDay(timelineController.obj[type].end,-1));
             }
             this.setCtrlBtns();
@@ -162,6 +166,10 @@ export class basePicker {
         if (! range) { return; }
         let max2 = utils.addDay(range.end, timelineController.time.range + 1);
         let min2 = utils.addDay(range.start, - timelineController.time.range - 1);
+        if (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {
+            max2 = utils.addMinutes(range.end, timelineController.time.rangeMins);
+            min2 = utils.addMinutes(range.start, -timelineController.time.rangeMins);
+        }
         if (max2 > timelineController.maxDate) { this.setBtn(TimelineAdjustType.FRONT_RANGE, true); } 
         else { this.setBtn(TimelineAdjustType.FRONT_RANGE, false); }
         if (min2 < timelineController.minDate) { this.setBtn(TimelineAdjustType.BACK_RANGE, true); } 

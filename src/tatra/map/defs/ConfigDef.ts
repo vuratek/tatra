@@ -15,8 +15,12 @@ export interface IConfigDef {
 export interface IModuleHandlers {
     [key:string]    : Module;
 }
+export interface IMenuOptionModule {
+    id              : string;
+    opened?         : boolean;
+}
 export interface IMenuOption {
-    modules         : Array <string> | null;
+    modules         : Array <IMenuOptionModule> | null;
     isDefault?      : boolean;
     id              : string;
     label           : string;
@@ -41,6 +45,7 @@ export interface IMenuModuleLayers {
     id              : string;
     visible         : boolean;
     _defaultVisible : boolean | null;
+    isFill?         : boolean | null;
     settings        : IMenuModuleLayerSettings | null;
 }
 export interface IGroupBreaker {
@@ -48,7 +53,7 @@ export interface IGroupBreaker {
     layers          : Array<string>;
     label           : string;
     opened          : boolean;
-    isBeta?         : boolean;
+    highlight?      : string;
 }
 export interface IMenuModule {
     id              : string;

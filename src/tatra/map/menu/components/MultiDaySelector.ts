@@ -41,7 +41,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		utils.setClick(`${this.props.id}_mds_btn_${BasicMenuDates.TODAY}`, () => this.setTab(BasicMenuDates.TODAY));
 		utils.setClick(`${this.props.id}_mds_btn_${BasicMenuDates.HRS_24}`, () => this.setTab(BasicMenuDates.HRS_24));
 		utils.setClick(`${this.props.id}_mds_btn_${BasicMenuDates.DAY_7}`, () => this.setTab(BasicMenuDates.DAY_7));
-		utils.setClick(`${this.props.id}_mds_btn_${BasicMenuDates.CUSTOM}`, () => this.setTab(BasicMenuDates.CUSTOM));
+		utils.setClick(`${this.props.id}_mds_btn_${BasicMenuDates.CUSTOM}`, () => this.openCustomTab());
 //		utils.setClick(`${this.props.id}_mds_btn_bookmark`, () => this.bookmark());
 
 		utils.setClick('mdsCalendar', () => this.openCalendar());
@@ -54,6 +54,10 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		timelineController.refreshTimelineDate();
 		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
 
+	}
+	private openCustomTab () {
+		this.setTab(BasicMenuDates.CUSTOM);
+		this.openCalendar();
 	}
 	public renderMenu () : string {
 		let cal = MultiDaySelectorSimple.renderCalendarConent(false);
@@ -177,6 +181,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	}
 	public timelineBtnClick (evt : CustomEvent) {
 		if (evt.detail.id == "timeline") {
+			console.log("HERE", this.currentSelection);
 			if (this.currentSelection != BasicMenuDates.CUSTOM) {
 				this.setTab(BasicMenuDates.CUSTOM);
 			}

@@ -54,7 +54,7 @@ export class hash {
 
     public static init() {
         window.addEventListener(this.EVENT_HASH_CHANGE, (evt)=> this.updateHash(evt));
-        setInterval(this.hashUpdate, 1500);
+        setInterval(this.hashUpdate, 750);
     }
 
     public static tab (id : string | null, update : boolean = true) {

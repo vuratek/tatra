@@ -7,11 +7,17 @@ import { layerCategories, Layer } from '../../obj/Layer';
 import { IHashLayer } from '../../hash';
 import { events } from '../../events';
 
+
+export interface ILastRefreshUrl {
+    [id : string] : string;
+}
 export class Module {
     public props : IMenuModule;
     public _isActive : boolean = false;
     public _hasGroup : boolean = true;
     public systemDateUpdateHandler : (evt: Event) => void;
+    public lastRefreshUrl : ILastRefreshUrl = {};
+    public overrideOpened : boolean | null = null;
 
     public constructor(props : IMenuModule) {
         this.props = props;
@@ -35,7 +41,8 @@ export class Module {
             el.id = `mmm_${this.props.id}`;
             div.appendChild(el);
         } else {
-            GroupContent.create( {id : this.props.id, label : this.props.label, parent: div, opened : this.props.opened} );
+            let opened = (this.overrideOpened != null) ? this.overrideOpened : this.props.opened;
+            GroupContent.create( {id : this.props.id, label : this.props.label, parent: div, opened : opened} );
         }
         //this.activate();
     }
@@ -48,6 +55,7 @@ export class Module {
     public activate() {
         this._isActive = true;
         document.addEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        this.lastRefreshUrl = {};
     }
 
     public hasGroup() : boolean {
@@ -137,7 +145,7 @@ export class Module {
     /**
      * getHashLayers() - returns list of layers that should be included in url hash
      */
-    public getHashLayers() : Array<string> {
+    /*public getHashLayers() : Array<string> {
         let res:Array<string> = [];
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;
         for (let i=0; i< arr.length; i++) {
@@ -149,7 +157,7 @@ export class Module {
             }
         }
         return res;
-    }
+    }*/
 
     public presetDefaultLayerVisibility (isActiveModule:boolean, hashLayers:Array<IHashLayer>) {
         if (!this.props.layer_refs) { return; }
@@ -199,6 +207,7 @@ export class Module {
     }
 
     public getLayerHashValue(lo : Layer) : string {
+        //console.log(lo.id);
         return lo.id;
     }
 

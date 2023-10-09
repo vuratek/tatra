@@ -29,7 +29,7 @@ export class hashHandler {
                 let mod = cfg.menuOptions[m];
                 if (mod.modules) {
                     for (let i=0; i<mod.modules.length; i++) {
-                        let key = mod.modules[i];
+                        let key = mod.modules[i].id;
                         if (props.menuModules[key]) {
                             let arr2 = props.menuModules[key].getHashLayerInformation();
                             if (arr2) {
@@ -63,6 +63,7 @@ export class hashHandler {
     }
 
     public static processDateTime(dates:IHashDates) {
+        let maxdate = flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d');
         if (dates) {
             let hasMins = false;
             props.time.rangeMins = 0;
@@ -89,11 +90,13 @@ export class hashHandler {
             if (! hasMins) {
                 dates = hash.convertDates(dates);
                 let d = flatpickr.parseDate(dates.single as string, 'Y-m-d');
-                if (d) {
-                    props.time.imageryDate = d;
+                if (dates.single <= maxdate) {
+                    if (d) {
+                        props.time.imageryDate = d;
+                    }
                 }
                 let e = flatpickr.parseDate(dates.end as string, 'Y-m-d');
-                if (e) { 
+                if (e && dates.end <= maxdate) { 
                     props.time.date = e; 
                     let s = flatpickr.parseDate(dates.start as string, 'Y-m-d');
                     if (s) {

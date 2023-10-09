@@ -205,13 +205,18 @@ export class mainMenu {
                 if (mod.modules) {
                     // render all menuOptions
                     for (let i=0; i<mod.modules.length; i++) {
-                        let key = mod.modules[i];
+                        let key = mod.modules[i].id;
                         if (props.menuModules[key]) {
+                            if (mod.modules[i].opened != undefined) {
+                                props.menuModules[key].overrideOpened = mod.modules[i].opened as boolean;
+                            } else {
+                                props.menuModules[key].overrideOpened = null;
+                            }
                             props.menuModules[key].activate();
                         }
                     }
                     for (let i=0; i<mod.modules.length; i++) {
-                        let key = mod.modules[i];
+                        let key = mod.modules[i].id;
                         let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
                         if (props.menuModules[key]) {
                             try {

@@ -106,7 +106,7 @@ export class Timeline {
         this.timeKeeper["range"] = { start: utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date()), timelineController.time.range)), end : utils.maximizeDate(utils.addDay(utils.sanitizeDate(new Date())))};
         //this.timeKeeper["range"] = { start: utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date()), false), - timelineController.time.range), end : utils.addDay(utils.getGMTTime(new Date()))};
         
-        if (this.timeKeeper) {
+        if (this.timeKeeper && Timeline.items) {
             Timeline.items.update({id: 'single', start: this.timeKeeper['single'].start, end: this.timeKeeper['single'].end, content : "<div></div>"});
             Timeline.items.update({id: 'range', start: this.timeKeeper['range'].start, end: this.timeKeeper['range'].end});
         }
@@ -127,7 +127,9 @@ export class Timeline {
         if (this.timeKeeper) {
             this.timeKeeper["single"].start == mindate;
         }
-        Timeline.items.update({id: 'single', start:  mindate, end: timelineController.maxDate});
+        if (Timeline.items) {
+            Timeline.items.update({id: 'single', start:  mindate, end: timelineController.maxDate});
+        }
         let zoomDate = new Date(mindate.getTime());
         zoomDate.setMinutes(-120);
 
@@ -704,12 +706,10 @@ export class Timeline {
                 obj["range"] = { start: Timeline.items.get("range").start, end : Timeline.items.get("range").end};
             }
         }
-        console.log(obj);
         return obj;
     }
 
     public static adjustTimeline (evt : CustomEvent) {
-        console.log("ADJUSTING", evt);
         let type = evt.detail.type;
         let dates = timelineController.currentRange;
         if (! dates) { return null;}
@@ -784,7 +784,8 @@ export class Timeline {
             } else if (timelineController.type == TimelineType.RANGE_TIED || timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED )  {
                 this.timeKeeper["range"] = {start: utils.addDay(time, - range), end: utils.addDay(time)};
             } else if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
-                this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: utils.addDay(time)};                
+                this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: endDay};                
+//                this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: utils.addDay(time)};                
             }
             if (timelineController.type != TimelineType.SINGLE) {
                 this.timeKeeper["single"] = {start: time, end: utils.addDay(time)};

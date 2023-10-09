@@ -115,7 +115,7 @@ export class menu {
                     let mod = cfg.menuOptions[m];
                     if (mod.modules) {
                         for (let i=0; i<mod.modules.length; i++) {
-                            let key = mod.modules[i];
+                            let key = mod.modules[i].id;
                             if (props.menuModules[key]) {
                                 props.menuModules[key].presetDefaultLayerVisibility(true, lyrs);
                             }
