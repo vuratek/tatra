@@ -3,7 +3,6 @@ import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
-import { Module } from "./components/Module";
 
 export class mainMenu {
 
@@ -23,12 +22,13 @@ export class mainMenu {
                 <span><i class="fas fa-bars"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
+        `;
+//                <span><i class="fas fa-graduation-cap"></i></span>
+/*
             <div class="mapMenuIcons">
                 <span><i class="fas fa-info-circle"></i></span>
             </div>
-        `;
-//                <span><i class="fas fa-graduation-cap"></i></span>
-        
+*/
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
         this.updateMapMenuOptionBar();
@@ -105,6 +105,12 @@ export class mainMenu {
     public static tab(tab : string) {
         let menu =  this.getMenuOptionById(tab);
         if (! menu) { return;}
+        if (menu.urlRedirect) {
+            props.mapMenuOpened = false;
+            this.updateMapMenuOptionBar();
+            window.location.href = menu.urlRedirect;
+            return;
+        }
         if (this.currentTab == tab) { 
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
@@ -204,18 +210,24 @@ export class mainMenu {
                 if (mod.modules) {
                     // render all menuOptions
                     for (let i=0; i<mod.modules.length; i++) {
-                        let key = mod.modules[i];
+                        let key = mod.modules[i].id;
                         if (props.menuModules[key]) {
+                            if (mod.modules[i].opened != undefined) {
+                                props.menuModules[key].overrideOpened = mod.modules[i].opened as boolean;
+                            } else {
+                                props.menuModules[key].overrideOpened = null;
+                            }
                             props.menuModules[key].activate();
                         }
                     }
                     for (let i=0; i<mod.modules.length; i++) {
-                        let key = mod.modules[i];
+                        let key = mod.modules[i].id;
                         let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
                         if (props.menuModules[key]) {
                             try {
                                 props.menuModules[key].render(_div);
                             } catch (e) {
+                                console.log(e);
                                 console.log(`Module ${key} not defined.`);
                             }
                         }
@@ -233,33 +245,5 @@ export class mainMenu {
     public static getCurrentTab() : string {
         return this.currentTab;
     }
-
-    /*public static tab(tab: string) {
-        let cfg = (props.config as IConfigDef);
-        if (! cfg.menuOptions || this.currentTab == tab) {
-            return;
-        }
-        
-        let _old = null;
-        let _new = null;
-        for (let i=0; i<cfg.menuOptions.length; i++) {
-            let obj = cfg.menuOptions[i];
-            if (obj.id == this.currentTab) {
-                _old = obj;
-            }
-            if (obj.id == tab) {
-                _new = obj;
-            }
-        }
-        if (_old && _old ._handler) {
-            _old._handler.close();
-            utils.removeClass(`${this.id}Header_${this.currentTab}`, "mapOptionTabSelected");
-        }
-        this.currentTab = tab;
-        if (_new && _new._handler) {
-            _new._handler.open();
-            utils.addClass(`${this.id}Header_${this.currentTab}`, "mapOptionTabSelected");
-        }
-    }*/
     
 }

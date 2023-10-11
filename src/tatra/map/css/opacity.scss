@@ -4,7 +4,12 @@
 }
 .opacityTitleLbl {
 	font-weight: 600;
-}
+	font-weight: normal;
+	color: #ce5511;
+	text-transform: uppercase;
+	font-family: Titillium Web, Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size: 1.8rem;
+} 
 .opacitySlider {
 	margin: 1rem 1rem;
 	position:relative;
@@ -63,4 +68,12 @@
 }
 .opacityValueRangeLblLeft {
 	float: left;
+}
+#opacityContainerWidthBG {
+	font-family: Titillium Web, Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-size:1.8rem;
+	background: #3a3a3a;
+	height:7rem;
+	margin:0 0 0.5rem 0;
+	border-bottom: solid 0.05rem #ddd;
 }

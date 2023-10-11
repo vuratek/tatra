@@ -135,9 +135,9 @@ export class colors extends baseComponent {
 
 		events.dispatchLayer(events.EVENT_COLOR_UPDATE, this.currentLayer.id);
 		    			
-		if (window.innerWidth <= 600 || window.innerHeight <= 600) {
+//		if (window.innerWidth <= 600 || window.innerHeight <= 600 || ! custom) {
 			colors.close();
-		}
+//		}
 	}
 	
 	public static rgbToHex (r : number, g : number, b : number) : string {

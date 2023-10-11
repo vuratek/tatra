@@ -11,9 +11,12 @@ import { Basemaps } from './menu/components/Basemaps';
 import { Basic } from './menu/components/Basic';
 import { FilterLayers } from './menu/components/FilterLayers';
 import { MultiDaySelector } from './menu/components/MultiDaySelector';
+import { MultiDaySelectorSimple } from './menu/components/MultiDaySelectorSimple';
 import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
 import { Module } from './menu/components/Module';
 import { hashHandler } from './menu/hashHandler';
+import { controls } from './components/controls';
+import { lg_info } from './components/lg_info';
 export class menu {
 
     private static id : string = '';
@@ -28,6 +31,7 @@ export class menu {
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
         document.addEventListener(events.EVENT_MENU_RESIZE, ()=> this.resize());
         closeable.create(this.id, id, 'map');
+        controls.createControlItem('lg_info', lg_info);
         
         if (hash.getTool()) {
             props.windowIsOpened = true;
@@ -35,18 +39,21 @@ export class menu {
         this.setMenu();
         let _mode = hash.getMode();
         let mode = '';
-        if (! _mode) {
-            let cfg = (props.config as IConfigDef);
-            if (cfg.menuOptions) {
-                for (let i=0; i<cfg.menuOptions.length; i++) {
-                    if (cfg.menuOptions[i].isDefault) {
-                        mode = cfg.menuOptions[i].id;
-                    }
+        let defMode = '';
+        let cfg = (props.config as IConfigDef);
+        if (cfg.menuOptions) {
+            for (let i=0; i<cfg.menuOptions.length; i++) {
+                if (cfg.menuOptions[i].isDefault) {
+                    defMode = cfg.menuOptions[i].id;
+                }
+                if (_mode && _mode.length > 0 && cfg.menuOptions[i].id == _mode[0]) {
+                    mode = _mode[0];
                 }
             }
-        } else {
-            mode = _mode[0];
         }
+        // set default mode if mode was not found or not defined
+        if (mode == '') { mode = defMode;}
+
         this.presetDefaultLayerVisibility(mode);
         this.setTab(mode);
         hashHandler.init();
@@ -62,6 +69,7 @@ export class menu {
                     case "basic" : props.menuModules[m.id] = new Basic(m); break;
                     case "filterlayers" : props.menuModules[m.id] = new FilterLayers(m); break;
                     case "multidayselector" : props.menuModules[m.id] = new MultiDaySelector(m); break;
+                    case "multidayselectorsimple" : props.menuModules[m.id] = new MultiDaySelectorSimple(m); break;
                     case "multidaytimeselector" : props.menuModules[m.id] = new MultiDayTimeSelector(m); break;
                 }
                 if (props.menuModules[m.id]) {
@@ -110,7 +118,7 @@ export class menu {
                     let mod = cfg.menuOptions[m];
                     if (mod.modules) {
                         for (let i=0; i<mod.modules.length; i++) {
-                            let key = mod.modules[i];
+                            let key = mod.modules[i].id;
                             if (props.menuModules[key]) {
                                 props.menuModules[key].presetDefaultLayerVisibility(true, lyrs);
                             }

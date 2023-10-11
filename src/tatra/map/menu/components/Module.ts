@@ -1,17 +1,24 @@
 // base class for menu module
 import { IMenuModule, IMenuModuleLayers } from '../../defs/ConfigDef';
-import { GroupContent } from '../../../aux/GroupContent';
+import { GroupContent, IGroupContentOptions } from '../../../aux/GroupContent';
 import { props } from '../../props';
 import { mapUtils } from '../../mapUtils';
-import { layerCategories } from '../../obj/Layer';
+import { layerCategories, Layer } from '../../obj/Layer';
 import { IHashLayer } from '../../hash';
 import { events } from '../../events';
+import { controls } from '../../components/controls';
+import { lg_info } from '../../components/lg_info';
 
+export interface ILastRefreshUrl {
+    [id : string] : string;
+}
 export class Module {
     public props : IMenuModule;
     public _isActive : boolean = false;
     public _hasGroup : boolean = true;
     public systemDateUpdateHandler : (evt: Event) => void;
+    public lastRefreshUrl : ILastRefreshUrl = {};
+    public overrideOpened : boolean | null = null;
 
     public constructor(props : IMenuModule) {
         this.props = props;
@@ -35,7 +42,18 @@ export class Module {
             el.id = `mmm_${this.props.id}`;
             div.appendChild(el);
         } else {
-            GroupContent.create( {id : this.props.id, label : this.props.label, parent: div, opened : this.props.opened} );
+            let opened = (this.overrideOpened != null) ? this.overrideOpened : this.props.opened;
+            let options:IGroupContentOptions =  {
+                id : this.props.id,
+                label : this.props.label, 
+                parent: div, 
+                opened : opened
+            };
+            if (this.props.menuDescription) {
+                options.infoIcon = 'question';
+                options.info = (id : string) => this.infoHandler(id);
+            }
+            GroupContent.create( options );
         }
         //this.activate();
     }
@@ -48,6 +66,7 @@ export class Module {
     public activate() {
         this._isActive = true;
         document.addEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        this.lastRefreshUrl = {};
     }
 
     public hasGroup() : boolean {
@@ -57,6 +76,14 @@ export class Module {
     public onSystemDateUpdate () {
     }
  
+    public infoHandler(id:string) {
+        if (this.props.menuDescription) {
+            controls.activateControlItem('lg_info');
+            lg_info.setLabel(this.props.label);
+            lg_info.setContent(this.props.menuDescription);
+            lg_info.open();
+        }
+    }
 
     // when module is removed from the map menu
     public deactivate() {
@@ -83,12 +110,13 @@ export class Module {
     // set layer_refs either from config or from layer_refs (validate layer exists)
     public setLayerRefs() {
         if (! this.props.tag) { return; }
+        // if there is no layer_refs, use tag to locate corresponding layers
         if (!this.props.layer_refs) {
             this.props.layer_refs = [];
             for (let i=0; i<props.layers.length; i++) {
                 let lo = props.layers[i];
                 if (lo.tag == this.props.tag) { 
-                    let obj : IMenuModuleLayers = { id: lo.id, visible : lo.visible, _defaultVisible : null};
+                    let obj : IMenuModuleLayers = { id: lo.id, visible : lo.visible, _defaultVisible : null, settings : null};
                     this.props.layer_refs.push(obj);
                 }
             }
@@ -137,7 +165,7 @@ export class Module {
     /**
      * getHashLayers() - returns list of layers that should be included in url hash
      */
-    public getHashLayers() : Array<string> {
+    /*public getHashLayers() : Array<string> {
         let res:Array<string> = [];
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;
         for (let i=0; i< arr.length; i++) {
@@ -149,7 +177,7 @@ export class Module {
             }
         }
         return res;
-    }
+    }*/
 
     public presetDefaultLayerVisibility (isActiveModule:boolean, hashLayers:Array<IHashLayer>) {
         if (!this.props.layer_refs) { return; }
@@ -158,6 +186,10 @@ export class Module {
             // set only active module to URL hash layers if they are defined
             if (isActiveModule && hashLayers.length > 0) {
                 arr[j].visible = this.isHashLayer(arr[j].id, hashLayers);
+                let info = this.getHashLayerId(arr[j].id, hashLayers);
+                if (arr[j].visible && info) {
+                    this.setAdditionalLayerInfo(arr[j], info);
+                }
             } else {
                 arr[j].visible = this.isDefaultLayer(arr[j].id);
             }
@@ -173,6 +205,17 @@ export class Module {
         return false;
     }
 
+    public setAdditionalLayerInfo(lyr : IMenuModuleLayers, info:string) {}
+
+    private getHashLayerId(id:string, hashLayers:Array<IHashLayer>) : string | null {
+        for (let i=0; i<hashLayers.length; i++) {
+            if (hashLayers[i].layerId == id && hashLayers[i].classifier != undefined) {
+                return hashLayers[i].classifier as string;
+            }
+        }
+        return null;
+    }
+
     // check if the layer is defined in url hash
     private isHashLayer(id:string, hashLayers:Array<IHashLayer>) : boolean {
         for (let i=0; i<hashLayers.length; i++) {
@@ -183,6 +226,11 @@ export class Module {
         return false;
     }
 
+    public getLayerHashValue(lo : Layer) : string {
+        //console.log(lo.id);
+        return lo.id;
+    }
+
     // provide list of all visible layers within the module
     public getHashLayerInformation() : Array <IHashLayer> | null {
         if (! this.isActive() || ! this.props.layer_refs) { return null;}
@@ -190,7 +238,7 @@ export class Module {
         for (let i=0; i<this.props.layer_refs.length; i++) {
             let lo = mapUtils.getLayerById(this.props.layer_refs[i].id)
             if (lo && ! lo.clandestine && lo.visible) {
-                arr.push(lo.id);
+                arr.push(this.getLayerHashValue(lo));
             }
         }
         if (arr.length > 0) {

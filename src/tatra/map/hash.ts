@@ -53,8 +53,8 @@ export class hash {
     };
 
     public static init() {
-        window.addEventListener("hashchange", (evt)=> this.updateHash(evt));
-        setInterval(this.hashUpdate, 1500);
+        window.addEventListener(this.EVENT_HASH_CHANGE, (evt)=> this.updateHash(evt));
+        setInterval(this.hashUpdate, 750);
     }
 
     public static tab (id : string | null, update : boolean = true) {
@@ -215,7 +215,7 @@ export class hash {
         this.values.layers = [];
         for (let i=0; i < arr.length; i++) {
             let lo = mapUtils.getLayerById(arr[i]);
-            if (! lo || (lo.tag != '' && lo.tag != 'sentinel')) {
+            if (! lo || (lo.tag != '')) {
                 let subs = arr[i].split('=');
                 if (subs.length == 2) {
                     this.values.layers.push({ layerId: subs[0], classifier: subs[1]});
@@ -364,6 +364,9 @@ export class hash {
     public static convertDates(dates:IHashDates) : IHashDates {
         let hd:IHashDates = {};
         let start = dates.start;
+        if (! dates.end) {
+            dates.end = dates.start;
+        }
         hd.start = this.getDateValue(dates.start as string);
         hd.end = dates.end;
         let mins = this.getMinutesValue(dates.end);

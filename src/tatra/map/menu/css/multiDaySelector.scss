@@ -13,7 +13,7 @@
     display:inline-block;
     margin: 0;
     line-height: 1.4rem;
-    margin: 3.5rem 0 0 0;
+    margin: 1rem 0 0 0;
 }
 #mdts_content {
     margin: 0 0 0.5rem 0;
@@ -54,6 +54,17 @@
 .dailyOption {
     width: 11rem;
     display: inline-block;
+}
+.mdsCalendarContent {
+    text-align: center;
+    padding: 1rem;
+}
+.mdsCalendarContent.isSmall {
+    width: 14rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 1.5rem;
+    padding: 0 1rem;
 }
 .mds_content input {
 	width:10.5rem;
@@ -130,7 +141,7 @@
     text-align: center;
     width:5rem; 
     height:5rem;
-    margin:0 .7rem;
+    margin:0 .4rem;
     display:inline-block;
     /*float:left;*/
     cursor:pointer;
@@ -148,10 +159,10 @@
 .mds_bookmark_btn {
 	position:absolute;
 	top:0;
-	right:0.8rem;
+	right:1.8rem;
 	color:#999;
 	cursor:pointer;
-	font-size:1.6rem;
+	font-size:2rem;
 }
 .mmTimeBtnSelected {
     color: #000;
@@ -166,7 +177,7 @@
     position: relative;
     text-align: center;
 }
-#mdsCalendar {
+.mdsCalendar {
     cursor: pointer;
     font-size: 1.7rem;
 }
@@ -196,13 +207,10 @@
     outline: none;
 }
 #mdsTimePeriodStatement {
-    color: #ccc;
-    width: 45%;
+    color: rgb(204, 204, 204);
+    width: 35%;
     padding: 0.3rem;
     font-size: 1.1rem;
-    display:inline-block;
-    top: 0rem;
-    left: 50%;
 }
 #mdsTimePeriodStatement a {
     color: #65b2e3;
@@ -215,4 +223,11 @@
 }
 #mds_btn_timeInfo {
     font-size:1.6rem;
+}
+#mmm_multidayselectorsimple .mds_content {
+    margin: 0;
+}
+#multidayselector_mds_btn_custom {
+    padding-top: 1.2rem;
+    font-size: 2rem;
 }

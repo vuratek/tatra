@@ -18,6 +18,10 @@
 #lmvControls_support_layers{
 	width:33rem;
 }
+#lmvControls_lg_info_Content {
+	color: #eee;
+    padding: 0 1rem 1rem 1rem;
+}
 #lmvControls_screenshot_Content p {
 	margin: 0.5rem;
 }
@@ -55,7 +59,7 @@
 	color: #aaa;
 }
 .lmvControlsLayerMsg.date_range {
-	background: #4f4f00;
+	background: #610a09;
 }
 .lmvControlsLayerMsg.extent {
 	background: #553a0a;
@@ -68,7 +72,7 @@
     font-size: 1.4rem;
 }
 .lmvControlsLayerMessage.date_range > div {
-	background: #c0c000;
+	background: #ea7777;
 }
 .lmvControlsLayerMessage.extent > div {
 	background:#dfa335;
@@ -195,7 +199,7 @@
 	right: 0.5rem;
 }
 .lmvControlsLayerMenu  {
-	right:2.7rem;
+	right:3rem;
 }
 .lmvControlsZoomTo {
 	right:5.2rem;
@@ -214,9 +218,10 @@
 	position:relative;
 	height:1.8rem;
 /*	padding:0.2rem 1rem;*/ 
-	font-size:1.1rem;
+	font-size:1.2rem;
 	color:#FFF;
 	margin-top: 0.7rem;
+	margin-bottom: 1rem;
 }
 .layerMenuVariableLegendBar {
 	width:100%;
@@ -225,7 +230,7 @@
 }
 .layerMenuVariableLegendLbl {
 	position:absolute; 
-	top:.2rem; 
+	top:0; 
 	left:1.5rem;
 	width:100%;
 }
@@ -237,10 +242,13 @@
     background: none;
     border: 0;
     color: #222;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 700;
     display: inline-block;
     text-align: center;
+}
+.layerValueRangeCont .layerValueRangeLbl:last-child {
+	text-align: right;
 }
 .layerValueRangeSlider {
     width: 26rem;

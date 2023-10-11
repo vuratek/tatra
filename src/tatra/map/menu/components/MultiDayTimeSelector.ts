@@ -1,15 +1,16 @@
 import { Module } from "./Module";
 import { IMenuModule } from "../../defs/ConfigDef";
-import { Timeline, TimelineType } from "../../../timeline/Timeline";
+import { Timeline } from "../../../timeline/Timeline2";
 import { props } from "../../props";
 import flatpickr from 'flatpickr';
 import { utils } from "../../../utils";
 import { events } from "../../events";
 import { controls } from "../../components/controls";
-import { rangePicker } from "../../../timeline/rangePicker";
+import { rangePicker } from "../../../timeline/rangePicker2";
 import { time_info } from "../features/time_info";
 import { hash } from "../../hash";
 import { hashHandler } from "../hashHandler";
+import { TimelineType, timelineController } from '../../../timeline/timelineController';
 
 export class MultiDayTimeSelector extends Module {
 
@@ -74,16 +75,7 @@ export class MultiDayTimeSelector extends Module {
                 </div>
             </div>
         `;
-        let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
-        console.log(props.time.rangeMins, props.time.range);
-        Timeline.singleDate = props.time.imageryDate;
-        Timeline.advancedRange = props.time.range;
-        Timeline.advancedMinuteRange = props.time.rangeMins;
-        Timeline.init("timeline");
-        controls.enableBtn("timeline");
-		controls.setItem("timeline", true);		
-		
-        
+
         utils.setClick('mdsCalendar', () => this.openCalendar());
         utils.setClick('ql_1h', ()=>this.onQuickLinksUpdate('1h'));
         utils.setClick('ql_4h', ()=>this.onQuickLinksUpdate('4h'));
@@ -93,6 +85,17 @@ export class MultiDayTimeSelector extends Module {
         utils.setClick('ql_info', ()=>this.displayTimeInfoDetail());
         utils.setClick(`mmm_${this.props.id}-btn-daily`, ()=>this.onDailySubDaily('daily'));
         utils.setClick(`mmm_${this.props.id}-btn-sub-daily`, ()=>this.onDailySubDaily('subdaily'));
+
+        // set timeline
+        let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
+		timelineController.time.imageryDate = props.time.imageryDate;
+		timelineController.time.date = props.time.imageryDate;
+		timelineController.time.range = props.time.range;
+		timelineController.time.rangeMins = props.time.rangeMins;
+        Timeline.init("timeline", ttype);
+        controls.enableBtn("timeline");
+		controls.setItem("timeline", true);				
+        
         let format = (props.time.rangeMins > 0) ? 'Y-m-d' : 'Y-m-d H:i';
         if (flatpickr.formatDate(props.time.date, format) == flatpickr.formatDate(utils.getGMTTime(new Date()), format)) {
             if (props.time.rangeMins > 0) {
@@ -101,15 +104,15 @@ export class MultiDayTimeSelector extends Module {
                 props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
             }
         }
+
 		this.initDatePicker(props.time.date);
-        //rangePicker.timelineUpdate();
+        rangePicker.timelineUpdate();
         if (props.time.rangeMins > 0) {
             this.onDailySubDaily('subdaily');
         } else {
             this.onDailySubDaily('daily');
         }
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
-        console.log("DONE");
     }
     public onDailySubDaily(option:string) {
 //        console.log(option, this.lastRangeDays);
@@ -117,6 +120,7 @@ export class MultiDayTimeSelector extends Module {
         if (option == 'daily') {
             this.setLastMinValues(this.lastRangeDays);
         } else {
+            props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
             this.setLastDayValues(this.lastRangeMins);
         }
         this.setDates();
@@ -203,6 +207,7 @@ export class MultiDayTimeSelector extends Module {
                 }
                 utils.setSelectValue('mdsSubDateRange', 'm' + props.time.rangeMins);
                 this.setDates();
+                rangePicker.setRangeSelect();
             }
         }
     }
@@ -272,13 +277,13 @@ export class MultiDayTimeSelector extends Module {
     }
     public activate () {
 		super.activate();
-		document.addEventListener(Timeline.EVENT_TIMELINE_UPDATED, this.timelineHandler);
+		document.addEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
     }
     public deactivate() {
         Timeline.setTimelineRangeMode(TimelineType.RANGE_TIED);
 		super.deactivate();
 		Timeline.delete();
-        document.removeEventListener(Timeline.EVENT_TIMELINE_UPDATED, this.timelineHandler);
+        document.removeEventListener(timelineController.EVENT_TIMELINE_UPDATED, this.timelineHandler);
         this.currentDayMode = '';
 	}
 
@@ -338,6 +343,7 @@ export class MultiDayTimeSelector extends Module {
 
     }
     private setClock() {
+        this.setDates();
     }
 	private setDates () {
         let range = (document.getElementById('mdsDateRange')) ? utils.getSelectValue(`mdsDateRange`) : utils.getSelectValue(`mdsSubDateRange`);
@@ -355,8 +361,11 @@ export class MultiDayTimeSelector extends Module {
             props.time.date = utils.sanitizeTime(props.time.date);
         }
 
-		props.time.quickTime = 0;
-        Timeline.setDate(props.time.date, props.time.range, props.time.rangeMins);
+        props.time.quickTime = 0;
+        timelineController.time.range = props.time.range;
+		timelineController.time.rangeMins = props.time.rangeMins;
+		timelineController.time.date = props.time.date;
+		timelineController.refreshTimelineDate();
         
         this.setQuickLinks();
 
@@ -370,7 +379,7 @@ export class MultiDayTimeSelector extends Module {
 	}
 
     private timelineUpdate () {
-        let obj = Timeline.getDates();
+        let obj = timelineController.obj;
         if (! obj) { return; }
         let pastImageryDate = props.time.imageryDate;
         //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
@@ -378,7 +387,7 @@ export class MultiDayTimeSelector extends Module {
         
         let _refresh = false;
 
-        if (Timeline.type == TimelineType.RANGE_SUBHOUR_TIED) {
+        if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
 //            console.log("END", obj["range"].end);
             let _dt = obj["range"].end;
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -388,7 +397,7 @@ export class MultiDayTimeSelector extends Module {
                 _refresh = true;
                 props.time.date = utils.sanitizeTime(_dt);
             }
-            let _rangeMin = Timeline.advancedMinuteRange;
+            let _rangeMin = timelineController.time.rangeMins;
             if (_rangeMin != props.time.rangeMins) {
                 _refresh = true;
                 props.time.rangeMins = _rangeMin;
@@ -404,15 +413,16 @@ export class MultiDayTimeSelector extends Module {
             //utils.setSelectValue('mdsSubDateRange', 'm' + Timeline.advancedMinuteRange.toString());
 
         } else {
-            if (Timeline.isPartialDate(obj["range"].end)) {
+            if (! obj["range"]) { return; }
+            if (timelineController.isPartialDate(obj["range"].end)) {
                 this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
             } else {
                 this.calendar.setDate(utils.addDay(obj["range"].end,-1));
             }
 
-            utils.setSelectValue('mdsDateRange', Timeline.advancedRange.toString());
+            utils.setSelectValue('mdsDateRange', timelineController.time.range.toString());
             let _dt = utils.addDay(obj["range"].end,-1);
-            let _range = Timeline.advancedRange;
+            let _range = timelineController.time.range;
             if (flatpickr.formatDate(_dt, 'Y-m-d') != flatpickr.formatDate(props.time.date, 'Y-m-d')) {
                 _refresh = true;
                 props.time.date = _dt;
@@ -428,7 +438,6 @@ export class MultiDayTimeSelector extends Module {
 		if (!_refresh) {
             return;
         }
-//        this.refreshLayers();
         this.setQuickLinks();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
     }

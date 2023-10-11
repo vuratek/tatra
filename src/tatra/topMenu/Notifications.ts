@@ -27,9 +27,7 @@ export class Notifications {
 
     public static load(url : string, obj:ITopMenuItemObj) {
         let rec =  { id: obj.id, url : url, data : null, obj: obj} as INotificationRecord;
-        let server = (window.location.host.indexOf('firms2') >=0 ) ? 'firms2' : 'firms';
-        url = url.replace('#HOST#', server);
-
+        
         this.records[obj.id] = rec;
         fetch(url)
             .then(response => {

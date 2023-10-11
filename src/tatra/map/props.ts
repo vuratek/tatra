@@ -3,6 +3,7 @@ import { Layer } from './obj/Layer';
 import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
 import { ColorPalette } from './obj/ColorPalette';
+import { ProductDates } from './obj/ProductDates';
 import { Module } from './menu/components/Module';
 import { MapTime } from "./obj/MapTime";
 
@@ -46,6 +47,8 @@ export class props  {
     public static locatorSubset         : string | null = null;
     public static tileLoadActive        : ITileLoadTracker = {};
     public static time                  : MapTime = new MapTime();
+
+    public static productDates          : Array<ProductDates> = [];
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)
     public static allowMultipleDynamicLayers  : boolean = false;                // if the value is ON/OFF so multiple layers can be on

@@ -12,8 +12,9 @@ import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
-import { IMenuModule, IConfigDef } from "./defs/ConfigDef";
+import { IMenuModuleLayers } from "./defs/ConfigDef";
 import { utils } from "../utils";
+import { ProductDates } from "./obj/ProductDates";
 
 export interface ICoordinates {
     xmin : number;
@@ -356,6 +357,48 @@ export class mapUtils {
             }
         }
         return arr.join(", ");
+    }
+
+    public static getColorStyle (lo : Layer, target : number = 0, isDefault : boolean = false) : string {
+		let colors = (isDefault) ? lo.defaultColor : lo.color;
+		if (colors) {
+			if (target == 1) {
+				return `rgb(${colors[3]},${colors[4]},${colors[5]})`;	
+			}
+			return `rgb(${colors[0]},${colors[1]},${colors[2]})`;
+		}
+		return '';
+    }
+    
+    public static getLayerInfoRefLayer(layer_refs: IMenuModuleLayers[], id:string) : IMenuModuleLayers | null {
+        if (layer_refs) {
+            for (let i=0; i< layer_refs.length; i++) {
+                if (layer_refs[i].id == id) {
+                    return layer_refs[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    public static addProductDate (id:string) : ProductDates {
+        for (let i=0; i<props.productDates.length; i++) {
+            if (props.productDates[i].id == id) {
+                return props.productDates[i];
+            }
+        }
+        let pd = new ProductDates(id);
+        props.productDates.push(pd);
+        return pd;
+    }
+
+    public static getProductDate (id:string) : ProductDates | null {
+        for (let i=0; i<props.productDates.length; i++) {
+            if (props.productDates[i].id == id) {
+                return props.productDates[i];
+            }
+        }
+        return null;
     }
     
     public static setPrecision(coord : Coord, precision : number) {
