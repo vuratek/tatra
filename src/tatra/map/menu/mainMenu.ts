@@ -106,7 +106,10 @@ export class mainMenu {
         let menu =  this.getMenuOptionById(tab);
         if (! menu) { return;}
         if (menu.urlRedirect) {
+            props.mapMenuOpened = false;
+            this.updateMapMenuOptionBar();
             window.location.href = menu.urlRedirect;
+            return;
         }
         if (this.currentTab == tab) { 
             props.mapMenuOpened = false;
