@@ -3,6 +3,7 @@ import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
+import { events } from "../events";
 
 export class mainMenu {
 
@@ -33,6 +34,7 @@ export class mainMenu {
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
         this.updateMapMenuOptionBar();
         this.renderMapMenuOptionBar();
+        document.addEventListener(events.EVENT_MENU_CLOSE, ()=> this.closeMenu());
 
 /*        let widthClass = 'mapOptionTab_' + cfg.menuOptions.length.toString();
         for (let i=0; i<cfg.menuOptions.length; i++) {
@@ -168,6 +170,11 @@ export class mainMenu {
         if (el) {
             el.innerHTML = info;
         }
+    }
+
+    private static closeMenu() {
+        props.mapMenuOpened = false;
+        this.updateMapMenuOptionBar();
     }
 
     private static setMapMenuOptionBar () {

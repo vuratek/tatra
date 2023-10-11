@@ -51,7 +51,7 @@ export class Module {
             };
             if (this.props.menuDescription) {
                 options.infoIcon = 'question';
-                options.info = (id : string) => this.infoHandler(id);
+                options.info = () => this.infoHandler();
             }
             GroupContent.create( options );
         }
@@ -76,7 +76,7 @@ export class Module {
     public onSystemDateUpdate () {
     }
  
-    public infoHandler(id:string) {
+    public infoHandler() {
         if (this.props.menuDescription) {
             controls.activateControlItem('lg_info');
             lg_info.setLabel(this.props.label);

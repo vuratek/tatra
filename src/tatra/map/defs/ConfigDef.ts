@@ -54,6 +54,7 @@ export interface IGroupBreaker {
     layers          : Array<string>;
     label           : string;
     opened          : boolean;
+    menuDescription? : string;
     highlight?      : string;
 }
 export interface IMenuModule {
