@@ -174,6 +174,19 @@ export class baseComponent {
         }
     }
 
+    public static setLabel(label:string) {
+        if (this.showHeader) {
+            (document.getElementById(`lmvCtrlHeaderLbl_${this.id}`) as HTMLDivElement).innerHTML = label;
+        }
+    }
+
+    public static setContent(content:string) {
+        let el = document.getElementById(`lmvControls_${this.id}_Content`) as HTMLDivElement;
+        if (! el) { return; }
+		el.innerHTML = content;
+
+    }
+
     public static optionItem (id : string, parentDiv : HTMLUListElement, label : string, icon: string, handler : Function) {
         let el = document.createElement("li");
         el.setAttribute("id", `bb_${this.id}_${id}_btn`);

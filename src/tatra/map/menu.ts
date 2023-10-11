@@ -15,6 +15,8 @@ import { MultiDaySelectorSimple } from './menu/components/MultiDaySelectorSimple
 import { MultiDayTimeSelector } from './menu/components/MultiDayTimeSelector';
 import { Module } from './menu/components/Module';
 import { hashHandler } from './menu/hashHandler';
+import { controls } from './components/controls';
+import { lg_info } from './components/lg_info';
 export class menu {
 
     private static id : string = '';
@@ -29,6 +31,7 @@ export class menu {
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
         document.addEventListener(events.EVENT_MENU_RESIZE, ()=> this.resize());
         closeable.create(this.id, id, 'map');
+        controls.createControlItem('lg_info', lg_info);
         
         if (hash.getTool()) {
             props.windowIsOpened = true;

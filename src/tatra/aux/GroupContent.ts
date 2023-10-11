@@ -13,6 +13,7 @@ export interface IGroupContentOptions {
     parent      : HTMLDivElement;
     opened?     : boolean;
     info?       : Function;
+    infoIcon?   : string;
 }
 export class GroupContent {
 
@@ -27,7 +28,8 @@ export class GroupContent {
 		content.setAttribute("class", "navGCContainer");
         options.parent.appendChild(content);
         let text = (options.text) ? options.text : '';
-        let info = (options.info) ? `<div id="navGCInfo_${id}" class="navGCInfo"><i class="fa fa-info-circle" aria-hidden="true"></i></div>` : '';
+        let infoIcon = (options.infoIcon) ? options.infoIcon : 'info-circle';
+        let info = (options.info) ? `<div id="navGCInfo_${id}" class="navGCInfo"><i class="fa fa-${infoIcon}" aria-hidden="true"></i></div>` : '';
         let infoCls = (options.info) ? 'navGCHeaderInfo' : '';
 		content.innerHTML = `
             <div id="navGCHeader_${id}" class="navGCHeader ${infoCls}">
