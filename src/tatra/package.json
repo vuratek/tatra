@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "1.3.10",
+  "version": "2.0.0",
   "description": "Transcending Application Tool for Research and Analysis",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
