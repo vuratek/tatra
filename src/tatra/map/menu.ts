@@ -211,7 +211,8 @@ export class menu {
             utils.hide(this.id + 'Header');
             utils.hide(this.id + 'Close');
             (document.getElementById(this.id) as HTMLDivElement).style.right='0px';
-			props.windowIsOpened = false;
+            props.windowIsOpened = false;
+            events.dispatch(events.EVENT_MENU_CLOSE);
         } else {
             this.resize();
             (document.getElementById(this.id) as HTMLDivElement).style.right='0px';
