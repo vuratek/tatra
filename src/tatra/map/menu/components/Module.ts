@@ -1,12 +1,13 @@
 // base class for menu module
 import { IMenuModule, IMenuModuleLayers } from '../../defs/ConfigDef';
-import { GroupContent } from '../../../aux/GroupContent';
+import { GroupContent, IGroupContentOptions } from '../../../aux/GroupContent';
 import { props } from '../../props';
 import { mapUtils } from '../../mapUtils';
 import { layerCategories, Layer } from '../../obj/Layer';
 import { IHashLayer } from '../../hash';
 import { events } from '../../events';
-
+import { controls } from '../../components/controls';
+import { lg_info } from '../../components/lg_info';
 
 export interface ILastRefreshUrl {
     [id : string] : string;
@@ -42,7 +43,17 @@ export class Module {
             div.appendChild(el);
         } else {
             let opened = (this.overrideOpened != null) ? this.overrideOpened : this.props.opened;
-            GroupContent.create( {id : this.props.id, label : this.props.label, parent: div, opened : opened} );
+            let options:IGroupContentOptions =  {
+                id : this.props.id,
+                label : this.props.label, 
+                parent: div, 
+                opened : opened
+            };
+            if (this.props.menuDescription) {
+                options.infoIcon = 'question';
+                options.info = (id : string) => this.infoHandler(id);
+            }
+            GroupContent.create( options );
         }
         //this.activate();
     }
@@ -65,6 +76,14 @@ export class Module {
     public onSystemDateUpdate () {
     }
  
+    public infoHandler(id:string) {
+        if (this.props.menuDescription) {
+            controls.activateControlItem('lg_info');
+            lg_info.setLabel(this.props.label);
+            lg_info.setContent(this.props.menuDescription);
+            lg_info.open();
+        }
+    }
 
     // when module is removed from the map menu
     public deactivate() {
@@ -91,6 +110,7 @@ export class Module {
     // set layer_refs either from config or from layer_refs (validate layer exists)
     public setLayerRefs() {
         if (! this.props.tag) { return; }
+        // if there is no layer_refs, use tag to locate corresponding layers
         if (!this.props.layer_refs) {
             this.props.layer_refs = [];
             for (let i=0; i<props.layers.length; i++) {

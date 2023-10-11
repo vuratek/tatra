@@ -3,7 +3,6 @@ import { IConfigDef, IMenuOption } from "../defs/ConfigDef";
 import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
-import { Module } from "./components/Module";
 
 export class mainMenu {
 
@@ -106,6 +105,9 @@ export class mainMenu {
     public static tab(tab : string) {
         let menu =  this.getMenuOptionById(tab);
         if (! menu) { return;}
+        if (menu.urlRedirect) {
+            window.location.href = menu.urlRedirect;
+        }
         if (this.currentTab == tab) { 
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
@@ -240,33 +242,5 @@ export class mainMenu {
     public static getCurrentTab() : string {
         return this.currentTab;
     }
-
-    /*public static tab(tab: string) {
-        let cfg = (props.config as IConfigDef);
-        if (! cfg.menuOptions || this.currentTab == tab) {
-            return;
-        }
-        
-        let _old = null;
-        let _new = null;
-        for (let i=0; i<cfg.menuOptions.length; i++) {
-            let obj = cfg.menuOptions[i];
-            if (obj.id == this.currentTab) {
-                _old = obj;
-            }
-            if (obj.id == tab) {
-                _new = obj;
-            }
-        }
-        if (_old && _old ._handler) {
-            _old._handler.close();
-            utils.removeClass(`${this.id}Header_${this.currentTab}`, "mapOptionTabSelected");
-        }
-        this.currentTab = tab;
-        if (_new && _new._handler) {
-            _new._handler.open();
-            utils.addClass(`${this.id}Header_${this.currentTab}`, "mapOptionTabSelected");
-        }
-    }*/
     
 }

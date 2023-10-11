@@ -88,7 +88,6 @@ export class MultiDayTimeSelector extends Module {
 
         // set timeline
         let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
-        console.log(props.time.rangeMins, props.time.range);
 		timelineController.time.imageryDate = props.time.imageryDate;
 		timelineController.time.date = props.time.imageryDate;
 		timelineController.time.range = props.time.range;

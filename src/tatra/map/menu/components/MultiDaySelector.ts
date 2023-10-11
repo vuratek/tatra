@@ -26,7 +26,6 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		let dates = hash.getDates();
 		let type : BasicMenuDates | null = null;
 		if (dates) {
-			console.log(dates);
 			if (dates.start == 'today') {
 				type = BasicMenuDates.TODAY;
 			} else if (dates.start == '24hrs') {
@@ -181,7 +180,6 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	}
 	public timelineBtnClick (evt : CustomEvent) {
 		if (evt.detail.id == "timeline") {
-			console.log("HERE", this.currentSelection);
 			if (this.currentSelection != BasicMenuDates.CUSTOM) {
 				this.setTab(BasicMenuDates.CUSTOM);
 			}

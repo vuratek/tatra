@@ -29,6 +29,7 @@ export interface IMenuOption {
     icon_color?     : string | null;
     description     : string;
     noAction?       : boolean;
+    urlRedirect?    : string | null;        // make the button function like a regular link
 }
 export interface IMenuModuleLayerSettings {
     opened          : boolean;

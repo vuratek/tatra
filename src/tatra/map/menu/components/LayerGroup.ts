@@ -50,7 +50,7 @@ export class LayerGroup extends Module {
 			if (lo.parent) { continue; }
 //			if (! showAll && ! lo.isBasicLayer) { continue; }
 			let go = false;
-			if (! lo.clandestine && lo.tag == this.props.tag && this.props.layer_refs) {                 
+			if (! lo.clandestine && this.props.layer_refs) {                 
                 go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 			}
 			else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
@@ -88,10 +88,7 @@ export class LayerGroup extends Module {
 		}
 		for (let i=0; i<layers.length; i++) {
 			if (lo.id == layers[i].id) { 
-				if(lo.tag == tag) {
-					return true; 
-				}
-				break;
+				return true; 
 			}
 		}
 		return false;
@@ -386,11 +383,11 @@ export class LayerGroup extends Module {
 	private setExtraBtn (menu : string, lo : Layer) {
 		let el = document.getElementById(`layerExtra_${menu}_${lo.id}`) as HTMLDivElement;
 		if (!el) { return; }
-		let type = 'plus';
-		if (opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
+		let type = 'adjust';
+/*		if (opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
 			type = 'minus';
-		}
-		el.innerHTML = `<i class="fa fa-${type}-circle" aria-hidden="true"></i>`;
+		}*/
+		el.innerHTML = `<i class="fa fa-${type}" aria-hidden="true"></i>`;
 	}
 
 	public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {

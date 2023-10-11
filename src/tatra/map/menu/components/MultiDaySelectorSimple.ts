@@ -130,7 +130,6 @@ export class MultiDaySelectorSimple extends Module {
 		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
 		props.time.rangeMins = 0;
 		props.time.quickTime = 0;
-		//console.log("SETTING", props.time.date, props.time.range);
 		this.setTimelineController();
 		timelineController.refreshTimelineDate();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
@@ -148,7 +147,6 @@ export class MultiDaySelectorSimple extends Module {
         let obj = timelineController.obj;
 		if (! obj || !obj["range"]) { return; }
 		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-		//console.log("tiMELINE UPDATE", props.time.imageryDate );
 		
         if (timelineController.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
