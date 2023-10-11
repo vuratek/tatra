@@ -478,6 +478,10 @@ export class mapUtils {
     			//mapUtils.displayPixelRange(pixel);
     		}
         });
+        let els = document.getElementsByClassName('mouseCursorPosition');
+        if (els) {
+            els[0].innerHTML = template.replace('{y}', '--.---').replace('{x}', '--.---');
+        }
     }
     public static displayFeatureInfo (pixel : Array <number>) {
         let id = "";

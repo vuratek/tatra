@@ -426,7 +426,7 @@ export class LayerGroup extends Module {
 						let start = (lo.minDate) ? lo.minDate : '...';
 						let end = (lo.maxDate) ? lo.maxDate : 'present';
 						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
-						msg = `DATA AVAILABLE: ${start} .. ${end}`;				
+						msg = `DATA ONLY AVAILABLE - ${start} TO ${end}`;				
 						if (props.currentBasemap == lo.id) {
 							update = true;
 						}
@@ -438,7 +438,7 @@ export class LayerGroup extends Module {
 				// secondary check for zoom level. Data range supersedes zoom level
 				if (msgType == LAYER_MESSAGE_TYPE.NONE && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
 					let txt = (level < lo.minLevel) ? 'Zoom IN (+)' : 'Zoom OUT (-)';
-					msg = `Zoom level not supported. ${txt}`;
+					msg = `Zoom level not supported - ${txt}`;
 					msgType = LAYER_MESSAGE_TYPE.EXTENT;
 				}
 				this.setLayerMessage(msg, lo.id, msgType);
