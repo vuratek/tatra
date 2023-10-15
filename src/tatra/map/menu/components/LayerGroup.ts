@@ -45,25 +45,42 @@ export class LayerGroup extends Module {
 			this.props.isMultiLayerActive = false;
         }
 //		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
-		for (let i = props.layers.length-1; i>=0; i--) {
-			let lo = props.layers[i];
-			if (lo.parent) { continue; }
-//			if (! showAll && ! lo.isBasicLayer) { continue; }
-			let go = false;
-			if (! lo.clandestine && this.props.layer_refs) {                 
-                go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+		// order by layerRef order (if defined in config), otherwise by location in the overall layer list; 
+		if (this.props.useLayerRefsOrder && this.props.useLayerRefsOrder === true) {
+			if (this.props.layer_refs) {
+				for (let i=0; i<this.props.layer_refs.length; i++) {
+					let lo = mapUtils.getLayerById(this.props.layer_refs[i].id);
+					if (lo.parent) { continue;}
+					if (!lo.clandestine || this.type == MenuLayerGroup.TYPE_CUSTOM) {
+						if (this.checkLayerRef(lo, this.props.layer_refs, this.props.tag)) {
+							this.createLayer(lo, ul, baseId);
+						}
+					}
+				}
+			} else {
+				console.log("Layers are not defined for the custom module.");
 			}
-			else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
-				if (! this.props.layer_refs) {
-					console.log("Layers are not defined for the custom module.");
-					go = false;
-				} else {
+		} else {
+			for (let i = props.layers.length-1; i>=0; i--) {
+				let lo = props.layers[i];
+				if (lo.parent) { continue; }
+				let go = false;
+				if (! lo.clandestine && this.props.layer_refs) {                 
 					go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 				}
-            }
-			if (! go) { continue;}
-			this.createLayer(lo, ul, baseId);
+				else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
+					if (! this.props.layer_refs) {
+						console.log("Layers are not defined for the custom module.");
+						go = false;
+					} else {
+						go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+					}
+				}
+				if (! go) { continue;}
+				this.createLayer(lo, ul, baseId);
+			}
 		}
+		
         this.updateLayers();
         if (this.props.hasMultiLayer) {
             this.setMultiDynamicLayer();

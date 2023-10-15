@@ -20,7 +20,9 @@
 }
 #lmvControls_lg_info_Content {
 	color: #eee;
-    padding: 0 1rem 1rem 1rem;
+	padding: 0 1rem 1rem 1rem;
+	max-height: 20rem;
+    overflow: auto;
 }
 #lmvControls_screenshot_Content p {
 	margin: 0.5rem;

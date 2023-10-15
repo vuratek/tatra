@@ -25,6 +25,9 @@ export class Module {
         if (props.opened == undefined) {
             props.opened = false;
         }
+        if (this.props.layer_refs && ! this.props.useLayerRefsOrder) {
+            this.props.useLayerRefsOrder = true;
+        }
         if (props.usePresetLayers == undefined) {
             props.usePresetLayers = true;
         }

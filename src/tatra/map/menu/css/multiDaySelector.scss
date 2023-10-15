@@ -67,15 +67,16 @@
     padding: 0 1rem;
 }
 .mds_content input {
-	width:10.5rem;
-	font-size:1.6rem;
-	padding: 0.2rem;
+    width: 10.5rem;
+    padding: 0 0.2rem 0.2rem 0.2rem;
+    font-size: 1.7rem;
+    margin-top: -0.8rem;
 }
 .mds_content input[type="date" i] {
 	width:15rem;
-	font-family: sans-serif;
+	font-family: 'Titillium Web', sans-serif;
 	background: none;
-    color: #7fc7f8;
+    color: #31a7ef;
     border: none;
     outline: none;
 }
@@ -184,7 +185,7 @@
 #mdsCalendar2 {
     display: inline-block;
 }
-#mdsHistorical input {
+#mds_date {
     width: 12.5rem;
     padding: 0.2rem;
     font-size: 1.6rem;
@@ -194,17 +195,20 @@
 }
 
 .mdsDateRange {
-    color: #7fc7f8;
+    color: #31a7ef;
     width: 10rem;
     background: #222222f2;
     border: none;
     outline: none;
 }
 #mds_date, #mds_clock {
-    color: #7fc7f8;
+    color: #31a7ef;
     background: 0 0;
     border: none;
     outline: none;
+}
+#mds_clock {
+    width:5rem;
 }
 #mdsTimePeriodStatement {
     color: rgb(204, 204, 204);

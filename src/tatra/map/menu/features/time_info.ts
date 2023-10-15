@@ -31,30 +31,30 @@ export class time_info extends baseComponent {
                 <table>
                     <tr>
                         <td>Today</td>
-                        <td>from 00:00 GMT today to present</td>
+                        <td>from 00:00 UTC today to present</td>
                     </tr>
                     <tr>
-                        <td>GMT</td>
-                        <td>${today.toUTCString()} to present</td>
+                        <td>UTC</td>
+                        <td>${today.toUTCString().replace('GMT','UTC')} to present</td>
                     </tr>
                     <tr>
                         <td>Local</td>
-                        <td>${today.toString()} to present</td>
+                        <td>${today.toString().replace('GMT','UTC')} to present</td>
                     </tr>
                 </table>
                 <br/>
                 <table>
                     <tr>
                         <td>24 hours</td>
-                        <td>from 00:00 GMT yesterday to present</td>
+                        <td>from 00:00 UTC yesterday to present</td>
                     </tr>
                     <tr>
-                        <td>GMT</td>
-                        <td>${yesterday.toUTCString()} to present</td>
+                        <td>UTC</td>
+                        <td>${yesterday.toUTCString().replace('GMT','UTC')} to present</td>
                     </tr>
                     <tr>
                         <td>Local</td>
-                        <td>${yesterday.toString()} to present</td>
+                        <td>${yesterday.toString().replace('GMT','UTC')} to present</td>
                     </tr>
                 </table>
 			</div>	

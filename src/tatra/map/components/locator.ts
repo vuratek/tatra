@@ -238,6 +238,7 @@ export class locator extends baseComponent {
                 return;
             }
         }
+        props.locatorFLyToEnabled = true;
         let geo = GeoLocation.setSavedLocation(sg);        
         this.reverseGeocode(geo);
     }
@@ -417,7 +418,6 @@ export class locator extends baseComponent {
     private static goToLocation(suggestion : any) {
         let geo = GeoLocation.hasMagicLocation(suggestion.magicKey);
         if (geo) {
-            console.log(geo);
             this.zoomTo(geo);
             return;
         }
@@ -539,13 +539,16 @@ export class locator extends baseComponent {
     private static zoomTo(geo : GeoLocation) {
         if (! geo.coord || ! geo.active) { return; }
         if (geo.reposition) {
+            let level = (geo.zoomLevel <= 10) ? 10 : geo.zoomLevel;
             if (props.locatorFLyToEnabled) {
-                this.flyTo(geo.coord, function () {}, geo.zoomLevel);
+                this.flyTo(geo.coord, function () {}, level);
             } else {
                 props.map.getView().setCenter( geo.coord );
-                props.map.getView().setZoom(geo.zoomLevel);
+                
+                props.map.getView().setZoom(level);
             }
         }
+        props.locatorFLyToEnabled = false;
 
         geo.render();
         this.updateSavedItems();

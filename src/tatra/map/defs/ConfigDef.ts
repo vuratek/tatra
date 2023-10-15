@@ -76,6 +76,7 @@ export interface IMenuModule {
     groupBreakers?  : Array<IGroupBreaker> | null;        // creates all on/off button for group of layers
     descriptionText? : string;              // passing description text for ex bookmarks
     menuDescription? : string;              // description used in menu selection
+    useLayerRefsOrder? : boolean;           // should layers sort based on layer_refs or appearance in list layer
     skipMenuDisplay? : boolean;
     menuLabel?       : string | null;
     localRedirect?   : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)

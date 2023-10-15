@@ -157,6 +157,7 @@ export class MultiDayTimeSelector extends Module {
             cal2.innerHTML = `
                 <span class="mdsCalendar"><i class="fa fa-clock fa-lg" style="margin-left:1rem;"></i></span>
                 <input type="text" id="mds_clock" readonly>
+                UTC
             `;
             content.innerHTML = `
                 <div id="mds_min_10" class="mds_subdaily_time">-10 mins</div>
@@ -368,6 +369,7 @@ export class MultiDayTimeSelector extends Module {
 		timelineController.refreshTimelineDate();
         
         this.setQuickLinks();
+        events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 
 		//
         //this.updateHash();

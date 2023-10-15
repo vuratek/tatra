@@ -144,9 +144,12 @@ export class MultiDaySelectorSimple extends Module {
 	}
 
 	public timelineUpdate () {
-        let obj = timelineController.obj;
+		let obj = timelineController.obj;
 		if (! obj || !obj["range"]) { return; }
-		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+		let pastImageryDate = props.time.imageryDate;
+        //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+        props.time.imageryDate = obj["single"].start;
+//		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		
         if (timelineController.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -165,10 +168,10 @@ export class MultiDaySelectorSimple extends Module {
             _refresh = true;
             props.time.range = _range;
 		}
-/*		if (!_refresh) {
-            return;
+		if (!_refresh) {
+//            return;
         }
-		this.refreshLayers();*/
+//		this.refreshLayers();
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 	}

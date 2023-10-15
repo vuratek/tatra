@@ -188,12 +188,14 @@ export class mainMenu {
         if (props.mapMenuOpened) {
             lbl = 'Main Map Menu';
             utils.addClass('MapMenuWrapItems', 'mainMenuOpen');
+            utils.hide(`${this.id}Content`);
 //            utils.hide(`${this.id}Close`);
         } else {
             let menu =  this.getMenuOptionById(this.currentTab);
             if (menu) {
                 lbl = menu.label;
             }
+            utils.show(`${this.id}Content`);
             utils.removeClass('MapMenuWrapItems', 'mainMenuOpen');
 //            utils.show(`${this.id}Close`);
         }
@@ -201,6 +203,7 @@ export class mainMenu {
         if (el) {
             el.innerHTML = lbl;
         }
+        events.dispatch(events.EVENT_MENU_RESIZE);
     }
     private static renderMenuOptions() {
         let cfg = (props.config as IConfigDef);

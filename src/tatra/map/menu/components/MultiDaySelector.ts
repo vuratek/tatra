@@ -160,9 +160,9 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		}
 		let txt = (props.time.quickTime == 1)  ? BasicMenuDates.TODAY : BasicMenuDates.HRS_24;
 		let label = `<span class="mds_btn_timeInfoTitle">${txt}</span><br/>`;
-		label += (props.time.quickTime == 1) ? "From [Today 00:00:00 GMT] to present" : "From [Yesterday 00:00:00 GMT] to present";
+		label += (props.time.quickTime == 1) ? "From [Today 00:00:00 UTC] to present" : "From [Yesterday 00:00:00 UTC] to present";
 		label += `<span id="mds_btn_timeInfo"> <i class="fa fa-info-circle" aria-hidden="true"></i></span>`;
-//        label += '<br><a target="_blank" rel="noopener" href="https://greenwichmeantime.com/uk/time/">Current Date/Time in GMT</a>';
+//        label += '<br><a target="_blank" rel="noopener" href="https://greenwichmeantime.com/uk/time/">Current Date/Time in UTC</a>';
         let el = document.getElementById('mdsTimePeriodStatement');
         if (el) {
 			el.innerHTML = label;
