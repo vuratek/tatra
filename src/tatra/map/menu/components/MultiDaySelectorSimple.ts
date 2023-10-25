@@ -69,7 +69,8 @@ export class MultiDaySelectorSimple extends Module {
 		utils.setSelectValue('mdsDateRange', props.time.range.toString());
 		this.initDatePicker(props.time.date);
 		this.displayTimeline(true);
-		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+		timelineController.refreshTimelineDate();
+		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));		
 	}
 	public static renderCalendarConent(isLarge : boolean) {
 		let icon1 = (isLarge) ? `<span id="mdsCalendar" class="mdsCalendar"><i class="fa fa-calendar-alt fa-lg"></i></span>` : '';

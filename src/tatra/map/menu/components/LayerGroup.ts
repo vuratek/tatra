@@ -49,9 +49,11 @@ export class LayerGroup extends Module {
 		if (this.props.useLayerRefsOrder && this.props.useLayerRefsOrder === true) {
 			if (this.props.layer_refs) {
 				for (let i=0; i<this.props.layer_refs.length; i++) {
-					let lo = mapUtils.getLayerById(this.props.layer_refs[i].id);
+					let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
 					if (lo.parent) { continue;}
-					if (!lo.clandestine || this.type == MenuLayerGroup.TYPE_CUSTOM) {
+					if (lo.type == "label") {
+						this.createLabel(lo, ul, baseId);
+					} else if (!lo.clandestine || this.type == MenuLayerGroup.TYPE_CUSTOM) {
 						if (this.checkLayerRef(lo, this.props.layer_refs, this.props.tag)) {
 							this.createLayer(lo, ul, baseId);
 						}
@@ -77,7 +79,11 @@ export class LayerGroup extends Module {
 					}
 				}
 				if (! go) { continue;}
-				this.createLayer(lo, ul, baseId);
+				if (lo.type == "label") {
+					this.createLabel(lo, ul, baseId);
+				} else {
+					this.createLayer(lo, ul, baseId);
+				}
 			}
 		}
 		
@@ -113,6 +119,14 @@ export class LayerGroup extends Module {
 
 	public onSystemDateUpdate () {
 		this.updateDisabled();
+	}
+
+	public createLabel (lo : Layer, ul : HTMLUListElement, baseId:string) {
+		let li = document.createElement("li");
+		li.setAttribute("id", `bb_label_${baseId}_${lo.id}`);
+		li.setAttribute("class", "lmvControlsLabel");
+		ul.appendChild(li);
+		li.innerHTML = lo.title;
 	}
 
     /**
@@ -203,7 +217,7 @@ export class LayerGroup extends Module {
 			str +=`<div id="layerLegend_${baseId}_${lo.id}" class="lmvControlsLayerLegendIcon"></div>`;
 		}
 		if (lo.hasLegend) {
-			str += `<div id="legend_${lo.id}" class="lmvControlsLayerLegend"></div>`;
+			str += `<div id="legend_${baseId}_${lo.id}" class="lmvControlsLayerLegend"></div>`;
 		}
 /*			for (let j=0; j<props.layers.length; j++) {
 			let lo2 = props.layers[j];
@@ -336,10 +350,10 @@ export class LayerGroup extends Module {
 			if (! el) { continue;}
 			let el2 = null;
 			if (lo.hasLegend) {
-				el2 = document.getElementById(`legend_${lo.id}`) as HTMLDivElement;
+				el2 = document.getElementById(`legend_${this.props.id}_${lo.id}`) as HTMLDivElement;
 			}
 			if (lo.listItemHandler) {
-				lo.listItemHandler(lo.id);
+				lo.listItemHandler(this.props.id, lo.id);
 			}
 			this.renderLayerLegend(this.props.id, lo);
 			this.setExtraBtn(this.props.id, lo);

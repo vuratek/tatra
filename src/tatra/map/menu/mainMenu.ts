@@ -84,13 +84,18 @@ export class mainMenu {
             let actionClass = (obj.noAction) ? 'noAction' : '';
             let actionDiv = (obj.noAction) ? '<div class="sublabel">in-progress</div>' : '';
             let icon = (obj.icon_fab) ? `<i class="fab fa-${obj.icon_fab}"></i>` : `<i class="fas fa-${obj.icon}"></i>`;
-            str += `
+            let str2 = `
                 <div class="option ${actionClass}" id="MapMenuItem_${obj.id}">
                     <div class="icon">${icon}</div>
                     <div class="label"><span>${obj.label}</span></div>
                     ${actionDiv}
                 </div>
             `;
+            if (obj.urlRedirect) {
+                str += `<a id="redirect_${obj.id}" href="${obj.urlRedirect}" target="_blank" rel="noopener noreferrer">${str2}</a>`;
+            } else {
+                str += str2;
+            }
 //            utils.setClick(`${this.id}Header_${obj.id}`, () => this.tab(obj.id));
         }
         el.innerHTML = str;
@@ -110,7 +115,13 @@ export class mainMenu {
         if (menu.urlRedirect) {
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
-            window.location.href = menu.urlRedirect;
+            let link = document.getElementById(`redirect_${tab}`) as HTMLAnchorElement;
+            if (link) {
+                let ref = link.href.split('#');
+                link.href = ref[0] + location.hash;
+                console.log(link.href);
+            }
+//            window.location.href = menu.urlRedirect;
             return;
         }
         if (this.currentTab == tab) { 

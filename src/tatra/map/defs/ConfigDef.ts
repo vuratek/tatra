@@ -29,6 +29,7 @@ export interface IMenuOption {
     icon_color?     : string | null;
     description     : string;
     noAction?       : boolean;
+    copyHash?       : boolean;          // add current hash; helpful for switching map viewers
     urlRedirect?    : string | null;        // make the button function like a regular link
 }
 export interface IMenuModuleLayerSettings {
