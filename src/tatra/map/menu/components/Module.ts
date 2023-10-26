@@ -321,7 +321,6 @@ export class Module {
     
     public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {
         let id = `layerInfo_msg_${this.props.id}_${_id}`;
-//        console.log(id);
 		let parentId = `bb_${this.props.id}_${_id}`;
 		utils.removeClass(parentId, 'date_range');
 		utils.removeClass(parentId, 'extent');

@@ -48,12 +48,17 @@ export class MultiDayTimeSelector extends Module {
 
 		th.innerHTML = `
             <div id="mdts_content" class="mds_content">
-                <div class="mdtsQuickLinks"> 
-                    <div id="ql_1h">1hr</div>
-                    <div id="ql_4h">4hrs</div>
+                <div id="ql_subdaily" class="mdtsQuickLinks"> 
+                    <div id="ql_1h">1 hr</div>
+                    <div id="ql_2h">2 hr</div>
+                    <div id="ql_4h">4 hrs</div>
+                    <div id="ql_6h">6 hrs</div>
+                </div>
+                <div id="ql_daily" class="mdtsQuickLinks">
                     <div id="ql_today">Today</div>
                     <div id="ql_24h">~24hrs</div>
-                    <div id="ql_7d">7days</div>
+                    <div id="ql_48h">3 days</div>
+                    <div id="ql_7d">7 days</div>
                     <div id="ql_info"><span id="mds_btn_timeInfo"><i class="fa fa-info-circle" aria-hidden="true"></i></span></div>
                 </div>
                 <div class="fmmModeWrap">
@@ -78,9 +83,12 @@ export class MultiDayTimeSelector extends Module {
 
         utils.setClick('mdsCalendar', () => this.openCalendar());
         utils.setClick('ql_1h', ()=>this.onQuickLinksUpdate('1h'));
+        utils.setClick('ql_2h', ()=>this.onQuickLinksUpdate('2h'));
         utils.setClick('ql_4h', ()=>this.onQuickLinksUpdate('4h'));
+        utils.setClick('ql_6h', ()=>this.onQuickLinksUpdate('6h'));
         utils.setClick('ql_today', ()=>this.onQuickLinksUpdate('today'));
         utils.setClick('ql_24h', ()=>this.onQuickLinksUpdate('24h'));
+        utils.setClick('ql_48h', ()=>this.onQuickLinksUpdate('48h'));
         utils.setClick('ql_7d', ()=>this.onQuickLinksUpdate('7d'));
         utils.setClick('ql_info', ()=>this.displayTimeInfoDetail());
         utils.setClick(`mmm_${this.props.id}-btn-daily`, ()=>this.onDailySubDaily('daily'));
@@ -118,8 +126,12 @@ export class MultiDayTimeSelector extends Module {
 //        console.log(option, this.lastRangeDays);
         if (this.currentDayMode == option) { return; }
         if (option == 'daily') {
+            utils.hide('ql_subdaily');
+            utils.show('ql_daily');
             this.setLastMinValues(this.lastRangeDays);
         } else {
+            utils.show('ql_subdaily');
+            utils.hide('ql_daily');
             props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
             this.setLastDayValues(this.lastRangeMins);
         }
@@ -222,12 +234,18 @@ export class MultiDayTimeSelector extends Module {
             this.setLastMinValues(0);
         } else if (val == '24h') {
             this.setLastMinValues(1);
+        } else if (val == '48h') {
+            this.setLastMinValues(2);
         } else if (val == '7d') {
             this.setLastMinValues(6);
         } else if (val == '1h') {
             this.setLastDayValues(60);
+        } else if (val == '2h') {
+            this.setLastDayValues(120);
         } else if (val == '4h') {
             this.setLastDayValues(240);
+        } else if (val == '6h') {
+            this.setLastDayValues(360);
         }     
         this.calendar.selectedDates[0] = dt;
         this.setDates();
@@ -254,7 +272,7 @@ export class MultiDayTimeSelector extends Module {
     }
     private setQuickLinks() {
         let dt = utils.sanitizeDate(utils.getGMTTime(new Date()));
-        let links = ['1h', '4h','today', '24h', '7d'];
+        let links = ['1h', '2h', '4h', '6h', 'today', '24h', '48h', '7d'];
         for (let i=0; i<links.length;i++) {
             utils.removeClass(`ql_${links[i]}`, 'selected');            
         }
@@ -264,13 +282,19 @@ export class MultiDayTimeSelector extends Module {
                 utils.addClass('ql_today', 'selected');
             } else if (props.time.range == 1 && props.time.rangeMins == 0) {
                 utils.addClass('ql_24h', 'selected');
+            } else if (props.time.range == 2 && props.time.rangeMins == 0) {
+                utils.addClass('ql_48h', 'selected');
             } else if (props.time.range == 6 && props.time.rangeMins == 0) {
                 utils.addClass('ql_7d', 'selected');
             } else if (this.getClockMaxTime(utils.getGMTTime(new Date())) == flatpickr.formatDate(props.time.date, 'H:i')) {
                 if (props.time.range == 0 && props.time.rangeMins == 60) {
                     utils.addClass('ql_1h', 'selected');
+                } else if (props.time.range == 0 && props.time.rangeMins == 120) {
+                    utils.addClass('ql_2h', 'selected');
                 } else if (props.time.range == 0 && props.time.rangeMins == 240) {
                     utils.addClass('ql_4h', 'selected');
+                } else if (props.time.range == 0 && props.time.rangeMins == 360) {
+                    utils.addClass('ql_6h', 'selected');
                 }                    
             }   
         }

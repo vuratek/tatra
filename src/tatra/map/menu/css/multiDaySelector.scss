@@ -23,6 +23,7 @@
     line-height: 1.8rem;
 }
 .mdtsQuickLinks {
+    display:none;
     text-align: center;
     margin-bottom: 0.5rem;
     border-bottom: 0.1rem solid #777;
@@ -30,14 +31,19 @@
 }
 .mdtsQuickLinks div {
     color: #aaa;
-    width: 18%;
     font-size: 1.4rem;
     padding: .2rem 0;
     display: inline-block;
     cursor:pointer;
 }
-.mdtsQuickLinks div:last-child {
-    width:9%;
+#ql_subdaily div {
+    width: 25%;
+}
+#ql_daily div {
+    width: 20%;
+}
+#ql_daily div:last-child {
+    width:10%;
 }
 .daily {
     display:inline-block;
