@@ -8,15 +8,24 @@ import { IHashLayer } from '../../hash';
 import { events } from '../../events';
 import { controls } from '../../components/controls';
 import { lg_info } from '../../components/lg_info';
+import { utils } from '../../../utils';
+import flatpickr from 'flatpickr';
 
 export interface ILastRefreshUrl {
     [id : string] : string;
+}
+
+export enum LAYER_MESSAGE_TYPE {
+	DATE_RANGE 		= "date_range",
+	EXTENT 			= "zoom_level",
+	NONE 			= "none"
 }
 export class Module {
     public props : IMenuModule;
     public _isActive : boolean = false;
     public _hasGroup : boolean = true;
     public systemDateUpdateHandler : (evt: Event) => void;
+    public disabledUpdateHandler : (evt: Event) => void;
     public lastRefreshUrl : ILastRefreshUrl = {};
     public overrideOpened : boolean | null = null;
 
@@ -36,6 +45,7 @@ export class Module {
         }
         this.setLayerRefs();
         this.systemDateUpdateHandler = () => this.onSystemDateUpdate();
+        this.disabledUpdateHandler = () => this.updateDisabled();
     }
 
     // create initial div component; customization done in a child class
@@ -268,4 +278,67 @@ export class Module {
         return null;
     }
 
+    public updateDisabled() {
+		let update = false;
+		let level = props.map.getView().getZoom();
+		if (this.props.layer_refs && level) {
+			for (let i=0; i<this.props.layer_refs.length; i++) {
+				let msg:string | null = null;
+				let msgType = LAYER_MESSAGE_TYPE.NONE;
+                let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
+                if (this.props.id == 'advanced-fires') {
+                    console.log(lo.id, lo.minDate, lo.maxDate);
+                }
+				if (lo.minDate || lo.maxDate) {
+					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
+						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
+						let start = (lo.minDate) ? lo.minDate : '...';
+						let end = (lo.maxDate) ? lo.maxDate : 'present';
+						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
+						msg = `DATA ONLY AVAILABLE - ${start} TO ${end}`;				
+						if (props.currentBasemap == lo.id) {
+							update = true;
+						}
+						if (lo.category != "basemap") {
+							lo.visible = false;
+						}
+					}
+				}
+				// secondary check for zoom level. Data range supersedes zoom level
+				if (msgType == LAYER_MESSAGE_TYPE.NONE && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
+					let txt = (level < lo.minLevel) ? 'Zoom IN (+)' : 'Zoom OUT (-)';
+					msg = `Zoom level not supported - ${txt}`;
+					msgType = LAYER_MESSAGE_TYPE.EXTENT;
+				}
+				this.setLayerMessage(msg, lo.id, msgType);
+			}
+		}
+		// update basemap if basemap is tied to date range and is out of range
+		if (update) {
+			mapUtils.setBasemap('earth');
+		}
+    }
+    
+    public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {
+        let id = `layerInfo_msg_${this.props.id}_${_id}`;
+//        console.log(id);
+		let parentId = `bb_${this.props.id}_${_id}`;
+		utils.removeClass(parentId, 'date_range');
+		utils.removeClass(parentId, 'extent');
+		if (type == LAYER_MESSAGE_TYPE.NONE) {
+			utils.hide(id);
+			utils.html(id,'');
+			utils.removeClass(parentId, 'lmvControlsLayerMsg');
+		} else {
+			let str = `<div>${text as string}</div>`;
+			utils.html(id, str);
+			utils.removeClass(id, 'date_range');
+			utils.removeClass(id, 'extent');
+			let cls = (type == LAYER_MESSAGE_TYPE.DATE_RANGE) ? 'date_range' : 'extent';
+			utils.addClass(parentId, 'lmvControlsLayerMsg');
+			utils.addClass(parentId, cls);
+			utils.addClass(id, cls);
+			utils.show(id);
+		}
+	}
 }

@@ -7,29 +7,21 @@ import { mapUtils } from "../../mapUtils";
 import { events } from "../../events";
 import { opacity } from "../../components/opacity";
 import { IMenuModuleLayers, IMenuModule } from "../../defs/ConfigDef";
-import flatpickr from 'flatpickr';
 
 export enum MenuLayerGroup {
 	TYPE_BASEMAPS	= "basemap",
 	TYPE_BASIC		= "basic",
 	TYPE_CUSTOM		= "custom"
 }
-export enum LAYER_MESSAGE_TYPE {
-	DATE_RANGE 		= "date_range",
-	EXTENT 			= "zoom_level",
-	NONE 			= "none"
-}
 export class LayerGroup extends Module {
 
 	// TYPE_CUSTOM will use props.layer_refs to determine which layers to show
 	public type	: MenuLayerGroup = MenuLayerGroup.TYPE_CUSTOM; 
 	public layerUpdateHandler : (evt: Event) => void;
-	public disabledUpdateHandler : (evt: Event) => void;
 
 	public constructor(props : IMenuModule) {
 		super(props);
 		this.layerUpdateHandler = () => this.updateLayers();
-		this.disabledUpdateHandler = () => this.updateDisabled();
 	}
 
     public render(par : HTMLDivElement) {
@@ -419,66 +411,6 @@ export class LayerGroup extends Module {
 			type = 'minus';
 		}*/
 		el.innerHTML = `<i class="fa fa-${type}" aria-hidden="true"></i>`;
-	}
-
-	public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {
-		let id = `layerInfo_msg_${this.props.id}_${_id}`;
-		let parentId = `bb_${this.props.id}_${_id}`;
-		utils.removeClass(parentId, 'date_range');
-		utils.removeClass(parentId, 'extent');
-		if (type == LAYER_MESSAGE_TYPE.NONE) {
-			utils.hide(id);
-			utils.html(id,'');
-			utils.removeClass(parentId, 'lmvControlsLayerMsg');
-		} else {
-			let str = `<div>${text as string}</div>`;
-			utils.html(id, str);
-			utils.removeClass(id, 'date_range');
-			utils.removeClass(id, 'extent');
-			let cls = (type == LAYER_MESSAGE_TYPE.DATE_RANGE) ? 'date_range' : 'extent';
-			utils.addClass(parentId, 'lmvControlsLayerMsg');
-			utils.addClass(parentId, cls);
-			utils.addClass(id, cls);
-			utils.show(id);
-		}
-	}
-
-	public updateDisabled() {
-		let update = false;
-		let level = props.map.getView().getZoom();
-		if (this.props.layer_refs && level) {
-			for (let i=0; i<this.props.layer_refs.length; i++) {
-				let msg:string | null = null;
-				let msgType = LAYER_MESSAGE_TYPE.NONE;
-				let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
-				if (lo.minDate || lo.maxDate) {
-					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
-						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
-						let start = (lo.minDate) ? lo.minDate : '...';
-						let end = (lo.maxDate) ? lo.maxDate : 'present';
-						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
-						msg = `DATA ONLY AVAILABLE - ${start} TO ${end}`;				
-						if (props.currentBasemap == lo.id) {
-							update = true;
-						}
-						if (lo.category != "basemap") {
-							lo.visible = false;
-						}
-					}
-				}
-				// secondary check for zoom level. Data range supersedes zoom level
-				if (msgType == LAYER_MESSAGE_TYPE.NONE && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
-					let txt = (level < lo.minLevel) ? 'Zoom IN (+)' : 'Zoom OUT (-)';
-					msg = `Zoom level not supported - ${txt}`;
-					msgType = LAYER_MESSAGE_TYPE.EXTENT;
-				}
-				this.setLayerMessage(msg, lo.id, msgType);
-			}
-		}
-		// update basemap if basemap is tied to date range and is out of range
-		if (update) {
-			mapUtils.setBasemap('earth');
-		}
 	}
 
     private appendDynamicLayerSelector(ul : HTMLUListElement) {
