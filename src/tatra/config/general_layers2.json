@@ -45,7 +45,7 @@
 		"tag"		: "basemap",
 		"title"		: "Firefly",
 		"altTitle1"	: "Altered Blue Marble (no clouds)",
-		"iconMatrix": [0,0], 
+		"iconMatrix": [0,6], 
 		"styleBackground" : "#000",
 		"props" 	: {
 				"maxZoom"			: 16,
