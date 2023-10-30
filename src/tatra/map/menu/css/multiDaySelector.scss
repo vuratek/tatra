@@ -37,14 +37,15 @@
     cursor:pointer;
 }
 #ql_subdaily div {
-    width: 25%;
+    width: 23%;
+    margin: 0 1%;
 }
 #ql_daily div {
-    width: 20%;
-    margin: 0 2%;
+    width: 19%;
+    margin: 0 1%;
 }
 #ql_daily div:last-child {
-    width:10%;
+    width: 10%;
 }
 .daily {
     display:inline-block;
