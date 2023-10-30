@@ -183,7 +183,7 @@
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"url"				: "/layers/pa_global/{z}/{y}/{x}.png",
+			"url"				: "https://firms.modaps.eosdis.nasa.gov/layers/pa_global/{z}/{y}/{x}.png",
 			"tileUrlHandler"	: "basic",
 			"wrapX"				: true
 		},
@@ -199,7 +199,7 @@
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"url"				: "/layers/pa_regional/{z}/{y}/{x}.png",
+			"url"				: "https://firms.modaps.eosdis.nasa.gov/layers/pa_regional/{z}/{y}/{x}.png",
 			"tileUrlHandler"	: "basic"
 		},
 		"isBasicIdentify" : true,

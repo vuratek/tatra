@@ -286,9 +286,6 @@ export class Module {
 				let msg:string | null = null;
 				let msgType = LAYER_MESSAGE_TYPE.NONE;
                 let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
-                if (this.props.id == 'advanced-fires') {
-                    console.log(lo.id, lo.minDate, lo.maxDate);
-                }
 				if (lo.minDate || lo.maxDate) {
 					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
 						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
