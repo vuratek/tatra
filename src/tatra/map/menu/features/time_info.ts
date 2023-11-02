@@ -21,6 +21,10 @@ export class time_info extends baseComponent {
         yesterday.setUTCHours(0);
         yesterday.setUTCMinutes(0);
         yesterday.setUTCSeconds(0);
+        let day7 = utils.addDay(utils.getGMTTime(new Date()), -6);
+        day7.setUTCHours(0);
+        day7.setUTCMinutes(0);
+        day7.setUTCSeconds(0);
         
 		el.innerHTML = `
 			<div id="lmvDragLbl_${this.id}" class="transparentWindowLabel">
@@ -55,6 +59,21 @@ export class time_info extends baseComponent {
                     <tr>
                         <td>Local</td>
                         <td>${yesterday.toString().replace('GMT','UTC')} to present</td>
+                    </tr>
+                </table>
+                <br/>
+                <table>
+                    <tr>
+                        <td>7 days</td>
+                        <td>from 00:00 UTC 7 days ago to present</td>
+                    </tr>
+                    <tr>
+                        <td>UTC</td>
+                        <td>${day7.toUTCString().replace('GMT','UTC')} to present</td>
+                    </tr>
+                    <tr>
+                        <td>Local</td>
+                        <td>${day7.toString().replace('GMT','UTC')} to present</td>
                     </tr>
                 </table>
 			</div>	

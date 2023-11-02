@@ -250,7 +250,7 @@ export class Module {
         let arr : Array <string> = [];
         for (let i=0; i<this.props.layer_refs.length; i++) {
             let lo = mapUtils.getLayerById(this.props.layer_refs[i].id)
-            if (lo && ! lo.clandestine && lo.visible) {
+            if (lo && ! lo.clandestine && ! lo.parent && lo.visible) {
                 arr.push(this.getLayerHashValue(lo));
             }
         }

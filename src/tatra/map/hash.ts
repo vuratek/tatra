@@ -402,7 +402,8 @@ export class hash {
         if (zoom) {
             let c = props.map.getView().getCenter();
             if (c == undefined || isNaN(c[0]) || isNaN(c[1])) { return ''; }
-            return `@${c[0].toFixed(1)},${c[1].toFixed(1)},${zoom.toFixed(1)}z`;
+            let decimals = (zoom >= 9.0) ? 2 : 1;
+            return `@${c[0].toFixed(decimals)},${c[1].toFixed(decimals)},${zoom.toFixed(decimals)}z`;
         }
         return '@0,0,2';
     }

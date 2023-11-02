@@ -3,6 +3,7 @@ import { LayerGroup, MenuLayerGroup } from './LayerGroup';
 import { props } from '../../props';
 import { mapUtils } from '../../mapUtils';
 import { layerCategories } from '../../obj/Layer';
+import { IHashLayer } from '../../hash';
 
 export class Basemaps extends LayerGroup {
 
@@ -39,5 +40,18 @@ export class Basemaps extends LayerGroup {
             basemap = 'earth';
         }        
         mapUtils.setBasemap(basemap);
+    }
+
+    public presetDefaultLayerVisibility (isActiveModule:boolean, hashLayers:Array<IHashLayer>) {
+        super.presetDefaultLayerVisibility(isActiveModule, hashLayers);
+        if (isActiveModule) {
+            let arr = this.props.layer_refs as Array<IMenuModuleLayers>;
+            for (let i=0; i< arr.length; i++) {
+                if (arr[i].visible) {
+                    props.currentBasemap = arr[i].id;
+                    break;
+                }
+            }
+        }
     }
 }
