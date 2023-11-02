@@ -8,6 +8,7 @@ import { events } from "../events";
 export class mainMenu {
 
     private static currentTab : string  = '';
+    public static selectedTab : number = 0;
     private static id : string = '';
 
     public static render(id: string) {
@@ -23,15 +24,14 @@ export class mainMenu {
                 <span><i class="fas fa-bars"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
-        `;
-//                <span><i class="fas fa-graduation-cap"></i></span>
-/*
             <div class="mapMenuIcons">
-                <span><i class="fas fa-info-circle"></i></span>
+                <span id="mapGraduationCap"><i class="fas fa-graduation-cap"></i></span>
             </div>
-*/
+        `;
+
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
+        utils.setClick('mapGraduationCap', ()=> this.setLearnMode());
         this.updateMapMenuOptionBar();
         this.renderMapMenuOptionBar();
         document.addEventListener(events.EVENT_MENU_CLOSE, ()=> this.closeMenu());
@@ -56,6 +56,17 @@ export class mainMenu {
             utils.setClick(model.APP + 'Header_'+tab, () => menuCommon.tab(tab));
         }        
         this.tab(model.initialTab);*/
+    }
+
+    private static setLearnMode() {
+        
+        let cfg = (props.config as IConfigDef);
+        if (! cfg.menuOptions) {
+            return;
+        }
+
+        // call last definition which should be learn mode
+        this.tab(cfg.menuOptions[cfg.menuOptions.length -1].id);
     }
 
     private static getMenuOptionById(id:string):IMenuOption | null {
@@ -148,7 +159,15 @@ export class mainMenu {
         utils.addClass(`${this.id}`, `tab_${this.currentTab}`);
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (! el) { return; }
+
         el.innerHTML = menu.label;
+
+        if (menu.label == 'Learn Mode') {
+            utils.hide(`mapGraduationCap`);
+        } else {
+            utils.show(`mapGraduationCap`);
+        }
+
         props.mapMenuOpened = false;
         // by default disable multi layer selection. If it is provided it will be set in the module
         props.allowMultipleDynamicLayersSelection = false;
@@ -227,6 +246,9 @@ export class mainMenu {
         // check menuOptions matching current tab
         for (let m =0; m<cfg.menuOptions.length; m++) {
             if (cfg.menuOptions[m].id == this.currentTab) {
+                if (m < cfg.menuOptions.length -1) {
+                    this.selectedTab = m;
+                }
                 let mod = cfg.menuOptions[m];
                 if (mod.modules) {
                     // render all menuOptions
