@@ -193,10 +193,12 @@ export class LayerGroup extends Module {
 		let str = `
 			<div id="${baseId}_${lo.id}" class="supp_lyrs_lyr_click ${legIcon}">
 				${icon}
-				${iconLabel}
+				${iconLabel}	
 				<div class="bottomBarSubMenuItemLabel">
-					${lo.title}
-				</div>				
+					${lo.title} 
+					<div class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+				</div>	
+						
 			</div>
 			${extraBtn}
             ${tileBtn}
@@ -205,6 +207,7 @@ export class LayerGroup extends Module {
 			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
 			${expandMenu}
 		`;
+		
 		if (lo.needsLegendIcon) { 
 			str +=`<div id="layerLegend_${baseId}_${lo.id}" class="lmvControlsLayerLegendIcon"></div>`;
 		}
