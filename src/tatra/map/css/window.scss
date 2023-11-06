@@ -15,7 +15,7 @@
     font-size: 1.4rem;
     padding: 0 1rem 1.5rem 1rem;
 }
-#lmvControls_support_layers{
+#lmvControls_support_layers {
 	width:33rem;
 }
 #lmvControls_lg_info_Content {
@@ -23,6 +23,9 @@
 	padding: 0 1rem 1rem 1rem;
 	max-height: 20rem;
     overflow: auto;
+	line-height: 2rem;
+	font-weight: normal;
+	font-size:1.6rem;
 }
 #lmvControls_screenshot_Content p {
 	margin: 0.5rem;
