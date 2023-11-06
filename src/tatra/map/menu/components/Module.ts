@@ -63,7 +63,7 @@ export class Module {
                 opened : opened
             };
             if (this.props.menuDescription) {
-                options.infoIcon = 'question';
+                options.infoIcon = 'clone';
                 options.info = () => this.infoHandler();
             }
             GroupContent.create( options );

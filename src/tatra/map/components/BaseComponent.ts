@@ -116,7 +116,7 @@ export class baseComponent {
     }
 
     public static defaultPosition(isTool : boolean = false) {
-        let offsetY = 230;
+        let offsetY = 350;
         let ctrl = (this.isWithinModal) ? 'modalWrap' : 'map';
         let mh = (document.getElementById(ctrl) as HTMLDivElement).clientHeight;
         let mw = (document.getElementById(ctrl) as HTMLDivElement).clientWidth;

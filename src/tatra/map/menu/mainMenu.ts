@@ -212,7 +212,6 @@ export class mainMenu {
         this.updateMapMenuOptionBar();
     }
 
-
     private static updateMapMenuOptionBar() {
         let lbl = '';
         if (props.mapMenuOpened) {
