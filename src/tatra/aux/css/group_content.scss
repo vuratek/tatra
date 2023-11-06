@@ -17,7 +17,6 @@
 	top: 0;
 	padding:0.7rem;
 }
-
 .navGCInfo {
 	position: absolute;
 	right: 3.5rem;
@@ -25,7 +24,6 @@
 	top: 0;
 	padding:0.5rem;
 }
-
 .navGCInfo:hover::after {
 	position:absolute; top:0.5rem; right:-3rem;
 	content: "Layer Details";

@@ -505,29 +505,24 @@ body::-webkit-scrollbar {
 .layerOnOffButton:hover {
 	color: #57f173;
 }
-
 .layerOnOffButton:hover::after {
 	position:absolute; top:-1.9rem; right:-5.5rem;
 	content: "Select";
 	width:8rem;
 }
-
 #navGCContent_basemaps-basic .layerOnOffButton, #navGCContent_basemaps-advanced .layerOnOffButton {
 	font:normal 1.4rem Titillium Web, sans-serif;
 	position:absolute; right:3.5rem; top:1.7rem;
 	color:#f0f0f0;
 }
-
 #navGCContent_basemaps-basic .layerOnOffButton:hover, #navGCContent_basemaps-advanced .layerOnOffButton:hover {
 	color: #57f173;
 }
-
 #navGCContent_basemaps-basic .layerOnOffButton:hover::after, #navGCContent_basemaps-advanced .layerOnOffButton:hover::after {
 	position:absolute; top:-1.9rem; right:-5.5rem;
 	content: "Select";
 	width:8rem;
 }
-
 #lmvControls_help_Content .bottomBarSubMenuItemLabel {
     line-height: 3rem;
 }
