@@ -502,7 +502,7 @@ body::-webkit-scrollbar {
 	position:absolute; right:6rem; top:1.7rem;
 	color:#f0f0f0;
 }
-.layerOnOffButton:hover {
+.layerOnOffButton:hover, .layerOnOffButtonActive {
 	color: #57f173;
 }
 .layerOnOffButton:hover::after {
