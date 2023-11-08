@@ -7,7 +7,7 @@ export class Header {
 //        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"> 
         let label = '';
         
-        let urlHome = (navProps.settings.app.alternateHome) ? navProps.settings.app.alternateHome : '/';        
+        let urlHome = (navProps.settings.app.alternateHome) ? navProps.PREFIX + navProps.settings.app.alternateHome : navProps.PREFIX + '/';        
         
         header.innerHTML = `
             <div id="earthdata-notification-banner"></div>

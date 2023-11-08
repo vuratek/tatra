@@ -6,5 +6,5 @@ export class navProps {
     public static main : HTMLElement | null;
     public static content : HTMLElement | null;
     public static footer : HTMLElement | null;
-
+    public static PREFIX : string = '';
 }
