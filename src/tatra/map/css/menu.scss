@@ -239,6 +239,13 @@
 .mapMenuIcons #mapGraduationCap {
 	margin-right: -0.8rem;
 }
+.mapMenuIcons #mapGraduationCap:hover::after {
+	position:absolute; top:-0.25rem; right:-0.8rem;
+	content: "Learn Mode";
+	font:bold 1.5rem Titillium Web, sans-serif;
+	width:15rem;
+	padding:0.2rem 0.5rem 0.4rem 1rem;
+}
 .mapMenuItems .noAction {
 /*	background:#888;*/
 	/*color:white;*/
