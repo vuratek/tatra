@@ -31,6 +31,7 @@ export interface IMenuOption {
     noAction?       : boolean;
     copyHash?       : boolean;          // add current hash; helpful for switching map viewers
     urlRedirect?    : string | null;        // make the button function like a regular link
+    isInfoMode?      : boolean;             // if is infoMode, do not use as typical menu option
 }
 export interface IMenuModuleLayerSettings {
     opened          : boolean;

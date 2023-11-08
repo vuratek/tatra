@@ -26,8 +26,6 @@ export class menu {
         window.addEventListener("resize", () => this.resize());
         animation.init();
         this.setDefaultMenuModules();
-        this.render();
-        this.resize();
         document.addEventListener(events.EVENT_MENU_CLOSEABLE, (evt)=> this.closeable(evt as CustomEvent));
         document.addEventListener(events.EVENT_MENU_RESIZE, ()=> this.resize());
         closeable.create(this.id, id, 'map');
@@ -36,7 +34,6 @@ export class menu {
         if (hash.getTool()) {
             props.windowIsOpened = true;
         } 
-        this.setMenu();
         let _mode = hash.getMode();
         let mode = '';
         let defMode = '';
@@ -46,6 +43,9 @@ export class menu {
                 if (cfg.menuOptions[i].isDefault) {
                     defMode = cfg.menuOptions[i].id;
                 }
+                if (cfg.menuOptions[i].isInfoMode === true) {
+                    props.hasInfoMode = true;
+                }
                 if (_mode && _mode.length > 0 && cfg.menuOptions[i].id == _mode[0]) {
                     mode = _mode[0];
                 }
@@ -53,6 +53,11 @@ export class menu {
         }
         // set default mode if mode was not found or not defined
         if (mode == '') { mode = defMode;}
+
+        this.render();
+        this.resize();
+        this.setMenu();
+
 
         this.presetDefaultLayerVisibility(mode);
         this.setTab(mode);
@@ -163,6 +168,11 @@ export class menu {
         utils.setClick(this.id + "Close", () => this.setMenu());
 
         let content = document.createElement("div");
+        content.setAttribute("id", this.id + "InfoContent");
+        content.setAttribute("class",  "mapMenuContent");        
+        div.appendChild(content);
+
+        content = document.createElement("div");
         content.setAttribute("id", this.id + "TopContent");
         content.setAttribute("class",  "mapMenuTopContent");        
         div.appendChild(content);
@@ -193,6 +203,7 @@ export class menu {
         if (props.version > '1.0.0') {
             mainMenu.render(this.id);
         }
+        //props.windowIsOpened = true;
     }
 
     public static registerMenu (id : string) {
@@ -279,15 +290,16 @@ export class menu {
             timeline = (document.getElementById('timeline') as HTMLDivElement).clientHeight + 10;
         }
         let topcontent = (document.getElementById(this.id + 'TopContent') as HTMLDivElement).clientHeight;
+        let infocontent = (document.getElementById(this.id + 'InfoContent') as HTMLDivElement).clientHeight;
         let map = (document.getElementById('map') as HTMLDivElement).clientHeight;
         if (window.innerHeight > 600) { header += 30;}
         if (window.innerHeight <= 600) {
-            el.style.maxHeight = (map + header - header2 - topcontent - 2 ) + "px";	
+            el.style.maxHeight = (map + header - header2 - topcontent - infocontent - 2 ) + "px";	
         }
 		else if (window.innerWidth <= 700 ) {
-			el.style.maxHeight = (map - header2 - topcontent - 2 ) + "px";	
+			el.style.maxHeight = (map - header2 - topcontent -infocontent - 2 ) + "px";	
 		} else {
-			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent - footer - 20) + "px";	
+			el.style.maxHeight = (window.innerHeight - header - controls - header2  - timeline - topcontent -infocontent - footer - 20) + "px";	
         }
 
 		
