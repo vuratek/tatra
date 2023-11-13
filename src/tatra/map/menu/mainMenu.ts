@@ -81,7 +81,7 @@ export class mainMenu {
         }
     }
 
-    private static closeLearnMode() {
+    public static closeLearnMode() {
         this.infoOptionOpened = false;
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         el.innerHTML = this.infoSaveText;

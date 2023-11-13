@@ -128,13 +128,13 @@ export class Navigation {
     private static addPrefix( menu:INavConfigMenu) {
         for (let i=0; i< menu.items.length; i++) {
             let item = menu.items[i];
-            if (item.url) {
+            if (item.url && item.url[0] == '/') {
                 item.url = navProps.PREFIX + item.url;
             }
             if (item.subMenu) {
                 for (let j=0; j< item.subMenu.length; j++) {
                     let sub = item.subMenu[j];
-                    if (sub.url) {
+                    if (sub.url && sub.url[0] == '/') {
                         sub.url = navProps.PREFIX + sub.url;
                     }
                 }

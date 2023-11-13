@@ -175,9 +175,13 @@ export class Notifications {
             }
             if (activeCounter == 0) {
                 let el = document.getElementById(`${this.prefix}_${id}`);
-                el.parentNode.removeChild(el);
+                if (el && el.parentNode) {
+                    el.parentNode.removeChild(el);
+                }
                 el = document.getElementById(`${TopMenuItem.prefix}_notifications-info`);
-                el.parentNode.removeChild(el);
+                if (el && el.parentNode) {
+                    el.parentNode.removeChild(el);
+                }
             }
         }
         if (show) {
