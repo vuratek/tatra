@@ -50,7 +50,7 @@ export class Notifications {
         let id = obj.id;
         let header = '';
         if (rec.id.indexOf('news')>=0) {
-            header = `<div class="notif-banner">WHAT'S NEW: </div>`;
+            header = `<div class="notif-banner">WHAT'S NEW </div>`;
         } else {
             header = '<div class="notif-banner">NOTIFICATIONS: </div>';
         }
