@@ -4,7 +4,7 @@ import { props } from '../../props';
 import { events } from '../../events';
 import { hash } from '../../hash';
 import { hashHandler } from '../hashHandler';
-import { time_info } from "../features/time_info";
+import { time_info, tio } from "../features/time_info";
 import { MultiDaySelectorSimple } from "./MultiDaySelectorSimple";
 import { BasicMenuDates, BasicMenuDateValues } from "../../defs/Times";
 import { timelineController } from "../../../timeline/timelineController";
@@ -52,6 +52,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		this.setTimelineController();
 		timelineController.refreshTimelineDate();
 		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+		time_info.setDisplayOptions([tio.TODAY, tio.DAY2, tio.DAY7]);
 
 	}
 	private openCustomTab () {

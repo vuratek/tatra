@@ -7,7 +7,7 @@ import { utils } from "../../../utils";
 import { events } from "../../events";
 import { controls } from "../../components/controls";
 import { rangePicker } from "../../../timeline/rangePicker2";
-import { time_info } from "../features/time_info";
+import { time_info, tio } from "../features/time_info";
 import { hash } from "../../hash";
 import { hashHandler } from "../hashHandler";
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
@@ -53,13 +53,14 @@ export class MultiDayTimeSelector extends Module {
                     <div id="ql_2h">2 hr</div>
                     <div id="ql_4h">4 hrs</div>
                     <div id="ql_6h">6 hrs</div>
+                    <div id="ql_info"><span id="mds_btn_timeInfo"><i class="fa fa-info-circle" aria-hidden="true"></i></span></div>
                 </div>
                 <div id="ql_daily" class="mdtsQuickLinks">
                     <div id="ql_today">Today</div>
                     <div id="ql_24h">~24hrs</div>
                     <div id="ql_48h">3 days</div>
                     <div id="ql_7d">7 days</div>
-                    <div id="ql_info"><span id="mds_btn_timeInfo"><i class="fa fa-info-circle" aria-hidden="true"></i></span></div>
+                    <div id="ql_info2"><span id="mds_btn_timeInfo2"><i class="fa fa-info-circle" aria-hidden="true"></i></span></div>
                 </div>
                 <div class="fmmModeWrap">
                     <div id="mmm_${this.props.id}-btn-daily" class="fmmModeBtn">
@@ -91,6 +92,7 @@ export class MultiDayTimeSelector extends Module {
         utils.setClick('ql_48h', ()=>this.onQuickLinksUpdate('48h'));
         utils.setClick('ql_7d', ()=>this.onQuickLinksUpdate('7d'));
         utils.setClick('ql_info', ()=>this.displayTimeInfoDetail());
+        utils.setClick('ql_info2', ()=>this.displayTimeInfoDetail());
         utils.setClick(`mmm_${this.props.id}-btn-daily`, ()=>this.onDailySubDaily('daily'));
         utils.setClick(`mmm_${this.props.id}-btn-sub-daily`, ()=>this.onDailySubDaily('subdaily'));
 
@@ -129,11 +131,13 @@ export class MultiDayTimeSelector extends Module {
             utils.hide('ql_subdaily');
             utils.show('ql_daily');
             this.setLastMinValues(this.lastRangeDays);
+            time_info.setDisplayOptions([tio.TODAY, tio.DAY2, tio.DAY3, tio.DAY7]);
         } else {
             utils.show('ql_subdaily');
             utils.hide('ql_daily');
             props.time.date = utils.sanitizeTime(utils.getGMTTime(new Date()), true);
             this.setLastDayValues(this.lastRangeMins);
+            time_info.setDisplayOptions([tio.HOUR1, tio.HOUR2, tio.HOUR4, tio.HOUR6]);
         }
         this.setDates();
         Timeline.setSelectOption();

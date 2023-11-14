@@ -511,6 +511,9 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	padding: 1rem 0 0.5rem 0;
 	line-height: 1.5rem;
 }
+#lmvControls_time_info_Content {
+	overflow:auto;
+}
 .transparentWindow .lmvControlsWindowCloseBtn {
 	top: 0.3rem;  
 	right: 0.5rem;

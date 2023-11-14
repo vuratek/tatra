@@ -35,16 +35,10 @@
     padding: .2rem 0;
     display: inline-block;
     cursor:pointer;
-}
-#ql_subdaily div {
-    width: 23%;
-    margin: 0 1%;
-}
-#ql_daily div {
     width: 19%;
     margin: 0 1%;
 }
-#ql_daily div:last-child {
+.mdtsQuickLinks div:last-child {
     width: 10%;
 }
 .daily {
