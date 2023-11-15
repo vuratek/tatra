@@ -15,12 +15,17 @@
     font-size: 1.4rem;
     padding: 0 1rem 1.5rem 1rem;
 }
-#lmvControls_support_layers{
+#lmvControls_support_layers {
 	width:33rem;
 }
 #lmvControls_lg_info_Content {
 	color: #eee;
-    padding: 0 1rem 1rem 1rem;
+	padding: 0 1rem 1rem 1rem;
+	max-height: 20rem;
+    overflow: auto;
+	line-height: 2rem;
+	font-weight: normal;
+	font-size:1.6rem;
 }
 #lmvControls_screenshot_Content p {
 	margin: 0.5rem;
@@ -42,6 +47,14 @@
     border: 0.1rem solid #AAA;
     outline: none;
 }
+.lmvControlsLabel {
+	padding: 0.5rem 1rem;
+	background: #db5516;
+	text-transform: uppercase;
+	font-size:1.1rem;
+	text-align: center;
+    color: #eee;
+}
 .lmvControlsLayer {
 	text-align:left;
 	padding:0;
@@ -55,27 +68,18 @@
 	color:#f0f0f0;
 } 
 .lmvControlsLayerMsg {
+	border:solid 0.2rem #dfa335;
 	border-bottom: none;
 	color: #aaa;
-}
-.lmvControlsLayerMsg.date_range {
-	background: #610a09;
-}
-.lmvControlsLayerMsg.extent {
-	background: #553a0a;
 }
 .lmvControlsLayerMessage > div {
 	text-align: center;
 	text-transform: uppercase;
     color: black;
     font-weight: 600;
-    font-size: 1.4rem;
-}
-.lmvControlsLayerMessage.date_range > div {
-	background: #ea7777;
-}
-.lmvControlsLayerMessage.extent > div {
-	background:#dfa335;
+	font-size: 1.4rem;
+	line-height: 1.8rem;
+	background: linear-gradient(45deg, #dfa335, #e5c641);
 }
 .lmvControlsMultiLayer {
 	min-height: 3.3rem;
@@ -131,7 +135,7 @@
 	float:left;
 	width:4rem;
 	height:4rem;
-	margin:0.5rem 1rem 0 0.6rem;
+	margin:0.7rem 1rem 0 2.5rem;
 	padding:0;
 	border-radius:3.2rem;
 	border:0.1rem solid #CCC;
@@ -143,7 +147,7 @@
     height: 4.5rem;
     border: 0;
     /*margin: 1rem 0 0 0;*/
-    padding: 1rem 0.3rem 0 0.5rem;
+    padding: 1rem 0.3rem 0 0.7rem;
     opacity: 0.7;
     text-align: center;
     font-size: 2.6rem;
@@ -175,13 +179,6 @@
 #lmvControls_support_layers_Content .navGCContainer {
 	margin :0;
 }
-/*#lmvControls_support_layers_Content .navGCHeader {
-	background: rgba(187, 187, 187, 0.9);
-	border-top: 1px solid #777;
-}
-#lmvControls_support_layers_Content .navGCCtrl {
-	color:#333;
-}*/
 .lmvSupportLayersContent {
 	background: #767676;
 }
@@ -205,6 +202,32 @@
 	right: 0;
 	font-size:1.8rem;
 }
+
+.fmmSupportIcons:hover, .lmvControlsLayerInfoBtns:hover, .fmm_ba_opacity:hover, .fmm_ba_opacity2:hover,
+.navGCInfo:hover,.navGCCtrl:hover, .fmmSupportIcons:hover {
+	color: #57f173;
+}
+.lmvControlsLayerMenu:hover::after, .lmvControlsLayerInfo:hover::after, .fmmSupportIcons:hover::after {
+	position:absolute; top:-2.3rem; right:-0.8rem;
+	display:block;
+	content: "Opacity";
+	font:normal 1.4rem Titillium Web, sans-serif;
+	width:5rem;
+	padding:0.2rem 0.5rem 0.4rem 1rem;
+}
+
+.lmvControlsLayerInfo:hover::after {
+	position:absolute; top:-2.3rem; right:-0.9rem;
+	content: "Info";
+	width:4rem;
+}
+.fmmSupportIcons:hover::after {
+	position:absolute; top:-0.3rem; right:3.2rem;
+	content: "Info";
+	font:normal 1.5rem Titillium Web, sans-serif;
+	width:4rem;
+}
+
 .lmvControlsLayerInfo  {
 	right: 0.5rem;
 }
@@ -445,6 +468,7 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
     width: 100%;
     cursor: move;
     text-transform: uppercase;
+	
 }
 .lmvControlsWindowCloseBtn {
     font-size: 1.7rem;
@@ -486,6 +510,9 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	overflow: hidden;
 	padding: 1rem 0 0.5rem 0;
 	line-height: 1.5rem;
+}
+#lmvControls_time_info_Content {
+	overflow:auto;
 }
 .transparentWindow .lmvControlsWindowCloseBtn {
 	top: 0.3rem;  

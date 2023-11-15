@@ -488,7 +488,6 @@ body::-webkit-scrollbar {
 	padding: 0;
 }
 .bottomBarBtnLabelTxt {
-	/*display:inline-block;*/
 	display: block;
 	font-size:1.1rem;
 }
@@ -497,6 +496,44 @@ body::-webkit-scrollbar {
 	line-height: 1.8rem;
 	display:flex;
 }
+.layerOnOffButton {
+	font:normal 1.3rem Titillium Web, sans-serif;
+	position:absolute; left:0.2rem; top:0.2rem;
+	color:#444444;
+	background: #818080;
+	width:2.2rem;
+	height: 2.2rem;
+	padding: 0.1rem 0 0.1rem 0.4rem;
+	border-radius: 2rem;
+}
+.layerOnOffButton:hover, .layerOnOffButtonActive {
+	color: #57f173;
+	background:#102638;
+}
+/*.layerOnOffButton:hover::after {
+	position:absolute; top:-1.9rem; right:-5.5rem;
+	content: "Select";
+	width:8rem;
+}*/
+#navGCContent_basemaps-basic .layerOnOffButton, #navGCContent_basemaps-advanced .layerOnOffButton {
+	font:normal 1.3rem Titillium Web, sans-serif;
+	position:absolute; left:0.2rem; top:0.2rem;
+	color:#444444;
+	background: #818080;
+	width:2.2rem;
+	height: 2.2rem;
+	padding: 0.1rem 0 0.1rem 0.4rem;
+	border-radius: 2rem;
+}
+#navGCContent_basemaps-basic .layerOnOffButton:hover, #navGCContent_basemaps-advanced .layerOnOffButton:hover {
+	color: #57f173;
+	background:#102638;
+}
+/*#navGCContent_basemaps-basic .layerOnOffButton:hover::after, #navGCContent_basemaps-advanced .layerOnOffButton:hover::after {
+	position:absolute; top:-1.9rem; right:-5.5rem;
+	content: "Select";
+	width:8rem;
+}*/
 #lmvControls_help_Content .bottomBarSubMenuItemLabel {
     line-height: 3rem;
 }
@@ -848,8 +885,8 @@ body::-webkit-scrollbar {
 		padding-top:0;
 	}
 	.lmvMousePosition {
-		top: 2rem;
-		left: 0;
+//		top: 2rem;
+//		left: 0;
 	}
 }
 

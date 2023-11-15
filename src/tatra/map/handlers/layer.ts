@@ -71,6 +71,8 @@ export class layer {
         case "drawClassicLayer":
             this.addBoxLayer(lo);
             break;
+        case "label":       // non-layer that is used for displaying information
+            return;
         default:
             console.log("ERROR : Unrecognized layer type " + lo.type);
             return;
@@ -265,7 +267,7 @@ export class layer {
     }
 
     public static refreshGeoJsonLayer (lo:Layer) {
-        if (!lo._layer) { return;}
+        if (!lo || !lo._layer) { return;}
 //        this._GeoJsonRefresh(lo);
 //        lo.refresh();
         let source = lo._layer.getSource();

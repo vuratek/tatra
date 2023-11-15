@@ -48,6 +48,8 @@ export class props  {
     public static tileLoadActive        : ITileLoadTracker = {};
     public static time                  : MapTime = new MapTime();
 
+    public static hasInfoMode           : boolean = false;
+
     public static productDates          : Array<ProductDates> = [];
 
     public static allowMultipleDynamicLayersSelection  : boolean = false;       // whether to provide the UI (checkbox)

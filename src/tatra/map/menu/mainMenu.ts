@@ -8,7 +8,12 @@ import { events } from "../events";
 export class mainMenu {
 
     private static currentTab : string  = '';
+    public static selectedTab : number = 0;
     private static id : string = '';
+
+    private static infoOption : IMenuOption | null = null;
+    private static infoOptionOpened : boolean = false;
+    private static infoSaveText : string = '';
 
     public static render(id: string) {
         this.id = id;
@@ -18,44 +23,82 @@ export class mainMenu {
         if (! cfg.menuOptions) {
             return;
         }
+        let items = '';
+        if (props.hasInfoMode) {
+            items = `
+                <div class="mapMenuIcons">
+                    <span id="mapGraduationCap"><i class="fa fa-graduation-cap"></i></span>
+                    <span id="mgcClose"><i class="fa fa-times"></i></span>
+                </div>
+            `;
+        }
         let str = `
             <div class="mapMenuOptions" id="mapMenuOptionBar">
                 <span><i class="fas fa-bars"></i></span>
             </div>
             <div class="mapMenuTitle" id="mapMenuTitle"></div>
+            ${items}
         `;
-//                <span><i class="fas fa-graduation-cap"></i></span>
-/*
-            <div class="mapMenuIcons">
-                <span><i class="fas fa-info-circle"></i></span>
-            </div>
-*/
+
         header.innerHTML = str;
         utils.setClick('mapMenuOptionBar', ()=>this.setMapMenuOptionBar());
+        if (props.hasInfoMode) {
+            utils.setClick('mapGraduationCap', ()=> this.setLearnMode());
+            utils.setClick('mgcClose', ()=> this.closeLearnMode());
+        }
         this.updateMapMenuOptionBar();
         this.renderMapMenuOptionBar();
         document.addEventListener(events.EVENT_MENU_CLOSE, ()=> this.closeMenu());
+    }
 
-/*        let widthClass = 'mapOptionTab_' + cfg.menuOptions.length.toString();
-        for (let i=0; i<cfg.menuOptions.length; i++) {
-            let obj = cfg.menuOptions[i];
-            let offset = Math.floor( 90 / cfg.menuOptions.length) * i;
-            str += `
-                <div id="${this.id}Header_${obj.id}" class="mapOptionTab ${widthClass}" style="left:${offset}%;">${obj.label}</div>
-            `;
-        }    
-        
-        for (let i=0; i<cfg.menuOptions.length; i++) {
-            let obj = cfg.menuOptions[i];
-            utils.setClick(`${this.id}Header_${obj.id}`, () => this.tab(obj.id));
-        }*/
-        /*
+    private static setLearnMode() {
+        if (! this.infoOption) { return; }
+        this.infoOptionOpened = true;
+        utils.hide(`mapGraduationCap`);
+        utils.hide('mapMenuOptionBar');
+        if (props.mapMenuOpened) {
+            utils.removeClass('MapMenuWrapItems', 'mainMenuOpen');
+            
+        } else {
+            utils.hide(`${this.id}TopContent`);
+            utils.hide(`${this.id}Content`);    
+        }
+        utils.hide(`${this.id}Close`);
+        utils.show(`${this.id}InfoContent`);
+        utils.show('mgcClose');
+        utils.addClass('mapMenuTitle', 'infoMode');
+        let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
+        this.infoSaveText = el.textContent;
+        el.innerHTML = this.infoOption.label;
+        let div = document.getElementById(this.id + 'InfoContent') as HTMLDivElement;
+        if (! div) { return; }
+        for (let m=0; m<this.infoOption.modules.length; m++) {
+            let key = this.infoOption.modules[m].id;
+            if (props.menuModules[key]) {
+                props.menuModules[key].activate();
+                props.menuModules[key].render(div);
+            }
+        }
+    }
 
-        for (let i=0; i<model.tabs.length; i++) {
-            let tab = model.tabs[i];
-            utils.setClick(model.APP + 'Header_'+tab, () => menuCommon.tab(tab));
-        }        
-        this.tab(model.initialTab);*/
+    public static closeLearnMode() {
+        this.infoOptionOpened = false;
+        let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
+        el.innerHTML = this.infoSaveText;
+        if (props.mapMenuOpened) {
+            utils.addClass('MapMenuWrapItems', 'mainMenuOpen');
+        } else {
+            utils.show(`${this.id}TopContent`);
+            utils.show(`${this.id}Content`);
+        }
+        utils.show(`mapGraduationCap`);
+        utils.show('mapMenuOptionBar');
+        utils.show(`${this.id}Close`);
+        utils.removeClass('mapMenuTitle', 'infoMode');
+        utils.hide(`${this.id}InfoContent`);
+        utils.hide('mgcClose');
+        let div = document.getElementById(this.id + 'InfoContent') as HTMLDivElement;
+        div.innerHTML = '';
     }
 
     private static getMenuOptionById(id:string):IMenuOption | null {
@@ -79,18 +122,27 @@ export class mainMenu {
         let str = '';
         for (let i=0; i<cfg.menuOptions.length; i++) {
             let obj = cfg.menuOptions[i];
+            if (obj.isInfoMode) {
+                this.infoOption = obj;
+                continue;
+            }
 //            let color = (obj.icon_color) ? `style="color:${obj.icon_color};"` : '';
             let color = '';
             let actionClass = (obj.noAction) ? 'noAction' : '';
             let actionDiv = (obj.noAction) ? '<div class="sublabel">in-progress</div>' : '';
             let icon = (obj.icon_fab) ? `<i class="fab fa-${obj.icon_fab}"></i>` : `<i class="fas fa-${obj.icon}"></i>`;
-            str += `
+            let str2 = `
                 <div class="option ${actionClass}" id="MapMenuItem_${obj.id}">
                     <div class="icon">${icon}</div>
                     <div class="label"><span>${obj.label}</span></div>
                     ${actionDiv}
                 </div>
             `;
+            if (obj.urlRedirect) {
+                str += `<a id="redirect_${obj.id}" href="${obj.urlRedirect}" target="_blank" rel="noopener noreferrer">${str2}</a>`;
+            } else {
+                str += str2;
+            }
 //            utils.setClick(`${this.id}Header_${obj.id}`, () => this.tab(obj.id));
         }
         el.innerHTML = str;
@@ -110,9 +162,15 @@ export class mainMenu {
         if (menu.urlRedirect) {
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
-            window.location.href = menu.urlRedirect;
+            let link = document.getElementById(`redirect_${tab}`) as HTMLAnchorElement;
+            if (link) {
+                let ref = link.href.split('#');
+                link.href = ref[0] + location.hash;
+            }
+//            window.location.href = menu.urlRedirect;
             return;
         }
+
         if (this.currentTab == tab) { 
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
@@ -137,7 +195,9 @@ export class mainMenu {
         utils.addClass(`${this.id}`, `tab_${this.currentTab}`);
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
         if (! el) { return; }
+
         el.innerHTML = menu.label;
+
         props.mapMenuOpened = false;
         // by default disable multi layer selection. If it is provided it will be set in the module
         props.allowMultipleDynamicLayersSelection = false;
@@ -173,6 +233,10 @@ export class mainMenu {
     }
 
     private static closeMenu() {
+        if (this.infoOptionOpened) {
+            this.closeLearnMode();
+            return;
+        }
         props.mapMenuOpened = false;
         this.updateMapMenuOptionBar();
     }
@@ -182,18 +246,21 @@ export class mainMenu {
         this.updateMapMenuOptionBar();
     }
 
-
     private static updateMapMenuOptionBar() {
         let lbl = '';
         if (props.mapMenuOpened) {
             lbl = 'Main Map Menu';
             utils.addClass('MapMenuWrapItems', 'mainMenuOpen');
+            utils.hide(`${this.id}Content`);
+            utils.hide(`${this.id}TopContent`);
 //            utils.hide(`${this.id}Close`);
         } else {
             let menu =  this.getMenuOptionById(this.currentTab);
             if (menu) {
                 lbl = menu.label;
             }
+            utils.show(`${this.id}TopContent`);
+            utils.show(`${this.id}Content`);
             utils.removeClass('MapMenuWrapItems', 'mainMenuOpen');
 //            utils.show(`${this.id}Close`);
         }
@@ -201,6 +268,7 @@ export class mainMenu {
         if (el) {
             el.innerHTML = lbl;
         }
+        events.dispatch(events.EVENT_MENU_RESIZE);
     }
     private static renderMenuOptions() {
         let cfg = (props.config as IConfigDef);
@@ -213,6 +281,9 @@ export class mainMenu {
         // check menuOptions matching current tab
         for (let m =0; m<cfg.menuOptions.length; m++) {
             if (cfg.menuOptions[m].id == this.currentTab) {
+                if (m < cfg.menuOptions.length -1) {
+                    this.selectedTab = m;
+                }
                 let mod = cfg.menuOptions[m];
                 if (mod.modules) {
                     // render all menuOptions

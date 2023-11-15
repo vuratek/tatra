@@ -45,7 +45,7 @@
 		"tag"		: "basemap",
 		"title"		: "Firefly",
 		"altTitle1"	: "Altered Blue Marble (no clouds)",
-		"iconMatrix": [0,0], 
+		"iconMatrix": [0,6], 
 		"styleBackground" : "#000",
 		"props" 	: {
 				"maxZoom"			: 16,
@@ -183,7 +183,7 @@
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"url"				: "/layers/pa_global/{z}/{y}/{x}",
+			"url"				: "https://firms.modaps.eosdis.nasa.gov/layers/pa_global/{z}/{y}/{x}.png",
 			"tileUrlHandler"	: "basic",
 			"wrapX"				: true
 		},
@@ -199,7 +199,7 @@
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
 		"props" 	: {
-			"url"				: "/layers/pa_regional/{z}/{y}/{x}",
+			"url"				: "https://firms.modaps.eosdis.nasa.gov/layers/pa_regional/{z}/{y}/{x}.png",
 			"tileUrlHandler"	: "basic"
 		},
 		"isBasicIdentify" : true,

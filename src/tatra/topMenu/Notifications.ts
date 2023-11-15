@@ -50,7 +50,7 @@ export class Notifications {
         let id = obj.id;
         let header = '';
         if (rec.id.indexOf('news')>=0) {
-            header = `<div class="notif-banner">WHAT'S NEW: </div>`;
+            header = `<div class="notif-banner">WHAT'S NEW </div>`;
         } else {
             header = '<div class="notif-banner">NOTIFICATIONS: </div>';
         }
@@ -175,9 +175,13 @@ export class Notifications {
             }
             if (activeCounter == 0) {
                 let el = document.getElementById(`${this.prefix}_${id}`);
-                el.parentNode.removeChild(el);
+                if (el && el.parentNode) {
+                    el.parentNode.removeChild(el);
+                }
                 el = document.getElementById(`${TopMenuItem.prefix}_notifications-info`);
-                el.parentNode.removeChild(el);
+                if (el && el.parentNode) {
+                    el.parentNode.removeChild(el);
+                }
             }
         }
         if (show) {

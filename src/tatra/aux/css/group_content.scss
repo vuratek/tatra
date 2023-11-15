@@ -2,10 +2,7 @@
     padding: 0.4rem 4rem 0.4rem 1.5rem;
     cursor: pointer;
     color: #DDD;
-	/*background: #336d91;*/
-	/*background: linear-gradient(180deg,#1d6894,#0f415c);*/
-	background:linear-gradient(#195e86, #0f415c);
-	border-top: 0.1rem solid #AAA;
+	background: linear-gradient(#207cb3, #0f425f);
 	width: 100%;
 }
 
@@ -27,6 +24,11 @@
 	top: 0;
 	padding:0.5rem;
 }
+.navGCInfo:hover::after {
+	position:absolute; top:0.5rem; right:-3rem;
+	content: "Layer Details";
+	width:14rem;
+}
 
 .navGCLbl {
 	font-size:1.6rem;
@@ -38,5 +40,5 @@
 	color:#FFF;
 }
 .navGCHeaderInfo {
-	padding: 0.4rem 7rem 0.4rem 1.5rem;
+	padding: 0.5rem 7rem 0.5rem 1.5rem;
 }

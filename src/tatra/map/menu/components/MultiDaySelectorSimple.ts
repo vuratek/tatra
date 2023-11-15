@@ -69,7 +69,8 @@ export class MultiDaySelectorSimple extends Module {
 		utils.setSelectValue('mdsDateRange', props.time.range.toString());
 		this.initDatePicker(props.time.date);
 		this.displayTimeline(true);
-		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+		timelineController.refreshTimelineDate();
+		document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));		
 	}
 	public static renderCalendarConent(isLarge : boolean) {
 		let icon1 = (isLarge) ? `<span id="mdsCalendar" class="mdsCalendar"><i class="fa fa-calendar-alt fa-lg"></i></span>` : '';
@@ -144,9 +145,12 @@ export class MultiDaySelectorSimple extends Module {
 	}
 
 	public timelineUpdate () {
-        let obj = timelineController.obj;
+		let obj = timelineController.obj;
 		if (! obj || !obj["range"]) { return; }
-		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+		let pastImageryDate = props.time.imageryDate;
+        //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
+        props.time.imageryDate = obj["single"].start;
+//		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		
         if (timelineController.isPartialDate(obj["range"].end)) {
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
@@ -165,10 +169,10 @@ export class MultiDaySelectorSimple extends Module {
             _refresh = true;
             props.time.range = _range;
 		}
-/*		if (!_refresh) {
-            return;
+		if (!_refresh) {
+//            return;
         }
-		this.refreshLayers();*/
+//		this.refreshLayers();
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 	}

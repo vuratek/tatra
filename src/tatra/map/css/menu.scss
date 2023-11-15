@@ -226,6 +226,9 @@
 	font-size: 2.2rem;
 	font-family: 'Titillium Web';
 }
+.infoMode {
+	left:2rem;
+}
 .mapMenuIcons {
 	position: absolute;
 	right: 5rem;
@@ -233,8 +236,15 @@
 	font-size: 2.4rem;
 	cursor:pointer;
 }
-.mapMenuIcons span {
-	margin-right: .5rem;
+.mapMenuIcons #mapGraduationCap {
+	margin-right: -0.8rem;
+}
+.mapMenuIcons #mapGraduationCap:hover::after {
+	position:absolute; top:-0.25rem; right:-0.8rem;
+	content: "Learn Mode";
+	font:bold 1.5rem Titillium Web, sans-serif;
+	width:15rem;
+	padding:0.2rem 0.5rem 0.4rem 1rem;
 }
 .mapMenuItems .noAction {
 /*	background:#888;*/
@@ -330,7 +340,7 @@
 		margin: 0 -.3rem;
 	}
 	.mapMenuCloseHolder {
-		top: 6rem;
+		top: 7rem;
 	}
 	.resize .mapMenuCloseHolder {
 		top: 1rem;

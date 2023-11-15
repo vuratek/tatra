@@ -29,7 +29,9 @@ export interface IMenuOption {
     icon_color?     : string | null;
     description     : string;
     noAction?       : boolean;
+    copyHash?       : boolean;          // add current hash; helpful for switching map viewers
     urlRedirect?    : string | null;        // make the button function like a regular link
+    isInfoMode?      : boolean;             // if is infoMode, do not use as typical menu option
 }
 export interface IMenuModuleLayerSettings {
     opened          : boolean;
@@ -76,6 +78,7 @@ export interface IMenuModule {
     groupBreakers?  : Array<IGroupBreaker> | null;        // creates all on/off button for group of layers
     descriptionText? : string;              // passing description text for ex bookmarks
     menuDescription? : string;              // description used in menu selection
+    useLayerRefsOrder? : boolean;           // should layers sort based on layer_refs or appearance in list layer
     skipMenuDisplay? : boolean;
     menuLabel?       : string | null;
     localRedirect?   : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)

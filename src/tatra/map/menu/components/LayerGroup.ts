@@ -7,29 +7,21 @@ import { mapUtils } from "../../mapUtils";
 import { events } from "../../events";
 import { opacity } from "../../components/opacity";
 import { IMenuModuleLayers, IMenuModule } from "../../defs/ConfigDef";
-import flatpickr from 'flatpickr';
 
 export enum MenuLayerGroup {
 	TYPE_BASEMAPS	= "basemap",
 	TYPE_BASIC		= "basic",
 	TYPE_CUSTOM		= "custom"
 }
-export enum LAYER_MESSAGE_TYPE {
-	DATE_RANGE 		= "date_range",
-	EXTENT 			= "zoom_level",
-	NONE 			= "none"
-}
 export class LayerGroup extends Module {
 
 	// TYPE_CUSTOM will use props.layer_refs to determine which layers to show
 	public type	: MenuLayerGroup = MenuLayerGroup.TYPE_CUSTOM; 
 	public layerUpdateHandler : (evt: Event) => void;
-	public disabledUpdateHandler : (evt: Event) => void;
 
 	public constructor(props : IMenuModule) {
 		super(props);
 		this.layerUpdateHandler = () => this.updateLayers();
-		this.disabledUpdateHandler = () => this.updateDisabled();
 	}
 
     public render(par : HTMLDivElement) {
@@ -45,25 +37,48 @@ export class LayerGroup extends Module {
 			this.props.isMultiLayerActive = false;
         }
 //		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
-		for (let i = props.layers.length-1; i>=0; i--) {
-			let lo = props.layers[i];
-			if (lo.parent) { continue; }
-//			if (! showAll && ! lo.isBasicLayer) { continue; }
-			let go = false;
-			if (! lo.clandestine && this.props.layer_refs) {                 
-                go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+		// order by layerRef order (if defined in config), otherwise by location in the overall layer list; 
+		if (this.props.useLayerRefsOrder && this.props.useLayerRefsOrder === true) {
+			if (this.props.layer_refs) {
+				for (let i=0; i<this.props.layer_refs.length; i++) {
+					let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
+					if (lo.parent) { continue;}
+					if (lo.type == "label") {
+						this.createLabel(lo, ul, baseId);
+					} else if (!lo.clandestine || this.type == MenuLayerGroup.TYPE_CUSTOM) {
+						if (this.checkLayerRef(lo, this.props.layer_refs, this.props.tag)) {
+							this.createLayer(lo, ul, baseId);
+						}
+					}
+				}
+			} else {
+				console.log("Layers are not defined for the custom module.");
 			}
-			else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
-				if (! this.props.layer_refs) {
-					console.log("Layers are not defined for the custom module.");
-					go = false;
-				} else {
+		} else {
+			for (let i = props.layers.length-1; i>=0; i--) {
+				let lo = props.layers[i];
+				if (lo.parent) { continue; }
+				let go = false;
+				if (! lo.clandestine && this.props.layer_refs) {                 
 					go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
 				}
-            }
-			if (! go) { continue;}
-			this.createLayer(lo, ul, baseId);
+				else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
+					if (! this.props.layer_refs) {
+						console.log("Layers are not defined for the custom module.");
+						go = false;
+					} else {
+						go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+					}
+				}
+				if (! go) { continue;}
+				if (lo.type == "label") {
+					this.createLabel(lo, ul, baseId);
+				} else {
+					this.createLayer(lo, ul, baseId);
+				}
+			}
 		}
+		
         this.updateLayers();
         if (this.props.hasMultiLayer) {
             this.setMultiDynamicLayer();
@@ -96,6 +111,14 @@ export class LayerGroup extends Module {
 
 	public onSystemDateUpdate () {
 		this.updateDisabled();
+	}
+
+	public createLabel (lo : Layer, ul : HTMLUListElement, baseId:string) {
+		let li = document.createElement("li");
+		li.setAttribute("id", `bb_label_${baseId}_${lo.id}`);
+		li.setAttribute("class", "lmvControlsLabel");
+		ul.appendChild(li);
+		li.innerHTML = lo.title;
 	}
 
     /**
@@ -170,10 +193,11 @@ export class LayerGroup extends Module {
 		let str = `
 			<div id="${baseId}_${lo.id}" class="supp_lyrs_lyr_click ${legIcon}">
 				${icon}
-				${iconLabel}
+				${iconLabel}	
 				<div class="bottomBarSubMenuItemLabel">
-					${lo.title}
-				</div>				
+					${lo.title} 
+					<div id="layerONOFFIcon" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+				</div>		
 			</div>
 			${extraBtn}
             ${tileBtn}
@@ -182,11 +206,12 @@ export class LayerGroup extends Module {
 			<div id="layerInfo_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerInfo"></div>
 			${expandMenu}
 		`;
+		
 		if (lo.needsLegendIcon) { 
 			str +=`<div id="layerLegend_${baseId}_${lo.id}" class="lmvControlsLayerLegendIcon"></div>`;
 		}
 		if (lo.hasLegend) {
-			str += `<div id="legend_${lo.id}" class="lmvControlsLayerLegend"></div>`;
+			str += `<div id="legend_${baseId}_${lo.id}" class="lmvControlsLayerLegend"></div>`;
 		}
 /*			for (let j=0; j<props.layers.length; j++) {
 			let lo2 = props.layers[j];
@@ -319,21 +344,23 @@ export class LayerGroup extends Module {
 			if (! el) { continue;}
 			let el2 = null;
 			if (lo.hasLegend) {
-				el2 = document.getElementById(`legend_${lo.id}`) as HTMLDivElement;
+				el2 = document.getElementById(`legend_${this.props.id}_${lo.id}`) as HTMLDivElement;
 			}
 			if (lo.listItemHandler) {
-				lo.listItemHandler(lo.id);
+				lo.listItemHandler(this.props.id, lo.id);
 			}
 			this.renderLayerLegend(this.props.id, lo);
 			this.setExtraBtn(this.props.id, lo);
 			if (lo.visible) {
 				utils.addClass(el.id, 'lmvControlsLayerSelected');
+				utils.addClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
 				if (el2) {
-					el2.style.display = "block";
+					el2.style.display = "block";				
 				}
 				
 			} else {
 				utils.removeClass(el.id, 'lmvControlsLayerSelected');
+				utils.removeClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
 				if (el2) {
 					el2.style.display = "none";
 				}
@@ -388,66 +415,6 @@ export class LayerGroup extends Module {
 			type = 'minus';
 		}*/
 		el.innerHTML = `<i class="fa fa-${type}" aria-hidden="true"></i>`;
-	}
-
-	public setLayerMessage(text:string | null, _id:string, type:LAYER_MESSAGE_TYPE) {
-		let id = `layerInfo_msg_${this.props.id}_${_id}`;
-		let parentId = `bb_${this.props.id}_${_id}`;
-		utils.removeClass(parentId, 'date_range');
-		utils.removeClass(parentId, 'extent');
-		if (type == LAYER_MESSAGE_TYPE.NONE) {
-			utils.hide(id);
-			utils.html(id,'');
-			utils.removeClass(parentId, 'lmvControlsLayerMsg');
-		} else {
-			let str = `<div>${text as string}</div>`;
-			utils.html(id, str);
-			utils.removeClass(id, 'date_range');
-			utils.removeClass(id, 'extent');
-			let cls = (type == LAYER_MESSAGE_TYPE.DATE_RANGE) ? 'date_range' : 'extent';
-			utils.addClass(parentId, 'lmvControlsLayerMsg');
-			utils.addClass(parentId, cls);
-			utils.addClass(id, cls);
-			utils.show(id);
-		}
-	}
-
-	public updateDisabled() {
-		let update = false;
-		let level = props.map.getView().getZoom();
-		if (this.props.layer_refs && level) {
-			for (let i=0; i<this.props.layer_refs.length; i++) {
-				let msg:string | null = null;
-				let msgType = LAYER_MESSAGE_TYPE.NONE;
-				let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
-				if (lo.minDate || lo.maxDate) {
-					if ((lo.minDate && lo.minDate > flatpickr.formatDate(lo.time, 'Y-m-d')) || 
-						(lo.maxDate && lo.maxDate < flatpickr.formatDate(lo.time, 'Y-m-d'))) {
-						let start = (lo.minDate) ? lo.minDate : '...';
-						let end = (lo.maxDate) ? lo.maxDate : 'present';
-						msgType = LAYER_MESSAGE_TYPE.DATE_RANGE;
-						msg = `DATA AVAILABLE: ${start} .. ${end}`;				
-						if (props.currentBasemap == lo.id) {
-							update = true;
-						}
-						if (lo.category != "basemap") {
-							lo.visible = false;
-						}
-					}
-				}
-				// secondary check for zoom level. Data range supersedes zoom level
-				if (msgType == LAYER_MESSAGE_TYPE.NONE && (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel))) {
-					let txt = (level < lo.minLevel) ? 'Zoom IN (+)' : 'Zoom OUT (-)';
-					msg = `Zoom level not supported. ${txt}`;
-					msgType = LAYER_MESSAGE_TYPE.EXTENT;
-				}
-				this.setLayerMessage(msg, lo.id, msgType);
-			}
-		}
-		// update basemap if basemap is tied to date range and is out of range
-		if (update) {
-			mapUtils.setBasemap('earth');
-		}
 	}
 
     private appendDynamicLayerSelector(ul : HTMLUListElement) {

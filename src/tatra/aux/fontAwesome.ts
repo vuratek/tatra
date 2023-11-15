@@ -15,7 +15,7 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
         faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt, faCog, faSearchLocation, faGraduationCap, faCogs, faFlask,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt,
-        faClock,
+        faClock, faInfo,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
@@ -23,7 +23,7 @@ export class fontAwesome {
 //        this.refresh();
 //        config.searchPseudoElements = false;
         //main
-        library.add(faTimes, faExternalLinkAlt, faPlusCircle, faMinusCircle, faInfoCircle, faMinus, faPlus, faFile, faDatabase, faDownload);
+        library.add(faTimes, faExternalLinkAlt, faPlusCircle, faMinusCircle, faInfo, faInfoCircle, faMinus, faPlus, faFile, faDatabase, faDownload);
         // top menu
         library.add(faComments, faHome, faUserCircle, faSearch, faSearchPlus, faAngleRight, faAngleLeft, 
             faChevronCircleRight, faEllipsisV, faBullhorn, faSearchLocation);

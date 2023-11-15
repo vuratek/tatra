@@ -1,7 +1,7 @@
 import { navProps } from './navProps';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { navConfigDef, NavigationModes } from './navConfigDef';
+import { navConfigDef, NavigationModes, INavConfigMenu } from './navConfigDef';
 import { LeftMenu } from '../sideMenu/LeftMenu';
 import { TopMenu } from '../topMenu/TopMenu';
 import { utils } from '../utils';
@@ -24,6 +24,9 @@ export class Navigation {
     
     public static init (settings : navConfigDef) {
         navProps.settings = settings;
+
+        this.convertUrls(); // if running on stagging, set urls
+
         if (! navProps.settings.app.navigationMode ) {
             navProps.settings.app.navigationMode = NavigationModes.BASIC;
         }
@@ -99,6 +102,47 @@ export class Navigation {
                 authentication.checkLogin();
             }
         }
+    }
+
+    private static convertUrls() {
+        let arr = window.location.pathname.split('/');
+        let prefix = '';
+        if (arr.length > 1) {
+            if (arr[1] == 'internal' && arr.length > 4) {
+                prefix = arr.slice(0,5).join('/');
+            } else if (arr[1] == 'dev' && arr.length > 1) {
+                prefix = arr.slice(0,2).join('/');
+            }
+        }
+        if (prefix == '') { return; }
+        navProps.PREFIX = prefix;
+        this.addPrefix(navProps.settings.topMenu);
+        this.addPrefix(navProps.settings.sideMenu);
+        if ( navProps.settings.footer ) {
+            this.addPrefix(navProps.settings.footer);
+        }
+        this.setAppPrefix("mainIcon");
+        this.setAppPrefix("screenShotIcon");
+        this.setAppPrefix("timelineURL");
+    }
+    private static addPrefix( menu:INavConfigMenu) {
+        for (let i=0; i< menu.items.length; i++) {
+            let item = menu.items[i];
+            if (item.url && item.url[0] == '/') {
+                item.url = navProps.PREFIX + item.url;
+            }
+            if (item.subMenu) {
+                for (let j=0; j< item.subMenu.length; j++) {
+                    let sub = item.subMenu[j];
+                    if (sub.url && sub.url[0] == '/') {
+                        sub.url = navProps.PREFIX + sub.url;
+                    }
+                }
+            }
+        }
+    }
+    private static setAppPrefix( item : string) {
+        if (navProps.settings.app[item]) {navProps.settings.app[item] = navProps.PREFIX + navProps.settings.app[item];}
     }
 
     public static hideAllLogin() {

@@ -39,6 +39,10 @@ a:link, a:visited {
     color: #2276ac;
     text-decoration: none;
 }
+a.navGCInfo {
+	color: #ddd;
+}
+
 a.ext::after{
     display: none;
     padding-left: 0.5rem;

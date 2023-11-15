@@ -283,18 +283,11 @@ export class utils {
         return JSON.stringify(obj) === JSON.stringify({});
     }
 
-    // convert mins into hours when possible (60 mins = 1 hour, but 75 mins = 75 mins)
+    // convert mins into hours (hh:mm) format
     public static getMinHourValue(mins:number) : string {
-        let str = '';
-        if (mins % 60 == 0) {
-            str = (mins/60).toString() + ' hr';
-            if (mins / 60 > 1) { 
-                str += 's';
-            }
-        } else {
-            str = mins + ' mins'
-        }
-        return str;
+        let tHrs = utils.padFill(Math.floor(mins / 60).toString(),2);
+        let tMins = utils.padFill((mins % 60).toString(), 2);
+        return `${tHrs}:${tMins}`;
     }
 
     public static isJson(str : string) {

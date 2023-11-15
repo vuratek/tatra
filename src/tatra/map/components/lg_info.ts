@@ -21,10 +21,10 @@ export class lg_info extends baseComponent {
 		let posy = 0;
 		let posx = 0;
 		if (mh > 500) {
-			posy = 50;
+			posy = 30;
 		}
 		if (mw > 600) {
-			posx = mw - 550;
+			posx = mw - 675;
 		}		
         this.position(posx, posy);
 	}
