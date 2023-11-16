@@ -56,7 +56,7 @@ export class MultiDaySelectorSimple extends Module {
 	}
 	public setTimelineController() {
 		timelineController.time.imageryDate = props.time.imageryDate;
-		timelineController.time.date = props.time.imageryDate;
+		timelineController.time.date = props.time.date;
 		timelineController.time.range = props.time.range;
 		timelineController.time.rangeMins = props.time.rangeMins;
 	}
@@ -127,8 +127,8 @@ export class MultiDaySelectorSimple extends Module {
 	}
 	public setDates () {
 		props.time.date = this.calendar.selectedDates[0];
-		props.time.imageryDate = this.calendar.selectedDates[0];
 		props.time.range = Number(utils.getSelectValue(`mdsDateRange`));
+//		props.time.imageryDate = this.calendar.selectedDates[0];
 		props.time.rangeMins = 0;
 		props.time.quickTime = 0;
 		this.setTimelineController();

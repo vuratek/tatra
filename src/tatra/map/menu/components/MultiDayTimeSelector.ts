@@ -32,13 +32,8 @@ export class MultiDayTimeSelector extends Module {
         super.render(par);
 
         let dates = hash.getDates();
-        props.time.rangeMins = 0;
-		props.time.range = 1;
-
-        if (dates) {
-            hashHandler.processDateTime(dates);		
-//            this.lastRangeDays = props.time.range;
-        }
+        hashHandler.processDateTime(dates);		
+        this.lastRangeDays = props.time.range;
         
         controls.createControlItem('time_info', time_info);
 		let el = document.getElementById(`mmm_${this.props.id}`) as HTMLDivElement;
@@ -99,9 +94,9 @@ export class MultiDayTimeSelector extends Module {
         // set timeline
         let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
 		timelineController.time.imageryDate = props.time.imageryDate;
-		timelineController.time.date = props.time.imageryDate;
+		timelineController.time.date = props.time.date;
 		timelineController.time.range = props.time.range;
-		timelineController.time.rangeMins = props.time.rangeMins;
+        timelineController.time.rangeMins = props.time.rangeMins;
         Timeline.init("timeline", ttype);
         controls.enableBtn("timeline");
 		controls.setItem("timeline", true);				
@@ -115,7 +110,7 @@ export class MultiDayTimeSelector extends Module {
             }
         }
 
-		this.initDatePicker(props.time.date);
+        this.initDatePicker(props.time.date);
         rangePicker.timelineUpdate();
         if (props.time.rangeMins > 0) {
             this.onDailySubDaily('subdaily');
@@ -125,11 +120,11 @@ export class MultiDayTimeSelector extends Module {
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
     }
     public onDailySubDaily(option:string) {
-//        console.log(option, this.lastRangeDays);
         if (this.currentDayMode == option) { return; }
         if (option == 'daily') {
             utils.hide('ql_subdaily');
             utils.show('ql_daily');
+
             this.setLastMinValues(this.lastRangeDays);
             time_info.setDisplayOptions([tio.TODAY, tio.DAY2, tio.DAY3, tio.DAY7]);
         } else {
@@ -280,7 +275,6 @@ export class MultiDayTimeSelector extends Module {
         for (let i=0; i<links.length;i++) {
             utils.removeClass(`ql_${links[i]}`, 'selected');            
         }
-//        console.log(props.time, flatpickr.formatDate(props.time.date, 'Y-m-d'), flatpickr.formatDate(dt, 'Y-m-d'));
         if (flatpickr.formatDate(props.time.date, 'Y-m-d') == flatpickr.formatDate(dt, 'Y-m-d')) {
             if (props.time.range == 0 && props.time.rangeMins == 0) {
                 utils.addClass('ql_today', 'selected');
@@ -393,9 +387,10 @@ export class MultiDayTimeSelector extends Module {
         props.time.quickTime = 0;
         timelineController.time.range = props.time.range;
 		timelineController.time.rangeMins = props.time.rangeMins;
-		timelineController.time.date = props.time.date;
-		timelineController.refreshTimelineDate();
-        
+        timelineController.time.date = props.time.date;
+        timelineController.time.imageryDate = props.time.imageryDate;
+        timelineController.refreshTimelineDate();
+
         this.setQuickLinks();
         events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
 
@@ -418,7 +413,6 @@ export class MultiDayTimeSelector extends Module {
         let _refresh = false;
 
         if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
-//            console.log("END", obj["range"].end);
             let _dt = obj["range"].end;
             this.calendar.setDate(utils.sanitizeDate(obj["range"].end));
             this.clock.maxTime = this.getClockMaxTime(_dt);

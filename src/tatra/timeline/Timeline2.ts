@@ -775,6 +775,7 @@ export class Timeline {
         let mins = timelineController.time.rangeMins;
         let endDay = timelineController.time.date;
         let time = utils.sanitizeDate(endDay, false);
+        let sliderTime = utils.sanitizeDate(timelineController.time.imageryDate, false);
         if (! Timeline.items) { 
             if (! this.timeKeeper) {
                 this.timeKeeper = {};
@@ -788,7 +789,7 @@ export class Timeline {
 //                this.timeKeeper["range"] = {start: utils.addMinutes(endDay, -mins), end: utils.addDay(time)};                
             }
             if (timelineController.type != TimelineType.SINGLE) {
-                this.timeKeeper["single"] = {start: time, end: utils.addDay(time)};
+                this.timeKeeper["single"] = {start: sliderTime, end: utils.addDay(sliderTime)};
             }
 
             this.notifyTimelineUpdate();

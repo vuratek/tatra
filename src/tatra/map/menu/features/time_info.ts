@@ -129,7 +129,6 @@ export class time_info extends baseComponent {
 
     public static setDisplayOptions(options : Array<string>) {
         this.options = options;
-        console.log(options);
         this.populateTypes();
     }
 
