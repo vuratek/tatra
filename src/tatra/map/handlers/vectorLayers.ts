@@ -5,6 +5,7 @@ import VectorTileSource from 'ol/source/VectorTile';
 import { Layer } from '../obj/Layer';
 import { Style } from "ol/style";
 import { EsriJSON, MVT } from "ol/format";
+import { VectorTile } from 'ol';
 
 export class vectorLayers {
 
@@ -57,6 +58,19 @@ export class vectorLayers {
             }),
             style : style
         });
+        if (lo._layer && lo.id == "eis-fire-tile") {
+            let vectorSource = (lo._layer as VectorTileLayer).getSource();
+            if (vectorSource) {
+                vectorSource.on('tileloadend', function(evt) {
+                    var z = evt.tile.getTileCoord()[0];
+                    var features = (evt.tile as VectorTile).getFeatures();
+                    for (let i=0; i<features.length; i++) {
+                        let p = features[i].getProperties();
+                        p[lo.id] = true;
+                    }
+                });
+            }
+        }
 
     }
 }

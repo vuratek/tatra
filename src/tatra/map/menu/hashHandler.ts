@@ -80,12 +80,10 @@ export class hashHandler {
 				props.time.range = 6;
 			} else if (dates.start && (dates.start.indexOf('hr') > 0 || dates.start.indexOf('mins') > 0)) {
                 let mins = hash.getMinutesValue(dates.start);
-                console.log("MINS", mins);
                 hasMins = true;
                 props.time.rangeMins = mins;
                 props.time.range = 0;
                 dates = hash.convertDates(dates);
-                console.log (">>>", dates);
             }
             if (! hasMins) {
                 dates = hash.convertDates(dates);
@@ -104,7 +102,10 @@ export class hashHandler {
                     }
                 }
             }		
-		}
+		} else {
+            props.time.rangeMins = 0;
+            props.time.range = 1;    
+        }
     }
 
     public static getMinuteDescr ( min:number) : string | null {

@@ -153,11 +153,6 @@ export class screenshot extends baseComponent {
         link.click();
     }
 
-    private static onGifComplete(obj, width, height) {
-        console.log("OBJ", obj);
-    }
-
-
     public static addTimestamp (canvas : HTMLCanvasElement, text : string) {
         let ctx = canvas.getContext('2d');
         if (! ctx) { return; }

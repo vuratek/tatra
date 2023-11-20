@@ -137,11 +137,12 @@ export class identifyVectorTile {
                     for (let i=0; i<features.length; i++) {
                         let feature = features[i];
                         let p = feature.getProperties();
-                        //console.log(p);
                         if (p[lo.id]) {
                             let style = '_' + ((lo as Layer).source as LayerSource).style + '_select';
                             let info = '_' + ((lo as Layer).source as LayerSource).style + '_info';
-                            (feature as Feature).setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
+                            try {
+                                (feature as Feature).setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
+                            } catch (err) {}
                             let top = (evt.pixel[1] < 170) ? true : false;
                             this.setToolTip(layerStyle[info](feature), top);
 //                            this.setInfoZoomto((feature as Feature));

@@ -163,9 +163,7 @@ export class LayerGroup extends Module {
 		}
 		let extraBtn = '';
 		if (lo.category != "basemap") {
-			extraBtn = `
-				<div id="layerExtra_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerMenu">					
-				</div>`;
+			extraBtn = `<div id="layerExtra_${baseId}_${lo.id}" class="lmvControlsLayerInfoBtns lmvControlsLayerMenu"></div>`;
         }
         let zoomTo = '';
         if (lo.zoomTo) {
@@ -225,7 +223,7 @@ export class LayerGroup extends Module {
 		li.innerHTML = str;
 		utils.setClick(`${baseId}_${lo.id}`, () => this.selectLayer(lo.id));
 		this.setLayerInfoField(`layerInfo_${baseId}_${lo.id}`, lo);
-		utils.setClick(`layerExtra_${baseId}_${lo.id}`, () => this.showExtraOption(lo.id));
+		this.setLayerOpacityField(`layerExtra_${baseId}_${lo.id}`, lo);
         utils.setChange(`layerShowMissingTile_${baseId}_${lo.id}`, ()=> this.refreshMissingTile(baseId, lo.id));
         if (lo.zoomTo) {
             utils.setClick(`layerZoomTo_${lo.id}`, ()=>this.zoomTo(lo.id));
@@ -256,17 +254,6 @@ export class LayerGroup extends Module {
                 mapUtils.zoomTo(Number(arr[0]), Number(arr[1]), Number(arr[2]));
             }
         }
-    }
-
-	private showExtraOption(id : string) {
-		let lo = mapUtils.getLayerById(id);
-		if (!lo) { return; }
-		if (lo.visible && opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
-			opacity.close();
-			return;
-		}
-		if (! lo.visible) { lo.visible=true;}
-		opacity.setLayer(lo.id, lo.title);
     }
     
     private selectLayer (id : string) {
@@ -321,22 +308,6 @@ export class LayerGroup extends Module {
 		}
     }
     
-    public setLayerInfoField (parentId: string, lo : Layer) {
-		let el = document.getElementById(parentId) as HTMLDivElement;
-		if (! el) { return; }
-		el.innerHTML =`<i class="fa fa-info-circle" aria-hidden="true"></i>`;
-		let info = (lo.info) ? lo.info : lo.id;
-		utils.setClick(parentId, () => events.infoClicked(info));
-	}
-
-	public setLayerLegendField (parentId: string, lo : Layer) {
-		let el = document.getElementById(parentId) as HTMLDivElement;
-		if (! el) { return; }
-		el.innerHTML =`<i class="fa fa-th-list" aria-hidden="true"></i>`;
-		let info = (lo.info) ? lo.info : lo.id;
-		utils.setClick(parentId, () => events.legendClicked(info));
-    }
-    
     public updateLayers () {
 		for (let i=0; i<props.layers.length; i++) {
 			let lo = props.layers[i];
@@ -350,7 +321,6 @@ export class LayerGroup extends Module {
 				lo.listItemHandler(this.props.id, lo.id);
 			}
 			this.renderLayerLegend(this.props.id, lo);
-			this.setExtraBtn(this.props.id, lo);
 			if (lo.visible) {
 				utils.addClass(el.id, 'lmvControlsLayerSelected');
 				utils.addClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
@@ -405,16 +375,6 @@ export class LayerGroup extends Module {
 		mapUtils.generateColorPaletteLegend(`lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas`, cp, width, 20, val1, val2);
 		utils.setClick(`lmvControls_${menu}_${lo.id}_SliderClickable`, ()=>this.showExtraOption(lo.id));
 
-	}
-
-	private setExtraBtn (menu : string, lo : Layer) {
-		let el = document.getElementById(`layerExtra_${menu}_${lo.id}`) as HTMLDivElement;
-		if (!el) { return; }
-		let type = 'adjust';
-/*		if (opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
-			type = 'minus';
-		}*/
-		el.innerHTML = `<i class="fa fa-${type}" aria-hidden="true"></i>`;
 	}
 
     private appendDynamicLayerSelector(ul : HTMLUListElement) {

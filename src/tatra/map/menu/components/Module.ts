@@ -10,6 +10,7 @@ import { controls } from '../../components/controls';
 import { lg_info } from '../../components/lg_info';
 import { utils } from '../../../utils';
 import flatpickr from 'flatpickr';
+import { opacity } from '../../components/opacity';
 
 export interface ILastRefreshUrl {
     [id : string] : string;
@@ -336,5 +337,39 @@ export class Module {
 			utils.addClass(id, cls);
 			utils.show(id);
 		}
-	}
+    }
+    
+    public setLayerInfoField (parentId: string, lo : Layer) {
+		let el = document.getElementById(parentId) as HTMLDivElement;
+		if (! el) { return; }
+		el.innerHTML =`<i class="fa fa-info-circle" aria-hidden="true"></i>`;
+		let info = (lo.info) ? lo.info : lo.id;
+		utils.setClick(parentId, () => events.infoClicked(info));
+    }
+    
+    public setLayerLegendField (parentId: string, lo : Layer) {
+		let el = document.getElementById(parentId) as HTMLDivElement;
+		if (! el) { return; }
+		el.innerHTML =`<i class="fa fa-th-list" aria-hidden="true"></i>`;
+		let info = (lo.info) ? lo.info : lo.id;
+		utils.setClick(parentId, () => events.legendClicked(info));
+    }
+    public setLayerOpacityField (parentId : string, lo : Layer) {
+		let el = document.getElementById(parentId) as HTMLDivElement;
+		if (!el) { return; }
+        el.innerHTML = `<i class="fa fa-adjust" aria-hidden="true"></i>`;
+        utils.setClick(parentId, () => this.showExtraOption(lo.id));
+    }
+    
+    private showExtraOption(id : string) {
+		let lo = mapUtils.getLayerById(id);
+		if (!lo) { return; }
+		if (lo.visible && opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
+			opacity.close();
+			return;
+		}
+//		if (! lo.visible) { lo.visible=true;}
+		opacity.setLayer(lo.id, lo.title);
+    }
+
 }

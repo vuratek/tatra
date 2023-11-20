@@ -8,6 +8,7 @@ import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
 import { utils } from "../../utils";
+import { colorPaletteArray } from "../colorPaletteArray";
 
 
 class AreaLabels {
@@ -318,7 +319,7 @@ export class layerStyle {
         return 14;
     }
 
-    private static getFireAlertSymbol(feature : Feature, resolution: number, type:string, isSelect : boolean) : Style | null {
+    private static getFireAlertSymbol(feature : Feature, resolution: number, featureVal:string, isSelect : boolean) : Style | null {
         let res = 1/resolution;
 
         let display = feature.get("_display");
@@ -331,7 +332,7 @@ export class layerStyle {
                 image: layerStyle.getFireIcon(false)
             });
         }
-        let label = (type == "canada") ? feature.get("firename") : feature.get("IncidentName");
+        let label = feature.get(featureVal);
         return new Style({
             image: layerStyle.getFireIcon(isSelect),
             text: new Text({
@@ -439,19 +440,19 @@ export class layerStyle {
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "canada", false);
+        return layerStyle.getFireAlertSymbol(feature, resolution, "firename", false);
     }
 
     public static _fireAlertCanada_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "canada", true);
+        return layerStyle.getFireAlertSymbol(feature, resolution, "firename", true);
     }
 
     public static _fireAlertUSA (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", false);
+        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", false);
     }
 
     public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
+        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
     }
 
     public static _firePerimeterUSA ( feature : Feature, resolution: number) : Style | null {
@@ -477,7 +478,7 @@ export class layerStyle {
     }
 
     public static _firePerimeterUSA_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
+        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
     }
     public static _firePerimeterUSA_info(feature : Feature) : string {
         let irwinid = feature.get('poly_IRWINID');
@@ -496,11 +497,15 @@ export class layerStyle {
     }
 
     public static eisColors(diff : number) : string {
-        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
-        if (diff < 0 || diff > 10) {
-            return colors[9];
-        }
-        return colors[diff];
+//        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
+        let colors = ["#ff3333", "#fff534", "#62ba35"];
+        let cols = colorPaletteArray.generate(colors, props.time.range + 1);
+        let p = props.time.range;
+        let d = diff -1;
+        if (d >= cols.length) {
+            d = cols.length;
+        } 
+        return colorPaletteArray.toRGBString(cols[d]);
     }
 
     public static _firePerimeterEIS ( feature : Feature, resolution: number) : Style | null {
@@ -512,7 +517,7 @@ export class layerStyle {
         let color = "#00000055";
         if (t) {
             let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
-            flag = "color" + diff;
+            flag = "color" + diff + '-' + props.time.range;
             color = layerStyle.eisColors(diff);
         }
         
@@ -534,24 +539,24 @@ export class layerStyle {
         }
         return layerStyle.symbols[key].cache[flag];
     }
-/*    public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "usa", true);
+    public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getFireAlertSymbol(feature, resolution, "fireid", true);
     }
     public static _firePerimeterEIS_info(feature : Feature) : string {
-        let irwinid = feature.get('poly_IRWINID');
-        let fireid = feature.get('attr_UniqueFireIdentifier');
-        let name = feature.get('poly_IncidentName');
+        let duration = feature.get('duration');
+        let fireid = feature.get('fireid');
+        let date = feature.get('t');
         return `
-            <span class="faLbl"><img src="/images/US-flag.jpg">Fire Perimeter</span><br/>
+            <span class="faLbl">EIS Fire Perimeter</span><br/>
             <div class="faSize">
                 <table>
-                    <tr><td>Name</td><td>${name}</td></tr>
                     <tr><td>Fire ID</td><td>${fireid}</td></tr>
-                    <tr><td colspan="2">IRWIN ID<br/>${irwinid}</td></tr>
+                    <tr><td>Duration</td><td>${duration}</td></tr>
+                    <tr><td>Date</td><td>${date}</td></tr>
                 </table>
             </div>
         `;
-    }*/
+    }
 
     public static _geographicAreasUSA ( feature : Feature, resolution: number) : Style | null {
         let key = "borders-usa";

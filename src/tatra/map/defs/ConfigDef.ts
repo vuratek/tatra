@@ -59,29 +59,34 @@ export interface IGroupBreaker {
     menuDescription? : string;
     highlight?      : string;
 }
+
+export interface IDateModuleOptions {
+    isSingle?       : boolean;          // if single slider should be used insead of a range
+}
 export interface IMenuModule {
-    id              : string;
-    label           : string;
-    icon            : string | null;
-    description?    : string | null;        // module description
-    module          : string;
-    opened?         : boolean;
-    tag             : string | null;        // used for matching layers in the config
-    defaultLayers   : Array<string> | null; // default layers that should load unless URL overrides it
-    noGroup?        : boolean;              // if set, doesn't show +/- for expansion; default is false
-    isTopModule?    : boolean;              // this is top part of map menu and the sroll doesn't apply to this
-    hasMultiLayer?  : boolean | null;       // dynamic imagery by default only allows 1 layer, but this will show a checkbox and allow multiple
+    id                  : string;
+    label               : string;
+    icon                : string | null;
+    description?        : string | null;        // module description
+    module              : string;
+    opened?             : boolean;
+    tag                 : string | null;        // used for matching layers in the config
+    defaultLayers       : Array<string> | null; // default layers that should load unless URL overrides it
+    noGroup?            : boolean;              // if set, doesn't show +/- for expansion; default is false
+    isTopModule?        : boolean;              // this is top part of map menu and the sroll doesn't apply to this
+    hasMultiLayer?      : boolean | null;       // dynamic imagery by default only allows 1 layer, but this will show a checkbox and allow multiple
     isMultiLayerActive? : boolean | null;   // whether the multilayer option is turned on; ties with hasMultiLayer
-    layer_refs?     : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
-    usePresetLayers : boolean;              // when switching tabs, do you maintain viewable layers. Applicable to modules that are persistent
-    handler         : Module | null;        // module handler pointer
-    groupBreakers?  : Array<IGroupBreaker> | null;        // creates all on/off button for group of layers
-    descriptionText? : string;              // passing description text for ex bookmarks
-    menuDescription? : string;              // description used in menu selection
-    useLayerRefsOrder? : boolean;           // should layers sort based on layer_refs or appearance in list layer
-    skipMenuDisplay? : boolean;
-    menuLabel?       : string | null;
-    localRedirect?   : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)
+    layer_refs?         : Array<IMenuModuleLayers> | null;  // this will only include tagged (tag:) layers referenced in this array
+    usePresetLayers     : boolean;              // when switching tabs, do you maintain viewable layers. Applicable to modules that are persistent
+    handler             : Module | null;        // module handler pointer
+    groupBreakers?      : Array<IGroupBreaker> | null;        // creates all on/off button for group of layers
+    descriptionText?    : string;              // passing description text for ex bookmarks
+    menuDescription?    : string;              // description used in menu selection
+    useLayerRefsOrder?  : boolean;           // should layers sort based on layer_refs or appearance in list layer
+    skipMenuDisplay?    : boolean;
+    menuLabel?          : string | null;
+    localRedirect?      : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)
+    options?            : IDateModuleOptions | null;  // additional settings if applicable
 }
 export interface ISupportFiles {
     files       : Array <string>;

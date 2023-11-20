@@ -66,7 +66,6 @@ export class MenuOption {
                         }
                     }
                 }
-                console.log(obj);
             }
         }
     }
