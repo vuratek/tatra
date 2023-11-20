@@ -49,6 +49,9 @@ export class mainMenu {
         this.updateMapMenuOptionBar();
         this.renderMapMenuOptionBar();
         document.addEventListener(events.EVENT_MENU_CLOSE, ()=> this.closeMenu());
+        if (cfg.menuOptions.length < 2){
+            utils.hide('mapMenuOptionBar');
+        }
     }
 
     private static setLearnMode() {
@@ -68,11 +71,13 @@ export class mainMenu {
         utils.show('mgcClose');
         utils.addClass('mapMenuTitle', 'infoMode');
         let el = document.getElementById('mapMenuTitle') as HTMLDivElement;
-        this.infoSaveText = el.textContent;
+        if (el.textContent) {
+            this.infoSaveText = el.textContent;
+        }
         el.innerHTML = this.infoOption.label;
         let div = document.getElementById(this.id + 'InfoContent') as HTMLDivElement;
-        if (! div) { return; }
-        for (let m=0; m<this.infoOption.modules.length; m++) {
+        if (! div || ! this.infoOption.modules ) { return; }
+        for (let m=0; m < this.infoOption.modules.length; m++) {
             let key = this.infoOption.modules[m].id;
             if (props.menuModules[key]) {
                 props.menuModules[key].activate();
@@ -300,14 +305,18 @@ export class mainMenu {
                     }
                     for (let i=0; i<mod.modules.length; i++) {
                         let key = mod.modules[i].id;
-                        let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
-                        if (props.menuModules[key]) {
-                            try {
-                                props.menuModules[key].render(_div);
-                            } catch (e) {
-                                console.log(e);
-                                console.log(`Module ${key} not defined.`);
+                        try {
+                            let _div = (props.menuModules[key].props.isTopModule === true) ? topDiv : div;
+                            if (props.menuModules[key]) {
+                                try {
+                                    props.menuModules[key].render(_div);
+                                } catch (e) {
+                                    console.log(e);
+                                    console.log(`Module ${key} not defined.`);
+                                }
                             }
+                        } catch (e) {
+                            console.log("Invalid module " + key);
                         }
                     }
                 }

@@ -60,7 +60,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		this.openCalendar();
 	}
 	public renderMenu () : string {
-		let cal = MultiDaySelectorSimple.renderCalendarConent(false);
+		let cal = MultiDaySelectorSimple.renderCalendarConent(false, false);
 		return `
 			<div id="${this.props.id}_mds_btn_${BasicMenuDates.TODAY}" class="mds_time_btn">
 				<div>${BasicMenuDates.TODAY}</div>
