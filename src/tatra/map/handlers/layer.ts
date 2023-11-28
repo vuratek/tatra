@@ -297,17 +297,41 @@ export class layer {
     private static _GeoJsonRefresh(lo : Layer) {
         if (!lo._layer) { return; }
         let source = lo._layer.getSource();        
-        let listenerKey = source.on("change", function(e) {
+/*        let listenerKey = source.on("change", function(e) {
             e;
             if (source.getState() == "ready") {
                 let f = e.target.getFeatures() as Array<Feature>;
                 if (f.length == 0) {
                     return;
                 }
-                unByKey(listenerKey);
+                //unByKey(listenerKey);
                 layer.setJsonFeatures(lo, f);
                 events.dispatchLayer(events.EVENT_GEOJSON_LOADED, lo.id);
             }
+        });*/
+        let listenerKey2 = source.on("featuresloadend", function(e) {
+            e;
+            if (source.getState() == "ready") {
+                let f = e.target.getFeatures() as Array<Feature>;
+                if (f.length == 0) {
+                    return;
+                } else if (lo.saveJSONData) {
+                    lo.jsonData = [];
+                    for (let i=0; i<f.length; i++) {
+                        let p = f[i].getProperties();
+                        let obj = {};
+                        for (let key in p) {
+                            obj[key] = p[key];
+                        }
+                        lo.jsonData.push(obj);
+                    }
+                }
+                
+                //unByKey(listenerKey2);
+                layer.setJsonFeatures(lo, f);
+                events.dispatchLayer(events.EVENT_GEOJSON_LOADED, lo.id);
+            }
+            
         });
     }
     
