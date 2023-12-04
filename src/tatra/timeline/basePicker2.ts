@@ -110,6 +110,7 @@ export class basePicker {
         let options = [10,20,30,40,50,60,120,180,240,360,480,600,720,1080,1440];
         let select = '';
         let custom = _custom;
+        select += `<option disabled>hours:mins</option>`;
         for (let i=0; i<options.length; i++) {
             if (custom) {
                 if (custom < options[i]) {

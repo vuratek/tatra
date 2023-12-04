@@ -80,6 +80,10 @@ export class map {
         layerInfo.init(props.config.properties.layerInfoURL);
 
         utils.clearLoader();
+        props.map.on('rendercomplete', function(e) {
+            events.dispatch(events.EVENT_RENDER_COMPLETE);
+        });  
+
     }
 
     // in some instances javascript reads json directly, otherwise parse is needed

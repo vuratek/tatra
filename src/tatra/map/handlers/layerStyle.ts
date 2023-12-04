@@ -481,6 +481,11 @@ export class layerStyle {
         return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
     }
     public static _firePerimeterUSA_info(feature : Feature) : string {
+        let test = feature.get('IrwinID');
+        // test if it can be redirected to use Active Fires info instead
+        if (test) {
+            return this._fireAlertUSA_info(feature);
+        }
         let irwinid = feature.get('poly_IRWINID');
         let fireid = feature.get('attr_UniqueFireIdentifier');
         let name = feature.get('poly_IncidentName');

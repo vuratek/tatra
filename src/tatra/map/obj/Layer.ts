@@ -40,20 +40,21 @@ enum TileSizes {
 }
 
 export class LayerSource {
-    url             : string | null = null;
-    wrapX           : boolean = true;
-    maxZoom         : number = 16;
+    crossCheckLayer : string | null = null;
+    format          : string | null = null;
+    imageExtent     : Array <number> = [-180,-90,180,90];
     imageSize       : number = 512;
     layer           : string | null = null;
-    tileUrlHandler  : string | null = null;
-    query           : string | null = null;
+    matrixSet       : string | null = null;
+    maxZoom         : number = 16;
     projection      : string = 'EPSG:4326';
-    imageExtent     : Array <number> = [-180,-90,180,90];
+    query           : string | null = null;
     selectHandler   : string | null = null;
     style           : string | null = null;
-    format          : string | null = null;
-    matrixSet       : string | null = null;
     templateUrl?    : string;
+    tileUrlHandler  : string | null = null;
+    url             : string | null = null;
+    wrapX           : boolean = true;
 }
 
 export interface IVariableRange {
@@ -125,6 +126,7 @@ export class Layer {
     public isLabel          : boolean = false;
     public isSelect         : boolean = false;
     public isTileIdentify   : boolean = false;
+    public jsonData         : Array <any> | null = null;
     public jsonHandler      : Function | null = null;
     public jsonSubsetHandler: Function | null = null;
     public limitExtent      : [number, number, number, number] | null = null;
@@ -142,6 +144,7 @@ export class Layer {
     public parser           : Function | null = null;
     public pixelSize        : number = 0;
     public replace          : Array <string> | null = null;
+    public saveJSONData     : boolean = false;
     public serversLimit     : Array <string> | null = null;
     public showTileError    : boolean = false;
     public source           : LayerSource | null = null;

@@ -3,14 +3,13 @@ import { props } from "../props";
 import { Coordinate } from 'ol/coordinate';
 import { events } from '../events';
 import { Layer, LayerSource } from '../obj/Layer';
-import { Select } from 'ol/interaction';
-import { platformModifierKeyOnly, click } from 'ol/events/condition';
 import { layerStyle } from './layerStyle';
-import Feature from 'ol/Feature';
+import Feature, { FeatureLike } from 'ol/Feature';
 import { utils } from '../../utils';
 import { mapUtils } from '../mapUtils';
 import { identifyUtils } from '../identifyUtils';
 import { Point } from 'ol/geom';
+import VectorSource from 'ol/source/Vector';
 
 
 export interface ILayers {
@@ -21,8 +20,6 @@ export class identifyVectorTile {
 
     private static identifyTooltipElement   : HTMLDivElement | null = null;
     private static identifyTooltip          : Overlay | null = null;
-    private static identifyLayers           : ILayers = {};
-    private static interaction              : Select | null = null; 
     private static activeLayers             : Array <Layer>  = [];
     public static active                    : boolean = false;
 
@@ -133,13 +130,28 @@ export class identifyVectorTile {
                     return false;
                 }
                 let features = props.map.getFeaturesAtPixel(evt.pixel);
+                let loCross = null;
+                let fidCross = null;
+                let fvalCross = null;
+                if (lo.source && lo.source.crossCheckLayer) {
+                    let arr = lo.source.crossCheckLayer.split(':');
+                    loCross = mapUtils.getLayerById(arr[0]);
+                    if (arr.length > 2) {
+                        fidCross = arr[1];
+                        fvalCross = arr[2];
+                    }
+                }
                 if (features.length != 0) {
                     for (let i=0; i<features.length; i++) {
                         let feature = features[i];
                         let p = feature.getProperties();
                         if (p[lo.id]) {
-                            let style = '_' + ((lo as Layer).source as LayerSource).style + '_select';
-                            let info = '_' + ((lo as Layer).source as LayerSource).style + '_info';
+                            let lStyle = ((lo as Layer).source as LayerSource).style;
+                            if (loCross && fidCross && fvalCross && p[fvalCross]) {
+                                this.searchGeoJson(loCross, fidCross, p[fvalCross], feature);
+                            }
+                            let style = '_' + lStyle + '_select';
+                            let info = '_' + lStyle + '_info';
                             try {
                                 (feature as Feature).setStyle(layerStyle[style](feature, props.map.getView().getZoom()));
                             } catch (err) {}
@@ -155,6 +167,29 @@ export class identifyVectorTile {
             }
         }
         return false;
+    }
+
+    // check GeoJson for feature fid with fval
+    private static searchGeoJson(lo : Layer, fid : string, fval : string, origFeature : FeatureLike) {
+        if (lo._layer ) {
+            let features = [];
+            if (lo.saveJSONData && lo.jsonData ) {
+                features = lo.jsonData;
+            } else {
+                features = (lo._layer.getSource() as VectorSource).getFeatures();
+            }
+            for (let i=0; i<features.length; i++) {
+                let p = (lo.saveJSONData && lo.jsonData ) ? features[i] : features[i].getProperties();
+                if (p[fid] && p[fid] == fval) {
+                    for (let key in p) {
+                        if (! origFeature.get(key) ) {
+                            origFeature.set(key, p[key]);
+                        }
+                    }
+                    return;
+                }
+            }
+        }
     }
 
     private static setInfoZoomto (f : Feature) {

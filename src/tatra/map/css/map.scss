@@ -21,6 +21,18 @@
 	position:fixed;
 	background:#333;
 }
+.map3d {
+	top:0;
+	bottom:0;
+	width:100%;
+	border: 0;
+	position:fixed;
+	background:radial-gradient(#000, #010f35);
+}
+.map_size {
+	width:2048px;
+	height:1024px;
+}
 ::-webkit-scrollbar {
 	width: 1.2rem;
 }
@@ -173,7 +185,7 @@ body::-webkit-scrollbar {
 	background-color: #ec6112;
 	outline:none;
 }
-.ol-zoom, .ol-locator {
+.ol-zoom, .ol-locator, .ol-view3d {
 	top: 2.5rem;
 	left: 1.5rem;
 	width:3.5rem;
@@ -192,17 +204,24 @@ body::-webkit-scrollbar {
 .resize .ol-locator {
 	top: 13.5rem;
 }
-.leftMenuActive .ol-zoom, .leftMenuActive .ol-locator {
+.ol-view3d {
+	top: 14.5rem;
+}
+.resize .ol-view3d {
+	top: 18.5rem;
+}
+
+.leftMenuActive .ol-zoom, .leftMenuActive .ol-locator, .leftMenuActive .ol-view3d {
     left: 8.5rem;
 }
 .ol-zoomClosed {
     top: 2.5rem;
     left: 0.5rem;	
 }
-.ol-zoom:hover, .ol-locator:hover {
+.ol-zoom:hover, .ol-locator:hover,  .ol-view3d:hover {
 	background-color: rgba(255,255,255,.6);
 }
-.ol-zoom:focus, ol-locator:focus {
+.ol-zoom:focus, ol-locator:focus, ol-view3d:focus  {
 	background:default;
 	outline:none;
 }
@@ -506,7 +525,10 @@ body::-webkit-scrollbar {
 	padding: 0.1rem 0 0.1rem 0.4rem;
 	border-radius: 2rem;
 }
-.layerOnOffButton:hover, .layerOnOffButtonActive {
+.layerOnOffButton:hover {
+	background:#dedede;
+}
+.layerOnOffButtonActive, .layerOnOffButtonActive:hover {
 	color: #57f173;
 	background:#102638;
 }

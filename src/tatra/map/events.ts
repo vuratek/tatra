@@ -26,11 +26,14 @@ export class events {
     public static readonly EVENT_MENU_CLOSEABLE         : string = "menu_closeable";
     public static readonly EVENT_MENU_RESIZE            : string = "menu_resize";
     public static readonly EVENT_PRODUCT_DATES_LOADED   : string = "product_dates_loaded";
+    public static readonly EVENT_RENDER_COMPLETE        : string = "render_complete";
     public static readonly EVENT_SELECTION_UPDATE       : string = "selection_update";
     public static readonly EVENT_SET_CONTROL_ITEM       : string = "set_control_item";
     public static readonly EVENT_SYSTEM_DATE_UPDATE     : string = "system_date_update";
     public static readonly EVENT_TOOL_RESULT_UPDATE     : string = "tool_result_update";
     public static readonly EVENT_UI_LAYER_UPDATE        : string = "ui_layer_update"; 
+    public static readonly EVENT_VIEW2D                 : string = "view2d"; 
+    public static readonly EVENT_VIEW3D                 : string = "view3d"; 
     
     public static updateHash () {
         document.dispatchEvent(new CustomEvent(events.EVENT_HASH_UPDATE));
