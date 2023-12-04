@@ -202,7 +202,7 @@ export class Navigation {
         if (navProps.settings.app.useMap === true) {
             str += `
                 <div id="map" class="map"></div>
-                <div id="map3d" class="map" style="display:none;"></div>
+                <div id="map3d" class="map3d" style="display:none;"></div>
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="timeline" class="timeline"></div>

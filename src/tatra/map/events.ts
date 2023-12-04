@@ -26,6 +26,7 @@ export class events {
     public static readonly EVENT_MENU_CLOSEABLE         : string = "menu_closeable";
     public static readonly EVENT_MENU_RESIZE            : string = "menu_resize";
     public static readonly EVENT_PRODUCT_DATES_LOADED   : string = "product_dates_loaded";
+    public static readonly EVENT_RENDER_COMPLETE        : string = "render_complete";
     public static readonly EVENT_SELECTION_UPDATE       : string = "selection_update";
     public static readonly EVENT_SET_CONTROL_ITEM       : string = "set_control_item";
     public static readonly EVENT_SYSTEM_DATE_UPDATE     : string = "system_date_update";

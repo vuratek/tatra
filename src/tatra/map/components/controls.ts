@@ -13,6 +13,7 @@ import { help } from "./help";
 import { measure } from "./measure";
 import { select } from "./select";
 import { locator } from "./locator";
+import { view3d } from "./view3d";
 import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
 import { quickSearch } from "../../aux/quickSearch";
@@ -132,6 +133,12 @@ export class controls  {
                     if (! item.icon) { item.icon = "fa-map-marker-alt"; }
                     if (! item.type) { item.type = ControlTypes.TOOL; }
                     if (! item.handler) { item.handler = locator;}
+                    break;
+                case "view3d" :
+                    if (! item.label) { item.label = "View 3d"; }
+                    if (! item.icon) { item.icon = "fa-globe"; }
+                    if (! item.type) { item.type = ControlTypes.TOOL; }
+                    if (! item.handler) { item.handler = view3d;}
                     break;
                 case "select": 
                     if (! item.label) { item.label = "SELECT"; }
