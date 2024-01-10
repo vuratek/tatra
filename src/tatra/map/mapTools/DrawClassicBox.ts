@@ -2,7 +2,7 @@ import { BaseTool } from "./BaseTool";
 import { props } from "../props";
 import { Layer, LayerSource } from "../obj/Layer";
 import { mapUtils } from "../mapUtils";
-import { classicSelection } from "./classicSelection";
+import { classicSelection, Drag, DownUpInteraction } from "./classicSelection";
 import PointerInteraction from "ol/interaction/Pointer";
 import { DataHandler } from "./dataHandler";
 
@@ -36,8 +36,8 @@ export class DrawClassicBox extends BaseTool {
         if (this.lo) this.lo.visible = true;
         if (props.map) {
             mapUtils.useDragPan(false);
-            this.dragInteraction = new this.cs.Drag();
-            this.downUpInteraction = new this.cs.DownUpInteraction();
+            this.dragInteraction = new Drag();
+            this.downUpInteraction = new DownUpInteraction();
             props.map.getInteractions().extend([this.dragInteraction as PointerInteraction, this.downUpInteraction as PointerInteraction ]);
         }        
     }
@@ -53,8 +53,8 @@ export class DrawClassicBox extends BaseTool {
     }
 
     private removeInteraction () {
-        props.map.getInteractions().remove(this.dragInteraction);
-        props.map.getInteractions().remove(this.downUpInteraction);
+        if (this.dragInteraction) { props.map.getInteractions().remove(this.dragInteraction); }
+        if (this.downUpInteraction) { props.map.getInteractions().remove(this.downUpInteraction); }
     }
 
     public populateResults (divResults : HTMLDivElement, prefixId : string = '') {
