@@ -303,7 +303,6 @@ export class LayerGroup extends Module {
 					events.dispatchLayer(events.EVENT_UI_LAYER_UPDATE, lo.id);
 				}
 			}
-            //utils.analyticsTrack(lo.category + '-' + id);
             this.updateLayers();
 		}
     }

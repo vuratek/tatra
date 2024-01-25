@@ -1,0 +1,38 @@
+.hasVideo .timelineWrap {
+    left:6rem;
+}
+.timeline_video {
+    border-right: 0.1rem solid #777;
+    width: 5.5rem;
+    height: 5rem;
+    top: 0;
+    line-height: 0.3rem;
+    text-align: center;
+    position: absolute;
+}
+#timelineVideoWrap {
+    font-size: 2.5rem;
+}
+#timelineVideoWrap span {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+.lmvAnimation table {
+    border-collapse: collapse;
+}
+.lmvAnimation tr {
+    background: #104362;
+    color: #fff;
+}
+.lmvAnimation tr:nth-child(2n) {
+    background: #217bb2;
+}
+.lmvAnimation td {
+    padding:.5rem 1rem;
+}
+.lmvAnimation td:first-child {
+    width:10rem;
+}
+.lmvAnimation select {
+    width: 15rem;
+}

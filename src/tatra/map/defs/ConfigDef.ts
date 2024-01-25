@@ -62,6 +62,7 @@ export interface IGroupBreaker {
 
 export interface IDateModuleOptions {
     isSingle?       : boolean;          // if single slider should be used insead of a range
+    enableVideo?    : boolean;          // whether video should be in timeline 
 }
 export interface IMenuModule {
     id                  : string;

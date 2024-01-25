@@ -384,7 +384,6 @@ export class support_layers extends baseComponent{
 				}
 			}
 			//support_layers.updateLayers();
-			//utils.analyticsTrack(lo.category + '-' + id);
 		}
 		this.updateLayers();
 	}

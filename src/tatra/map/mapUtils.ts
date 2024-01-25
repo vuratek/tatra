@@ -704,15 +704,4 @@ export class mapUtils {
         return { x : x, y : y, zoom : zoom};
     
     }
-
-    public static analyticsTrack (val : string) {}
-
-/*    public static analyticsTrack (val) {
-        if (props.analytics && props.analyticsToolEvent) {
-            let _evt = props.analyticsToolEvent;
-            let obj = {'event' : _evt};
-            obj[_evt] = {'id' : val};
-            dataLayer.push(obj);
-        }
-    }*/
 }

@@ -107,7 +107,6 @@ export class baseComponent {
 //        controls.openWindow(this.id);
         this.isOpened = true;
         //controls.setItem(this.id, true);
-//        utils.analyticsTrack(this.id);
     }
 
     public static setIgnoreResize(ignore : boolean) {

@@ -342,7 +342,6 @@ export class controls  {
             if (activateDefault) {
                 this.setItem(this.DEFAULT_TOOL, true);
             }
-//            utils.analyticsTrack('tool-'+id);               
         } else if (item.type == ControlTypes.FLAG) {
             controls.items[id].visible = visible;
             let btn = document.getElementById( `bb_${id}_btn`) as HTMLDivElement;
@@ -440,12 +439,7 @@ export class controls  {
         this.deactivateControlItem(this.currentTool);
         this.currentTool = id;
         this.activateControlItem(id);
-//        tools.activateTool(id);  
-        mapUtils.analyticsTrack('tool-'+id);           
-    }
-
-    public static track (id : string) {
-        mapUtils.analyticsTrack(id);
+//        tools.activateTool(id);         
     }
 
     public static openWindow (id : string) {        

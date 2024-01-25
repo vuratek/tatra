@@ -7,6 +7,7 @@ import { singleDatePicker } from './singleDatePicker2';
 import { loadHandler } from "./loadHandler";
 import { helper } from './helper2';
 import { TimelineType, ITimelineItem, timelineController, TimelineAdjustType, ITimelineRanges } from './timelineController';
+import { videoOption } from './videoOption';
 
 export enum ActionType {
     CLICK       = "click",      // outside of range
@@ -289,7 +290,7 @@ export class Timeline {
         if (timelineController.type== TimelineType.RANGE_TIED || timelineController.type== TimelineType.RANGE_HOUR_MIN_TIED ) {
             this.timeKeeper["range"] = { start: utils.sanitizeDate(utils.addDay(utils.getGMTTime(new Date()), timelineController.time.range)), end : utils.maximizeDate(utils.addDay(utils.getGMTTime(new Date())))};
             //this.timeKeeper["range"] = { start: utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date())), - timelineController.time.range), end : utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date()),false))};
-            rangePicker.render(this.id)
+            rangePicker.render(this.id);
         } else if (timelineController.type== TimelineType.SINGLE) {
             singleDatePicker.render(this.id);
         } else if (timelineController.type== TimelineType.RANGE_SUBHOUR_TIED) {
@@ -300,27 +301,19 @@ export class Timeline {
             let mindate = new Date(maxdate.getTime());
             mindate.setMinutes(mindate.getMinutes() - 10);
             this.timeKeeper["range"] = { start: utils.addMinutes(maxdate, timelineController.time.rangeMins), end : maxdate};
-            rangePicker.render(this.id)
+            rangePicker.render(this.id);
         }
-        this.renderTimelineWrap(this.id);
-        this.container = document.createElement("div");
-        this.container.setAttribute("id", "timeline_main");
-        let wrap = document.getElementById('timelineWrap') as HTMLDivElement;        
-        wrap.appendChild(this.container); 
+        utils.ae(`${this.id}Wrap`, "timelineWrap", this.id);
+        this.container = utils.ae("timeline_main", null, `${this.id}Wrap`) as HTMLDivElement;
+        videoOption.render(this.id);
     
         utils.addClass('timeline', 'timelineMissing');
         loadHandler.load();        
     }
 
 
-    private static renderTimelineWrap (id : string) {
-        let div = document.getElementById(id) as HTMLDivElement;
-        if (! div) { return; }
-        
-        let cont = document.createElement("div");
-        cont.setAttribute("class", "timelineWrap")
-        cont.setAttribute("id", id + 'Wrap');
-        div.appendChild(cont);
+    public static allowVideo(allow : boolean) {
+        videoOption.allowVideo(allow);
     }
 
     private static onMouseDown (event : Event) {

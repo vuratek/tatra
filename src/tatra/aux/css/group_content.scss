@@ -24,12 +24,6 @@
 	top: 0;
 	padding:0.5rem;
 }
-.navGCInfo:hover::after {
-	position:absolute; top:0.5rem; right:-3rem;
-	content: "Layer Details";
-	width:14rem;
-}
-
 .navGCLbl {
 	font-size:1.6rem;
 	padding: 0.1rem 0;

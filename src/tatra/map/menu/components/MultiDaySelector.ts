@@ -100,6 +100,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 			utils.setSelectValue(`mdsDateRange`, range.toString());
 		}
 		this.setDates();
+		events.menuOpen(`module-mds-${this.currentSelection}`);
 	}
 //	private bookmark() {
 //		controls.activateControlItem('bookmark');

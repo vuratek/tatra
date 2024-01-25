@@ -29,6 +29,9 @@ export class MultiDaySelectorSimple extends Module {
 		if (this.props.options && this.props.options.isSingle === true) {
 			this.isSingle = true;
 		}
+		if (this.props.options && this.props.options.enableVideo) {
+			Timeline.allowVideo(this.props.options.enableVideo);
+		}
 	}
 
 	public render(par : HTMLDivElement) {
