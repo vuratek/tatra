@@ -339,8 +339,8 @@ export class LayerGroup extends Module {
 	}
 
 	private renderLayerLegend (menu : string, lo : Layer) {
-		let el = document.getElementById(`layerMenu_${menu}_${lo.id}`);
-		if (!el || !lo.colorPaletteId) {
+		let el = document.getElementById(`layerMenu_${menu}_${lo.id}`) as HTMLDivElement;
+		if (!el || !lo.colorPaletteId || !lo.variableRange || !lo.variableRange["coloring"]) {
 			return;
 		}
 		if (! lo.visible) {

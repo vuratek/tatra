@@ -361,7 +361,7 @@ export class Module {
         utils.setClick(parentId, () => this.showExtraOption(lo.id));
     }
     
-    private showExtraOption(id : string) {
+    public showExtraOption(id : string) {
 		let lo = mapUtils.getLayerById(id);
 		if (!lo) { return; }
 		if (lo.visible && opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
