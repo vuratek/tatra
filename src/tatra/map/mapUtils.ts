@@ -607,15 +607,21 @@ export class mapUtils {
     public static readColorMap (lo : Layer) {
 //        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.initData) {
         if (lo.initData) {
-            var arr = lo.initData.split("..");
+            let arr = lo.initData.split("..");
             if (arr.length == 2) {
                 let a1 = Number(arr[0]);
                 let a2 = Number(arr[1]);
                 lo.variableRange["coloring"] = [a1, a2];
+            } else {
+                let arr = lo.initData.split(",");
+                let arr2 = [];
+                for (let i=0; i<arr.length; i++) {
+                    arr2.push(Number(arr[i]));
+                }
+                lo.variableRange["coloringSet"] = arr2;
             }
         }
         if (lo.paletteUrl) {
-//            ajax.get(lo.paletteUrl as string, null, (data:any) => this.processColorMap(lo, data));
             fetch(lo.paletteUrl)
             .then(response => {
                 if (response.status == 404) {
@@ -643,24 +649,55 @@ export class mapUtils {
     
     public static prepareColors (lo : Layer) {
         if (! lo.colorPaletteId) { return; }
-        props.colorLookup[lo.id] = {};
-        let cp = props.colorPalettes[lo.colorPaletteId];
-        let start = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : 1;
-        let end = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values.length;
-        for (let i=0; i < cp.values.length; i++) {
+        
+        if (lo.variableRange) {
+            if (lo.variableRange["coloring"]) {
+                this.setColoringRange(lo);
+            }
+            else if (lo.variableRange["coloringSet"]) {
+                this.setColoringSet(lo);
+            }
+        }   
+    }
 
+    private static setColoringRange(lo : Layer) {
+        props.colorLookup[lo.id] = {};
+        if (! lo.colorPaletteId) { return; }
+        let cp = props.colorPalettes[lo.colorPaletteId];
+        let start = (lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : 1;
+        let end = (lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values.length;
+        for (let i=0; i < cp.values.length; i++) {
             if (cp.values[i].ref >= start && cp.values[i].ref <= end) {
-                let c1 = parseInt(cp.values[i].color.substring(0,2), 16);
-                let c2 = parseInt(cp.values[i].color.substring(2,4), 16);
-                let c3 = parseInt(cp.values[i].color.substring(4,6), 16);
-                let c4 = parseInt(cp.values[i].color.substring(6,8), 16);
-                let val = `${c1},${c2},${c3},${c4}`;
+                let val = this.getColorCombination(cp.values[i].color);
                 if (i >= start && i <=end) {
                 // c2 = val;            // this will need to reference alternate color
                 }
                 props.colorLookup[lo.id][val] = cp.values[i].ref;
             }
         }
+    }
+
+    private static setColoringSet(lo:Layer) {
+        props.colorLookup[lo.id] = {};
+        if (! lo.colorPaletteId) { return; }
+        let cp = props.colorPalettes[lo.colorPaletteId];
+        for (let i=0; i < cp.values.length; i++) {
+            for (let j=0; j<lo.variableRange["coloringSet"].length; j++) {
+                if (cp.values[i].ref == lo.variableRange["coloringSet"][j]) {
+                    let val = this.getColorCombination(cp.values[i].color);
+                    props.colorLookup[lo.id][val] = cp.values[i].ref;
+                    break;
+                }
+            }
+        }
+    }
+
+    private static getColorCombination(color:string):string {
+        let c1 = parseInt(color.substring(0,2), 16);
+        let c2 = parseInt(color.substring(2,4), 16);
+        let c3 = parseInt(color.substring(4,6), 16);
+        let c4 = parseInt(color.substring(6,8), 16);
+        return `${c1},${c2},${c3},${c4}`;
     }
 
     public static generateColorPaletteLegend(divId: string, cp : ColorPalette, width : number, height:number, min:number, max:number) {
@@ -704,15 +741,4 @@ export class mapUtils {
         return { x : x, y : y, zoom : zoom};
     
     }
-
-    public static analyticsTrack (val : string) {}
-
-/*    public static analyticsTrack (val) {
-        if (props.analytics && props.analyticsToolEvent) {
-            let _evt = props.analyticsToolEvent;
-            let obj = {'event' : _evt};
-            obj[_evt] = {'id' : val};
-            dataLayer.push(obj);
-        }
-    }*/
 }

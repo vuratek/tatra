@@ -92,6 +92,9 @@ export class MultiDayTimeSelector extends Module {
         utils.setClick(`mmm_${this.props.id}-btn-sub-daily`, ()=>this.onDailySubDaily('subdaily'));
 
         // set timeline
+        if (this.props.options && this.props.options.enableVideo) {
+			Timeline.allowVideo(this.props.options.enableVideo);
+		}
         let ttype = (props.time.rangeMins == 0) ? TimelineType.RANGE_TIED : TimelineType.RANGE_SUBHOUR_TIED;
 		timelineController.time.imageryDate = props.time.imageryDate;
 		timelineController.time.date = props.time.date;
@@ -134,6 +137,7 @@ export class MultiDayTimeSelector extends Module {
             this.setLastDayValues(this.lastRangeMins);
             time_info.setDisplayOptions([tio.HOUR1, tio.HOUR2, tio.HOUR4, tio.HOUR6]);
         }
+        events.menuOpen( `module-mdts-${option}` );
         this.setDates();
         Timeline.setSelectOption();
     }
@@ -245,7 +249,8 @@ export class MultiDayTimeSelector extends Module {
             this.setLastDayValues(240);
         } else if (val == '6h') {
             this.setLastDayValues(360);
-        }     
+        }    
+        events.menuOpen(`mdts-${val}`); 
         this.calendar.selectedDates[0] = dt;
         this.setDates();
         Timeline.setSelectOption();

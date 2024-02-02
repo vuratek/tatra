@@ -169,7 +169,7 @@ export class opacity extends baseComponent {
 			return;
 		}
 		let lo = this.currentLayers[0] as Layer;
-		if (!lo || !lo.colorPaletteId) { 
+		if (!lo || !lo.colorPaletteId || !lo.variableRange || !lo.variableRange["coloring"]) { 
 			el.innerHTML = '';
 			return; 
 		}

@@ -136,7 +136,6 @@ export class share extends baseComponent {
 //				window.open('https://www.tumblr.com/widgets/share/tool/preview?posttype=link&canonicalUrl='+url+'k&title=' + title);
 				break;
         }
-        mapUtils.analyticsTrack('share-' + type);
     }
     
 	public static email () {

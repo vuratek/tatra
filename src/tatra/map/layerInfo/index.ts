@@ -198,7 +198,7 @@ export class layerInfo {
 
         utils.setChange('liKeyword', ()=>this.updateKeyword());
         utils.setUIAction('keyup', 'liKeyword', ()=>this.updateKeyword());
-        utils.setClick('liKeywordClear', ()=>this.clearKeyword())
+        utils.setClick('liKeywordClear', ()=>this.clearKeyword());
 
         this.updateKeyword();
     }

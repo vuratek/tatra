@@ -96,11 +96,17 @@ export class utils {
         return '';
     }
 
-    public static ae (id : string, className? : string | null) : HTMLDivElement {
-        let el = document.createElement("div");
+    public static ae (id : string, className? : string | null, parentId? : string | null, elType = "div") : HTMLElement {
+        let el = document.createElement(elType);
         el.setAttribute("id", id);
         if (className) {
             el.setAttribute("class", className);
+        }
+        if (parentId) {
+            let div = document.getElementById(parentId) as HTMLElement;
+            if (div) { 
+                div.appendChild(el);
+            }
         }
         return el;
     }

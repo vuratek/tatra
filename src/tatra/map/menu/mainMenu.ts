@@ -84,6 +84,7 @@ export class mainMenu {
                 props.menuModules[key].render(div);
             }
         }
+        events.menuOpen('learn_mode');
     }
 
     public static closeLearnMode() {
@@ -167,6 +168,7 @@ export class mainMenu {
         if (menu.urlRedirect) {
             props.mapMenuOpened = false;
             this.updateMapMenuOptionBar();
+            events.menuOpen('redirect-' + tab);
             let link = document.getElementById(`redirect_${tab}`) as HTMLAnchorElement;
             if (link) {
                 let ref = link.href.split('#');
@@ -195,6 +197,7 @@ export class mainMenu {
                 }
             }
         }
+        events.menuOpen(tab);
         this.currentTab = tab;
         utils.addClass(`MapMenuItem_${this.currentTab}`, 'selected');
         utils.addClass(`${this.id}`, `tab_${this.currentTab}`);

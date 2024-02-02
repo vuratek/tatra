@@ -22,6 +22,7 @@ export class events {
     public static readonly EVENT_LEGEND_CLICK           : string = "legend_click";
     public static readonly EVENT_MAP_EXTENT_CHANGE      : string = "map_extent_change";
     public static readonly EVENT_MAPVIEWER_READY        : string = "mapviewer_ready";
+    public static readonly EVENT_MENU_OPEN              : string = "menu_open";
     public static readonly EVENT_MENU_CLOSE             : string = "menu_close";
     public static readonly EVENT_MENU_CLOSEABLE         : string = "menu_closeable";
     public static readonly EVENT_MENU_RESIZE            : string = "menu_resize";
@@ -88,11 +89,23 @@ export class events {
             }
         }));
     }
+
+    public static menuOpen (menuId : string) {
+        document.dispatchEvent(new CustomEvent(events.EVENT_MENU_OPEN, {
+            detail: {
+                id: menuId,
+                menuId : menuId,
+                visible : true
+            }
+        }));
+    }
     
     public static menuClose (menuId : string) {
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_CLOSE, {
             detail: {
-                menuId: menuId
+                id: menuId,
+                menuId : menuId,
+                visible : false
             }
         }));
     }

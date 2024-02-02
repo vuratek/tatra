@@ -204,30 +204,50 @@
 }
 
 .fmmSupportIcons:hover, .lmvControlsLayerInfoBtns:hover, .fmm_ba_opacity:hover, .fmm_ba_opacity2:hover,
-.navGCInfo:hover,.navGCCtrl:hover, .fmmSupportIcons:hover {
+.navGCInfo:hover,.navGCCtrl:hover, .fmmSupportIcons:hover, .fmmGroupBreakerCtrl_info:hover, .fire_option_opacity:hover {
 	color: #57f173;
 }
-.lmvControlsLayerMenu:hover::after, .lmvControlsLayerInfo:hover::after, .fmmSupportIcons:hover::after {
-	position:absolute; top:-2.3rem; right:-0.8rem;
+.fmmSupportIcons:hover {
+	position: relative;
+}
+.fmmSupportIcons:hover::after, .lmvControlsLayerInfoBtns:hover::after, .fmm_ba_opacity:hover::after, .fmm_ba_opacity2:hover::after,
+.navGCInfo:hover::after,.navGCCtrl:hover::after, .fmmSupportIcons:hover::after, .mapMenuIcons #mapGraduationCap:hover::after, 
+.fmmGroupBreakerCtrl_info:hover::after, .fire_option_opacity:hover::after {
+	position:absolute; 
 	display:block;
-	content: "Opacity";
 	font:normal 1.4rem Titillium Web, sans-serif;
-	width:5rem;
-	padding:0.2rem 0.5rem 0.4rem 1rem;
+	text-align: center;
+	padding: 0.2rem 0.5rem;
+	background: #333;
+	min-width: 4.5rem;
+	white-space: nowrap;
+	border-radius: 1rem;
+	top:-2.5rem; 
+	opacity:1;
+	right:-0.4rem;
+	text-transform: capitalize;
 }
-
-.lmvControlsLayerInfo:hover::after {
-	position:absolute; top:-2.3rem; right:-0.9rem;
+.mapMenuIcons #mapGraduationCap:hover::after {
+	top:-0.25rem; right:2.3rem;
+	background:none;
+	content: "Learn Mode";
+}
+.navGCInfo:hover::after {
+	top:-0.25rem; right:3rem;
+	content: "Layer Details";
+}
+.fire_option_opacity:hover::after {
+	right:-2rem;
+}
+.lmvControlsLayerMenu:hover::after, .fire_option_opacity:hover::after {
+	content: "Opacity";
+}
+.lmvControlsLayerInfo:hover::after, .fmmSupportIcons:hover::after, .fmmGroupBreakerCtrl_info:hover::after  {
 	content: "Info";
-	width:4rem;
 }
-.fmmSupportIcons:hover::after {
-	position:absolute; top:-0.3rem; right:3.2rem;
-	content: "Info";
-	font:normal 1.5rem Titillium Web, sans-serif;
-	width:4rem;
+.fmmLyrExpBtn:hover::after {
+	content: "Options";
 }
-
 .lmvControlsLayerInfo  {
 	right: 0.5rem;
 }
