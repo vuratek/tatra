@@ -1,0 +1,193 @@
+#modal_video {
+    background: #222;
+}
+#modal_video_close {
+    display: none;
+}
+.anim_btn_load_video {
+    margin: 0.5rem auto;
+    display: block;
+    padding: 0.3rem 1rem;
+    background: white;
+    border-radius: 1rem;
+    text-align: center;
+    width: 10rem;
+    cursor: pointer;
+}
+#navGCHeader_videoFramesList {
+    padding: 0rem 1rem;
+}
+#navGCHdrLbl_videoFramesList {
+    font-size: 1.4rem;
+}
+#navGCCtrl_videoFramesList {
+    padding: .3rem;
+}
+#vidFrameCtrl {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem 0;
+    background: rgba(20,20,20,0.5);
+}
+#navGCContent_videoFramesList {
+    max-height: 50rem;
+    height: 50vh;
+    overflow: auto;
+}
+#videoLibrary {
+    max-width: 50rem;
+    margin: 1rem auto;
+    border: .1rem solid #777;
+    background: rgba(10,100,100,0.5);
+    position: relative;
+    border-radius: 1rem;
+
+/*    animation-name: example;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;    
+    animation-play-state: running;*/
+
+}
+.vfl_info {
+    position: absolute;
+    top: 1rem;
+    right: .3rem;
+    width:18rem;
+}
+#videoBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom : 0;
+/*    animation-name: example;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;    
+    animation-play-state: running;*/
+}
+@-webkit-keyframes example {
+    0%   {    background: #113938; opacity:0.3;}
+    50%  {    background: red; opacity : 0.1;}
+    75%  {    background:  yellow; opacity:0.2;}
+    100% {    background:  #113938; opacity : 0.3;}
+}
+
+@keyframes example {
+    0%   {    background: #113938; opacity:1.0;}
+    50%  {    background: red; opacity : 0;}
+    75%  {    background:  yellow; opacity:0.5;}
+    100% {    background:  #113938; opacity : 1.0;}
+}
+#videLibraryClose {
+    top:0;
+}
+#videoLibraryTitle {
+    color: #b3c5c4;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+}
+#videoControlsWrap {
+    position:absolute;
+    bottom: 2.5rem;
+    width:100%;
+}
+#videoControls {
+    background: rgba(70, 70, 70, .5);
+    border: 0.1rem solid #AAA;
+    border-radius: 3rem;
+    width: 30rem;
+    padding: 1rem;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+.video_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+}
+.vcBtn {
+    margin: 0 2rem;
+    font-size: 3.5rem;
+    color: #555;
+    display:inline-block;
+    cursor: pointer;
+}
+.vcBtn:hover {
+    color: #ce5511;
+}
+.vcBtnSelected, .vcBtnSelected:hover {
+    color:#999;
+}
+#videoLaunch {
+    text-align: center;
+    cursor: pointer;
+    width: 12rem;
+    margin: 2rem auto;
+    padding: 0;
+    background: linear-gradient(180deg, white, #505050);
+    border: 0.1rem solid white;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    border-radius: 1rem;
+}
+#videoLibraryList {
+    width:96%;
+    margin: 1rem auto;
+}
+#videoLibraryList .navGCHeader {
+    background: linear-gradient(#319c99, #315151);
+}
+#videoLibraryList .navGCWrap {
+    background: none;
+}
+.vidFrmList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.vidFrmList li {
+    padding: 1rem;
+    border-bottom: 0.1rem solid #AAA;
+    position: relative;
+}
+/*.vidFrmList li:last-child {
+    border-bottom: none;
+}*/
+.vidFrmList li canvas {
+    max-width: 25rem;
+    max-height: 25rem;
+}
+.vfl_info_date {
+    font-size: 1.4rem;
+    color:#ddd;
+}
+.vfl_info_state {
+    background: #0050ff;
+    text-align: center;
+    margin: 3rem auto 0;
+    float:right;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    height:2.2rem;
+    width: 9rem;
+    border-radius: 2rem;
+}
+.vfl_info_ready {
+    background: #147800;
+}
+.vfl_info_loading {
+    background:#d0881d;
+}
+#vidFrameCtrl {
+    color:#eee;
+}
+#vidFrameCtrl select {
+    margin-right: 1rem;
+}
+#vidFrameCtrl span {
+    margin-right: 1rem;
+}

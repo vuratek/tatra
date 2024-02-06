@@ -61,6 +61,11 @@ body::-webkit-scrollbar {
 .mapMaxLabel .logoWrapper {
 	float:left;
 }
+.vidTopLabel {
+    display: block;
+    z-index: 5000;
+    left: 1rem;
+}
 .noDisplay {
     display: none;
 }

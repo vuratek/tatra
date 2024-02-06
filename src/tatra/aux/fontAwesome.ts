@@ -12,10 +12,10 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faCheckSquare,
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, faLayerGroup,
-        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faCloud, faAngleDoubleDown,
+        faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faStop, faCloud, faAngleDoubleDown,
         faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt, faCog, faSearchLocation, faGraduationCap, faCogs, faFlask,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt, faVideo,
-        faClock, faInfo,
+        faClock, faInfo, faSync,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
@@ -33,7 +33,7 @@ export class fontAwesome {
         library.add(faHandPaper, faMapMarkedAlt, faRuler, faVectorSquare, faQuestion, faRulerHorizontal, faTrash, faAdjust,
             faClone, faSlidersH, faShareAlt, faCamera, faCompressArrowsAlt, faExpandArrowsAlt, faArrowCircleLeft, faMapMarkerAlt, 
             faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage, faCrosshairs,
-            faCog );
+            faCog, faSync);
         // corporate icons    
         library.add(faRedditAlien, faTwitter, faFacebook);
         // timeline 
@@ -44,7 +44,7 @@ export class fontAwesome {
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faCaretDown);
         // laads
-        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash, faBolt);
+        library.add(faFileCsv, faFileAlt, faFileCode, faPlay, faPause, faStop, faLayerGroup, faAngleDoubleDown, faAngleDoubleUp, faEye, faEyeSlash, faBolt);
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap, faCheckSquare, faSquareEmpty );
         // moon
