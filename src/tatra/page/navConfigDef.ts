@@ -27,6 +27,8 @@ export interface INavConfigApp {
     feedbackHeader?     : string;       // if tophat feedback is used, this the Subject header in the feedback form
     mobileMenu?         : boolean;      // create mobile version of top navigation
     useNavigationLinks? : boolean;      // if set, footer is a replica of top navigation links except HOME
+    timelineMinDate?    : string;       // set custom min date
+    timelineMaxDate?    : string;       // set custom max date
     navigationMode      : string;
     showFooterLinks?    : boolean;      // generate footer with links
     isBeta?             : boolean;      // if beta, BETA tag will be shown in the header

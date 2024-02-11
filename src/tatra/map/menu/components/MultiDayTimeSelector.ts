@@ -319,12 +319,13 @@ export class MultiDayTimeSelector extends Module {
 		let option = this;
 		if (this.calendar) {
 			this.calendar.destroy();
-		}
+        }
+        let [minDate, maxDate] = utils.getTimelineDateRange();
         this.calendar = flatpickr("#mds_date", {
             dateFormat : this.df,
             defaultDate : d,
-            minDate : new Date(2000,11-1, 11),
-            maxDate : utils.getGMTTime(new Date()),
+            minDate : minDate,
+            maxDate : maxDate,
             onChange : function () {
                 option.setDates();
             }

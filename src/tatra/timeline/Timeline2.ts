@@ -51,6 +51,7 @@ export class Timeline {
         }
         if (! this.initialized) {
             this.initialized = true;
+            timelineController.refreshMinMaxDates();
             document.addEventListener(events.EVENT_CONTROL_BTN, (evt) => this._setTimeline(evt));
             document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.setSingleSlider());
             document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.setSingleSlider());

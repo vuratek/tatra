@@ -386,8 +386,7 @@ export class animation extends baseComponent {
     public static initDatePicker (d : Date, type : string) {
         let option = this;
         let calendar = this.calendarFrom;
-        let minDate =  new Date(2000,11-1, 11);
-        let maxDate = utils.getGMTTime(new Date());
+        let [minDate, maxDate] = utils.getTimelineDateRange();
         if (type == "To") {
             calendar = this.calendarTo;
             minDate = this.calendarFrom.selectedDates[0];

@@ -1,3 +1,6 @@
+import { navProps } from "./page/navProps";
+import flatpickr from "flatpickr";
+
 export class utils {
 
     public static setChange (divId : string, action : any) {
@@ -410,6 +413,24 @@ export class utils {
 			}
 		}
 		return false;
-	}
+    }
+    
+    public static getTimelineDateRange() : Array<Date> {
+        let minDate = utils.sanitizeDate(new Date(2000,11-1, 11));
+        let maxDate = utils.getGMTTime(new Date());
+        if (navProps.settings) {
+            if (navProps.settings.app.timelineMinDate) {
+                let _minDate = flatpickr.parseDate(navProps.settings.app.timelineMinDate, 'Y-m-d');
+                if (_minDate) {
+                    minDate = utils.sanitizeDate(_minDate);
+                }
+            }
+            if (navProps.settings.app.timelineMaxDate) {
+                let _maxDate = flatpickr.parseDate(navProps.settings.app.timelineMaxDate, 'Y-m-d');
+                if (_maxDate) { maxDate = _maxDate; }
+            }
+        } 
+        return [minDate, maxDate];
+    }
 
 }

@@ -42,8 +42,8 @@ export class timelineController {
     public static MAX_DAYS              : number = 31;
     public static MAX_MINUTES           : number = 24*60;   // 1 day
     public static time                  : MapTime = new MapTime();
-    public static minDate               : Date = utils.getGMTTime(new Date(2000, 10, 11, 0, 0, 0));
-    public static maxDate               : Date = utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date())));
+    public static minDate               : Date = utils.getTimelineDateRange()[0];
+    public static maxDate               : Date = utils.addDay(utils.sanitizeDate(utils.getTimelineDateRange()[1]));
     public static currentRange          : ITimelineRanges | null = null;
     public static obj                   : ITimelineItem | null = null;
 
@@ -62,5 +62,9 @@ export class timelineController {
     public static isPartialDate(date:Date) : boolean {
         if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED && flatpickr.formatDate(date, 'H:i') != '00:00') return true;
         return false;
+    }
+    public static refreshMinMaxDates () {
+        this.minDate = utils.getTimelineDateRange()[0];
+        this.maxDate = utils.addDay(utils.sanitizeDate(utils.getTimelineDateRange()[1]));
     }
 }

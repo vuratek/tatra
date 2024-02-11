@@ -10,7 +10,7 @@ import { BasicMenuDates, BasicMenuDateValues } from "../../defs/Times";
 import { timelineController } from "../../../timeline/timelineController";
 
 export class MultiDaySelector extends MultiDaySelectorSimple {
-	public currentSelection			: BasicMenuDates = BasicMenuDates.HRS_24;
+	public currentSelection			: BasicMenuDates = BasicMenuDates.CUSTOM;
 
 	public render(par : HTMLDivElement) {;
 		super.render(par);
