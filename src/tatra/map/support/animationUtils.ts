@@ -4,7 +4,7 @@ import { MapTime } from "../obj/MapTime";
 import { utils } from "../../utils";
 import { configProps } from "./configProps";
 import { events } from "../events";
-import { IVideo, IVideoFrame, VIDEO_TRANSITION } from "./animationProps";
+import { IVideo, IVideoFrame, VIDEO_TRANSITION, VIDEO_FRAME_TYPE } from "./animationProps";
 import flatpickr from "flatpickr";
 import { videoProps } from "./animationProps";
 
@@ -74,11 +74,11 @@ export class animationUtils {
             let map = document.getElementById('map') as HTMLDivElement;
             map.style.width = '';
             map.style.height = '';
-            props.map.updateSize();
 
             let view = props.map.getView();
             view.setCenter(sett.center);
             view.setZoom(sett.zoom);
+            props.map.updateSize();
             props.time.date = sett.time.date;
             props.time.imageryDate = sett.time.imageryDate;
             this.setDateTime();
@@ -146,7 +146,7 @@ export class animationUtils {
                         </td>
                     </tr>
                 </table>
-                <div>
+                <div>                    
                     <div id="anim_btn_load_video" class="anim_btn_load_video">Load Video</div>
                 </div>
 			</div>	
@@ -164,13 +164,14 @@ export class animationUtils {
                 <div class="vidFrameChkAll-lbl">Select All</div>
                 <div id="vidFrame-reload-all" class="vidFrameCtlrPanelBtn"><span><i class="fa fa-redo"></i></span> Reload</div>
                 <div id="vidFrame-remove-all" class="vidFrameCtlrPanelBtn"><span><i class="fa fa-trash"></i></span> Delete</div>
-                <div>
+                <div id="vidFrameCtrlSubPanel" class="vidFrameCtrlSubPanel">
                     <span>Frame duration: </span>
                     <select id="vidFrameDuration">
+                        <option disabled selected value="-1"> --- </option>
                         <option value="500">500ms</option>
                         <option value="750">750ms</option>
                         <option value="1000">1s</option>
-                        <option value="1250">1.25s</option>
+                        <option value="1300">1.3s</option>
                         <option value="1500">1.5s</option>
                         <option value="2000">2s</option>
                         <option value="2500">2.5s</option>
@@ -182,17 +183,21 @@ export class animationUtils {
                     </select>
                     <span>Transition: </span>
                     <select id="vidFrameTransition">
+                        <option disabled selected value="-1"> --- </option>
                         <option value="${VIDEO_TRANSITION.SOFT}">Soft</option>
                         <option value="${VIDEO_TRANSITION.HARD}">Hard</option>
                         <option value="${VIDEO_TRANSITION.CONTINUOUS}">Continuous</option>
                     </select>
                 </div>
             </div>
+            <div id="videoFramesList_cmd_none" class="vidFrameCtrlPanelNone">
+                No active frames.
+            </div>
         `;
-        utils.setSelectValue('vidFrameDuration', videoProps.defaultDuration.toString());
+//        utils.setSelectValue('vidFrameDuration', videoProps.defaultDuration.toString());
         utils.setChange('vidFrameDuration', ()=>this.updateDuration());
-        utils.setSelectValue('vidFrameTransition', videoProps.defaultTransition);
         utils.setChange('vidFrameTransition', ()=>this.updateTransition());
+        this.updateInfoCheckboxes();
     }
 
     // set default duration from select box
@@ -200,16 +205,27 @@ export class animationUtils {
         let val = utils.getSelectValue('vidFrameDuration');
         videoProps.defaultDuration = Number(val);
         for (let i=0; i< videoProps.video.frames.length; i++) {
-            videoProps.video.frames[i].duration = videoProps.defaultDuration;
+            if (videoProps.video.frames[i].checked) {
+                videoProps.video.frames[i].duration = videoProps.defaultDuration;
+            }
         }
+        this.refreshVideoFramesList();
     }
     // update transition type
     private static updateTransition() {
         let val = utils.getSelectValue('vidFrameTransition') as VIDEO_TRANSITION;
         videoProps.defaultTransition = val;
         for (let i=0; i< videoProps.video.frames.length; i++) {
-            videoProps.video.frames[i].transition = videoProps.defaultTransition;
+            if (videoProps.video.frames[i].checked) {
+                videoProps.video.frames[i].transition = videoProps.defaultTransition;
+            }
         }
+        this.refreshVideoFramesList();
+    }
+    private static refreshVideoFramesList() {
+        this.populateVideoFramesList('videoFramesList_content', videoProps.video);
+        this.updateVideoImages();
+        this.updateInfoCheckboxes();
     }
 
     // determine resolution size. If world, it requires zoom changes
@@ -239,7 +255,13 @@ export class animationUtils {
             parentDiv.appendChild(li);
             let fid = parentDiv.id + '_c_' + i.toString();
             let date = flatpickr.formatDate(frame.date, 'Y-m-d');
-            let date2 = flatpickr.formatDate(frame.date, 'Y-m-d');
+            let period = '';
+            if (frame.rangeMins > 0) {
+
+            } else if (frame.range > 0) {
+                period = ` (${frame.range+1}days)`;
+            }
+/*            let date2 = flatpickr.formatDate(frame.date, 'Y-m-d');
             let range = frame.range;
             if (frame.rangeMins == 0) {
                 date2 = flatpickr.formatDate(utils.addDay(frame.date, -range), 'Y-m-d');
@@ -248,13 +270,13 @@ export class animationUtils {
                 date2 = '';
             } else {
                 date2 = ' - ' + date2;
-            }
+            }*/
             let dur = Math.round(frame.duration / 100) / 10;
             
             li.innerHTML = `
                 <canvas id="${fid}"></canvas>
                 <div class="vfl_info">
-                    <div class="vfl_info_date">${date}${date2}</div>
+                    <div class="vfl_info_date">${date}${period}</div>
                     <div class="vfl_info_date">Size: ${frame.width}px x ${frame.height}px</div>
                     <div class="vfl_info_date">Duration: ${dur} sec</div>
                     <div class="vfl_info_date">Transition: ${frame.transition}</div>
@@ -270,7 +292,6 @@ export class animationUtils {
     // update video frame list <ul> with status for each frame
     public static updateVideoImages() {
         let allLoaded = true;
-        if (! videoProps.video) { return; }
         let frames = videoProps.video.frames;
         if (frames.length == 0) {
             allLoaded = false;
@@ -296,10 +317,14 @@ export class animationUtils {
                 allLoaded = false;
             }
         }
+        utils.hide('videoLoading');
         if (allLoaded) {
             utils.show('videoLaunch');
         } else {
             utils.hide('videoLaunch');
+            if (frames.length > 0) {
+                utils.show('videoLoading');
+            }
         }
     }
     // draw canvas for the video list
@@ -316,7 +341,7 @@ export class animationUtils {
         }
     }
     public static getVideoFrame(i : number) : IVideoFrame | null {
-        if (videoProps.video && videoProps.video.frames.length > i && videoProps.video.frames[i].imageObj) {
+        if (videoProps.video.frames.length > i && videoProps.video.frames[i].imageObj) {
             return videoProps.video.frames[i];
         }
         return null;
@@ -328,8 +353,48 @@ export class animationUtils {
                 videoProps.video.frames.splice(i,1);
             }
         }
-        this.populateVideoFramesList('videoFramesList_content', videoProps.video);
-        this.updateVideoImages();
+        this.refreshVideoFramesList();
+    }
+
+    // reload frames
+    public static reloadFrames() {
+        let f = videoProps.video.frames;
+        for (let i= f.length-1; i>=0; i--) {
+            if (f[i].checked === true) {
+                f[i].loaded = false;
+                f[i].checked = false;
+                f[i].imageObj.image = null;
+                f[i].imageObj.context = null;
+                if (f[i].waitCycles < 200) {
+                    f[i].waitCycles += 50;
+                }
+                videoProps.props.frameLoaderCounter = i;
+            }
+        }
+        
+        videoProps.video.ignoreCounter = false;
+        this.refreshVideoFramesList();
+        this.processFrames();
+    }
+
+    // execute each frame
+    public static processFrames() {
+        console.log("processing", videoProps.props.frameLoaderCounter);
+        if (videoProps.props.frameLoaderCounter >= videoProps.video.frames.length) {
+            // DONE
+            return;
+        }
+        let f = videoProps.video.frames[videoProps.props.frameLoaderCounter];
+        videoProps.props.frameLoaderCounter++;
+        if (f.type == VIDEO_FRAME_TYPE.DATA && ! f.loaded) {
+            props.time.date = f.date;
+            props.time.imageryDate = f.date;
+            videoProps.video.ignoreCounter = false;
+            animationUtils.setDateTime();
+        } else {
+            // this is non-data frame
+            this.processFrames();
+        }
     }
 
     // set checkbox for all based on how many frame checkboxes are checked
@@ -359,6 +424,29 @@ export class animationUtils {
         } else {
             videoProps.chkAllFrames = false;
             utils.removeClass('vidFrameChkAll', 'layerOnOffButtonActive');
+        }
+        let dis = 'vidFrameCtlrPanelBtnDisabled';
+        if (counter == 0) {
+            utils.addClass('vidFrame-reload-all', dis);
+            utils.addClass('vidFrame-remove-all', dis);
+            utils.hide('vidFrameCtrlSubPanel');
+            utils.setSelectValue('vidFrameDuration', '-1');
+            utils.setSelectValue('vidFrameTransition', '-1');
+        } else {
+            utils.removeClass('vidFrame-reload-all', dis);
+            utils.removeClass('vidFrame-remove-all', dis);
+            utils.show('vidFrameCtrlSubPanel');
+        }
+        if (videoProps.video.frames.length == 0) {
+            utils.show('videoFramesList_cmd_none');
+            utils.hide('videoFramesList_cmd_ctrl');
+            utils.hide('videoAddons');
+            utils.hide('videoFramesList');
+        } else {
+            utils.hide('videoFramesList_cmd_none');
+            utils.show('videoFramesList_cmd_ctrl');
+            utils.show('videoAddons');
+            utils.show('videoFramesList');
         }
     }
 
@@ -392,5 +480,35 @@ export class animationUtils {
                 this.updateInfoCheckboxes();
             }
         }
+    }
+    public static setVideoAddons(type:string | null) {
+        let v = videoProps.video;
+        let c = 'layerOnOffButtonActive';
+        if (type) {
+            if (type == 'intro') { v.showIntro = !v.showIntro; }
+            else if (type == 'info') { v.showInfo = !v.showInfo; }
+            else if (type == 'topBanner') { v.showTopBanner = !v.showTopBanner; }
+            else if (type == 'logo') { v.showLogo = !v.showLogo; }
+        }
+        if (v.showIntro) {utils.addClass('videoAddonsIntro', c);}
+        else {utils.removeClass('videoAddonsIntro', c);}
+        if (v.showInfo) {
+            utils.addClass('videoAddonsInfo', c);
+            utils.show('videoStageInfo');
+        } else {
+            utils.removeClass('videoAddonsInfo', c);
+            utils.hide('videoStageInfo');
+        }
+        if (v.showLogo) {
+            utils.addClass('videoAddonsLogo', c);
+            utils.show('videoStageLogo');
+        }
+        else {
+            utils.removeClass('videoAddonsLogo', c);
+            utils.hide('videoStageLogo');
+        }
+        // display controlled in animation.controlVideo()
+        if (v.showTopBanner) {utils.addClass('videoAddonsTopBanner', c);}
+        else {utils.removeClass('videoAddonsTopBanner', c);}
     }
 }

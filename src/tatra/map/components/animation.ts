@@ -6,7 +6,7 @@ import { events } from "../events";
 import { Modal } from "../../aux/Modal";
 import { imageUtils } from "../imageUtils";
 import { animationUtils } from "../support/animationUtils";
-import { videoProps, VIDEO_TRANSITION } from "../support/animationProps";
+import { videoProps, VIDEO_TRANSITION, AnimationProps, VIDEO_FRAME_TYPE } from "../support/animationProps";
 
 export class animation extends baseComponent {
 	public static id		            : string = 'animation';
@@ -58,6 +58,7 @@ export class animation extends baseComponent {
         this.isActive = false;
     }
 
+
     public static loadFrames() {
         this.videoModal = new Modal({id: 'video', style : 'modalVideo'});
         let el = this.videoModal.getContent();
@@ -70,11 +71,11 @@ export class animation extends baseComponent {
 
         map.style.width = w.toString() + 'px';
         map.style.height = h.toString() + 'px';
-        props.map.updateSize();
         if (z != -1) {
             props.map.getView().setCenter([0,0]);
             props.map.getView().setZoom(z);
         }
+        props.map.updateSize();
 
         let cont = document.getElementById(el) as HTMLDivElement;
         if (! cont) { return; }
@@ -83,6 +84,19 @@ export class animation extends baseComponent {
             <div id="videoLibrary">
                 <div id="videoLibraryTitle">Animation Data Control</div>
                 <div id="videoLibraryList"></div>
+                <div id="videoAddons">
+                    <table>
+                        <tr>
+                            <td id="td_vaIntro"><div id="videoAddonsIntro" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Intro &amp; Credits</span></td>
+                            <td id="td_vaTopBanner"><div id="videoAddonsTopBanner" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Top Label</span></td>
+                        </tr>
+                        <tr>
+                            <td id="td_vaInfo"><div id="videoAddonsInfo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Data Info</span></td>
+                            <td id="td_vaLogo"><div id="videoAddonsLogo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Bottom Logo</span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="videoLoading">loading</div>
                 <div id="videoLaunch">Play</div>
                 <div id="videoLibraryClose" class="modalCloseIcon">
                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -92,8 +106,8 @@ export class animation extends baseComponent {
                 <div id="videoCanvas">
                     <canvas class="video_canvas" id="video_canvas_bottom"></canvas>
                     <canvas class="video_canvas" id="video_canvas_top"></canvas>
-                    <div id="videoStageDateTime"></div>
-                    <div id="videoStageLogo"><img src="/images/NASA_logo.svg"></div>
+                    <div id="videoStageInfo"></div>
+                    <div id="videoStageLogo"></div>
                 </div>
                 <div id="videoControlsWrap">
                     <div id="videoControls">
@@ -105,6 +119,9 @@ export class animation extends baseComponent {
                 </div>
             </div>
         `;
+        if (videoProps.video.logoDiv) {
+            utils.html('videoStageLogo', videoProps.video.logoDiv);
+        }
         utils.setClick('videoLaunch', ()=> this.controlVideo('play'));
         utils.hide('videoLaunch');
         utils.hide('videoStage');
@@ -114,6 +131,11 @@ export class animation extends baseComponent {
         utils.setClick('vcReload', ()=>this.controlVideo('reload'));
         utils.setClick('videoCanvas', ()=>this.controlVideo('pausePlay'));
         utils.setClick('videoLibraryClose', ()=>this.closeModal());
+        utils.setClick('td_vaIntro', ()=>animationUtils.setVideoAddons('intro'));
+        utils.setClick('td_vaInfo', ()=>animationUtils.setVideoAddons('info'));
+        utils.setClick('td_vaTopBanner', ()=>animationUtils.setVideoAddons('topBanner'));
+        utils.setClick('td_vaLogo', ()=>animationUtils.setVideoAddons('logo'));
+        animationUtils.setVideoAddons(null);
         utils.hide('vcPause');
         this.setVideoReload();
 
@@ -129,13 +151,9 @@ export class animation extends baseComponent {
         if (!size) {
             return;
         }
-        videoProps.video = { 
-            step : _step, 
-            frames : [], 
-            speed : 5,
-            timerCounter : 0,
-            ignoreCounter : false
-        };
+        videoProps.video.step = _step;
+        videoProps.video.timerCounter = 0;
+        videoProps.video.ignoreCounter = false;
         let date = sd;
         let frame = 0;
         let run = true;
@@ -151,6 +169,8 @@ export class animation extends baseComponent {
                 height : h,
                 duration : videoProps.defaultDuration,
                 transition : VIDEO_TRANSITION.SOFT,
+                type : VIDEO_FRAME_TYPE.DATA,
+                waitCycles : 50,
                 checked : false
             });
             date = utils.addDay(date, step);
@@ -167,12 +187,14 @@ export class animation extends baseComponent {
             setInterval(videoProps.props.loadTimer, videoProps.props.intervalDelay);
         }
         this.renderPopup();
-        this.processFrames();
+        animationUtils.processFrames();
     }
 
     private static closeModal() {
         animationUtils.restoreStage();
-        this.videoModal.close();
+        if (this.videoModal) {
+            this.videoModal.close();
+        }
     }
 
     private static renderPopup() {
@@ -188,34 +210,19 @@ export class animation extends baseComponent {
         utils.setClick('vidFrameChkAll', ()=> animationUtils.setAllFrames());
 
         utils.setClick('vidFrame-remove-all', ()=> animationUtils.deleteFrames());
+        utils.setClick('vidFrame-reload-all', ()=> animationUtils.reloadFrames());
         
         animationUtils.populateVideoFramesList(ul.id, videoProps.video);
 
         animationUtils.updateVideoImages();
-        utils.setClick(ul.id, (evt)=> animationUtils.frameListMouseClickHandler(evt));
+        utils.setClick(ul.id, (evt:MouseEvent)=> animationUtils.frameListMouseClickHandler(evt));
     }
 
     private static updateImage() {
-//        console.log('updateImage', this.isActive);
         if (! this.isActive) { return; }
-        if (videoProps.video) {
-            // reset counter when image is updated so it waits until another potential update or timeout
-            videoProps.video.timerCounter = 0;  
-            videoProps.video.ignoreCounter = false;    
-        }
-    }
-
-    private static processFrames() {
-        if (!videoProps.video || !videoProps.video.frames) { return; }
-        if (videoProps.props.frameLoaderCounter >= videoProps.video.frames.length) {
-            // DONE
-            return;
-        }
-        props.time.date = videoProps.video.frames[videoProps.props.frameLoaderCounter].date;
-		props.time.imageryDate = videoProps.video.frames[videoProps.props.frameLoaderCounter].date;
-        videoProps.props.frameLoaderCounter++;
-        videoProps.video.ignoreCounter = false;
-        animationUtils.setDateTime();
+        // reset counter when image is updated so it waits until another potential update or timeout
+        videoProps.video.timerCounter = 0;  
+        videoProps.video.ignoreCounter = false;    
     }
 
 
@@ -275,11 +282,11 @@ export class animation extends baseComponent {
         }
     }
     private static updateTimer() {
-        if (! videoProps.video || videoProps.video.ignoreCounter) { return; }
-        if (videoProps.video.timerCounter < videoProps.props.maxWait) {
+        if (videoProps.video.ignoreCounter) { return; }
+        if (videoProps.video.timerCounter < videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
             videoProps.video.timerCounter ++;
         }
-        if (videoProps.video.timerCounter >= videoProps.props.maxWait) {
+        if (videoProps.video.timerCounter >= videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
             videoProps.video.ignoreCounter = true;    // block counter until new frame is loaded
             videoProps.video.timerCounter = 0;
             // load new frame
@@ -287,12 +294,11 @@ export class animation extends baseComponent {
         }
     }
     private static processImage() {
-        if (! videoProps.video) { return;}
         let frame = videoProps.video.frames[videoProps.props.frameLoaderCounter-1];
         frame.imageObj = imageUtils.renderScreenshot();
         frame.loaded = true;
         animationUtils.updateVideoImages();
-        this.processFrames();
+        animationUtils.processFrames();
     }
     
     private static controlVideo (btn : string) {
@@ -315,7 +321,9 @@ export class animation extends baseComponent {
             utils.showCustom('vcPause', "inline-block");
             utils.hide('vcPlay');
             utils.show('videoStage');
-            utils.addClass('mapMaxLabel', 'vidTopLabel');
+            if (videoProps.video.showTopBanner) {
+                utils.addClass('mapMaxLabel', 'vidTopLabel');
+            }
             utils.hide('videoLibrary');    
             videoProps.props.videoPlaying = true;
             this.playAnimation();
@@ -400,7 +408,7 @@ export class animation extends baseComponent {
             if (frame.range > 0) {
                 lbl += ` (${frame.range+1}days)`;
             }
-            utils.html('videoStageDateTime', lbl);
+            utils.html('videoStageInfo', lbl);
         }
     }
 

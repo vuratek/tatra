@@ -390,6 +390,17 @@ export class layerStyle {
         ii.UniqueFireIdentifier = feature.get("UniqueFireIdentifier");
         return layerStyle.fireAlertTemplate(ii, '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
     }
+    public static _fireAlertUSA2_info(feature : Feature) : string {
+        let irwin_date = feature.get("IrwinFireDiscoveryDateTime");
+        let areas = layerStyle.getAreas(feature.get("size"), false);
+        let ii = new IncidentInfo();
+        ii.IncidentManagementOrganization = feature.get("gacc");
+        ii.PercentContained = feature.get("x100pct");
+        ii.Name = feature.get("fire_name");
+        ii.IrwinID = feature.get("IrwinID");
+        ii.UniqueFireIdentifier = feature.get("UniqueFireIdentifier");
+        return layerStyle.fireAlertTemplate(ii, '/images/US-flag.jpg', irwin_date, areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
+    }
 
     private static fireAlertTemplate(ii : IncidentInfo, flagUrl: string, dateString : string, areas:AreaLabels, reportUrl:string) {
         let incident = '';
@@ -453,6 +464,14 @@ export class layerStyle {
 
     public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
+    }
+
+    public static _fireAlertUSA2 (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getFireAlertSymbol(feature, resolution, "fire_name", false);
+    }
+
+    public static _fireAlertUSA2_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getFireAlertSymbol(feature, resolution, "fire_name", true);
     }
 
     public static _firePerimeterUSA ( feature : Feature, resolution: number) : Style | null {

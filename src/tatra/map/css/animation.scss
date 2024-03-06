@@ -19,9 +19,9 @@
 }
 .videoFramesList {
     font-size: 1.4rem;
-    max-height: 50rem;
+    max-height: 50vh;
     position: relative;
-    height: 50vh;
+    min-height: 10rem;
     overflow: auto;
 }
 #videoLibraryList {
@@ -30,7 +30,7 @@
 #vidFrameCtrl {
     font-size: 1.2rem;
     text-transform: uppercase;
-    padding: 0.3rem 1rem 0;
+    padding: 0.3rem 0 0;
     background: rgba(20,20,20,0.5);
 }
 .vidFrameChkAll-lbl {
@@ -38,6 +38,29 @@
 }
 .vidFrameCtrlPanel {
     position: fixed;
+}
+.vidFrameCtrlSubPanel {
+    margin-left:3rem;
+}
+.vidFrameCtrlSubPanel select {
+    width: 10rem;
+}
+#videoAddons {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+#videoAddons table {
+    background:#ddd;
+}
+#videoAddons table td {
+    position: relative;
+    cursor: pointer;
+}
+#videoAddons table tr {
+    background: none;
+}
+#videoAddons table td span {
+    margin-left: 3rem;
 }
 .vidFrameCtlrPanelBtn {
     margin: 0 0 0 2rem;
@@ -52,6 +75,10 @@
 .vidFrameCtlrPanelBtn:hover {
     opacity: 1;
 }
+.vidFrameCtlrPanelBtnDisabled, .vidFrameCtlrPanelBtnDisabled:hover {
+    opacity: 0.4;
+    cursor: default;
+}
 #videoFramesList_cmd_ctrl {
     color: #eee;
     text-transform: uppercase;
@@ -59,6 +86,12 @@
     width: 100%;
     font-size: 1.2rem;
     position: relative;
+    min-height: 3.3rem;
+}
+#videoFramesList_cmd_none {
+    text-align: center;
+    padding: 1rem;
+    margin: 0 0 2rem 0;
 }
 .vidFrameCtrlPanel div {
     display: inline-block;
@@ -133,7 +166,7 @@
     position: relative;
     text-align: center;
 }
-#videoStageDateTime {
+#videoStageInfo {
     position: fixed;
     bottom: 10px;
     left:1rem;
@@ -147,15 +180,12 @@
     bottom: 5px;
     right: 5px;
 }
-#videoStageLogo img {
-    width: 50px;
-    height: 42px;
-}
 .video_canvas {
     position: absolute;
     top: 0;
     left: 0;
-    width:100%;
+    /*width:100%;*/
+    
 }
 .vcBtn {
     margin: 0 2rem;
@@ -169,6 +199,14 @@
 }
 .vcBtnSelected, .vcBtnSelected:hover {
     color:#999;
+}
+#videoLoading {
+    background: linear-gradient(90deg, transparent, #316ed5, #316ed5, transparent);
+    text-transform: uppercase;
+    margin: 2rem 0;
+    color:white;
+    padding:.5rem;
+    text-align: center;
 }
 #videoLaunch {
     text-align: center;

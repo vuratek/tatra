@@ -7,6 +7,13 @@ export enum VIDEO_TRANSITION {
     CONTINUOUS      = "continuous"
 }
 
+export enum VIDEO_FRAME_TYPE {
+    CREDITS     = "credits",
+    DATA        = "data",
+    INTRO       = "intro",
+    PARTITION   = "partition"    
+}
+
 export interface IVideoFrame {
     date            : Date;                     // which date does it represent
     range           : number;                   // # of days
@@ -17,6 +24,8 @@ export interface IVideoFrame {
     height          : number;                   // height of the image
     duration        : number;                   // miliseconds
     transition      : VIDEO_TRANSITION;         // how does frame execute
+    type            : VIDEO_FRAME_TYPE;         // type of frame; data is from the mapviewer
+    waitCycles      : number;                   // how many cycles to wait for frame to load (increased when reload requested)
     checked         : boolean;
 }
 
@@ -26,6 +35,11 @@ export interface IVideo {
     step            : string;
     timerCounter    : number;
     ignoreCounter   : boolean;
+    logoDiv?        : string;
+    showTopBanner   : boolean;
+    showLogo        : boolean;
+    showIntro       : boolean;
+    showInfo        : boolean;
 }
 
 export class AnimationProps {
@@ -36,7 +50,6 @@ export class AnimationProps {
     public maxFrames                : number = 50;
     public intervalDelay            : number = 50;      // miliseconds for frame loading timer
     public videoDelay               : number = 10;      // miliseconds for video play timer
-    public maxWait                  : number = 50;      // # of times counter gets updated before it is done
     public frameLoaderCounter       : number = 0;
     public framePlayCounter         : number = 0;
     public framePlayDurationCounter : number = 0;
@@ -44,7 +57,7 @@ export class AnimationProps {
 }
 
 export class videoProps {
-    public static video                 : IVideo | null = null;
+    public static video                 : IVideo = { step : "1", frames : [], speed : 5, timerCounter : 0, ignoreCounter : false, showTopBanner : true, showInfo : true, showLogo : true, showIntro : true };
     public static props                 : AnimationProps = new AnimationProps();
     public static defaultDuration       : number = 2500;
     public static defaultTransition     : VIDEO_TRANSITION = VIDEO_TRANSITION.SOFT;
