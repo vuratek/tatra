@@ -194,7 +194,7 @@ export class LayerGroup extends Module {
 				${iconLabel}	
 				<div class="bottomBarSubMenuItemLabel">
 					${lo.title} 
-					<div id="layerONOFFIcon" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+					<div id="${lo.id}-layerONOFFIcon" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
 				</div>		
 			</div>
 			${extraBtn}
@@ -322,14 +322,14 @@ export class LayerGroup extends Module {
 			this.renderLayerLegend(this.props.id, lo);
 			if (lo.visible) {
 				utils.addClass(el.id, 'lmvControlsLayerSelected');
-				utils.addClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+				utils.addClass(el.id +` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 				if (el2) {
 					el2.style.display = "block";				
 				}
 				
 			} else {
 				utils.removeClass(el.id, 'lmvControlsLayerSelected');
-				utils.removeClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+				utils.removeClass(el.id + ` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 				if (el2) {
 					el2.style.display = "none";
 				}

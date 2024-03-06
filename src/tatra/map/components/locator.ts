@@ -4,7 +4,6 @@ import { Locator } from "../mapTools/Locator";
 import { controls } from "./controls";
 import { props } from "../props";
 import { utils } from "../../utils";
-import { Vector } from "ol/layer";
 import { MapBrowserEvent } from "ol";
 import { mapUtils } from "../mapUtils";
 import { GeoLocation } from "../obj/GeoLocation";
@@ -27,7 +26,6 @@ export class locator extends baseComponent {
     public static className     : string = 'transparentWindow';
     public static draggable     : boolean = true;
     public static currentTab   : number  = -1;
-    private static layer        : Vector | null = null;
     private static results      : ISearchData = {};
     private static ESRI_GEO_URL : string = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&langCode=en&text=#SEARCH#&category=Address%2CStreet%20Address%2CPopulated%20Place%2CEducation%2CLand%20Features%2CWater%20Features%2CMuseum%2CTourist%20Attraction%2CScientific%20Research%2CGovernment%20Office%2CBusiness%20Facility%2CPrimary%20Postal%2CAirport'
     private static ESRI_LOCATION_URL : string = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&langCode=en&outFields=*&magicKey=#MAGICKEY#';

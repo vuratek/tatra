@@ -4,6 +4,9 @@
 #modal_video_close {
     display: none;
 }
+#videoLibraryClose {
+    top:0;
+}
 .anim_btn_load_video {
     margin: 0.5rem auto;
     display: block;
@@ -14,14 +17,15 @@
     width: 10rem;
     cursor: pointer;
 }
-#navGCHeader_videoFramesList {
-    padding: 0rem 1rem;
-}
-#navGCHdrLbl_videoFramesList {
+.videoFramesList {
     font-size: 1.4rem;
+    max-height: 50rem;
+    position: relative;
+    height: 50vh;
+    overflow: auto;
 }
-#navGCCtrl_videoFramesList {
-    padding: .3rem;
+#videoLibraryList {
+    margin: 1rem 0 0 0;
 }
 #vidFrameCtrl {
     font-size: 1.2rem;
@@ -29,10 +33,36 @@
     padding: 0.3rem 1rem 0;
     background: rgba(20,20,20,0.5);
 }
-#navGCContent_videoFramesList {
-    max-height: 50rem;
-    height: 50vh;
-    overflow: auto;
+.vidFrameChkAll-lbl {
+    margin-left: 3rem;
+}
+.vidFrameCtrlPanel {
+    position: fixed;
+}
+.vidFrameCtlrPanelBtn {
+    margin: 0 0 0 2rem;
+    background: linear-gradient(180deg, white, #505050);
+    margin: 0 0 0 2rem;
+    border-radius: 2rem;
+    padding: 0 1.5rem;
+    color: #222;
+    opacity: 0.8;
+    cursor: pointer;
+}
+.vidFrameCtlrPanelBtn:hover {
+    opacity: 1;
+}
+#videoFramesList_cmd_ctrl {
+    color: #eee;
+    text-transform: uppercase;
+    z-index: 20;
+    width: 100%;
+    font-size: 1.2rem;
+    position: relative;
+}
+.vidFrameCtrlPanel div {
+    display: inline-block;
+    margin-top: 0.3rem;
 }
 #videoLibrary {
     max-width: 50rem;
@@ -53,7 +83,7 @@
     position: absolute;
     top: 1rem;
     right: .3rem;
-    width:18rem;
+    width:21rem;
 }
 #videoBack {
     position: absolute;
@@ -89,7 +119,7 @@
     padding: 0.3rem 1rem;
 }
 #videoControlsWrap {
-    position:absolute;
+    position:fixed;
     bottom: 2.5rem;
     width:100%;
 }
@@ -102,6 +132,24 @@
     margin: 0 auto;
     position: relative;
     text-align: center;
+}
+#videoStageDateTime {
+    position: fixed;
+    bottom: 10px;
+    left:1rem;
+    font-size: 2rem;
+    color:#CCC;
+    font-family: monospace;
+    text-shadow: 1px 1px 1px #333, -1px 1px 1px #333, -1px -1px 0 #333, 1px -1px 0 #333;
+}
+#videoStageLogo {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+}
+#videoStageLogo img {
+    width: 50px;
+    height: 42px;
 }
 .video_canvas {
     position: absolute;
@@ -134,19 +182,9 @@
     font-size: 1.4rem;
     border-radius: 1rem;
 }
-#videoLibraryList {
-    width:96%;
-    margin: 1rem auto;
-}
-#videoLibraryList .navGCHeader {
-    background: linear-gradient(#319c99, #315151);
-}
-#videoLibraryList .navGCWrap {
-    background: none;
-}
 .vidFrmList {
     list-style: none;
-    margin: 0;
+    margin: .7rem 0 0 0;
     padding: 0;
 }
 .vidFrmList li {
@@ -166,21 +204,23 @@
     color:#ddd;
 }
 .vfl_info_state {
-    background: #0050ff;
+    background: linear-gradient(90deg, transparent, #173c7a, #173c7a, transparent);
+    color: white;
     text-align: center;
-    margin: 3rem auto 0;
-    float:right;
+    position: absolute;
+    margin: 2rem auto;
     font-size: 1.2rem;
     text-transform: uppercase;
     height:2.2rem;
-    width: 9rem;
-    border-radius: 2rem;
+    width: 15rem;
+    top: 2rem;
+    left:5rem;
 }
 .vfl_info_ready {
-    background: #147800;
+    display: none;
 }
 .vfl_info_loading {
-    background:#d0881d;
+    background: linear-gradient(90deg, transparent, #316ed5, #316ed5, transparent);
 }
 #vidFrameCtrl {
     color:#eee;

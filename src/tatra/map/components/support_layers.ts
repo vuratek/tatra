@@ -459,7 +459,7 @@ export class support_layers extends baseComponent{
 				this.setExtraBtn(menu, lo);
                 if (lo.visible) {
 					utils.addClass(el.id, 'lmvControlsLayerSelected');
-					utils.addClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+					utils.addClass(el.id + ` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 					
 					if (el2) {
 						el2.style.display = "block";
@@ -467,7 +467,7 @@ export class support_layers extends baseComponent{
 					
                 } else {
 					utils.removeClass(el.id, 'lmvControlsLayerSelected');
-					utils.removeClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+					utils.removeClass(el.id + ` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 					if (el2) {
 						el2.style.display = "none";
 					}
