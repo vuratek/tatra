@@ -98,6 +98,7 @@ export class Layer {
     public cloneHasTime     : boolean = true;   // remove?
     public color            : Array <number> | null = null;
     public colorPaletteId   : string | null = null;
+    public credit           : string | null = null;
     public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
