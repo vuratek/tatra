@@ -87,6 +87,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		if (tab && this.currentSelection == tab) {
 			return;
 		}
+		let previousSelection = this.currentSelection;
 		this.currentSelection = (tab) ? tab : BasicMenuDates.HRS_24;
 		let range = 1;
 		if (this.currentSelection == BasicMenuDates.TODAY) {
@@ -94,7 +95,10 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		} else if (this.currentSelection == BasicMenuDates.DAY_7) {
 			range = 6;
 		}
-		if ((this.currentSelection != BasicMenuDates.CUSTOM)) {
+		if (previousSelection == BasicMenuDates.HRS_24 && this.currentSelection ==  BasicMenuDates.CUSTOM) {
+			range = 0;
+		}
+		if ((this.currentSelection != BasicMenuDates.CUSTOM) || (previousSelection == BasicMenuDates.HRS_24 && this.currentSelection == BasicMenuDates.CUSTOM)) {
 			let date = utils.sanitizeDate(utils.getGMTTime(new Date()));
 			this.calendar.setDate(date);
 			utils.setSelectValue(`mdsDateRange`, range.toString());
