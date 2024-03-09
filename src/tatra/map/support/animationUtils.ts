@@ -7,6 +7,8 @@ import { events } from "../events";
 import { IVideo, IVideoFrame, VIDEO_TRANSITION, VIDEO_FRAME_TYPE } from "./animationProps";
 import flatpickr from "flatpickr";
 import { videoProps } from "./animationProps";
+import { IImageObj } from "../imageUtils";
+import { navProps } from "../../page/navProps";
 
 export interface ISavedMapParams {
     zoom            : number;
@@ -59,7 +61,10 @@ export class animationUtils {
         let zoom = view.getZoom();
         let center = [0,0];
         if (zoom) {
-            center = view.getCenter();
+            let _center = view.getCenter();
+            if (_center != undefined) {
+                center = _center;
+            }
         } else {
             zoom = 4;
         }
@@ -74,11 +79,11 @@ export class animationUtils {
             let map = document.getElementById('map') as HTMLDivElement;
             map.style.width = '';
             map.style.height = '';
+            props.map.updateSize();
 
             let view = props.map.getView();
             view.setCenter(sett.center);
             view.setZoom(sett.zoom);
-            props.map.updateSize();
             props.time.date = sett.time.date;
             props.time.imageryDate = sett.time.imageryDate;
             this.setDateTime();
@@ -363,8 +368,10 @@ export class animationUtils {
             if (f[i].checked === true) {
                 f[i].loaded = false;
                 f[i].checked = false;
-                f[i].imageObj.image = null;
-                f[i].imageObj.context = null;
+                if (f[i].imageObj) {
+                    f[i].imageObj.image = null;
+                    f[i].imageObj.context = null;
+                }
                 if (f[i].waitCycles < 200) {
                     f[i].waitCycles += 50;
                 }
@@ -379,7 +386,6 @@ export class animationUtils {
 
     // execute each frame
     public static processFrames() {
-        console.log("processing", videoProps.props.frameLoaderCounter);
         if (videoProps.props.frameLoaderCounter >= videoProps.video.frames.length) {
             // DONE
             return;
@@ -510,5 +516,145 @@ export class animationUtils {
         // display controlled in animation.controlVideo()
         if (v.showTopBanner) {utils.addClass('videoAddonsTopBanner', c);}
         else {utils.removeClass('videoAddonsTopBanner', c);}
+    }
+    public static addIntroCreditsFrame() {
+        let fs = videoProps.video.frames;
+        if (fs.length == 0 || !videoProps.video.showIntro) { return; }
+        let w = fs[0].width;
+        let h = fs[0].height;
+        if (fs[0].type != VIDEO_FRAME_TYPE.INTRO) {
+            let intro:IVideoFrame = {
+                date            : new Date(),
+                range           : -1,
+                rangeMins       : -1,
+                imageObj        : null,
+                credits         : [],
+                layers          : [],
+                loaded          : true,
+                width           : w,
+                height          : h,
+                duration        : 2500,
+                transition      : VIDEO_TRANSITION.HARD,
+                type            : VIDEO_FRAME_TYPE.INTRO,
+                waitCycles      : 0,
+                checked         : false
+            }
+            this.createAuxFrame(intro);
+            fs.unshift(intro);
+        }
+        if (fs[fs.length-1].type != VIDEO_FRAME_TYPE.CREDITS) {
+            let credits:IVideoFrame = {
+                date            : new Date(),
+                range           : -1,
+                rangeMins       : -1,
+                imageObj        : null,
+                credits         : [],
+                layers          : [],
+                loaded          : true,
+                width           : w,
+                height          : h,
+                duration        : 2500,
+                transition      : VIDEO_TRANSITION.HARD,
+                type            : VIDEO_FRAME_TYPE.CREDITS,
+                waitCycles      : 0,
+                checked         : false
+            }
+            this.createAuxFrame(credits);
+            fs.push(credits);
+        }
+    }
+    public static removeIntroCreditsFrame() {
+        let fs = videoProps.video.frames;
+        if (fs.length > 0 && fs[0].type == VIDEO_FRAME_TYPE.INTRO) {
+            fs.shift();
+        }
+        if (fs.length > 0 && fs[fs.length-1].type == VIDEO_FRAME_TYPE.CREDITS) {
+            fs.pop();
+        }
+    }
+
+    public static createAuxFrame(frame : IVideoFrame) {
+        // don't generate data frames
+        if (frame.type == VIDEO_FRAME_TYPE.DATA) { return frame; }
+        let image = document.createElement('canvas');
+        image.width = frame.width;
+        image.height = frame.height;
+        let context = image.getContext('2d');
+        let label = '';
+        if (videoProps.auxFrameSettings.label) {
+            label = videoProps.auxFrameSettings.label;
+        } else if (navProps.settings.app.singleLabel) {
+            label = navProps.settings.app.singleLabel;
+        } else if (navProps.settings.app.doubleLongLabel) {
+            label = navProps.settings.app.doubleLongLabel;
+        }
+        let style = '';
+        if (frame.type == VIDEO_FRAME_TYPE.INTRO) {
+            style = videoProps.auxFrameSettings.introStyle;
+        } else if (frame.type == VIDEO_FRAME_TYPE.CREDITS) {
+            style = videoProps.auxFrameSettings.creditsStyle;
+            // generate credits table
+            let credits = this.aggregateCredits();
+            label = `${label}<br/>`;
+            if (credits.length > 0) {
+                label += 'Data credits:<br/>';
+                for (let i=0; i < credits.length; i++) {
+                    label += `${credits[i]}<br/>`;
+                }
+            }
+        }
+
+        let data = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="${image.width}" height="${image.height}">
+                <foreignObject width="100%" height="100%">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="position:absolute;top:0;left:0;width:${image.width}px;height:${image.height}px;color:#eee;font-family: Titillium Web, sans-serif;font-size: 25px;">
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;${style}">
+                            <div style="margin: 0 auto;width:${image.width}px;margin-top: 30vh;">
+                                <div style="text-align: center;margin: 0 auto;">${label}</div>
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+            </svg>`;
+
+        let svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+        let img = new Image();
+        var DOMURL = window.URL || window.webkitURL || window;
+
+        var url = DOMURL.createObjectURL(svg);
+        img.onload = function () {
+            if (context) {
+                context.drawImage(img, 0, 0);
+            }
+            DOMURL.revokeObjectURL(url);
+            console.log("DONE");
+        }
+          
+        img.src = url;  
+
+        frame.imageObj = {image : image, context : context};
+    }
+    
+    // go over all frames and aggregate layer credits
+    private static aggregateCredits() : Array<string> {
+        let fs = videoProps.video.frames;
+        if (fs.length == 0 || !videoProps.video.showIntro) { return []; }
+        let c = {};
+        for (let i=0; i<fs.length; i++) {
+            let frame = fs[i];
+            if (frame.credits) {
+                for (let i=0; i<frame.credits.length; i++) {
+                    let credit = frame.credits[i];
+                    if (! c[credit]) {
+                        c[credit] = credit;
+                    }
+                }
+            }
+        }
+        let arr = [];
+        for (let lbl in c) {
+            arr.push(lbl);
+        }
+        return arr.sort();
     }
 }

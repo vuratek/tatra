@@ -4,6 +4,7 @@ import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
 import { events } from "../events";
+import { videoProps } from "../support/animationProps";
 
 export class mainMenu {
 
@@ -186,6 +187,7 @@ export class mainMenu {
         if (this.currentTab != '') {
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
+            videoProps.reset();
             for (let key in props.menuModules) {
                 if (props.menuModules[key].props.usePresetLayers) {
                     props.menuModules[key].presetLayers();

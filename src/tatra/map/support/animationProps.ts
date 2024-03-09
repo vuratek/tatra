@@ -18,6 +18,8 @@ export interface IVideoFrame {
     date            : Date;                     // which date does it represent
     range           : number;                   // # of days
     rangeMins       : number;
+    credits         : Array<string>;            // list of agencies / org that are used on the map
+    layers          : Array<string>;            // list of visible layers
     imageObj        : IImageObj | null;         // image/data information
     loaded          : boolean;                  // is data available
     width           : number;                   // width of the image (may or may not match the video size)
@@ -42,6 +44,12 @@ export interface IVideo {
     showInfo        : boolean;
 }
 
+export interface IAuxVideoFrame {
+    introStyle     : string,
+    creditsStyle   : string,
+    label          : string | null,        // provide custom header
+}
+
 export class AnimationProps {
     public loadTimer                : Function | null = null;
     public playTimer                : Function | null = null;
@@ -61,6 +69,16 @@ export class videoProps {
     public static props                 : AnimationProps = new AnimationProps();
     public static defaultDuration       : number = 2500;
     public static defaultTransition     : VIDEO_TRANSITION = VIDEO_TRANSITION.SOFT;
-    public static defaultVideoReload    : boolean = true;   
+    public static defaultVideoReload    : boolean = false;   
     public static chkAllFrames          : boolean = false;
+    public static auxFrameSettings      : IAuxVideoFrame = {
+                                            introStyle : 'background:radial-gradient(circle at 90%, #222, #06274f 50%, #182a3f 75%, #babed4 76%, #111 76%);',
+                                            creditsStyle : 'background:linear-gradient(0, #06274f, #182a3f); font-size: 18px;',
+                                            label : null
+                                        };
+    public static reset() {
+        this.video.frames = [];
+        this.video.timerCounter = 0;
+        this.video.ignoreCounter = false;
+    }
 }

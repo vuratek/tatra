@@ -50,7 +50,7 @@
     text-transform: uppercase;
 }
 #videoAddons table {
-    background:#ddd;
+    background:#068884;
 }
 #videoAddons table td {
     position: relative;
@@ -185,7 +185,7 @@
     top: 0;
     left: 0;
     /*width:100%;*/
-    
+
 }
 .vcBtn {
     margin: 0 2rem;
@@ -201,7 +201,7 @@
     color:#999;
 }
 #videoLoading {
-    background: linear-gradient(90deg, transparent, #316ed5, #316ed5, transparent);
+    background:linear-gradient(90deg, rgba(0, 0, 0, 0), #058884, #058884, rgba(0, 0, 0, 0));
     text-transform: uppercase;
     margin: 2rem 0;
     color:white;
@@ -258,7 +258,7 @@
     display: none;
 }
 .vfl_info_loading {
-    background: linear-gradient(90deg, transparent, #316ed5, #316ed5, transparent);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0), #058884, #058884, rgba(0, 0, 0, 0));
 }
 #vidFrameCtrl {
     color:#eee;

@@ -6,7 +6,7 @@ import { events } from "../events";
 import { Modal } from "../../aux/Modal";
 import { imageUtils } from "../imageUtils";
 import { animationUtils } from "../support/animationUtils";
-import { videoProps, VIDEO_TRANSITION, AnimationProps, VIDEO_FRAME_TYPE } from "../support/animationProps";
+import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame } from "../support/animationProps";
 
 export class animation extends baseComponent {
 	public static id		            : string = 'animation';
@@ -53,12 +53,6 @@ export class animation extends baseComponent {
 		this.position(posx, posy);
     }
 
-    public static close() {
-        super.close();
-        this.isActive = false;
-    }
-
-
     public static loadFrames() {
         this.videoModal = new Modal({id: 'video', style : 'modalVideo'});
         let el = this.videoModal.getContent();
@@ -71,11 +65,12 @@ export class animation extends baseComponent {
 
         map.style.width = w.toString() + 'px';
         map.style.height = h.toString() + 'px';
+        props.map.updateSize();
         if (z != -1) {
             props.map.getView().setCenter([0,0]);
             props.map.getView().setZoom(z);
         }
-        props.map.updateSize();
+        console.log("loadfr", props.map.getSize(), w,h);
 
         let cont = document.getElementById(el) as HTMLDivElement;
         if (! cont) { return; }
@@ -119,10 +114,37 @@ export class animation extends baseComponent {
                 </div>
             </div>
         `;
+        /*
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background: radial-gradient(circle at 90%, #222, #1f2e12 50%, #4c7628 75%, #232323 75%);color:#eee;">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
+                    <div style="margin: 0 auto;width: 100%;max-width: 900px;margin-top: 30vh;">
+                        <div style="text-align: center;float: left;font-size: 18px;max-width: 600px;margin-top: 50px;">Data Source:</div>
+                        <div>
+                            <table>
+                                <tr><td>NASA/FIRMS</td></tr>
+                                <tr><td>NASA/GIBS</td></tr>
+                                <tr><td>NOAA</td></tr>
+                            </table>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        */
+        /*
+                    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background: radial-gradient(circle at 90%, #222, #1f2e12 50%, #4c7628 75%, #232323 75%);color:#eee;">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
+                    <div style="margin: 0 auto;width: 100%;max-width: 900px;margin-top: 30vh;">
+                        <img src="/images/NASA_logo.svg" style="float: left;height: 120px;">
+                        <div style="text-align: center;float: left;font-size: 25px;max-width: 600px;margin-top: 50px;">Fire Information for Resource Management System US/Canada</div>
+                        <img src="/images/fs_img2.png" style="float: left;height: 130px;">
+                    </div>                    
+                </div>
+            </div>*/
+        
         if (videoProps.video.logoDiv) {
             utils.html('videoStageLogo', videoProps.video.logoDiv);
         }
-        utils.setClick('videoLaunch', ()=> this.controlVideo('play'));
+        utils.setClick('videoLaunch', ()=> this.preparePlayVideo());
         utils.hide('videoLaunch');
         utils.hide('videoStage');
         utils.setClick('vcPlay', ()=>this.controlVideo('play'));
@@ -154,6 +176,16 @@ export class animation extends baseComponent {
         videoProps.video.step = _step;
         videoProps.video.timerCounter = 0;
         videoProps.video.ignoreCounter = false;
+        let credits = [];
+        let layers = [];
+        for (let i=0; i<props.layers.length; i++) {
+            if (props.layers[i].visible) {
+                if (props.layers[i].credit && props.layers[i].credit != '') {
+                    credits.push(props.layers[i].credit as string);
+                }
+                layers.push(props.layers[i].id);
+            }
+        }
         let date = sd;
         let frame = 0;
         let run = true;
@@ -165,6 +197,8 @@ export class animation extends baseComponent {
                 rangeMins : props.time.rangeMins,
                 imageObj : null, 
                 loaded : false, 
+                credits : credits,
+                layers : layers,
                 width : w, 
                 height : h,
                 duration : videoProps.defaultDuration,
@@ -183,6 +217,7 @@ export class animation extends baseComponent {
         videoProps.props.frameLoaderCounter = 0;
         this.isActive = true;
         if ( ! videoProps.props.loadTimer) {
+            console.log("Setting timer");
             videoProps.props.loadTimer = ()=> this.updateTimer();
             setInterval(videoProps.props.loadTimer, videoProps.props.intervalDelay);
         }
@@ -191,6 +226,7 @@ export class animation extends baseComponent {
     }
 
     private static closeModal() {
+        this.isActive = false;
         animationUtils.restoreStage();
         if (this.videoModal) {
             this.videoModal.close();
@@ -225,6 +261,12 @@ export class animation extends baseComponent {
         videoProps.video.ignoreCounter = false;    
     }
 
+    private static preparePlayVideo() {
+        animationUtils.addIntroCreditsFrame();
+        videoProps.props.framePlayDurationCounter = 0;
+        videoProps.props.framePlayCounter = 0;
+        this.controlVideo('play');
+    }
 
     public static initDatePicker (d : Date, type : string) {
         let option = this;
@@ -287,6 +329,7 @@ export class animation extends baseComponent {
             videoProps.video.timerCounter ++;
         }
         if (videoProps.video.timerCounter >= videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
+            console.log(videoProps.video.timerCounter, (videoProps.props.frameLoaderCounter-1), videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles);
             videoProps.video.ignoreCounter = true;    // block counter until new frame is loaded
             videoProps.video.timerCounter = 0;
             // load new frame
@@ -317,6 +360,7 @@ export class animation extends baseComponent {
             videoProps.props.videoPlaying = false;
             videoProps.props.framePlayCounter = 0;           // reset frames to 0 so they start from beginning
             videoProps.props.framePlayDurationCounter = 0;      // reset duration counter
+            animationUtils.removeIntroCreditsFrame();
         } else if (btn == "play") {
             utils.showCustom('vcPause', "inline-block");
             utils.hide('vcPlay');
@@ -346,7 +390,8 @@ export class animation extends baseComponent {
     private static renderAnimation () {
         if (! videoProps.props.videoPlaying || videoProps.video.frames.length == 0) { return; }     // video is paused / or no frames
         // if video is at the end
-        if (videoProps.props.framePlayCounter >= videoProps.video.frames.length) { 
+        let counter = videoProps.props.framePlayCounter;
+        if ( counter >= videoProps.video.frames.length) { 
             videoProps.props.framePlayCounter = 0;
             videoProps.props.framePlayDurationCounter = 0;
             if (!videoProps.defaultVideoReload) {
@@ -357,17 +402,26 @@ export class animation extends baseComponent {
         }
         if (videoProps.props.framePlayDurationCounter == 0) {
             // load images
-            this.loadAnimationFrame(videoProps.props.framePlayCounter, "top");
-            this.loadAnimationFrame(videoProps.props.framePlayCounter + 1, "bottom");
+            this.loadAnimationFrame(counter, "top");
+            this.loadAnimationFrame(counter + 1, "bottom");
             if (videoProps.video.frames.length == 1) {
                 videoProps.props.videoPlaying = false;
                 // set background frame to the same as top
-                this.loadAnimationFrame(videoProps.props.framePlayCounter, "bottom");
+                this.loadAnimationFrame(counter, "bottom");
             }
         }
+        if (videoProps.video.frames[videoProps.props.framePlayCounter].type != VIDEO_FRAME_TYPE.DATA) {
+            utils.removeClass('mapMaxLabel', 'vidTopLabel');
+            utils.hide('videoStageLogo');
+            utils.hide('videoStageInfo');
+        } else {
+            utils.addClass('mapMaxLabel', 'vidTopLabel');
+            utils.show('videoStageLogo');
+            utils.show('videoStageInfo');
+        }
         videoProps.props.framePlayDurationCounter += videoProps.props.videoDelay;
-        let transition = videoProps.video.frames[videoProps.props.framePlayCounter].transition;
-        let duration = videoProps.video.frames[videoProps.props.framePlayCounter].duration;
+        let transition = videoProps.video.frames[counter].transition;
+        let duration = videoProps.video.frames[counter].duration;
         let opacity = 1;
         if (transition == VIDEO_TRANSITION.SOFT) {
             if (videoProps.props.framePlayDurationCounter >= duration - videoProps.props.transitionSoftDelay) {
@@ -384,7 +438,7 @@ export class animation extends baseComponent {
         }
 
         // at last reset counter if over duration and prep for next frame
-        if (videoProps.props.framePlayDurationCounter > videoProps.video.frames[videoProps.props.framePlayCounter].duration) {
+        if (videoProps.props.framePlayDurationCounter > videoProps.video.frames[counter].duration) {
             videoProps.props.framePlayDurationCounter = 0;
             videoProps.props.framePlayCounter ++;
         }
@@ -399,7 +453,7 @@ export class animation extends baseComponent {
         canvas.style.opacity = "1";
         if (canvas) {
             let context = canvas.getContext('2d');
-            if (context) {
+            if (context && frame.imageObj && frame.imageObj.image) {
                 context.drawImage(frame.imageObj.image, 0, 0);
             }
         }
