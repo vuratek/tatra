@@ -1,6 +1,6 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF, Source, Vector } from "ol/source";
 import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
@@ -55,8 +55,8 @@ export class layer {
         case "esrigeojson":
             this.addGeoJsonLayer(lo);
             break;
-        case "custom_symbol":
-            this.addCustomSymbolLayer(lo);
+        case "csv":
+            this.addCSVLayer(lo);
             break;
         case "static_image":
             this.addStaticImageLayer(lo);
@@ -290,6 +290,10 @@ export class layer {
             }
 
             f[feature].setId(lo.id + '--' + counter);
+            if (lo.icon && lo.icon.indexOf('color:') < 0) {
+                f[feature].setProperties({"_icon" : lo.icon});
+                f[feature].setProperties({"_scale" : lo.jsonIconRatio});
+            }
             counter ++;
         }
     }
@@ -508,7 +512,7 @@ export class layer {
         });
         let img = fromUrl('/tif/OMPS-NPP_NMTO3-L3-DAILY-Ozone-GeoTIFF_v2.1_2022m0101_2022m0103t015721.tif')
             .then(tiff => {
-                console.log(tiff);
+                //console.log(tiff);
                 let image = tiff.getImage(0)
                 .then (img => {
                     let tiepoint =img.getTiePoints();  
@@ -545,25 +549,41 @@ export class layer {
 //        imageExtent: lo.sourceImageExtent,
     }
     
-    public static addCustomSymbolLayer (lo : Layer) {
-/*        let source = new VectorSrc(
+    public static addCSVLayer (lo : Layer) {
+        let source = new VectorSrc(
             {
-                wrapX: true,                                
+                wrapX: true,       
+                format: new GeoJSON(),                         
                 loader :  function(extent, resolution, projection) {
-                    $.ajax({
-                        url: lo.source.url,
-                        success: function (result) {
-                            lo.parser(result, lo);
-                        }                                       
-                    });
+                    // call json handler 
+                    if (lo.csvHandler) {
+                        lo.csvHandler(lo);
+                    }
                 }
             });
         
-        let func = 'layerStyle.' + lo.symbol + 'SymbolStyle';
+        let func = layerStyle['_' + lo.source.style];
         lo._layer = new VectorLayer({
             source: source,
             style: eval(func)
-         });    */
+         });
+    }
+
+    public static processGeoJsonString(lo:Layer, geojson : string) {
+        if (lo._layer) {
+            let src = lo._layer.getSource();
+            if (src) {
+                let features = src.getFormat().readFeatures(geojson); 
+                (src as Vector).addFeatures(features);
+                let f = (src as Vector).getFeatures();
+                let counter = 0;
+                for (let feature in f) {        
+                    f[feature].setId(lo.id + '--' + counter);
+                    counter ++;
+                }
+                events.dispatchLayer(events.EVENT_GEOJSON_LOADED, lo.id);
+            }
+        }
     }
     
     public static inRange (lo : Layer) {

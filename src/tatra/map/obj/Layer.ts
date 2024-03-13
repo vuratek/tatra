@@ -98,6 +98,7 @@ export class Layer {
     public cloneHasTime     : boolean = true;   // remove?
     public color            : Array <number> | null = null;
     public colorPaletteId   : string | null = null;
+    public csvHandler       : Function | null = null;
     public credit           : string | null = null;
     public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
     public dateFormat       : string = 'Y-m-d';
@@ -129,6 +130,7 @@ export class Layer {
     public isTileIdentify   : boolean = false;
     public jsonData         : Array <any> | null = null;
     public jsonHandler      : Function | null = null;
+    public jsonIconRatio    : number = 0.1;     // how much to resize geojson related icon
     public jsonSubsetHandler: Function | null = null;
     public limitExtent      : [number, number, number, number] | null = null;
     public listItemHandler  : Function | null = null;

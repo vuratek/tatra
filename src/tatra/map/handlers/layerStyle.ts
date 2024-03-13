@@ -35,7 +35,7 @@ export class layerStyle {
     public static scale         : number = 1;
     public static showValSite   : string = "all";
 
-    private static minFireResolutionLabel : number = 100;
+    private static minResolutionLabel : number = 100;
     
     public static setWMTSTime(imageTile : any, src : string, id : string) {
         let lo = mapUtils.getLayerById(id) as Layer;
@@ -295,12 +295,12 @@ export class layerStyle {
         return obj;
     }
 
-    private static getFireIcon(isSelect : boolean) {
+    private static getBasicIcon(isSelect : boolean, iconUrl : string, _scale : number) {
         let opacity = 0.8;
-        let scale = 0.08;
+        let scale = _scale;
         if (isSelect) {
             opacity = 1.0;
-            scale = 0.1;
+            scale = scale * 1.25;
         }
         return new Icon({
             scale: scale,
@@ -308,7 +308,7 @@ export class layerStyle {
             anchor: [0.5, 0.5],
             anchorXUnits: 'fraction',
             anchorYUnits: 'fraction',       //pixels
-            src: '/images/fireicon1.png',
+            src: iconUrl,
         });
     }
 
@@ -319,22 +319,29 @@ export class layerStyle {
         return 14;
     }
 
-    private static getFireAlertSymbol(feature : Feature, resolution: number, featureVal:string, isSelect : boolean) : Style | null {
+    private static getLayerSymbol(feature : Feature, resolution: number, featureVal:string, isSelect : boolean) : Style | null {
         let res = 1/resolution;
-
         let display = feature.get("_display");
         if (display === false) {
             return null;
         }
                 
-        if (!isSelect && res < layerStyle.minFireResolutionLabel) {
+        let icon = feature.get('_icon');
+        if (!icon) { return null;}
+        let scale = feature.get('_scale');
+        if (! scale) {
+            scale = 0.1;
+        }
+        if (!isSelect && res < layerStyle.minResolutionLabel) {
             return new Style({
-                image: layerStyle.getFireIcon(false)
+                image: layerStyle.getBasicIcon(false, icon, scale)
             });
         }
         let label = feature.get(featureVal);
+        let lbl_back = (feature.get('_labelBackground')) ? feature.get('_labelBackground') : '#fff';
+        let lbl_color = (feature.get('_labelColor')) ? feature.get('_labelColor') : '#000';
         return new Style({
-            image: layerStyle.getFireIcon(isSelect),
+            image: layerStyle.getBasicIcon(isSelect, icon, scale),
             text: new Text({
                 textAlign: "left",
                 textBaseline: "bottom",
@@ -342,10 +349,10 @@ export class layerStyle {
                 text: label,
                 placement: 'point',
                 fill: new Fill({
-                    color: 'black'
+                    color: lbl_color
                 }),
                 stroke: new Stroke({
-                    color: '#fff',
+                    color: lbl_back,
                     width: 5
                 })
             })
@@ -451,27 +458,27 @@ export class layerStyle {
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "firename", false);
+        return layerStyle.getLayerSymbol(feature, resolution, "firename", false);
     }
 
     public static _fireAlertCanada_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "firename", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "firename", true);
     }
 
     public static _fireAlertUSA (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", false);
+        return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", false);
     }
 
     public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", true);
     }
 
     public static _fireAlertUSA2 (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "fire_name", false);
+        return layerStyle.getLayerSymbol(feature, resolution, "fire_name", false);
     }
 
     public static _fireAlertUSA2_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "fire_name", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "fire_name", true);
     }
 
     public static _firePerimeterUSA ( feature : Feature, resolution: number) : Style | null {
@@ -497,7 +504,7 @@ export class layerStyle {
     }
 
     public static _firePerimeterUSA_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "IncidentName", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", true);
     }
     public static _firePerimeterUSA_info(feature : Feature) : string {
         let test = feature.get('IrwinID');
@@ -515,6 +522,38 @@ export class layerStyle {
                     <tr><td>Name</td><td>${name}</td></tr>
                     <tr><td>Fire ID</td><td>${fireid}</td></tr>
                     <tr><td colspan="2">IRWIN ID<br/>${irwinid}</td></tr>
+                </table>
+            </div>
+        `;
+    }
+
+    public static _volcanoes ( feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getLayerSymbol(feature, resolution, "name", false);
+    }
+    public static _volcanoes_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getLayerSymbol(feature, resolution, "name", true);
+    }
+    public static _volcanoes_info (feature : Feature) : string {
+        let icon = feature.get('_icon');
+        let volcano_type = feature.get('volcano_type');
+        let name = feature.get('name');
+        let eruption = feature.get('eruption');
+        let elevation = feature.get('elevation');
+        let rock_type = feature.get('rock_type');
+        let tectonics = feature.get('tectonics');
+        let lat = feature.get('lat');
+        let lon = feature.get('lon');
+        return `
+            <span class="faLbl"><img src="${icon}">Volcano</span><br/>
+            <div class="faSize">
+                <table>
+                    <tr><td>Name</td><td>${name}</td></tr>
+                    <tr><td>Lat, Lon</td><td>${lat}, ${lon}</td></tr>
+                    <tr><td>Type</td><td>${volcano_type}</td></tr>
+                    <tr><td>Last Known Eruption</td><td>${eruption}</td></tr>
+                    <tr><td>Elevation</td><td>${elevation} m</td></tr>
+                    <tr><td>Rock Type</td><td>${rock_type}</td></tr>
+                    <tr><td colspan="2">Tectonic Setting<br/>${tectonics}</td></tr>
                 </table>
             </div>
         `;
@@ -564,7 +603,7 @@ export class layerStyle {
         return layerStyle.symbols[key].cache[flag];
     }
     public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getFireAlertSymbol(feature, resolution, "fireid", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "fireid", true);
     }
     public static _firePerimeterEIS_info(feature : Feature) : string {
         let duration = feature.get('duration');
