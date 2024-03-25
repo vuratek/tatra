@@ -11,11 +11,15 @@
     margin: 0.5rem auto;
     display: block;
     padding: 0.3rem 1rem;
-    background: white;
+    background: #207cb3;
+    color: white;
     border-radius: 1rem;
     text-align: center;
-    width: 10rem;
+    width: 17rem;
     cursor: pointer;
+}
+#anim_btn_view_video {
+    background: #104363;
 }
 .videoFramesList {
     font-size: 1.4rem;
@@ -26,6 +30,9 @@
 }
 #videoLibraryList {
     margin: 1rem 0 0 0;
+}
+#videoBackgroundLogoHolder {
+    display:none;
 }
 #vidFrameCtrl {
     font-size: 1.2rem;
@@ -156,8 +163,23 @@
     bottom: 2.5rem;
     width:100%;
 }
+#videoControlsClose {
+    position: fixed;
+    top:2rem;
+    right:2rem;
+    color:#eee;
+    font-size:2.4rem;
+    border-radius: 3rem;
+    padding: .3rem .5rem;
+    opacity:0.6;
+    cursor: pointer;
+}
+#videoControlsClose:hover {
+    opacity:1;
+}
 #videoControls {
-    background: rgba(70, 70, 70, .5);
+    background: linear-gradient(0, black, #ddd);
+    opacity: 0.7;
     border: 0.1rem solid #AAA;
     border-radius: 3rem;
     width: 30rem;
@@ -167,8 +189,8 @@
     text-align: center;
 }
 #videoStageInfo {
-    position: fixed;
-    bottom: 10px;
+    position: absolute;
+    top:10px;
     left:1rem;
     font-size: 2rem;
     color:#CCC;
@@ -176,9 +198,9 @@
     text-shadow: 1px 1px 1px #333, -1px 1px 1px #333, -1px -1px 0 #333, 1px -1px 0 #333;
 }
 #videoStageLogo {
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
 .video_canvas {
     position: absolute;
@@ -190,7 +212,7 @@
 .vcBtn {
     margin: 0 2rem;
     font-size: 3.5rem;
-    color: #555;
+    color: #171717;
     display:inline-block;
     cursor: pointer;
 }
@@ -208,17 +230,19 @@
     padding:.5rem;
     text-align: center;
 }
-#videoLaunch {
+.videoLaunch {
     text-align: center;
     cursor: pointer;
-    width: 12rem;
+    text-transform: uppercase;
+    background: linear-gradient(#fff, #505050);
+    border-radius: 2rem;
+    width: 15rem;
     margin: 2rem auto;
     padding: 0;
-    background: linear-gradient(180deg, white, #505050);
-    border: 0.1rem solid white;
-    text-transform: uppercase;
     font-size: 1.4rem;
-    border-radius: 1rem;
+}
+#videoLaunch3d {
+    display: none;
 }
 .vidFrmList {
     list-style: none;
@@ -259,6 +283,55 @@
 }
 .vfl_info_loading {
     background: linear-gradient(90deg, rgba(0, 0, 0, 0), #058884, #058884, rgba(0, 0, 0, 0));
+}
+.vfl_partition_btn {
+    color: #eee;
+    opacity: .4;
+    background: #333;
+    border-radius: 1rem;
+    font-size: 1rem;
+    position: absolute;
+    padding: 0 .5rem;
+    top: -1rem;
+    right: 1rem;
+    width:7rem;
+    text-align: center;
+    cursor: pointer;
+}
+.vfl_partition_btn:hover {
+    opacity: .9;
+    background: #058884;
+    font-size: 1.2rem;
+}
+.vfl_partition_btn_selected {
+    opacity:1;
+    background: #058884;
+    border:.1rem solid #eee;
+    width:15rem;
+}
+.vfl_partition_btn_selected:hover {
+    opacity:1;
+}
+.vfl_partition_option {
+    width: 12rem;
+    margin: 0 auto .2rem;
+    text-transform: uppercase;
+    text-align: center;
+    background: #444;
+    cursor: pointer;
+}
+.vfl_partition_option:hover {
+    background:#111;
+}
+.vfl_partition_close {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    font-size: 1.8rem;
+    opacity: .5;
+}
+.vfl_partition_close:hover {
+    opacity: 1;
 }
 #vidFrameCtrl {
     color:#eee;

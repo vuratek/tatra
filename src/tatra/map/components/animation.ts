@@ -24,6 +24,7 @@ export class animation extends baseComponent {
     public static init () {
         super.init();
         document.addEventListener(events.EVENT_RENDER_COMPLETE, (evt) => this.updateImage());
+        document.addEventListener(events.EVENT_VIDEO_FRAME_LOADED, (evt) => this.playVideo());
     }
 
 	public static createWindow () {
@@ -33,7 +34,8 @@ export class animation extends baseComponent {
         let d1 = utils.addDay(props.time.date, -videoProps.props.defaultFrames+1);
         this.initDatePicker(d1, "From");
         this.initDatePicker(props.time.date, "To");
-        utils.setClick('anim_btn_load_video', ()=>this.loadFrames());
+        utils.setClick('anim_btn_load_video', ()=>this.loadFrames(true));
+        utils.setClick('anim_btn_view_video', ()=>this.loadFrames(false));
     }
 
 	public static open() {
@@ -43,7 +45,7 @@ export class animation extends baseComponent {
 		let posy = 0;
 		let posx = 0;
 		if (mh > 500) {
-			posy = mh - 300;
+			posy = mh - 350;
 		}
 		if (mw > 400 && mw < 800) {
 			posx = 50;
@@ -53,7 +55,7 @@ export class animation extends baseComponent {
 		this.position(posx, posy);
     }
 
-    public static loadFrames() {
+    public static loadFrames(addNew : boolean) {
         this.videoModal = new Modal({id: 'video', style : 'modalVideo'});
         let el = this.videoModal.getContent();
         this.videoModal.open();
@@ -66,9 +68,11 @@ export class animation extends baseComponent {
         map.style.width = w.toString() + 'px';
         map.style.height = h.toString() + 'px';
         props.map.updateSize();
+        let isWorld = false;
         if (z != -1) {
             props.map.getView().setCenter([0,0]);
             props.map.getView().setZoom(z);
+            isWorld = true;
         }
         console.log("loadfr", props.map.getSize(), w,h);
 
@@ -82,17 +86,23 @@ export class animation extends baseComponent {
                 <div id="videoAddons">
                     <table>
                         <tr>
-                            <td id="td_vaIntro"><div id="videoAddonsIntro" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Intro &amp; Credits</span></td>
+                            <td id="td_vaIntro"><div id="videoAddonsIntro" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Intro</span></td>
                             <td id="td_vaTopBanner"><div id="videoAddonsTopBanner" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Top Label</span></td>
                         </tr>
                         <tr>
-                            <td id="td_vaInfo"><div id="videoAddonsInfo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Data Info</span></td>
+                            <td id="td_vaCredits"><div id="videoAddonsCredits" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Credits</span></td>
                             <td id="td_vaLogo"><div id="videoAddonsLogo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Bottom Logo</span></td>
+                        </tr>
+                        <tr>
+                            <td id="td_vaInfo"><div id="videoAddonsInfo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Data Info</span></td>
+                            <td>&nbsp;</td>
                         </tr>
                     </table>
                 </div>
                 <div id="videoLoading">loading</div>
-                <div id="videoLaunch">Play</div>
+                <div id="videoLoadFrames" class="videoLaunch"><span><i class="fa fa-plus"></i></span>&nbsp;&nbsp;Add Frames</div>
+                <div id="videoLaunch" class="videoLaunch"><span><i class="fa fa-play"></i></span>&nbsp;&nbsp;Play</div>
+                <div id="videoLaunch3d" class="videoLaunch"><span><i class="fa fa-globe"></i></span>&nbsp;&nbsp;Play 3D</div>
                 <div id="videoLibraryClose" class="modalCloseIcon">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </div>
@@ -112,24 +122,12 @@ export class animation extends baseComponent {
                         <div class="vcBtn" id="vcReload"><i class="fa fa-sync"></i></div>
                     </div>
                 </div>
-            </div>
-        `;
-        /*
-        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background: radial-gradient(circle at 90%, #222, #1f2e12 50%, #4c7628 75%, #232323 75%);color:#eee;">
-                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
-                    <div style="margin: 0 auto;width: 100%;max-width: 900px;margin-top: 30vh;">
-                        <div style="text-align: center;float: left;font-size: 18px;max-width: 600px;margin-top: 50px;">Data Source:</div>
-                        <div>
-                            <table>
-                                <tr><td>NASA/FIRMS</td></tr>
-                                <tr><td>NASA/GIBS</td></tr>
-                                <tr><td>NOAA</td></tr>
-                            </table>
-                        </div>
-                    </div>                    
+                <div id="videoControlsClose">
+                    <span><i class="fa fa-times"></i></span>
                 </div>
             </div>
-        */
+        </div>
+        `;
         /*
                     <div style="position:absolute;top:0;left:0;width:100%;height:100%;background: radial-gradient(circle at 90%, #222, #1f2e12 50%, #4c7628 75%, #232323 75%);color:#eee;">
                 <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
@@ -140,20 +138,75 @@ export class animation extends baseComponent {
                     </div>                    
                 </div>
             </div>*/
+            /* FIRMS GLOBAL
+            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 90%, #222, #aa120e 50%, #630202 75%, #eee 76%, #111 76%);color:#eee;">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
+                    <div style="margin: 0 auto;
+                    width: 100%;
+                    max-width: 900px;
+                    margin-top: 45vh;">
+                        <img src="/images/nasa_logo_white.png" style="    position: absolute;
+                        top: 10vh;
+                        right: 5vw;
+                        height: 80vh;
+                        opacity: 0.45;">
+                        <div style="text-align: center;
+                        text-transform: uppercase;
+                        line-height: 50px;
+                        padding-right: 200px;
+                        font-weight: 600;
+                        font-size: 40px;">Fire Information for Resource <br>Management System</div>
+                    </div>                    
+                </div>
+            </div>
+            */
+           /*USFS
+                       <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 90%, #222, #1d6030 50%, #012201 75%, #ffc423 76%, #111 76%);color:#ffc423;">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
+                    <div style="margin: 0 auto;
+                    width: 100%;
+                    max-width: 900px;
+                    margin-top: 45vh;">
+                        <img src="/images/nasa_logo_white.png" style="position: absolute;
+                        top: 10vh;
+                        right: 15vw;
+                        height: 40vh;
+                        opacity: 0.45;">
+                        <img src="/images/usfs_white.png" style="     position: absolute;
+                        top: 40vh;
+                        right: 5vw;
+                        height: 40vh;
+                        opacity: 0.45;">
+                        <div style="text-align: center;
+                        text-transform: uppercase;
+                        line-height: 50px;
+                        padding-right: 200px;
+                        font-weight: 600;
+                        font-size: 40px;">Fire Information for Resource <br>Management System<br/>US & Canada</div>
+                    </div>                    
+                </div>
+            </div>
+            */
         
         if (videoProps.video.logoDiv) {
             utils.html('videoStageLogo', videoProps.video.logoDiv);
         }
+        utils.setClick('videoLoadFrames', ()=> this.addNewFrames());
         utils.setClick('videoLaunch', ()=> this.preparePlayVideo());
+        utils.setClick('videoLaunch3d', ()=> this.preparePlayVideo3d());
+        utils.hide('videoLoadFrames');
         utils.hide('videoLaunch');
+        utils.hide('videoLaunch3d');
         utils.hide('videoStage');
         utils.setClick('vcPlay', ()=>this.controlVideo('play'));
         utils.setClick('vcPause', ()=>this.controlVideo('pause'));
         utils.setClick('vcStop', ()=>this.controlVideo('stop'));
+        utils.setClick('videoControlsClose', ()=>this.controlVideo('stop'));
         utils.setClick('vcReload', ()=>this.controlVideo('reload'));
-        utils.setClick('videoCanvas', ()=>this.controlVideo('pausePlay'));
+        utils.setClick('videoCanvas', ()=>this.controlVideo('pause'));
         utils.setClick('videoLibraryClose', ()=>this.closeModal());
         utils.setClick('td_vaIntro', ()=>animationUtils.setVideoAddons('intro'));
+        utils.setClick('td_vaCredits', ()=>animationUtils.setVideoAddons('credits'));
         utils.setClick('td_vaInfo', ()=>animationUtils.setVideoAddons('info'));
         utils.setClick('td_vaTopBanner', ()=>animationUtils.setVideoAddons('topBanner'));
         utils.setClick('td_vaLogo', ()=>animationUtils.setVideoAddons('logo'));
@@ -161,71 +214,83 @@ export class animation extends baseComponent {
         utils.hide('vcPause');
         this.setVideoReload();
 
-        let sd = utils.sanitizeDate(this.calendarFrom.selectedDates[0]);
-        let ed = utils.sanitizeDate(this.calendarTo.selectedDates[0]);
-        let _step = utils.getSelectValue(`lmvControls_anim_step`);
-        let step = 1;
-        if (_step.indexOf('d')>=0) {
-            step = Number(_step.replace('d', ''));
-        }
-        if (sd > ed) { return; }
-        let size = props.map.getSize();
-        if (!size) {
-            return;
-        }
-        videoProps.video.step = _step;
-        videoProps.video.timerCounter = 0;
-        videoProps.video.ignoreCounter = false;
-        let credits = [];
-        let layers = [];
-        for (let i=0; i<props.layers.length; i++) {
-            if (props.layers[i].visible) {
-                if (props.layers[i].credit && props.layers[i].credit != '') {
-                    credits.push(props.layers[i].credit as string);
+
+        if (addNew) {
+            let sd = utils.sanitizeDate(this.calendarFrom.selectedDates[0]);
+            let ed = utils.sanitizeDate(this.calendarTo.selectedDates[0]);
+            let _step = utils.getSelectValue(`lmvControls_anim_step`);
+            let step = 1;
+            if (_step.indexOf('d')>=0) {
+                step = Number(_step.replace('d', ''));
+            }
+            if (sd > ed) { return; }
+            let size = props.map.getSize();
+            if (!size) {
+                return;
+            }
+            videoProps.video.step = _step;
+            videoProps.video.timerCounter = 0;
+            videoProps.video.ignoreCounter = false;
+            let credits = [];
+            let layers = [];
+            for (let i=0; i<props.layers.length; i++) {
+                if (props.layers[i].visible) {
+                    if (props.layers[i].credit && props.layers[i].credit != '') {
+                        credits.push(props.layers[i].credit as string);
+                    }
+                    layers.push(props.layers[i].id);
                 }
-                layers.push(props.layers[i].id);
             }
-        }
-        let date = sd;
-        let frame = 0;
-        let run = true;
-        while (run) {
-            frame ++;
-            videoProps.video.frames.push({
-                date: date, 
-                range : props.time.range,
-                rangeMins : props.time.rangeMins,
-                imageObj : null, 
-                loaded : false, 
-                credits : credits,
-                layers : layers,
-                width : w, 
-                height : h,
-                duration : videoProps.defaultDuration,
-                transition : VIDEO_TRANSITION.SOFT,
-                type : VIDEO_FRAME_TYPE.DATA,
-                waitCycles : 50,
-                checked : false
-            });
-            date = utils.addDay(date, step);
-            // quit when over max frames or time reaches end point
-            if (frame == videoProps.props.maxFrames || flatpickr.formatDate(date, 'Y-m-d') > flatpickr.formatDate(ed, 'Y-m-d')) {
-                run = false;
+            let date = sd;
+            let frame = 0;
+            let run = true;
+            while (run) {
+                frame ++;
+                let fr = {
+                    date: date, 
+                    range : props.time.range,
+                    rangeMins : props.time.rangeMins,
+                    imageObj : null, 
+                    loaded : false, 
+                    credits : credits,
+                    layers : layers,
+                    width : w, 
+                    height : h,
+                    isWorld : isWorld,
+                    duration : videoProps.defaultDuration,
+                    transition : VIDEO_TRANSITION.SOFT,
+                    type : VIDEO_FRAME_TYPE.DATA,
+                    waitCycles : 50,
+                    checked : false
+                };
+                if (videoProps.videoLoaderIndex >= videoProps.video.frames.length) {
+                    videoProps.video.frames.push(fr);
+                    videoProps.videoLoaderIndex = videoProps.video.frames.length;
+                } else {
+                    videoProps.video.frames.splice(videoProps.videoLoaderIndex, 0, fr);
+                    videoProps.videoLoaderIndex++;
+                }
+                date = utils.addDay(date, step);
+                // quit when over max frames or time reaches end point
+                if (frame == videoProps.props.maxFrames || flatpickr.formatDate(date, 'Y-m-d') > flatpickr.formatDate(ed, 'Y-m-d')) {
+                    run = false;
+                }
             }
-        }
-        console.log(videoProps.video);
-        videoProps.props.frameLoaderCounter = 0;
-        this.isActive = true;
-        if ( ! videoProps.props.loadTimer) {
-            console.log("Setting timer");
-            videoProps.props.loadTimer = ()=> this.updateTimer();
-            setInterval(videoProps.props.loadTimer, videoProps.props.intervalDelay);
+            console.log(videoProps.video);
+            videoProps.props.frameLoaderCounter = 0;
+            this.isActive = true;
+            if ( ! videoProps.props.loadTimer) {
+                videoProps.props.loadTimer = ()=> this.updateTimer();
+                setInterval(videoProps.props.loadTimer, videoProps.props.intervalDelay);
+            }
         }
         this.renderPopup();
-        animationUtils.processFrames();
+        if (addNew) {
+            animationUtils.processFrames();
+        }
     }
 
-    private static closeModal() {
+    public static closeModal() {
         this.isActive = false;
         animationUtils.restoreStage();
         if (this.videoModal) {
@@ -233,6 +298,11 @@ export class animation extends baseComponent {
         }
     }
 
+    private static addNewFrames() {
+        videoProps.videoLoaderIndex = videoProps.video.frames.length;
+        this.closeModal();
+    }
+ 
     private static renderPopup() {
         let par = document.getElementById('videoLibraryList') as HTMLDivElement;
         animationUtils.renderControlOptions(par);
@@ -265,7 +335,22 @@ export class animation extends baseComponent {
         animationUtils.addIntroCreditsFrame();
         videoProps.props.framePlayDurationCounter = 0;
         videoProps.props.framePlayCounter = 0;
+        videoProps.readyToPlay = true;
+        events.dispatch(events.EVENT_VIDEO_FRAME_LOADED);
+    }
+    private static preparePlayVideo3d() {
+        videoProps.props.framePlayDurationCounter = 0;
+        videoProps.props.framePlayCounter = 0;
         this.controlVideo('play');
+    }
+
+    private static playVideo() {
+        if (videoProps.readyToPlay) {
+            for (let i=0; i<videoProps.video.frames.length; i++) {
+                if (! videoProps.video.frames[i].loaded) { return; }
+            }
+            this.controlVideo('play');
+        }
     }
 
     public static initDatePicker (d : Date, type : string) {
@@ -329,7 +414,6 @@ export class animation extends baseComponent {
             videoProps.video.timerCounter ++;
         }
         if (videoProps.video.timerCounter >= videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
-            console.log(videoProps.video.timerCounter, (videoProps.props.frameLoaderCounter-1), videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles);
             videoProps.video.ignoreCounter = true;    // block counter until new frame is loaded
             videoProps.video.timerCounter = 0;
             // load new frame
@@ -345,14 +429,8 @@ export class animation extends baseComponent {
     }
     
     private static controlVideo (btn : string) {
-        console.log("btn", btn);
-        if (btn == "pausePlay") {
-            if (videoProps.props.videoPlaying) {
-                btn = "pause";
-            } else {
-                btn = "play"
-            }
-        }
+        utils.show('videoControlsWrap');
+        utils.show('videoControlsClose');
         if (btn == "stop") {
             utils.hide('videoStage');
             utils.show('videoLibrary');
@@ -361,8 +439,11 @@ export class animation extends baseComponent {
             videoProps.props.framePlayCounter = 0;           // reset frames to 0 so they start from beginning
             videoProps.props.framePlayDurationCounter = 0;      // reset duration counter
             animationUtils.removeIntroCreditsFrame();
+            videoProps.readyToPlay = false;
         } else if (btn == "play") {
             utils.showCustom('vcPause', "inline-block");
+            utils.hide('videoControlsWrap');        // hide control bar while playing
+            utils.hide('videoControlsClose');
             utils.hide('vcPlay');
             utils.show('videoStage');
             if (videoProps.video.showTopBanner) {
@@ -388,47 +469,48 @@ export class animation extends baseComponent {
     }
 
     private static renderAnimation () {
-        if (! videoProps.props.videoPlaying || videoProps.video.frames.length == 0) { return; }     // video is paused / or no frames
+        let v = videoProps.video;
+        let p = videoProps.props;
+        if (! p.videoPlaying || v.frames.length == 0) { return; }     // video is paused / or no frames
         // if video is at the end
-        let counter = videoProps.props.framePlayCounter;
-        if ( counter >= videoProps.video.frames.length) { 
-            videoProps.props.framePlayCounter = 0;
-            videoProps.props.framePlayDurationCounter = 0;
+        let counter = p.framePlayCounter;
+        if ( counter >= v.frames.length) { 
+            p.framePlayCounter = 0;
+            p.framePlayDurationCounter = 0;
             if (!videoProps.defaultVideoReload) {
                 // hit pause btn so play btn appears and resets
                 this.controlVideo('pause');
             }
             return; 
         }
-        if (videoProps.props.framePlayDurationCounter == 0) {
+        if (p.framePlayDurationCounter == 0) {
             // load images
             this.loadAnimationFrame(counter, "top");
             this.loadAnimationFrame(counter + 1, "bottom");
-            if (videoProps.video.frames.length == 1) {
-                videoProps.props.videoPlaying = false;
+            if (v.frames.length == 1) {
+                p.videoPlaying = false;
                 // set background frame to the same as top
                 this.loadAnimationFrame(counter, "bottom");
             }
         }
-        if (videoProps.video.frames[videoProps.props.framePlayCounter].type != VIDEO_FRAME_TYPE.DATA) {
-            utils.removeClass('mapMaxLabel', 'vidTopLabel');
-            utils.hide('videoStageLogo');
-            utils.hide('videoStageInfo');
-        } else {
-            utils.addClass('mapMaxLabel', 'vidTopLabel');
-            utils.show('videoStageLogo');
-            utils.show('videoStageInfo');
+        utils.removeClass('mapMaxLabel', 'vidTopLabel');
+        utils.hide('videoStageLogo');
+        utils.hide('videoStageInfo');
+        if (v.frames[p.framePlayCounter].type == VIDEO_FRAME_TYPE.DATA) {
+            if (v.showTopBanner) { utils.addClass('mapMaxLabel', 'vidTopLabel'); }
+            if (v.showLogo) { utils.show('videoStageLogo'); }
+            if (v.showInfo) { utils.show('videoStageInfo'); }
         }
-        videoProps.props.framePlayDurationCounter += videoProps.props.videoDelay;
-        let transition = videoProps.video.frames[counter].transition;
-        let duration = videoProps.video.frames[counter].duration;
+        p.framePlayDurationCounter += p.videoDelay;
+        let transition = v.frames[counter].transition;
+        let duration = v.frames[counter].duration;
         let opacity = 1;
         if (transition == VIDEO_TRANSITION.SOFT) {
-            if (videoProps.props.framePlayDurationCounter >= duration - videoProps.props.transitionSoftDelay) {
-                opacity = Math.round((duration - videoProps.props.framePlayDurationCounter) / videoProps.props.transitionSoftDelay * 100) / 100.0;
+            if (p.framePlayDurationCounter >= duration - p.transitionSoftDelay) {
+                opacity = Math.round((duration - p.framePlayDurationCounter) / p.transitionSoftDelay * 100) / 100.0;
             }
         } else if (transition == VIDEO_TRANSITION.CONTINUOUS) {
-            opacity = 1.0 - Math.round(videoProps.props.framePlayDurationCounter / duration * 100) / 100;
+            opacity = 1.0 - Math.round(p.framePlayDurationCounter / duration * 100) / 100;
         }
         if (opacity > 1) { opacity = 1.0;}
         if (opacity < 0) { opacity = 0;}
@@ -437,10 +519,25 @@ export class animation extends baseComponent {
             canvas.style.opacity = opacity.toString();
         }
 
+        // position logo and info
+        let w = v.frames[p.framePlayCounter].width;
+        let h = v.frames[p.framePlayCounter].height;
+        let el = document.getElementById('videoStageLogo') as HTMLDivElement;
+        if (el && el.clientHeight > 0) {
+            el.style.left =  ( w - el.clientWidth - 5).toString() + "px";
+            el.style.top = ( h - el.clientHeight - 5).toString() + "px";
+        }
+        el = document.getElementById('videoStageInfo') as HTMLDivElement;
+        if (el && el.clientHeight > 0) {
+            el.style.left =  "10px";
+            el.style.top = ( h - el.clientHeight - 10).toString() + "px";
+        }
+        
+
         // at last reset counter if over duration and prep for next frame
-        if (videoProps.props.framePlayDurationCounter > videoProps.video.frames[counter].duration) {
-            videoProps.props.framePlayDurationCounter = 0;
-            videoProps.props.framePlayCounter ++;
+        if (p.framePlayDurationCounter > v.frames[counter].duration) {
+            p.framePlayDurationCounter = 0;
+            p.framePlayCounter ++;
         }
     }
 

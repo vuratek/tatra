@@ -9,6 +9,7 @@ import flatpickr from "flatpickr";
 import { videoProps } from "./animationProps";
 import { IImageObj } from "../imageUtils";
 import { navProps } from "../../page/navProps";
+import { animation } from "../components/animation";
 
 export interface ISavedMapParams {
     zoom            : number;
@@ -113,7 +114,10 @@ export class animationUtils {
 			<div id="lmvDragLbl_${id}" class="transparentWindowLabel">
 				<span id="lmvControls_${id}_Layer" class="opacityTitleLbl">Animate</span>
 			</div>
-			<div style="width:100%;" class="lmvAnimation">
+            <div style="width:100%;" class="lmvAnimation">
+                <div>
+                    <div id="anim_btn_view_video" class="anim_btn_load_video">View Frames</div> 
+                </div>
                 <table>
                     <tr>
                         <td>From:</td>
@@ -151,8 +155,8 @@ export class animationUtils {
                         </td>
                     </tr>
                 </table>
-                <div>                    
-                    <div id="anim_btn_load_video" class="anim_btn_load_video">Load Video</div>
+                <div>
+                    <div id="anim_btn_load_video" class="anim_btn_load_video">Add Frames</div>
                 </div>
 			</div>	
 		`;
@@ -198,11 +202,19 @@ export class animationUtils {
             <div id="videoFramesList_cmd_none" class="vidFrameCtrlPanelNone">
                 No active frames.
             </div>
+            <div id="videoBackgroundLogoHolder">
+            </div>
         `;
 //        utils.setSelectValue('vidFrameDuration', videoProps.defaultDuration.toString());
         utils.setChange('vidFrameDuration', ()=>this.updateDuration());
         utils.setChange('vidFrameTransition', ()=>this.updateTransition());
         this.updateInfoCheckboxes();
+        let el2 = document.getElementById('videoBackgroundLogoHolder') as HTMLDivElement;
+        if (el2) {
+            el2.innerHTML = `
+                <img id="_videoLogo_1" src="/images/nasa_logo_white.png" style="width:432px;height:432px;">
+            `;
+        }
     }
 
     // set default duration from select box
@@ -279,12 +291,16 @@ export class animationUtils {
             let dur = Math.round(frame.duration / 100) / 10;
             
             li.innerHTML = `
-                <canvas id="${fid}"></canvas>
+            <canvas id="${fid}"></canvas>
                 <div class="vfl_info">
                     <div class="vfl_info_date">${date}${period}</div>
                     <div class="vfl_info_date">Size: ${frame.width}px x ${frame.height}px</div>
                     <div class="vfl_info_date">Duration: ${dur} sec</div>
                     <div class="vfl_info_date">Transition: ${frame.transition}</div>
+                    <div id="vfl_part-${i.toString()}" class="vfl_partition_btn">
+                        <div><span>+ frames</span></div>
+                        <div id="vfl_part_btn-${i.toString()}"></div>
+                    </div>
                 </div>
                 <div class="vfl_info_state" id="vfl_state_${i.toString()}"></div>
                 <div id="vfl_chk-${i.toString()}" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
@@ -323,14 +339,37 @@ export class animationUtils {
             }
         }
         utils.hide('videoLoading');
+        utils.hide('videoLaunch3d');
+        let partDisplay = 'none';
         if (allLoaded) {
             utils.show('videoLaunch');
+            utils.show('videoLoadFrames');
+            partDisplay = 'block';
+            let fc = 0;
+            let fw = 0;
+            for (let i=0; i<frames.length; i++) {
+                if (frames[i].type == VIDEO_FRAME_TYPE.DATA) {
+                    fc++;
+                    if (frames[i].isWorld) {
+                        fw++;
+                    }
+                }
+            }
+            if (fc == fw) {
+//                utils.show('videoLaunch3d');
+            }
         } else {
             utils.hide('videoLaunch');
+            utils.hide('videoLoadFrames');
             if (frames.length > 0) {
                 utils.show('videoLoading');
             }
         }
+        // show/hide all partition buttons
+        document.querySelectorAll('.vfl_partition_btn').forEach(function(el) {
+            (el as HTMLDivElement).style.display = partDisplay;
+        });
+        
     }
     // draw canvas for the video list
     private static drawVideoImage(index : number) {
@@ -476,14 +515,92 @@ export class animationUtils {
                         type = 'checkbox';
                         id = el.id.replace('vfl_chk-', '');
                         break;
+                    }
+                    else if (el.id.indexOf('vfl_part_option_above') >=0 || el.id.indexOf('vfl_part_option_below') >=0) {
+                        let arr = el.id.split('-');
+                        if (arr.length == 2) {
+                            videoProps.videoLoaderIndex = Number(arr[1]);
+                            if (el.id.indexOf('below')>=0) {
+                                videoProps.videoLoaderIndex++;
+                            }
+                            animation.closeModal();
+                        }
+                        break;
+                    } 
+                    else if (el.id.indexOf('vfl_part_option_partition') >=0) {
+                        type = 'add-partition';
+                        id = el.id.replace('vfl_part_option_partition-', '');
+                        break;
+                    } 
+                    else if (el.id.indexOf('vfl_part') >=0) {
+                        type = 'partition';
+                        id = el.id.replace('vfl_part-', '');
+                        break;
                     } 
                 }
             } 
         }
         if (id) {
+            if (type == 'partition') {
+                this.setPartitionBtns(Number(id));
+            } else {
+                this.setPartitionBtns(-1);
+            }
             if (type == 'checkbox') {
                 videoProps.video.frames[Number(id)].checked = ! videoProps.video.frames[Number(id)].checked;
                 this.updateInfoCheckboxes();
+            } else if (type == 'add-partition') {
+                this.generatePartition(Number(id));
+            }
+        }
+    }
+    private static generatePartition(index : number) {
+        let f = videoProps.video.frames[index];
+
+        let fr = {
+            date: new Date(), 
+            range : 0,
+            rangeMins : 0,
+            imageObj : null, 
+            loaded : false, 
+            credits : [],
+            layers : [],
+            width : f.width, 
+            height : f.height,
+            isWorld : f.isWorld,
+            duration : videoProps.defaultDuration,
+            transition : VIDEO_TRANSITION.SOFT,
+            type : VIDEO_FRAME_TYPE.PARTITION,
+            waitCycles : 0,
+            checked : false
+        };
+        videoProps.video.frames.splice(index, 0, fr);
+        this.createAuxFrame(fr);
+        
+    }
+    private static setPartitionBtns (index : number) {
+        let f = videoProps.video.frames;
+        for (let i=0; i<f.length; i++) {
+            if (f[i].type == VIDEO_FRAME_TYPE.DATA || f[i].type == VIDEO_FRAME_TYPE.PARTITION) {
+                let _i = i.toString();
+                let id = `vfl_part_btn-${_i}`;
+                if (index != i) {
+                    utils.hide(id);
+                    utils.html(id, '');
+                    utils.removeClass(`vfl_part-${_i}`, 'vfl_partition_btn_selected');
+                } else {
+                    
+                    let pref = 'vfl_part_option';
+                    let str = `
+                        <div id="${pref}_above-${_i}" class="vfl_partition_option">above</div>
+                        <div id="${pref}_partition-${_i}" class="vfl_partition_option">partition</div>
+                        <div id="${pref}_below-${_i}" class="vfl_partition_option">below</div>
+                        <div class="vfl_partition_close"><span><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                    `;
+                    utils.show(id);
+                    utils.addClass(`vfl_part-${_i}`, 'vfl_partition_btn_selected');
+                    utils.html(id, str);
+                }
             }
         }
     }
@@ -495,9 +612,12 @@ export class animationUtils {
             else if (type == 'info') { v.showInfo = !v.showInfo; }
             else if (type == 'topBanner') { v.showTopBanner = !v.showTopBanner; }
             else if (type == 'logo') { v.showLogo = !v.showLogo; }
+            else if (type == 'credits') { v.showCredits = !v.showCredits; }
         }
         if (v.showIntro) {utils.addClass('videoAddonsIntro', c);}
         else {utils.removeClass('videoAddonsIntro', c);}
+        if (v.showCredits) {utils.addClass('videoAddonsCredits', c);}
+        else {utils.removeClass('videoAddonsCredits', c);}
         if (v.showInfo) {
             utils.addClass('videoAddonsInfo', c);
             utils.show('videoStageInfo');
@@ -519,48 +639,37 @@ export class animationUtils {
     }
     public static addIntroCreditsFrame() {
         let fs = videoProps.video.frames;
-        if (fs.length == 0 || !videoProps.video.showIntro) { return; }
+        if (fs.length == 0 ) { return; }
         let w = fs[0].width;
         let h = fs[0].height;
-        if (fs[0].type != VIDEO_FRAME_TYPE.INTRO) {
-            let intro:IVideoFrame = {
-                date            : new Date(),
-                range           : -1,
-                rangeMins       : -1,
-                imageObj        : null,
-                credits         : [],
-                layers          : [],
-                loaded          : true,
-                width           : w,
-                height          : h,
-                duration        : 2500,
-                transition      : VIDEO_TRANSITION.HARD,
-                type            : VIDEO_FRAME_TYPE.INTRO,
-                waitCycles      : 0,
-                checked         : false
-            }
+        if (videoProps.video.showIntro && fs[0].type != VIDEO_FRAME_TYPE.INTRO) {
+            let intro = this._setInfoCreditsFrame(w,h,VIDEO_FRAME_TYPE.INTRO);
             this.createAuxFrame(intro);
             fs.unshift(intro);
         }
-        if (fs[fs.length-1].type != VIDEO_FRAME_TYPE.CREDITS) {
-            let credits:IVideoFrame = {
-                date            : new Date(),
-                range           : -1,
-                rangeMins       : -1,
-                imageObj        : null,
-                credits         : [],
-                layers          : [],
-                loaded          : true,
-                width           : w,
-                height          : h,
-                duration        : 2500,
-                transition      : VIDEO_TRANSITION.HARD,
-                type            : VIDEO_FRAME_TYPE.CREDITS,
-                waitCycles      : 0,
-                checked         : false
-            }
+        if (videoProps.video.showCredits  &&fs[fs.length-1].type != VIDEO_FRAME_TYPE.CREDITS) {
+            let credits = this._setInfoCreditsFrame(w,h,VIDEO_FRAME_TYPE.CREDITS);
             this.createAuxFrame(credits);
             fs.push(credits);
+        }
+    }
+    private static _setInfoCreditsFrame(w : number, h : number, type : VIDEO_FRAME_TYPE) : IVideoFrame {
+        return {
+            date            : new Date(),
+            range           : -1,
+            rangeMins       : -1,
+            imageObj        : null,
+            credits         : [],
+            layers          : [],
+            loaded          : false,
+            width           : w,
+            height          : h,
+            duration        : 2500,
+            isWorld         : false,
+            transition      : VIDEO_TRANSITION.HARD,
+            type            : type,
+            waitCycles      : 0,
+            checked         : false
         }
     }
     public static removeIntroCreditsFrame() {
@@ -580,6 +689,36 @@ export class animationUtils {
         image.width = frame.width;
         image.height = frame.height;
         let context = image.getContext('2d');
+
+        // add background logo
+        let logo = document.getElementById('_videoLogo_1') as HTMLCanvasElement;
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        // determine size of the background image
+        let coef = logo.width / logo.height;
+        let w = Math.floor(image.height * 0.8);
+        let fx = image.width / 640;
+        if (image.width < image.height) {
+            w = Math.floor(image.width * 0.8);
+            fx = image.height / 480;
+        }
+        let h = Math.floor(w / coef);
+
+        canvas.height = h;
+        canvas.width = w;
+        ctx.drawImage(logo, 0, 0, w, h);
+        var uri = canvas.toDataURL('image/png');
+        let offx = Math.round((image.width / 2) * 0.15);
+//        if (offx > 150) { offx = 120;}
+
+        // compute font sizes
+        let fs = Math.floor(26 + 4 * fx);
+        let fs2 = Math.floor(12 + 4 * fx);
+        let lh = Math.floor(fs * 1.25);
+        let lh2 = Math.floor(fs2 * 1.2);
+        console.log(fs, fs2, lh, lh2);
+
+        let fontInfo = `text-transform: uppercase;line-height: ${lh}px;font-size: ${fs}px;`;
         let label = '';
         if (videoProps.auxFrameSettings.label) {
             label = videoProps.auxFrameSettings.label;
@@ -592,47 +731,77 @@ export class animationUtils {
         if (frame.type == VIDEO_FRAME_TYPE.INTRO) {
             style = videoProps.auxFrameSettings.introStyle;
         } else if (frame.type == VIDEO_FRAME_TYPE.CREDITS) {
+            fontInfo = `line-height: ${lh2}px;font-size: ${fs2}px;`;
             style = videoProps.auxFrameSettings.creditsStyle;
             // generate credits table
             let credits = this.aggregateCredits();
-            label = `${label}<br/>`;
+            label = `<span style="text-transform:uppercase;">${label}</span><br/>`;
             if (credits.length > 0) {
                 label += 'Data credits:<br/>';
                 for (let i=0; i < credits.length; i++) {
                     label += `${credits[i]}<br/>`;
                 }
             }
+        } else if (frame.type == VIDEO_FRAME_TYPE.PARTITION) {
+            style = videoProps.auxFrameSettings.partitionStyle;
         }
 
-        let data = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="${image.width}" height="${image.height}">
-                <foreignObject width="100%" height="100%">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="position:absolute;top:0;left:0;width:${image.width}px;height:${image.height}px;color:#eee;font-family: Titillium Web, sans-serif;font-size: 25px;">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;${style}">
-                            <div style="margin: 0 auto;width:${image.width}px;margin-top: 30vh;">
-                                <div style="text-align: center;margin: 0 auto;">${label}</div>
+        let data = '';
+        if (frame.type == VIDEO_FRAME_TYPE.INTRO || frame.type == VIDEO_FRAME_TYPE.CREDITS) {
+            data = `
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${image.width}" height="${image.height}">
+                    <foreignObject width="100%" height="100%">
+                        <div xmlns="http://www.w3.org/1999/xhtml" style="position:absolute;top:0;left:0;width:${image.width}px;height:${image.height}px;color:#eee;font-family: Titillium Web, sans-serif;font-size: 25px;">
+                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;${style}">
+                            <img src="${uri}" style="position:absolute; top:10vh; right:5vw;opacity:0.45;"/>
+                            <div style="margin: 0 auto;margin-top: 35vh;">
+                                    <div style="margin:0 auto;text-align: center;font-family:Titillium Web, sans-serif;${fontInfo}max-width:700px;padding-right:${offx}">
+                                        ${label}
+                                    </div>                                
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </foreignObject>
-            </svg>`;
+                    </foreignObject>
+                </svg>
+            `;
+        } else {
+            data = `
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${image.width}" height="${image.height}">
+                    <foreignObject width="100%" height="100%">
+                        <div xmlns="http://www.w3.org/1999/xhtml" style="position:absolute;top:0;left:0;width:${image.width}px;height:${image.height}px;color:#eee;font-family: Titillium Web, sans-serif;font-size: 25px;">
+                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;${style}">
+                            </div>
+                        </div>
+                    </foreignObject>
+                </svg>
+            `;
+        }
 
         let svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
         let img = new Image();
         var DOMURL = window.URL || window.webkitURL || window;
 
         var url = DOMURL.createObjectURL(svg);
+        frame.imageObj = {image : image, context : context};
+
         img.onload = function () {
             if (context) {
                 context.drawImage(img, 0, 0);
             }
             DOMURL.revokeObjectURL(url);
-            console.log("DONE");
+            frame.loaded = true;
+            events.dispatch(events.EVENT_VIDEO_FRAME_LOADED);
+            if (frame.type == VIDEO_FRAME_TYPE.PARTITION) {
+                animationUtils.refreshVideoFramesList();
+            }
         }
-          
-        img.src = url;  
-
-        frame.imageObj = {image : image, context : context};
+        img.src = url;   
+        if (frame.loaded) {
+            events.dispatch(events.EVENT_VIDEO_FRAME_LOADED);
+            if (frame.type == VIDEO_FRAME_TYPE.PARTITION) {
+                this.refreshVideoFramesList();
+            }
+        }         
     }
     
     // go over all frames and aggregate layer credits

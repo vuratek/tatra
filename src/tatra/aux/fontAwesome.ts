@@ -15,7 +15,7 @@ import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastFor
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faStop, faCloud, faAngleDoubleDown,
         faAngleDoubleUp, faEyeSlash, faCaretDown, faFolder, faBolt, faCog, faSearchLocation, faGraduationCap, faCogs, faFlask,
         faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faFilePdf, faThLarge, faList, faBan, faMapMarkedAlt, faVideo,
-        faClock, faInfo, faSync, faRedo,
+        faClock, faInfo, faSync, faRedo, faFilePowerpoint,
         faDrawPolygon, faBullhorn, faImage, faSquare, faLock, faLockOpen, faSitemap, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 export class fontAwesome {
     public static init () {
@@ -48,7 +48,7 @@ export class fontAwesome {
         // ozone
         library.add(faListOl,  faMicrochip, faSun, faAlignLeft, faFilePdf, faThLarge, faList, faBan, faSquare, faSitemap, faCheckSquare, faSquareEmpty );
         // moon
-        library.add(faUpload, faLock, faLockOpen, faFolder);
+        library.add(faUpload, faLock, faLockOpen, faFolder, faFilePowerpoint);
         this.refresh();
         config.searchPseudoElements = false;    // turn off to prevent performance issues. Used only for initial loading
         dom.watch();

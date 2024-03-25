@@ -9,6 +9,7 @@ import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
 import { utils } from "../../utils";
 import { colorPaletteArray } from "../colorPaletteArray";
+import { Vector } from "ol/source";
 
 
 class AreaLabels {
@@ -30,8 +31,26 @@ class IncidentInfo {
     public IrwinID : string | null = null;
     public UniqueFireIdentifier : string | null = null;
 }
+export interface IIconStyles {
+    [key:string]    : Icon;
+}
+export interface ISymbolsCacheItemStyles {
+    [key:string]    : Style | Array<Style>;
+}
+export interface ISymbolsCacheStyles {
+    cache       : ISymbolsCacheItemStyles;
+}
+export interface ISymbolsStyles {
+    [key:string]    : ISymbolsCacheStyles;
+}
+
+export interface IValidationSite {
+    [key:string]    : string;
+}
+
 export class layerStyle {
-    public static symbols       = [];
+    public static symbols       : ISymbolsStyles = {};
+    public static icons         : IIconStyles = {};
     public static scale         : number = 1;
     public static showValSite   : string = "all";
 
@@ -72,18 +91,18 @@ export class layerStyle {
         let temp = [];
         for (let i = 0; i < arr.length - 1; i++) {
             let coord = arr[i].split(" ");
-            let obj = new Object();
-            obj.x = coord[1];
-            obj.y = coord[0];
             //if (i==10) break;
             let iconFeature = new Feature({
-                geometry: new Point([obj.x, obj.y,]),
+                geometry: new Point([Number(coord[1]), Number(coord[0])]),
                 name: "Point " + i,
             });
             temp.push(iconFeature);
         }
         if (lo && lo._layer) {
-            lo._layer.getSource().addFeatures(temp);
+            let src = lo._layer.getSource();
+            if (src) {
+                (src as Vector).addFeatures(temp);
+            }
         }
     }
     
@@ -238,13 +257,12 @@ export class layerStyle {
         return style;
     }
     
-    public static _validationSite (feature : Feature) : Style | null {
+    public static _validationSite (feature : Feature) : Array<Style> | null {
         // get the incomenetwork from the feature properties
         let network = feature.get("Network");
         let key = "validationSite";
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [];
+            layerStyle.symbols[key] = { cache : {}};
         }
         let siteTypes = layerStyle.validationSiteLegend(false);
         // if there is no network or its one we don't recognize,
@@ -281,8 +299,8 @@ export class layerStyle {
         return [layerStyle.symbols[key].cache[network],];
     }
     
-    public static validationSiteLegend (all : boolean) {
-        let obj = {
+    public static validationSiteLegend (all : boolean) : IValidationSite {
+        let obj : IValidationSite = {
             "NASA EOS Core Site": "#0B3D91", //NASA blue
             "FLUXNET": "#984ea3", //purple
             "AERONET": "#e31a1c", //red
@@ -295,21 +313,26 @@ export class layerStyle {
         return obj;
     }
 
-    private static getBasicIcon(isSelect : boolean, iconUrl : string, _scale : number) {
+    private static getBasicIcon(isSelect : boolean, iconUrl : string, _scale : number) : Icon {
         let opacity = 0.8;
         let scale = _scale;
         if (isSelect) {
             opacity = 1.0;
             scale = scale * 1.25;
         }
-        return new Icon({
-            scale: scale,
-            opacity: opacity,
-            anchor: [0.5, 0.5],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'fraction',       //pixels
-            src: iconUrl,
-        });
+        let id = iconUrl + '-' + scale.toString() + '-' + opacity.toString();
+        if (! layerStyle.icons[id]) {
+            console.log('Adding Icon', id);
+            layerStyle.icons[id] = new Icon({
+                scale: scale,
+                opacity: opacity,
+                anchor: [0.5, 0.5],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'fraction',       //pixels
+                src: iconUrl,
+            });
+        }
+        return layerStyle.icons[id];
     }
 
     private static getFireLabelSize(resolution:number) {
@@ -333,9 +356,14 @@ export class layerStyle {
             scale = 0.1;
         }
         if (!isSelect && res < layerStyle.minResolutionLabel) {
-            return new Style({
-                image: layerStyle.getBasicIcon(false, icon, scale)
-            });
+            let key = icon + '-' + res.toString();
+            if (!layerStyle.symbols[key]) {
+                layerStyle.symbols[key] = { cache : {}};
+                layerStyle.symbols[key].cache["icon"] = new Style({
+                    image: layerStyle.getBasicIcon(false, icon, scale)
+                });
+            }
+            return layerStyle.symbols[key].cache["icon"] as Style;
         }
         let label = feature.get(featureVal);
         let lbl_back = (feature.get('_labelBackground')) ? feature.get('_labelBackground') : '#fff';
@@ -427,9 +455,9 @@ export class layerStyle {
         if (ii.IrwinID) {
             incident += `<tr><td colspan="2">IRWIN ID<br/>${ii.IrwinID}</td></tr>`;
         }
-        if (ii.Country == "USA") {
+        if (reportUrl!= '') {
             stReportLink = `<a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>`;
-        }
+        } 
         return `
             <span class="faLbl"><img src="${flagUrl}">${ii.Name}</span><br/>
             <div class="faSize">
@@ -454,7 +482,7 @@ export class layerStyle {
         let ii = new IncidentInfo();
         ii.Name = feature.get("firename");
         ii.Country = "Canada";
-        return layerStyle.fireAlertTemplate(ii, '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/en/ciffc/public/sitrep");
+        return layerStyle.fireAlertTemplate(ii, '/images/CA-flag.jpg', ds, areas, "https://ciffc.net/");
     }
 
     public static _fireAlertCanada (feature : Feature, resolution: number) : Style | null {
@@ -485,8 +513,7 @@ export class layerStyle {
         let key = "perimeter-usa";
         let flag = "default";
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
+            layerStyle.symbols[key] = { cache : {}};
         }
         if (!layerStyle.symbols[key].cache[flag]) {
             layerStyle.symbols[key].cache[flag] = new Style({
@@ -500,7 +527,7 @@ export class layerStyle {
                 zIndex: 1,
             });
         }
-        return layerStyle.symbols[key].cache[flag];
+        return layerStyle.symbols[key].cache[flag] as Style;
     }
 
     public static _firePerimeterUSA_select (feature : Feature, resolution: number) : Style | null {
@@ -544,11 +571,10 @@ export class layerStyle {
         let lat = feature.get('lat');
         let lon = feature.get('lon');
         return `
-            <span class="faLbl"><img src="${icon}">Volcano</span><br/>
+            <span class="faLbl"><img src="${icon}">${name}</span><br/>
             <div class="faSize">
                 <table>
-                    <tr><td>Name</td><td>${name}</td></tr>
-                    <tr><td>Lat, Lon</td><td>${lat}, ${lon}</td></tr>
+                    <tr><td>Latitude, Longitude</td><td>${lat}, ${lon}</td></tr>
                     <tr><td>Type</td><td>${volcano_type}</td></tr>
                     <tr><td>Last Known Eruption</td><td>${eruption}</td></tr>
                     <tr><td>Elevation</td><td>${elevation} m</td></tr>
@@ -585,8 +611,7 @@ export class layerStyle {
         }
         
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
+            layerStyle.symbols[key] = { cache : {}};
         }
         if (!layerStyle.symbols[key].cache[flag]) {
             layerStyle.symbols[key].cache[flag] = new Style({
@@ -600,7 +625,7 @@ export class layerStyle {
                 zIndex: 1,
             });
         }
-        return layerStyle.symbols[key].cache[flag];
+        return layerStyle.symbols[key].cache[flag] as Style;
     }
     public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "fireid", true);
@@ -625,8 +650,7 @@ export class layerStyle {
         let key = "borders-usa";
         let flag = "default";
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
+            layerStyle.symbols[key] = { cache : {}};
         }
         if (!layerStyle.symbols[key].cache[flag]) {
             let lightStroke = new Style({
@@ -650,7 +674,7 @@ export class layerStyle {
 
             layerStyle.symbols[key].cache[flag] = [lightStroke, darkStroke];
         }
-        return layerStyle.symbols[key].cache[flag];
+        return layerStyle.symbols[key].cache[flag] as Style;
     }
 
     public static _geographicAreasUSA_info (feature : Feature) : string {
@@ -700,8 +724,7 @@ export class layerStyle {
         if (!flag) { return null; }
         let key = "noaa-alerts-select";
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
+            layerStyle.symbols[key] = { cache : {}};
         }
         
         if (!layerStyle.symbols[key].cache[flag]) {
@@ -719,16 +742,15 @@ export class layerStyle {
         }
         // at this point, the style for the current network is in the cache
         // so return it (as an array!)
-        return [layerStyle.symbols[key].cache[flag]];
+        return [layerStyle.symbols[key].cache[flag]] as Array<Style>;
     }
 
-    public static _noaaWeatherAlerts (feature : Feature) : Array<Style> {
+    public static _noaaWeatherAlerts (feature : Feature) : Array<Style> | null {
         let flag = feature.get("prod_type");
-        if (!flag) { return; }
+        if (!flag) { return null; }
         let key = "noaa-alerts";
         if (!layerStyle.symbols[key]) {
-            layerStyle.symbols[key] = new Object();
-            layerStyle.symbols[key].cache = [] as Array<Style>;
+            layerStyle.symbols[key] = { cache : {}};
         }
         
         if (!layerStyle.symbols[key].cache[flag]) {
@@ -746,7 +768,7 @@ export class layerStyle {
         }
         // at this point, the style for the current network is in the cache
         // so return it (as an array!)
-        return [layerStyle.symbols[key].cache[flag]];
+        return [layerStyle.symbols[key].cache[flag]] as Array<Style>;
     }
     
     
@@ -755,12 +777,15 @@ export class layerStyle {
     }
     
     public static populateSymbols (id : string) {
-        for (let i = 0; i < props.config.symbols.length; i++) {
-            let sym = props.config.symbols[i];
-            if (sym.id == id) {
-                layerStyle.symbols[id] = sym;
-                layerStyle.symbols[id].cache = [];
-                return;
+        if (props && props.config && props.config.symbols) {
+            console.log("Check populate Symbols");
+            for (let i = 0; i < props.config.symbols.length; i++) {
+                let sym = props.config.symbols[i];
+                if (sym.id == id) {
+                    layerStyle.symbols[id] = sym;
+                    layerStyle.symbols[id].cache = {};
+                    return;
+                }
             }
         }
         console.log("Symbol " + id + " not defined in symbols definition.");

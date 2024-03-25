@@ -33,6 +33,7 @@ export class events {
     public static readonly EVENT_SYSTEM_DATE_UPDATE     : string = "system_date_update";
     public static readonly EVENT_TOOL_RESULT_UPDATE     : string = "tool_result_update";
     public static readonly EVENT_UI_LAYER_UPDATE        : string = "ui_layer_update"; 
+    public static readonly EVENT_VIDEO_FRAME_LOADED     : string = "video_frame_loaded";
     public static readonly EVENT_VIEW2D                 : string = "view2d"; 
     public static readonly EVENT_VIEW3D                 : string = "view3d"; 
     
