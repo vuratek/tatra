@@ -6,6 +6,10 @@ export enum VIDEO_TRANSITION {
     SOFT            = "soft",
     CONTINUOUS      = "continuous"
 }
+export enum RENDER_MODE {
+    DAILY           = "daily",
+    SUBDAILY        = "subdaily"
+}
 
 export enum VIDEO_FRAME_TYPE {
     CREDITS     = "credits",
@@ -87,6 +91,7 @@ export class videoProps {
     public static defaultVideoReload    : boolean = false;   
     public static chkAllFrames          : boolean = false;
     public static readyToPlay           : boolean = false;
+    public static renderMode            : RENDER_MODE = RENDER_MODE.DAILY;
     public static auxFrameSettings      : IAuxVideoFrame = {
                                             introStyle : 'background:radial-gradient(circle at 90%, #222, #06274f 50%, #182a3f 75%, #babed4 76%, #111 76%);',
                                             creditsStyle : 'background:linear-gradient(0, #06274f, #182a3f); font-size: 18px;',

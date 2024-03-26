@@ -3,6 +3,7 @@ export interface navConfigDef {
     topMenu         : INavConfigMenu;   // top navigation menu
     sideMenu        : INavConfigMenu;   // left side menu
     footer?         : INavConfigMenu;   // footer is optional; if not defined only the minimal standard footer is shown (NASA official, main NASA links)
+    subfooter?      : INavConfigMenu;   // subfooter is optional; if not defined only the minimal standard footer is shown (NASA official, main NASA links)
 }
 
 export enum NavigationModes {

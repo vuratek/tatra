@@ -17,6 +17,10 @@
     text-align: center;
     width: 17rem;
     cursor: pointer;
+    opacity:0.7;
+}
+.anim_btn_load_video:hover {
+    opacity: 1;
 }
 #anim_btn_view_video {
     background: #104363;

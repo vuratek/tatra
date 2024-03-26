@@ -6,7 +6,7 @@ import { events } from "../events";
 import { Modal } from "../../aux/Modal";
 import { imageUtils } from "../imageUtils";
 import { animationUtils } from "../support/animationUtils";
-import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame } from "../support/animationProps";
+import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame, RENDER_MODE } from "../support/animationProps";
 
 export class animation extends baseComponent {
 	public static id		            : string = 'animation';
@@ -34,8 +34,11 @@ export class animation extends baseComponent {
         let d1 = utils.addDay(props.time.date, -videoProps.props.defaultFrames+1);
         this.initDatePicker(d1, "From");
         this.initDatePicker(props.time.date, "To");
+        animationUtils.setRenderMode();
         utils.setClick('anim_btn_load_video', ()=>this.loadFrames(true));
         utils.setClick('anim_btn_view_video', ()=>this.loadFrames(false));
+        utils.setClick('anim_btn-daily', ()=>animationUtils.updateRenderMode(RENDER_MODE.DAILY));
+        utils.setClick('anim_btn-sub-daily', ()=>animationUtils.updateRenderMode(RENDER_MODE.SUBDAILY));
     }
 
 	public static open() {
@@ -45,7 +48,7 @@ export class animation extends baseComponent {
 		let posy = 0;
 		let posx = 0;
 		if (mh > 500) {
-			posy = mh - 350;
+			posy = mh - 400;
 		}
 		if (mw > 400 && mw < 800) {
 			posx = 50;

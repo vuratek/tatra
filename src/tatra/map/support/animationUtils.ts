@@ -4,10 +4,9 @@ import { MapTime } from "../obj/MapTime";
 import { utils } from "../../utils";
 import { configProps } from "./configProps";
 import { events } from "../events";
-import { IVideo, IVideoFrame, VIDEO_TRANSITION, VIDEO_FRAME_TYPE } from "./animationProps";
+import { IVideo, IVideoFrame, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, RENDER_MODE } from "./animationProps";
 import flatpickr from "flatpickr";
 import { videoProps } from "./animationProps";
-import { IImageObj } from "../imageUtils";
 import { navProps } from "../../page/navProps";
 import { animation } from "../components/animation";
 
@@ -118,6 +117,14 @@ export class animationUtils {
                 <div>
                     <div id="anim_btn_view_video" class="anim_btn_load_video">View Frames</div> 
                 </div>
+                <div class="fmmModeWrap" style="display:none;">
+                    <div id="anim_btn-daily" class="fmmModeBtn active">
+                        DAILY
+                    </div>
+                    <div id="anim_btn-sub-daily" class="fmmModeBtn">
+                        SUB-DAILY
+                    </div>
+                </div>
                 <table>
                     <tr>
                         <td>From:</td>
@@ -130,14 +137,6 @@ export class animationUtils {
                         <td>Step:</td>
                         <td>
                             <select id="lmvControls_anim_step">
-                                <option value="1d" selected>1 Day</option>
-                                <option value="2d">2 Days</option>
-                                <option value="3d">3 Days</option>
-                                <option value="4d">4 Days</option>
-                                <option value="5d">5 Days</option>
-                                <option value="6d">6 Days</option>
-                                <option value="7d">7 Days</option>
-                                <option value="10d">10 Days</option>
                             </select>
                         </td>
                     </tr>
@@ -159,7 +158,46 @@ export class animationUtils {
                     <div id="anim_btn_load_video" class="anim_btn_load_video">Add Frames</div>
                 </div>
 			</div>	
-		`;
+        `;
+    }
+
+    public static updateRenderMode(mode : RENDER_MODE) {
+        if (mode == videoProps.renderMode) { return; }
+        videoProps.renderMode = mode;
+        this.setRenderMode();
+    }
+
+    public static setRenderMode() {
+        if (videoProps.renderMode == RENDER_MODE.DAILY) {
+            let selStr = `
+                <option value="1d">1 Day</option>
+                <option value="2d">2 Days</option>
+                <option value="3d">3 Days</option>
+                <option value="4d">4 Days</option>
+                <option value="5d">5 Days</option>
+                <option value="6d">6 Days</option>
+                <option value="7d">7 Days</option>
+                <option value="10d">10 Days</option>
+            `;
+            utils.html('lmvControls_anim_step', selStr);
+            utils.setSelectValue('lmvControls_anim_step', "1d");
+            utils.addClass('anim_btn-daily', 'active');
+            utils.removeClass('anim_btn-sub-daily', 'active');
+        } else {
+            let selStr = `
+                <option value="10m">10 mins</option>
+                <option value="30m">30 mins</option>
+                <option value="60m">1 hour</option>
+                <option value="120m">2 hours</option>
+                <option value="240m">4 hours</option>
+                <option value="360m">6 hours</option>
+                <option value="720m">12 hours</option>
+            `;
+            utils.html('lmvControls_anim_step', selStr);
+            utils.setSelectValue('lmvControls_anim_step', "60m");
+            utils.addClass('anim_btn-sub-daily', 'active');
+            utils.removeClass('anim_btn-daily', 'active');
+        }
     }
 
     // render video settings options
@@ -289,6 +327,10 @@ export class animationUtils {
                 date2 = ' - ' + date2;
             }*/
             let dur = Math.round(frame.duration / 100) / 10;
+            if (frame.type == VIDEO_FRAME_TYPE.PARTITION) {
+                date = 'partition';
+                period = '';
+            }
             
             li.innerHTML = `
             <canvas id="${fid}"></canvas>
@@ -568,7 +610,7 @@ export class animationUtils {
             width : f.width, 
             height : f.height,
             isWorld : f.isWorld,
-            duration : videoProps.defaultDuration,
+            duration : 1300,
             transition : VIDEO_TRANSITION.SOFT,
             type : VIDEO_FRAME_TYPE.PARTITION,
             waitCycles : 0,
