@@ -11,6 +11,7 @@ import { time_info, tio } from "../features/time_info";
 import { hash } from "../../hash";
 import { hashHandler } from "../hashHandler";
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
+import { Instance } from "flatpickr/dist/types/instance";
 
 export class MultiDayTimeSelector extends Module {
 
@@ -32,7 +33,9 @@ export class MultiDayTimeSelector extends Module {
         super.render(par);
 
         let dates = hash.getDates();
-        hashHandler.processDateTime(dates);		
+        if (dates) {
+            hashHandler.processDateTime(dates);		
+        }
         this.lastRangeDays = props.time.range;
         
         controls.createControlItem('time_info', time_info);
@@ -121,6 +124,9 @@ export class MultiDayTimeSelector extends Module {
             this.onDailySubDaily('daily');
         }
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+    }
+    public isSubDaily() : boolean {
+        return true;
     }
     public onDailySubDaily(option:string) {
         if (this.currentDayMode == option) { return; }

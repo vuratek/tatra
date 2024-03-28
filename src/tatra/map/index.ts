@@ -77,7 +77,7 @@ export class map {
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
-        layerInfo.init(props.config.properties.layerInfoURL);
+        if (props.config) { layerInfo.init(props.config.properties.layerInfoURL); }
 
         utils.clearLoader();
         props.map.on('rendercomplete', function(e) {

@@ -5,8 +5,9 @@ import { props } from "../props";
 import { events } from "../events";
 import { Modal } from "../../aux/Modal";
 import { imageUtils } from "../imageUtils";
-import { animationUtils } from "../support/animationUtils";
-import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame, RENDER_MODE } from "../support/animationProps";
+import { animationUtils } from "../animation/utils";
+import { animationFrames } from "../animation/frames";
+import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame, RENDER_MODE } from "../animation/props";
 
 export class animation extends baseComponent {
 	public static id		            : string = 'animation';
@@ -14,9 +15,6 @@ export class animation extends baseComponent {
 	public static draggable             : boolean = true;
 	public static className             : string = 'transparentWindow';
     public static showHeader            : boolean = false;
-    public static calendarFrom          : any;
-    public static calendarTo            : any;
-    public static readonly df           : string = 'M d Y';
 
     private static isActive             : boolean = false;
     private static videoModal           : Modal | null = null;
@@ -25,15 +23,14 @@ export class animation extends baseComponent {
         super.init();
         document.addEventListener(events.EVENT_RENDER_COMPLETE, (evt) => this.updateImage());
         document.addEventListener(events.EVENT_VIDEO_FRAME_LOADED, (evt) => this.playVideo());
+        document.addEventListener(events.EVENT_MENU_OPEN, (evt) => animationUtils.menuChange());
     }
 
 	public static createWindow () {
 		super.createWindow();
-		animationUtils.renderToolWindow(this.id);
+        animationUtils.renderToolWindow(this.id);
         super.setDraggable(`lmvDragLbl_${this.id}`);
-        let d1 = utils.addDay(props.time.date, -videoProps.props.defaultFrames+1);
-        this.initDatePicker(d1, "From");
-        this.initDatePicker(props.time.date, "To");
+        animationUtils.enableRenderMode();
         animationUtils.setRenderMode();
         utils.setClick('anim_btn_load_video', ()=>this.loadFrames(true));
         utils.setClick('anim_btn_view_video', ()=>this.loadFrames(false));
@@ -55,7 +52,7 @@ export class animation extends baseComponent {
 		} else if (mw > 600) {
 			posx = mw / 2 - 200;
 		}		
-		this.position(posx, posy);
+        this.position(posx, posy);
     }
 
     public static loadFrames(addNew : boolean) {
@@ -77,7 +74,6 @@ export class animation extends baseComponent {
             props.map.getView().setZoom(z);
             isWorld = true;
         }
-        console.log("loadfr", props.map.getSize(), w,h);
 
         let cont = document.getElementById(el) as HTMLDivElement;
         if (! cont) { return; }
@@ -131,65 +127,6 @@ export class animation extends baseComponent {
             </div>
         </div>
         `;
-        /*
-                    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background: radial-gradient(circle at 90%, #222, #1f2e12 50%, #4c7628 75%, #232323 75%);color:#eee;">
-                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
-                    <div style="margin: 0 auto;width: 100%;max-width: 900px;margin-top: 30vh;">
-                        <img src="/images/NASA_logo.svg" style="float: left;height: 120px;">
-                        <div style="text-align: center;float: left;font-size: 25px;max-width: 600px;margin-top: 50px;">Fire Information for Resource Management System US/Canada</div>
-                        <img src="/images/fs_img2.png" style="float: left;height: 130px;">
-                    </div>                    
-                </div>
-            </div>*/
-            /* FIRMS GLOBAL
-            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 90%, #222, #aa120e 50%, #630202 75%, #eee 76%, #111 76%);color:#eee;">
-                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
-                    <div style="margin: 0 auto;
-                    width: 100%;
-                    max-width: 900px;
-                    margin-top: 45vh;">
-                        <img src="/images/nasa_logo_white.png" style="    position: absolute;
-                        top: 10vh;
-                        right: 5vw;
-                        height: 80vh;
-                        opacity: 0.45;">
-                        <div style="text-align: center;
-                        text-transform: uppercase;
-                        line-height: 50px;
-                        padding-right: 200px;
-                        font-weight: 600;
-                        font-size: 40px;">Fire Information for Resource <br>Management System</div>
-                    </div>                    
-                </div>
-            </div>
-            */
-           /*USFS
-                       <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 90%, #222, #1d6030 50%, #012201 75%, #ffc423 76%, #111 76%);color:#ffc423;">
-                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Titillium Web, sans-serif;">
-                    <div style="margin: 0 auto;
-                    width: 100%;
-                    max-width: 900px;
-                    margin-top: 45vh;">
-                        <img src="/images/nasa_logo_white.png" style="position: absolute;
-                        top: 10vh;
-                        right: 15vw;
-                        height: 40vh;
-                        opacity: 0.45;">
-                        <img src="/images/usfs_white.png" style="     position: absolute;
-                        top: 40vh;
-                        right: 5vw;
-                        height: 40vh;
-                        opacity: 0.45;">
-                        <div style="text-align: center;
-                        text-transform: uppercase;
-                        line-height: 50px;
-                        padding-right: 200px;
-                        font-weight: 600;
-                        font-size: 40px;">Fire Information for Resource <br>Management System<br/>US & Canada</div>
-                    </div>                    
-                </div>
-            </div>
-            */
         
         if (videoProps.video.logoDiv) {
             utils.html('videoStageLogo', videoProps.video.logoDiv);
@@ -219,12 +156,23 @@ export class animation extends baseComponent {
 
 
         if (addNew) {
-            let sd = utils.sanitizeDate(this.calendarFrom.selectedDates[0]);
-            let ed = utils.sanitizeDate(this.calendarTo.selectedDates[0]);
+            let sd = videoProps.calendarFrom.selectedDates[0];
+            let ed = videoProps.calendarTo.selectedDates[0];
             let _step = utils.getSelectValue(`lmvControls_anim_step`);
             let step = 1;
-            if (_step.indexOf('d')>=0) {
-                step = Number(_step.replace('d', ''));
+            if (videoProps.renderMode == RENDER_MODE.DAILY) {
+                if (_step.indexOf('d')>=0) {
+                    step = Number(_step.replace('d', ''));
+                }
+                // clear time values
+                sd = utils.sanitizeDate(sd);
+                ed = utils.sanitizeDate(ed);
+            } else if (videoProps.renderMode == RENDER_MODE.SUBDAILY) {
+                step = 60;
+                if (_step.indexOf('m')>=0) {
+                    step = Number(_step.replace('m', ''));
+                }
+
             }
             if (sd > ed) { return; }
             let size = props.map.getSize();
@@ -249,6 +197,7 @@ export class animation extends baseComponent {
             let run = true;
             while (run) {
                 frame ++;
+                console.log("Running" , date);
                 let fr = {
                     date: date, 
                     range : props.time.range,
@@ -273,9 +222,15 @@ export class animation extends baseComponent {
                     videoProps.video.frames.splice(videoProps.videoLoaderIndex, 0, fr);
                     videoProps.videoLoaderIndex++;
                 }
-                date = utils.addDay(date, step);
+                let validationFormat = 'Y-m-d';
+                if (videoProps.renderMode == RENDER_MODE.SUBDAILY) {
+                    date = utils.addMinutes(date, step);
+                    validationFormat += '-H-i';
+                } else {
+                    date = utils.addDay(date, step);
+                }
                 // quit when over max frames or time reaches end point
-                if (frame == videoProps.props.maxFrames || flatpickr.formatDate(date, 'Y-m-d') > flatpickr.formatDate(ed, 'Y-m-d')) {
+                if (frame == videoProps.props.maxFrames || flatpickr.formatDate(date, validationFormat) > flatpickr.formatDate(ed, validationFormat)) {
                     run = false;
                 }
             }
@@ -321,7 +276,7 @@ export class animation extends baseComponent {
         utils.setClick('vidFrame-remove-all', ()=> animationUtils.deleteFrames());
         utils.setClick('vidFrame-reload-all', ()=> animationUtils.reloadFrames());
         
-        animationUtils.populateVideoFramesList(ul.id, videoProps.video);
+        animationFrames.populateVideoFramesList(ul.id, videoProps.video);
 
         animationUtils.updateVideoImages();
         utils.setClick(ul.id, (evt:MouseEvent)=> animationUtils.frameListMouseClickHandler(evt));
@@ -335,7 +290,7 @@ export class animation extends baseComponent {
     }
 
     private static preparePlayVideo() {
-        animationUtils.addIntroCreditsFrame();
+        animationFrames.addIntroCreditsFrame();
         videoProps.props.framePlayDurationCounter = 0;
         videoProps.props.framePlayCounter = 0;
         videoProps.readyToPlay = true;
@@ -356,61 +311,6 @@ export class animation extends baseComponent {
         }
     }
 
-    public static initDatePicker (d : Date, type : string) {
-        let option = this;
-        let calendar = this.calendarFrom;
-        let [minDate, maxDate] = utils.getTimelineDateRange();
-        if (type == "To") {
-            calendar = this.calendarTo;
-            minDate = this.calendarFrom.selectedDates[0];
-            d = utils.addDay(minDate, videoProps.props.defaultFrames-1);
-            let maxDate2 = utils.addDay(minDate, videoProps.props.maxFrames-1);
-            if (maxDate2 < maxDate) {
-                maxDate = maxDate2;
-            }
-            if (d > maxDate) {
-                d = maxDate;
-            }
-        } 
-        if (calendar) {
-            calendar.destroy();
-        }
-        calendar = flatpickr("#animation_date" + type, {
-            dateFormat : this.df,
-            defaultDate : d,
-            minDate : minDate,
-            maxDate : maxDate,
-            onChange : function () {
-                option.setDates(type);
-            }
-        }) as Instance;
-
-        if (type == "From") {
-            this.calendarFrom = calendar;
-        } else {
-            this.calendarTo = calendar;
-        }
-//        this.setDates();
-    }
-
-    private static setDates(type : string) {
-        if (type == 'From') {
-            let minDate = this.calendarFrom.selectedDates[0];
-            let maxDate = utils.getGMTTime(new Date());
-            let maxDate2 = utils.addDay(minDate, videoProps.props.maxFrames-1);
-            let date = this.calendarTo.selectedDates[0];
-            if (maxDate2 < maxDate) {
-                maxDate = maxDate2;
-            }
-            if (date > maxDate) {
-                date = maxDate;
-            }
-
-            this.calendarTo.set("minDate",minDate);
-            this.calendarTo.set("maxDate",maxDate);
-            this.calendarTo.setDate(date);
-        }
-    }
     private static updateTimer() {
         if (videoProps.video.ignoreCounter) { return; }
         if (videoProps.video.timerCounter < videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
@@ -441,7 +341,7 @@ export class animation extends baseComponent {
             videoProps.props.videoPlaying = false;
             videoProps.props.framePlayCounter = 0;           // reset frames to 0 so they start from beginning
             videoProps.props.framePlayDurationCounter = 0;      // reset duration counter
-            animationUtils.removeIntroCreditsFrame();
+            animationFrames.removeIntroCreditsFrame();
             videoProps.readyToPlay = false;
         } else if (btn == "play") {
             utils.showCustom('vcPause', "inline-block");

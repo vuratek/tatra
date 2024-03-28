@@ -152,6 +152,10 @@ export class Module {
      */
     public setDateTime() { }
 
+    // whether module handles subdaily
+    public isSubDaily() : boolean {
+        return false;
+    }
 
     public showLayers() {
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;   

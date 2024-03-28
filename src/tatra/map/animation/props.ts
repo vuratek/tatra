@@ -54,6 +54,7 @@ export interface IAuxVideoFrame {
     introStyle     : string,
     creditsStyle   : string,
     partitionStyle : string,
+    backgroundLogo : string,
     label          : string | null,        // provide custom header
 }
 
@@ -61,7 +62,7 @@ export class AnimationProps {
     public loadTimer                : Function | null = null;
     public playTimer                : Function | null = null;
     public videoPlaying             : boolean = false;
-    public defaultFrames            : number = 1;
+    public defaultFrames            : number = 7;
     public maxFrames                : number = 50;
     public intervalDelay            : number = 50;      // miliseconds for frame loading timer
     public videoDelay               : number = 10;      // miliseconds for video play timer
@@ -92,12 +93,19 @@ export class videoProps {
     public static chkAllFrames          : boolean = false;
     public static readyToPlay           : boolean = false;
     public static renderMode            : RENDER_MODE = RENDER_MODE.DAILY;
+    public static isSubDaily            : boolean = false;
     public static auxFrameSettings      : IAuxVideoFrame = {
                                             introStyle : 'background:radial-gradient(circle at 90%, #222, #06274f 50%, #182a3f 75%, #babed4 76%, #111 76%);',
                                             creditsStyle : 'background:linear-gradient(0, #06274f, #182a3f); font-size: 18px;',
                                             partitionStyle : 'background:radial-gradient(farthest-corner at 40px 40px, #222 0%, #0a2431 100%);',
+                                            backgroundLogo : '<img id="_videoLogo_1" src="/images/nasa_logo_white.png" style="width:432px;height:432px;">',
                                             label : null
                                         };
+
+    public static calendarFrom          : any;
+    public static calendarTo            : any;
+    public static readonly df           : string = 'M d Y';
+    public static readonly df_sub       : string = 'M d Y H:i';
 
     public static reset() {
         this.video.frames = [];
