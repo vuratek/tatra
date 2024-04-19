@@ -75,7 +75,7 @@ export class Timeline {
     private static initialized          : boolean = false;
     private static rendered             : boolean = false;
 
-    public static minDate               : Date = utils.getGMTTime(new Date(2000, 10, 11, 0, 0, 0));
+    public static minDate               : Date = utils.getGMTTime(new Date(2000, 1, 24, 0, 0, 0));
     public static maxDate               : Date = utils.addDay(utils.sanitizeDate(utils.getGMTTime(new Date())));
     private static timeUpdateHandler    : Function;
 

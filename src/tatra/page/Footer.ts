@@ -17,18 +17,31 @@ export class Footer {
         this.setCompliance();
     }
     private static setCompliance () {
-        let official = (navProps.settings.app.official) ? `<li>NASA Official: ${navProps.settings.app.official}</li>` : '';
-        let txt = `
-            <ul>
-                ${official}
-                <li><a target="_blank" rel="noopener" class="ext" href="http://www.nasa.gov/about/highlights/HP_Privacy.html">Web Privacy Policy</a></li>
-                <li><a target="_blank" rel="noopener" class="ext" href="http://science.nasa.gov/earth-science/earth-science-data/data-information-policy/">Data &amp; Information Policy</a></li>
-                <li><a target="_blank" rel="noopener" class="ext" href="http://www.nasa.gov/audience/formedia/features/communication_policy.html">Communications Policy</a></li>
-                <li><a target="_blank" rel="noopener" class="ext" href="http://www.nasa.gov/FOIA/index.html">Freedom of Information Act</a></li>
-                <li><a target="_blank" rel="noopener" class="ext" href="http://www.usa.gov/">USA.gov</a></li>
-            </ul>
-        `;
-        utils.html("compliance", txt);
+        utils.html("compliance", this.renderCompliance(false));
+    }
+    public static renderCompliance(isMap : boolean) : string {
+        if (! navProps.settings.subfooter) { return ''; }
+        let official = (navProps.settings.app.official) ? `NASA Official: ${navProps.settings.app.official}` : '';
+        let txt = `<ul>`;
+        if (!isMap) {
+            txt += `<li>${official}</li>`;
+        }
+        for (let i=0; i<navProps.settings.subfooter.items.length; i++) {
+            let item = navProps.settings.subfooter.items[i];
+            txt += `<li><a target="_blank" rel="noopener" class="ext" href="${item.url}">${item.label}</a></li>`;
+        }
+        txt += '</ul>';
+        if (isMap) {
+            txt = `
+                <div>
+                    ${txt}
+                </div>
+                <div class="official">
+                    ${official}
+                </div>
+            `;
+        }
+        return txt;
     }
 
     private static subItems(items : INavConfigMenuItems) : string {
