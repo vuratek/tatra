@@ -246,6 +246,9 @@ export class Module {
 
     public getLayerHashValue(lo : Layer) : string {
         //console.log(lo.id);
+        if (lo.classifier) {
+            return lo.id + '=' + lo.classifier;
+        }
         return lo.id;
     }
 

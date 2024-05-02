@@ -92,6 +92,7 @@ export class Layer {
     public altTitle2        : string | null = null;
     public boxSource        : Vector | null = null;
     public clandestine      : boolean = false;
+    public classifier       : string | null = null;
     public cloneFormat      : string = "image/png";
     public cloneId          : string = "";  // used for duplicate layers
     public cloneLevel       : number = 9;  // 6-13  -- only applies to imagery_template

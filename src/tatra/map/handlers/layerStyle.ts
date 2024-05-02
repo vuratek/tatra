@@ -322,7 +322,6 @@ export class layerStyle {
         }
         let id = iconUrl + '-' + scale.toString() + '-' + opacity.toString();
         if (! layerStyle.icons[id]) {
-            console.log('Adding Icon', id);
             layerStyle.icons[id] = new Icon({
                 scale: scale,
                 opacity: opacity,

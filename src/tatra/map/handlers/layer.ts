@@ -18,9 +18,12 @@ import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
+import { WebGLPoints } from 'ol/layer';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 import { vectorLayers } from "./vectorLayers";
 import { tileUrlHandler } from "./tileUrlHandler";
+import VectorSource from "ol/source/Vector";
+import { WebGLStyle } from "ol/style/webgl";
 
 export class layer {
         
@@ -57,6 +60,9 @@ export class layer {
             break;
         case "csv":
             this.addCSVLayer(lo);
+            break;
+        case "webglpoints":
+            this.addWebGLPointsLayer(lo);
             break;
         case "static_image":
             this.addStaticImageLayer(lo);
@@ -550,23 +556,37 @@ export class layer {
     }
     
     public static addCSVLayer (lo : Layer) {
-        let source = new VectorSrc(
-            {
-                wrapX: true,       
-                format: new GeoJSON(),                         
+        let func = layerStyle['_' + lo.source.style];
+        lo._layer = new VectorLayer({
+            source: new VectorSrc(
+                {
+                    wrapX: true,       
+                    format: new GeoJSON(),                         
+                    loader :  function(extent, resolution, projection) {
+                        // call json handler 
+                        if (lo.csvHandler) {
+                            lo.csvHandler(lo);
+                        }
+                    }
+            }),
+            style: eval(func)
+         });
+    }
+
+    public static addWebGLPointsLayer (lo : Layer) {
+         lo._layer = new WebGLPoints({
+            source: new Vector({
                 loader :  function(extent, resolution, projection) {
                     // call json handler 
                     if (lo.csvHandler) {
                         lo.csvHandler(lo);
                     }
-                }
-            });
-        
-        let func = layerStyle['_' + lo.source.style];
-        lo._layer = new VectorLayer({
-            source: source,
-            style: eval(func)
-         });
+                },
+                format: new GeoJSON(),
+                wrapX: true,
+            }),
+            style: lo.styleJSON as WebGLStyle
+        });
     }
 
     public static processGeoJsonString(lo:Layer, geojson : string) {
@@ -582,6 +602,7 @@ export class layer {
                     counter ++;
                 }
                 events.dispatchLayer(events.EVENT_GEOJSON_LOADED, lo.id);
+                layer.refreshGeoJsonLayer(lo);
             }
         }
     }
