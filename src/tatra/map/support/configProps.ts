@@ -17,6 +17,7 @@ export class configProps {
     public static longName              : string = '';
     public static mapbox                : string | null = null;
     public mapDatesURL                  : string | null = null;
+    public map3DLibrary                 : string | null = null;
     public static maxZoom               : number = 10;
     public static measureAreaUnits      : UNITS = UNITS.KM;
     public static measureDistanceUnits  : UNITS = UNITS.KM;

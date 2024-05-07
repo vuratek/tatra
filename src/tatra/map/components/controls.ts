@@ -24,9 +24,10 @@ export interface IControlsItem {
     [key : string]  : ControlsItem;          // whether icon is turned on / off
 }
 export class ControlsItem {
-    public visible : boolean = true;
-    public enabled : boolean = true;
-    public handler : Function | null = null;
+    public visible  : boolean = true;
+    public enabled  : boolean = true;
+    public has3d    : boolean = true;
+    public handler  : Function | null = null;
 }
 
 export enum ControlTypes {
@@ -134,12 +135,6 @@ export class controls  {
                     if (! item.type) { item.type = ControlTypes.TOOL; }
                     if (! item.handler) { item.handler = locator;}
                     break;
-                case "view3d" :
-                    if (! item.label) { item.label = "View 3d"; }
-                    if (! item.icon) { item.icon = "fa-globe"; }
-                    if (! item.type) { item.type = ControlTypes.TOOL; }
-                    if (! item.handler) { item.handler = view3d;}
-                    break;
                 case "select": 
                     if (! item.label) { item.label = "SELECT"; }
                     if (! item.icon) { item.icon = "fa-vector-square"; }
@@ -175,6 +170,10 @@ export class controls  {
                     if (! item.icon) { item.icon = "fa-camera"; }
                     if (! item.type) { item.type = ControlTypes.MENU;}
                     if (! item.handler) { item.handler = screenshot;}
+                    break;
+                case "view3d" :
+                    if (! item.type) { item.type = ControlTypes.FLAG; }
+                    if (! item.handler) { item.handler = view3d;}
                     break;
                 case "resize": 
                     if (! item.type) { item.type = ControlTypes.FLAG;} 
@@ -233,6 +232,18 @@ export class controls  {
             </p>
         `;
     }
+
+    private static setView3d (visible : boolean) {
+        let label = (visible) ? '2D View' : '3D View';
+        let icon = (visible) ? "fa-map" : "fa-globe";
+        return `
+            <p>
+                <i class="fa ${icon} fa-lg bottomBarBtnLabel"></i>
+                <br/>
+                <span class="bottomBarBtnLabelTxt">${label}</span>
+            </p>
+        `;
+    }
     
     private static optionItem (id : string, parentDiv : HTMLUListElement) {
         let item = (props.config as IConfigDef).mapControls[id] as IMapControlsItem;
@@ -254,6 +265,8 @@ export class controls  {
             el.innerHTML = this.setResize(false);
         } else if (id == 'toggle') {
             el.innerHTML = this.setToggle(false);
+        } else if (id == 'view3d') {
+            el.innerHTML = this.setView3d(false);
         } else {
             let label = (item.label) ? item.label : '?';
             let icon = (item.icon) ? item.icon : 'fa-square';
@@ -276,9 +289,17 @@ export class controls  {
     public static createControlItem ( id: string, handler : Function | undefined) {
         controls.items[id] = new ControlsItem();
         controls.items[id].visible = false;
+        controls.items[id].has3d = this.set3dSupport(id);
         if (handler) {
             handler.init();
         }        
+    }
+
+    private static set3dSupport (id:string) : boolean {
+        if (id == "resize" || id == "measure" || id == "locator" || id == "screenshot") {
+            return false;
+        }
+        return true;
     }
     
     private static controlItemClicked ( id : string ) {
@@ -351,6 +372,9 @@ export class controls  {
             } else if (id == 'toggle') {
                 btn.innerHTML = this.setToggle(visible);
             }
+            else if (id == 'view3d') {
+                btn.innerHTML = this.setView3d(visible);
+            }
 
             this.controlItemClicked(id); 
         }
@@ -384,6 +408,30 @@ export class controls  {
                 timeline.close();
             }
             this.disableBtn(id);
+        }
+    }
+
+    public static set3dMode (is3d : boolean) {
+        for (let id in this.items) {
+            let t = this.items[id];
+            // set full screen mode when checking resize; remember the old setting
+            if ( id == "resize") {
+                if (is3d) {
+                    this.fullScreen = t.visible;
+                } 
+                if (! this.fullScreen) {
+                    controls.setItem('resize', is3d);
+                }
+            }
+            if (is3d) {
+                if (t.enabled && !t.has3d) {
+                    utils.hide(`bb_${id}_btn`);
+                }
+            } else  {
+                if (!t.has3d) {
+                    utils.showCustom(`bb_${id}_btn`, 'inherit');
+                }
+            }
         }
     }
 
