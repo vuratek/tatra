@@ -185,6 +185,7 @@ export class mainMenu {
             return; 
         }
         if (this.currentTab != '') {
+            events.menuClose(this.currentTab);
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
             videoProps.reset();

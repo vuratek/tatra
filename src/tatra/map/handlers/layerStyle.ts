@@ -412,7 +412,7 @@ export class layerStyle {
         obj.km = obj._km.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         return obj;
     }
-    public static _fireAlertUSA_info(feature : Feature) : string {
+    public static _fireAlertUSADetail_info(feature : Feature) : string {
         let date = new Date();
         date.setTime(Number(feature.get("FireDiscoveryDateTime")));
         let areas = layerStyle.getAreas(feature.get("IncidentSize"), false);
@@ -424,7 +424,7 @@ export class layerStyle {
         ii.UniqueFireIdentifier = feature.get("UniqueFireIdentifier");
         return layerStyle.fireAlertTemplate(ii, '/images/US-flag.jpg', layerStyle.formatDate(date), areas, "https://www.nifc.gov/nicc/sitreprt.pdf");
     }
-    public static _fireAlertUSA2_info(feature : Feature) : string {
+    public static _fireAlertUSA_info(feature : Feature) : string {
         let irwin_date = feature.get("IrwinFireDiscoveryDateTime");
         let areas = layerStyle.getAreas(feature.get("size"), false);
         let ii = new IncidentInfo();
@@ -492,19 +492,19 @@ export class layerStyle {
         return layerStyle.getLayerSymbol(feature, resolution, "firename", true);
     }
 
-    public static _fireAlertUSA (feature : Feature, resolution: number) : Style | null {
+    public static _fireAlertUSADetail (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", false);
     }
 
-    public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
+    public static _fireAlertUSADetail_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", true);
     }
 
-    public static _fireAlertUSA2 (feature : Feature, resolution: number) : Style | null {
+    public static _fireAlertUSA (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "fire_name", false);
     }
 
-    public static _fireAlertUSA2_select (feature : Feature, resolution: number) : Style | null {
+    public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "fire_name", true);
     }
 
@@ -536,7 +536,7 @@ export class layerStyle {
         let test = feature.get('IrwinID');
         // test if it can be redirected to use Active Fires info instead
         if (test) {
-            return this._fireAlertUSA_info(feature);
+            return this._fireAlertUSADetail_info(feature);
         }
         let irwinid = feature.get('poly_IRWINID');
         let fireid = feature.get('attr_UniqueFireIdentifier');
