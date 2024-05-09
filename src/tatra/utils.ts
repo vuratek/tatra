@@ -433,4 +433,19 @@ export class utils {
         return [minDate, maxDate];
     }
 
+    public static getReleaseVersion() : string | null {
+        if (navProps.settings && navProps.settings.app.releaseVersion) {
+            let v = navProps.settings.app.releaseVersion;
+            if (v == '' || v.indexOf('RELEASE_VERSION') >=0) {
+                return 'local';
+            }
+            let arr = v.split('.');
+            if (arr.length > 3) {
+                return arr.slice(0, 3).join('.');
+            }
+            return v;
+        }
+        return null;
+    }
+
 }

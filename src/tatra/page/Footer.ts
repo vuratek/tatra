@@ -51,7 +51,15 @@ export class Footer {
         let txt = '';
         for (let i=0; i<items.subMenu.length; i++) {
             let item = items.subMenu[i];
-            if (!item.label || !item.url) { continue; }
+            if (!item.label || !item.url) { 
+                if (item.id == 'version') {
+                    let v = utils.getReleaseVersion();
+                    if (v) {
+                        txt += `<li><a href="javascript:void(0);">${item.label} ${v}</a></li>`;
+                    }
+                }
+                continue; 
+            }
             let external = (item.external) ? 'target="_blank" rel="noopener" class="ext"' : '';
             let title = item.label.replace(/\&/g, "&amp;");
             if (item.subMenu) {
@@ -68,6 +76,7 @@ export class Footer {
         }
         return txt;
     }
+
 
     private static render() {
         if (! navProps.settings.footer && ! navProps.settings.app.useNavigationLinks) { return;}

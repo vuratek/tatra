@@ -23,6 +23,7 @@ export interface INavConfigApp {
     singleLabel?        : string;       // single line header
     singleShortLabel?   : string;       // single line header when resolution is small
     official?           : string;       // NASA official
+    releaseVersion?     : string;       // gitlab release version
     timelineURL?        : string;       // url link to timeline javascript library
     alternateHome?      : string;
     feedbackHeader?     : string;       // if tophat feedback is used, this the Subject header in the feedback form
