@@ -447,5 +447,16 @@ export class utils {
         }
         return null;
     }
-
+    
+    public static renderOrbitIcon(direction : string, color : string, ) : string {
+        return `
+            <div class="orbitIcon orbitIcon_${direction}">
+                <div class="orbIcon_line" style="background:${color};">
+                    <div class="orbIcon_circle"></div>
+                    <div class="orbIcon_circle"></div>
+                    <div class="orbIcon_circle"></div>
+                </div>
+            </div>
+        `;
+    }
 }

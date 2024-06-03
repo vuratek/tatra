@@ -1,4 +1,4 @@
-import { props } from "./props";
+import { props, VIEW_MODES } from "./props";
 import { DragPan } from 'ol/interaction';
 import { format } from 'ol/coordinate';
 import { MousePosition } from 'ol/control';
@@ -15,6 +15,8 @@ import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
 import { IMenuModuleLayers } from "./defs/ConfigDef";
 import { utils } from "../utils";
 import { ProductDates } from "./obj/ProductDates";
+import { hash } from "./hash";
+import { viewMode } from "./components/viewMode";
 
 export interface ICoordinates {
     xmin : number;
@@ -740,5 +742,40 @@ export class mapUtils {
         if (zoom > maxZoom) { zoom = maxZoom;}
         return { x : x, y : y, zoom : zoom};
     
+    }
+
+    public static setInfoLabel(str : string) {
+        utils.html('kioskLabel', str);
+        utils.html('lmvFeatureInfo1', str);
+    }
+    public static setInfoDate(str : string) {
+        utils.html('kioskDate', str);
+    }
+
+    public static setViewMode() {
+        let vm = hash.getViewMode();
+        if (!vm || !vm.type) { return; }
+        viewMode.updateViewMode(vm.type, false);
+    }
+    public static renderLayerIcon(lo:Layer) : string {
+        let iconStyle = (lo.iconHasBorder) ? '' : ' style="border:none;"';
+        let icon = '';
+		if (lo.icon && lo.icon.indexOf('color:') == 0) {
+			let color = lo.icon.replace('color:', '');
+			icon =`<div class="lmvControlsIconDiv" style="background: ${color}"></div>`;
+        } else if (lo.icon && lo.icon.indexOf('orbit') == 0) {
+            let arr = lo.icon.split('>');
+            if (arr.length != 3 || (arr[1] != 'left' && arr[1] != 'right')) { icon = `<div class="lmvControlsIconDiv" style="background: #AAA;"></div>`; }
+            else {
+                icon = `<div class="lmvControlsIconDiv lmvControlsOrbitIconDiv">${utils.renderOrbitIcon(arr[1],arr[2])}</div>`;
+            }
+        } else if (lo.iconMatrix && lo.iconMatrix.length == 2) {
+			let x = lo.iconMatrix[0] * 70 + 9;
+			let y = lo.iconMatrix[1] * 70 + 9;
+			icon = `<div class="lmvControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
+		} else {
+			icon = `<img src="${lo.icon}" ${iconStyle}>`;
+        }
+        return icon;
     }
 }
