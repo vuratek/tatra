@@ -13,6 +13,7 @@ import { hashHandler } from '../hashHandler';
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
 import { timeline } from '../../components/timeline'; 
 import { singleDatePicker } from '../../../timeline/singleDatePicker2';
+import { mapUtils } from '../../mapUtils';
 
 export class MultiDaySelectorSimple extends Module {
 
@@ -197,6 +198,12 @@ export class MultiDaySelectorSimple extends Module {
 //		this.refreshLayers();
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+		this.updateInfoLabel();
+
+	}
+
+	public updateInfoLabel() {
+		mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, 'Y-m-d'));
 	}
 
 	public timelineBtnClick (evt : CustomEvent) {}

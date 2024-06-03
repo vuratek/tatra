@@ -17,8 +17,8 @@ export class resize extends baseComponent {
         if (! controls.items['toggle'].visible) {
             controls.onClick('toggle');
         }
-        utils.show('leftNavBarMapResize');
-        utils.hide('leftNavBarShell');
+//        utils.show('leftNavBarMapResize');
+//        utils.hide('leftNavBarShell');
         if (utils.mobileAndTabletCheck() && ! utils.isFullScreen()) {
             utils.toggleFullScreen();
         }
@@ -28,8 +28,8 @@ export class resize extends baseComponent {
         super.close();
         utils.removeClass('html', 'resize', false);
         props.map.updateSize();
-        utils.hide('leftNavBarMapResize');
-        utils.show('leftNavBarShell');
+//        utils.hide('leftNavBarMapResize');
+//        utils.show('leftNavBarShell');
         if (utils.isFullScreen()) {
             utils.toggleFullScreen();
         }

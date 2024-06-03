@@ -1,6 +1,6 @@
 // path:#l=layer1,layer2:D,layer3:N,layer3:D-434321-N-123412;d=2020-01-20..2020-01-25,2020-01-22;t=ba;@43.45,21.23,5.4z
 import { events } from "./events";
-import { props } from "./props";
+import { props, VIEW_MODES } from "./props";
 import { configProps } from "./support/configProps";
 import { coreUtils } from "./support/coreUtils";
 import { utils } from "../utils";
@@ -16,6 +16,10 @@ export interface IHashDates {
     end?        : string;
     single?     : string;
 }
+export interface IHashViewMode {
+    type?       : VIEW_MODES;
+    components? : string[] | null;
+}
 interface IHash {
     tab?            : string;
     layers?         : Array <IHashLayer>;
@@ -23,6 +27,7 @@ interface IHash {
     dates?          : IHashDates;
     mode?           : Array<string>;
     tool?           : string;
+    viewMode?       : IHashViewMode;
 }
 
 export class hash {
@@ -141,6 +146,32 @@ export class hash {
     private static modeToString () : string | null {
         if (this.values.mode) {
             return `m:${this.values.mode.join(',')}`;
+        }
+        return null;
+    }
+
+    public static viewMode(viewMode : VIEW_MODES, components : Array<string>, update : boolean = true) {
+        if (!this.values.viewMode) { this.values.viewMode = {}; }
+        this.values.viewMode.type = viewMode;
+        if (components.length > 0) {
+            this.values.viewMode.components = components;
+        } else {
+            this.values.viewMode.components = null;
+        }
+        if (update) { this.update(); }
+    }
+    public static getViewMode() : IHashViewMode | null {
+        return (this.values.viewMode) ? this.values.viewMode : null;
+    }
+
+    private static viewModeToString() : string | null {
+        if (this.values.viewMode) 
+        if (this.values.viewMode && this.values.viewMode.type && this.values.viewMode.type != VIEW_MODES.NORMAL ) {
+            let c = '';
+            if (this.values.viewMode.components) {
+                c = `[${this.values.viewMode.components.join(',')}]`;
+            }
+            return `v:${this.values.viewMode.type}${c}`;
         }
         return null;
     }
@@ -416,10 +447,12 @@ export class hash {
         let dates = this.datesToString();
         let lyrs = this.layersToString();
         let loc = this.locationToString();
+        let viewMode = this.viewModeToString();
         if (tab) { arr.push(tab); }
         if (mode) { arr.push(mode); }
         if (dates) { arr.push(dates); }
         if (lyrs) { arr.push(lyrs); }
+        if (viewMode) { arr.push(viewMode); }
         if (loc) { arr.push(loc); }
 
         if (arr.length > 0) {
@@ -436,6 +469,29 @@ export class hash {
     private static parseTool(tool:string) {
         if (tool == 'location' || tool == 'measure') {
             this.values.tool = tool;
+        }
+    }
+
+    private static parseViewMode(tool:string) {
+        let arr = tool.replace(']', '').split('[');
+        this.values.viewMode = {};
+        this.values.viewMode.type = VIEW_MODES.NORMAL;
+        if (arr[0] == VIEW_MODES.KIOSK || arr[0] == VIEW_MODES.MAX || arr[0] == VIEW_MODES.NORMAL) {
+            this.values.viewMode.type = arr[0] as VIEW_MODES;
+            this.values.viewMode.components = null;
+            if (arr.length == 2) {
+                let comp = []
+                let arr2 = arr[1].split(',');
+                for (let i=0; i<arr2.length; i++) {
+                    let c = arr2[i];
+                    if (c == 'timeline' || c == 'identify' || c == 'menu' || c == '3d') {
+                        comp.push(c);
+                    }
+                }
+                if (comp.length > 0) {
+                    this.values.viewMode.components = comp;
+                }
+            }
         }
     }
 
@@ -491,7 +547,10 @@ export class hash {
                     case 'm':
                         this.values.mode = PAR.split(',');
                         break;
-                    // date / dates
+                    case 'v':
+                        this.parseViewMode(PAR);
+                        break;
+                        // date / dates
                     case 'd':
                         this.parseDates(PAR);
 //                        configProps.dates = PAR;

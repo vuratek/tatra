@@ -14,6 +14,7 @@ import { measure } from "./measure";
 import { select } from "./select";
 import { locator } from "./locator";
 import { view3d } from "./view3d";
+import { viewMode } from "./viewMode";
 import { toggle } from './toggle';
 import { AlwaysIdentify } from "../mapTools/AlwaysIdentify";
 import { quickSearch } from "../../aux/quickSearch";
@@ -170,6 +171,12 @@ export class controls  {
                     if (! item.icon) { item.icon = "fa-camera"; }
                     if (! item.type) { item.type = ControlTypes.MENU;}
                     if (! item.handler) { item.handler = screenshot;}
+                    break;
+                case "viewMode": 
+                    if (! item.label) { item.label = "VIEW MODE"; }
+                    if (! item.icon) { item.icon = "fa-tv"; }
+                    if (! item.type) { item.type = ControlTypes.MENU;}
+                    if (! item.handler) { item.handler = viewMode;}
                     break;
                 case "view3d" :
                     if (! item.type) { item.type = ControlTypes.FLAG; }

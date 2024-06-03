@@ -142,6 +142,12 @@ export class layerInfo {
         if (lo.icon && lo.icon.indexOf('color:') == 0) {
             let color = lo.icon.replace('color:', '');
             el.style.background = color;
+        } else if (lo.icon && lo.icon.indexOf('orbit') == 0) {
+            let arr = lo.icon.split('>');
+            if (arr.length != 3 || (arr[1] != 'left' && arr[1] != 'right')) {  el.style.background = "AAA"; }
+            else {
+                el.innerHTML = utils.renderOrbitIcon(arr[1],arr[2]);
+            }
         } else if (lo.icon && lo.iconMatrix && lo.iconMatrix.length == 2) {
             x = lo.iconMatrix[0] * 70;
             y = lo.iconMatrix[1] * 70;

@@ -1,0 +1,53 @@
+#lmvControls_viewMode {
+    width:33rem;
+}
+.lmvViewMode .bottomBarSubMenuItemLabel {
+    display:block;
+}
+.lmvViewMode .lmvControlsLayer {
+    min-height: 6rem;
+}
+.lmvViewMode .lmvControlsIconDiv, .lmvViewMode .lmvControlsLayerSelected .lmvControlsIconDiv, .lmvViewMode .lmvControlsLayer:hover .lmvControlsIconDiv {
+    border: none;
+}
+.lmvViewMode .lmvControlsIconDiv {
+    font-size: 2.5rem;
+    margin-top: 1.5rem;
+}
+.lmvViewMode .bottomBarSubMenuItemLabel > div:first-child {
+    text-transform: uppercase;
+}
+.lmvViewMode .bottomBarSubMenuItemLabel > div:last-child {
+    font-size:1.3rem;
+}
+.lmvVMOptions {
+    margin-top: 1rem;
+    padding: .5rem;
+    background:#444;
+}
+.lmvVMOptions > div {
+    min-height: 3.5rem;
+    padding-left: 7rem;
+}
+.lmvVMOptions .llCheckbox {
+    position: relative;
+}
+.lmvVMOptions .llCheckbox > div {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    padding: .7rem 0 0 .5rem;
+}
+.lmvViewMode .lmvControlsLayer.lmvVM3D {
+    min-height: 4rem;
+    background:#333;
+}
+.lmvVM3D .llCheckbox {
+    position: relative;
+    margin-left: 2rem;
+}
+.lmvVM3D > div > div {
+    padding: .7rem 0 0 7rem;   
+}
+.lmvVM3D > div > div > span {
+    font-size: 2rem;
+}

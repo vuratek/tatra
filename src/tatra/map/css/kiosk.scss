@@ -1,0 +1,81 @@
+.kiosk header, .kiosk #lmvInfoBar, .kiosk #lmvTools, .kiosk #lmvMaxLabel, .kiosk #lmvControls, .kiosk #lmvMenus, 
+.kiosk #lmvTimelineWrapper, .kiosk #leftNavBarMapResize, .kiosk #leftNavBarShell, .kiosk .ol-overlaycontainer-stopevent,
+.kiosk.isMap #leftNavBarMapResize, .kiosk #bottomLogo {
+	display:none;
+}
+.kiosk-timeline #lmvTimelineWrapper, .kiosk-menu #lmvMenus {
+    display:block;
+}
+.kiosk-menu #lmvMenus {
+    top:0;
+}
+#lmvKioskWrapper {
+    opacity: .7;
+    color: #fff;
+    background: #222;
+    display: none;
+    position: absolute;
+    bottom: .3rem;
+    left: .3rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+.kiosk-timeline #lmvKioskWrapper {
+    bottom: 7rem;
+}
+.kiosk #lmvKioskWrapper {
+    display:block;
+}
+
+#kioskDate {
+    font-size: 3rem;
+    line-height: 3.5rem;
+    display: inline-block;
+}
+#kioskLabel {
+    font-size: 2.2rem;
+    line-height: 3rem;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-left: 1.5rem;
+}
+.kiosk .mapMaxLabel {
+	display:block;
+	background: black;
+    padding: .5rem 2rem;
+    border-radius: .7rem;
+	left: 1rem;
+	cursor:pointer;
+	opacity:0.9;
+}
+.kiosk .mapMaxLabel:hover {
+	opacity:1;
+}
+.kiosk_label {
+    padding: 2rem;
+    text-align: center;
+    font-size: 2rem
+}
+.kiosk_btn {
+    display: inline-block;
+    padding: .5rem 5rem;
+    background: green;
+    border-radius: 1rem;
+    position: relative;
+    width: 30%;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 9%;
+}
+#kiosk_btn_no {
+    background: darkred;
+}
+
+@media screen and (max-height: 600px) {
+    .kiosk .mapMenu {
+		top:0rem;
+    }
+    .kiosk .mapMenuCloseHolder {
+		top: 2rem;
+	}
+}

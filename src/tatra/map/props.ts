@@ -7,6 +7,11 @@ import { ProductDates } from './obj/ProductDates';
 import { Module } from './menu/components/Module';
 import { MapTime } from "./obj/MapTime";
 
+export enum VIEW_MODES {
+    "NORMAL"    = "normal",
+    "KIOSK"     = "kiosk",
+    "MAX"       = "max"
+}
 export class props  {
     
     public static config                : IConfigDef | null = null;
@@ -21,6 +26,8 @@ export class props  {
     public static imageryDate 		    : Date = new Date();
     public static version               : string = '1.0.0';
     public static mapMenuOpened         : boolean = false;
+    public static viewMode              : VIEW_MODES = VIEW_MODES.NORMAL; 
+    public static identifyEnabled       : boolean = true;       // kiosk mode may not allow identify
     
     public static layers                : Array <Layer> = [];
 /*    public static baseLayers : [];

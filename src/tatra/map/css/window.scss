@@ -131,7 +131,7 @@
     text-shadow: 0.1rem 0.1rem #2c2929;
     opacity:0.5;
 }
-.lmvControlsLayer img, .lmControlsIconDiv {
+.lmvControlsLayer img, .lmvControlsIconDiv {
 	float:left;
 	width:4rem;
 	height:4rem;
@@ -140,6 +140,9 @@
 	border-radius:3.2rem;
 	border:0.1rem solid #CCC;
 	opacity: 0.5;
+}
+.lmvControlsOrbitIconDiv {
+	overflow: hidden;
 }
 .lmvControlsLayer .text {
 	float: left;
@@ -152,11 +155,11 @@
     text-align: center;
     font-size: 2.6rem;
 }
-.lmvControlsLayer:hover img, .lmvControlsLayer:hover .lmControlsIconDiv {
+.lmvControlsLayer:hover img, .lmvControlsLayer:hover .lmvControlsIconDiv {
 	border:0.1rem solid #EEE;
 	opacity: 0.8;
 }
-.lmvControlsLayerSelected img, .lmvControlsLayerSelected .lmControlsIconDiv {
+.lmvControlsLayerSelected img, .lmvControlsLayerSelected .lmvControlsIconDiv {
 	opacity: 1;
 	border:0.1rem solid #EEE;
 }
@@ -173,7 +176,7 @@
 	font-size: 0.75em;
 }
 
-.lmvControlsLayerSelected:hover img, .lmvControlsLayerSelected:hover .lmControlsIconDiv {
+.lmvControlsLayerSelected:hover img, .lmvControlsLayerSelected:hover .lmvControlsIconDiv {
 	opacity: 1;
 }
 #lmvControls_support_layers_Content .navGCContainer {
@@ -641,6 +644,43 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	color:red;
 	font-size: 1.8rem;
 	padding: .5rem .4rem;
+}
+.orbitIcon_left {
+	transform: rotate(45deg);
+	top: -10px;
+    left: 8px;
+}
+.orbitIcon_right {
+	transform: rotate(-45deg);
+    left: -8px;
+    top: -8px;
+}
+.orbitIcon {
+	width: inherit;
+    height: inherit;
+    position: relative;
+    overflow: hidden;
+}
+.orbIcon_line {
+    position:absolute;
+    width:64px;
+    height: 3px;
+    top:30px;
+}
+.orbIcon_circle {
+    border-radius: 10px;
+    position:absolute;
+    width:14px;
+    height: 14px;
+    top: -6px;
+    left:5px; 
+    background:inherit;
+}
+.orbIcon_circle:nth-child(2) {
+    left: 25px;
+}
+.orbIcon_circle:nth-child(3) {
+    left: 45px;
 }
 @media screen and (max-width: 700px) {
 	#lmvControls_support_layers {

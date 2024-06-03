@@ -458,7 +458,7 @@ export class layerStyle {
             stReportLink = `<a href="${reportUrl}" target="_blank" rel="noopener">View situation report <span><i class="fa fa-external-link-alt" aria-hidden="true"></i></span></a><br/>`;
         } 
         return `
-            <span class="faLbl"><img src="${flagUrl}">${ii.Name}</span><br/>
+            <div class="faLbl"><img src="${flagUrl}">${ii.Name}</div>
             <div class="faSize">
                 <table>
                     <tr><td>${areas.acres} acres</td><td>${areas.ha} ha</td></tr>
@@ -467,7 +467,7 @@ export class layerStyle {
                 </table>
             </div>
             <div class="zoomto" id="geojson_info"><span><i class="fa fa-search-plus" aria-hidden="true"></i></span> zoom to location</div>
-            <span class="faDate">Discovery Date: <br/>${dateString}</span>
+            <div class="faDate">Discovery Date:${dateString}</div>
             <div class="faSituation">
                 ${stReportLink}
                 ${incidentLink}

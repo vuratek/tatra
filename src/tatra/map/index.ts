@@ -19,6 +19,7 @@ import { hash } from './hash';
 import { utils } from '../utils';
 import { layerInfo } from './layerInfo';
 import { tileUrlFunctions } from './handlers/tileUrlFunctions';
+import { kiosk } from './kiosk';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -72,12 +73,15 @@ export class map {
         coreUtils.loadLayers();
         mapUtils.setInfoBar();
         controls.init();
+        kiosk.init();
         coreUtils.setAOI();
         controls.setStartTool();
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
         if (props.config) { layerInfo.init(props.config.properties.layerInfoURL); }
+
+        mapUtils.setViewMode();
 
         utils.clearLoader();
         props.map.on('rendercomplete', function(e) {
