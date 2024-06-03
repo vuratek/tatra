@@ -12,6 +12,7 @@ export enum NavigationModes {
 }
 
 export interface INavConfigApp {
+    applicationLabel?   : string;       // used for labeling dates
     mainIcon            : string;       // icon used in left side menu and top banner
     mainIcon2?          : string;       // optional second icon used with mainIcon (two logos like NASA and USFS)
     screenShotIcon      : string;       // used for screenshot. If not defined, it uses mainIcon

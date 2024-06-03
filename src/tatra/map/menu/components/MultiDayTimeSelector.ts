@@ -12,6 +12,8 @@ import { hash } from "../../hash";
 import { hashHandler } from "../hashHandler";
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
 import { Instance } from "flatpickr/dist/types/instance";
+import { navProps } from "../../../page/navProps";
+import { mapUtils } from "../../mapUtils";
 
 export class MultiDayTimeSelector extends Module {
 
@@ -471,14 +473,24 @@ export class MultiDayTimeSelector extends Module {
         if (pastImageryDate != props.time.imageryDate) {
             _refresh = true;
         }
+        this.updateInfoLabel();
 		if (!_refresh) {
             return;
         }
         this.setQuickLinks();
-		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+        events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+
     }
     private displayTimeInfoDetail() {
 		controls.activateControlItem('time_info');
         time_info.open();
+    }
+
+    public updateInfoLabel() {
+		let prefix = (navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+        let range = (this.currentDayMode == 'daily') ? utils.getSelectText('mdsDateRange') : utils.getSelectText('mdsSubDateRange') + ' [hours:mins]';
+        mapUtils.setInfoLabel((prefix + range).toUpperCase());
+        let format = (props.time.rangeMins > 0) ? 'Y-m-d H:i' : 'Y-m-d';
+        mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, format));
 	}
 }
