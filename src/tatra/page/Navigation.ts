@@ -19,6 +19,7 @@ import './css/layerInfo.scss';
 import './css/breadcrumb.scss';
 import './css/main.scss';
 import '../sideMenu/css/*.scss';
+import { events } from '../map/events';
 
 export class Navigation {
     
@@ -105,17 +106,12 @@ export class Navigation {
     }
 
     private static convertUrls() {
-        let arr = window.location.pathname.split('/');
-        let prefix = '';
-        if (arr.length > 1) {
-            if (arr[1] == 'internal' && arr.length > 4) {
-                prefix = arr.slice(0,5).join('/');
-            } else if (arr[1] == 'dev' && arr.length > 1) {
-                prefix = arr.slice(0,2).join('/');
-            }
+        // if redirect not defined or set to default do nothing
+        if (! window.URL_REDIRECT || window.URL_REDIRECT == '#URL_REDIRECT#' || window.URL_REDIRECT == '') {
+            return;
         }
-        if (prefix == '') { return; }
-        navProps.PREFIX = prefix;
+        if (window.URL_REDIRECT.indexOf('http')>=0) { return; }
+        navProps.PREFIX = window.URL_REDIRECT;
         this.addPrefix(navProps.settings.topMenu);
         this.addPrefix(navProps.settings.sideMenu);
         if ( navProps.settings.footer ) {
@@ -205,7 +201,10 @@ export class Navigation {
                 <div id="map3d" class="map3d" style="display:none;"></div>
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
-                <div id="timeline" class="timeline"></div>
+                <div id="lmvKioskWrapper"></div>
+                <div id="lmvTimelineWrapper">
+                    <div id="timeline" class="timeline"></div>
+                </div>
                 <div id="bottomLogo" class="lmvBottomLogo"></div>
             `;
         }
@@ -218,6 +217,7 @@ export class Navigation {
             }
             Header.setLogo('mapMaxLabel');
             utils.setClick('leftNavBarMapResize',()=>this.handleMapResize());
+            utils.setClick('mapMaxLabel', ()=>this.handleKiosk());
         }
 
 //        <div id="${menu.app.search}"></div>
@@ -228,5 +228,9 @@ export class Navigation {
         utils.show('leftNavBarShell');
         utils.hide('leftNavBarMapResize');
         HomeMenuButton.setState();
+    }
+
+    private static handleKiosk() {
+        events.dispatch(events.EVENT_KIOSK_EXIT);
     }
 }

@@ -1,5 +1,6 @@
 import './css/*.scss';
 import { Data, Image } from "./Data";
+import { navProps } from '../page/navProps';
 export class Carousel {
     private currentSlide : number = 0;
     private slides : HTMLCollectionOf<Element>;
@@ -46,7 +47,7 @@ export class Carousel {
             
             el.setAttribute("class", `${this.slideClass} ${this.identifyClass}`);
             div.appendChild(el);
-            el.style.backgroundImage=`url('${item.image}')`;
+            el.style.backgroundImage=`url("${navProps.PREFIX}${item.image}")`;
             el.style.backgroundRepeat = 'no-repeat';
             el.style.backgroundSize = 'cover';
             if (item.offsetY) {
@@ -65,7 +66,11 @@ export class Carousel {
                     label += `</br><span>${item.date}</span>`;
                 }
                 if (item.url && item.url != '') {
-                    label = `<a href="${item.url}">${label}</a>`;
+                    let url = item.url;
+                    if (item.url.indexOf('/') == 0) {
+                        url = navProps.PREFIX + item.url;
+                    }
+                    label = `<a href="${url}">${label}</a>`;
                 }
                 el2.innerHTML = label;
             }

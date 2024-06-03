@@ -141,7 +141,7 @@ export class coreUtils {
             }
         }
         if (configProps.allowHashProps) {
-            hash.parse();
+//            hash.parse(); -- seems duplicate
         }
         this.setLayerInitialVisibility();
 
