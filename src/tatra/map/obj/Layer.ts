@@ -133,6 +133,7 @@ export class Layer {
     public jsonHandler      : Function | null = null;
     public jsonIconRatio    : number = 0.1;     // how much to resize geojson related icon
     public jsonSubsetHandler: Function | null = null;
+    public kioskLegendLabel : string | null = null;
     public limitExtent      : [number, number, number, number] | null = null;
     public listItemHandler  : Function | null = null;
     public maxDate          : string | null = null;

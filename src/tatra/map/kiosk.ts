@@ -9,11 +9,16 @@ export class kiosk {
     
     public static init() {
         document.addEventListener(events.EVENT_KIOSK_EXIT, ()=> this.renderKioskExitMenu());
+        document.addEventListener(events.EVENT_KIOSK_LEGEND, ()=> this.renderKioskLegend());
         let str = `
             <div id="kioskDate"></div>
             <div id="kioskLabel"></div>
         `;
         utils.html('lmvKioskWrapper', str);
+        str = `
+            <div id="kioskLegend"></div>
+        `;
+        utils.html('lmvKioskLegendWrapper', str);
     }
 
     public static renderKioskExitMenu () {
@@ -40,5 +45,26 @@ export class kiosk {
                 viewMode.updateViewMode(VIEW_MODES.NORMAL, true); 
             });
         }
+    }
+    private static renderKioskLegend() {
+        if (props.viewMode != VIEW_MODES.KIOSK) { return; }
+        let str = '';
+        for (let key in props.menuModules) {
+            if (props.menuModules[key].isActive()) {
+                console.log("legend", key);
+                let legend = props.menuModules[key].renderKioskLegend();
+                if (legend) {
+                    str += legend;
+                }
+            }
+        }
+        if (str != '') {
+            str = `
+                <div id="lmvKioskLegend">
+                    ${str}
+                </div>
+            `;
+        }
+        utils.html('lmvKioskLegendWrapper', str);
     }
 }

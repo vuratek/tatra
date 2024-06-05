@@ -558,16 +558,15 @@ export class layer {
     public static addCSVLayer (lo : Layer) {
         let func = layerStyle['_' + lo.source.style];
         lo._layer = new VectorLayer({
-            source: new VectorSrc(
-                {
-                    wrapX: true,       
-                    format: new GeoJSON(),                         
-                    loader :  function(extent, resolution, projection) {
-                        // call json handler 
-                        if (lo.csvHandler) {
-                            lo.csvHandler(lo);
-                        }
+            source: new VectorSrc({
+                wrapX: true,       
+                format: new GeoJSON(),                         
+                loader :  function(extent, resolution, projection) {
+                    // call json handler 
+                    if (lo.csvHandler) {
+                        lo.csvHandler(lo);
                     }
+                }
             }),
             style: eval(func)
          });

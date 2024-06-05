@@ -379,4 +379,42 @@ export class Module {
 		opacity.setLayer(lo.id, lo.title);
     }
 
+    public renderKioskLegend() : string | null {
+        let legends : Array <{ icon: string | null, label : string, lo : Layer }> = [];
+        if (this.props.layer_refs) {
+			for (let i=0; i<this.props.layer_refs.length; i++) {
+                let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
+                if (lo && lo.visible && lo.kioskLegendLabel) {
+                    let found = false;
+                    let comp = lo.kioskLegendLabel;
+                    if (comp.indexOf('#') >= 0) {
+                        comp = lo[comp.replace('#','')];
+                    }
+                    for (let l = 0; l<legends.length; l++) {
+                        let leg = legends[l];
+                        if (leg.icon == lo.icon && leg.label == comp) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        legends.push( {icon : lo.icon, label : comp, lo : lo});
+                    }
+                }
+            }
+        }
+        if (legends.length == 0) { return null; }
+        let str = '';
+        for (let i=0; i<legends.length; i++) {
+            let icon = mapUtils.renderLayerIcon(legends[i].lo);
+            str += `
+                <div class="kioskLegendItem">
+                    <div>${icon}</div>
+                    <div>${legends[i].label}</div>
+                </div>
+            `;
+        }
+        return str;
+    }
+
 }

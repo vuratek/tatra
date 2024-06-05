@@ -76,13 +76,6 @@ export class viewMode extends baseComponent {
                                 <div>Menu</div>
                             </label>
                         </div>
-                        <div>
-                            <label class="llCheckbox">
-                                <input type="checkbox" id="lmvCtrlBtns_${this.id}_timeline">
-                                <span class="checkmark" id="lmvCtrlBtns_${this.id}_timelinelbl"></span>
-                                <div>Timeline</div>
-                            </label>
-                        </div>
                     </div>
                 </div>
                 ${str3d}
@@ -158,13 +151,12 @@ export class viewMode extends baseComponent {
     private static resetKioskMode() {
         utils.removeClass('html', 'kiosk', false);
         utils.removeClass('html', 'kiosk-menu', false);
-        utils.removeClass('html', 'kiosk-timeline', false);
         props.identifyEnabled = true;
     }
 
     private static presetViewMode(mode:string) {
         let comp:Array<string> = [];
-        let arr = ['timeline', 'identify', '3d', 'menu'];
+        let arr = ['identify', '3d', 'menu'];
         for (let i=0; i<arr.length; i++) {
             let el = document.getElementById(`lmvCtrlBtns_${this.id}_${arr[i]}`) as HTMLInputElement;
             if (el && el.checked) {
@@ -184,13 +176,12 @@ export class viewMode extends baseComponent {
             for (let i=0; i<comp.length; i++) {
                 if (comp[i] == 'menu') {
                     utils.addClass('html', 'kiosk-menu', false);
-                } else if (comp[i] == 'timeline') {
-                    utils.addClass('html', 'kiosk-timeline', false);
                 } else if (comp[i] == 'identify') {
                     props.identifyEnabled = true;
                 }
             }
         }
+        events.dispatch(events.EVENT_KIOSK_LEGEND);
     }
 
     private static resetNormalMode() {}

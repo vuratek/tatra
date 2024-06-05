@@ -202,6 +202,7 @@ export class Navigation {
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="lmvKioskWrapper"></div>
+                <div id="lmvKioskLegendWrapper"></div>
                 <div id="lmvTimelineWrapper">
                     <div id="timeline" class="timeline"></div>
                 </div>

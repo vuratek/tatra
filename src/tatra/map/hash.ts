@@ -484,7 +484,7 @@ export class hash {
                 let arr2 = arr[1].split(',');
                 for (let i=0; i<arr2.length; i++) {
                     let c = arr2[i];
-                    if (c == 'timeline' || c == 'identify' || c == 'menu' || c == '3d') {
+                    if (c == 'identify' || c == 'menu' || c == '3d') {
                         comp.push(c);
                     }
                 }

@@ -178,6 +178,7 @@
 		"hasTime"	: true,
 		"clandestine": false,
 		"credit"	: "NASA/GIBS",
+		"kioskLegendLabel" : "#title",
 		"replace"	: ["layer", "?" ],
 		"props" 	: {
 			"maxZoom"			: 12,

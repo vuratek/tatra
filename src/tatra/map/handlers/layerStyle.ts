@@ -341,7 +341,7 @@ export class layerStyle {
         return 14;
     }
 
-    private static getLayerSymbol(feature : Feature, resolution: number, featureVal:string, isSelect : boolean) : Style | null {
+    private static getLayerSymbol(feature : Feature, resolution: number, featureVal:string, isSelect : boolean, offset:Array<number> | null = null) : Style | null {
         let res = 1/resolution;
         let display = feature.get("_display");
         if (display === false) {
@@ -367,6 +367,12 @@ export class layerStyle {
         let label = feature.get(featureVal);
         let lbl_back = (feature.get('_labelBackground')) ? feature.get('_labelBackground') : '#fff';
         let lbl_color = (feature.get('_labelColor')) ? feature.get('_labelColor') : '#000';
+        let offx = 0;
+        let offy = 0;
+        if (offset) {
+            offx = offset[0];
+            offy = offset[1];
+        }
         return new Style({
             image: layerStyle.getBasicIcon(isSelect, icon, scale),
             text: new Text({
@@ -375,6 +381,8 @@ export class layerStyle {
                 font: `${layerStyle.getFireLabelSize(res)}px "Open Sans", "Arial Unicode MS", "sans-serif"`,
                 text: label,
                 placement: 'point',
+                offsetY: offy,
+                offsetX: offx,
                 fill: new Fill({
                     color: lbl_color
                 }),
@@ -554,15 +562,20 @@ export class layerStyle {
     }
 
     public static _volcanoes ( feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getLayerSymbol(feature, resolution, "name", false);
+        let iconStyle = layerStyle.getLayerSymbol(feature, resolution, "name", false, [-10,30]);
+        if (iconStyle) {
+            iconStyle.getImage().setScale(1/Math.pow(resolution, 1/5 ) * 0.35);
+        }
+        return iconStyle;
     }
     public static _volcanoes_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getLayerSymbol(feature, resolution, "name", true);
+        return layerStyle.getLayerSymbol(feature, resolution, "name", true, [-10,30]);
     }
     public static _volcanoes_info (feature : Feature) : string {
         let icon = feature.get('_icon');
         let volcano_type = feature.get('volcano_type');
         let name = feature.get('name');
+        let id = feature.get('volcano_id');
         let eruption = feature.get('eruption');
         let elevation = feature.get('elevation');
         let rock_type = feature.get('rock_type');
@@ -579,6 +592,7 @@ export class layerStyle {
                     <tr><td>Elevation</td><td>${elevation} m</td></tr>
                     <tr><td>Rock Type</td><td>${rock_type}</td></tr>
                     <tr><td colspan="2">Tectonic Setting<br/>${tectonics}</td></tr>
+                    <tr><td colspan="2"><a href="https://volcano.si.edu/volcano.cfm?vn=${id}" target="_blank" rel="noopener" class="ext">More info</a></td></tr>
                 </table>
             </div>
         `;

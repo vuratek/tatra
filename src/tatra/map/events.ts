@@ -14,6 +14,7 @@ export class events {
     public static readonly EVENT_EXTERNAL_HASH_UPDATE   : string = "external_hash_update";  // user altered hash
     public static readonly EVENT_INFO_CLICK             : string = "info_click";
     public static readonly EVENT_KIOSK_EXIT             : string = "kiosk_exit";
+    public static readonly EVENT_KIOSK_LEGEND           : string = "kiosk_legend";
     public static readonly EVENT_LAYER_DATE_UPDATE      : string = "layerDateUpdate";
     public static readonly EVENT_LAYER_HIDDEN           : string = "layerHidden";
     public static readonly EVENT_LAYER_RANGE_UPDATE     : string = "layerRangeUpdate";
