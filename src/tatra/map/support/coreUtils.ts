@@ -185,110 +185,6 @@ export class coreUtils {
         }
     }
 
-    public static parseUrlHash () {
-        let str = window.location.hash;
-        if (!(str && str != '')) {
-            return;
-        }
-        let hash = str.substr(1);
-        let pars = hash.split(';');
-        let zoomSet = false;
-        let cExt = [0, 0];
-        let cZoom = configProps.minZoom;
-        for (let i=0; i<pars.length; i++) {
-            let arr = pars[i].split(':');
-            if (arr.length == 2) {
-                let PAR = decodeURIComponent(arr[1]);
-                switch (arr[0]) {
-                    case 'l':
-                        configProps.layers = PAR;
-                        break;
-                    case 't':
-                        configProps.tab = PAR;
-                        break;
-                    // zoom level
-                    case 'z':
-                        let z = PAR;
-                        if (parseInt(z) >= configProps.minZoom && parseInt(z) <= configProps.maxZoom) { configProps.zoom = parseInt(z); }
-                        break;
-                    // center point
-                    case 'c':
-                        let points = PAR.split(',');
-                        if (points.length == 2) {
-                            let x = Number(points[0]);
-                            let y = Number(points[1]);
-                            if (coreUtils.checkValidLatLon(x, false) && coreUtils.checkValidLatLon(y, true)) { 
-                                configProps.center = [x,y];
-                            }
-                            zoomSet = true;
-                        }
-                        break;
-                    // date / dates
-                    case 'd':
-                        configProps.dates = PAR;
-                        break;
-                    // interest
-                    case 'i':
-                        if (arr[1].startsWith("POLYGON")) {
-                            let str = PAR.replace("POLYGON((", "");
-                            str = str.replace("))", "");
-                            let coord = str.split(',');
-                            let valid = 0;
-                            let sumx = 0;
-                            let sumy = 0;
-                            let min = [180, 180];
-                            let max = [-180,-180];
-                            if (coord.length >=3) {
-                                for (let p=0; p<coord.length; p++) {
-                                    let point = coord[p].split(' ');
-                                    if (point.length == 2) {
-                                        if (coreUtils.checkValidLatLon(point[0], false) && coreUtils.checkValidLatLon(point[1], true)) {
-                                            valid ++;
-                                            if (p != coord.length -1 ) {
-                                                sumx += parseFloat(point[0]);
-                                                sumy += parseFloat(point[1]);
-                                                if (parseFloat(point[0]) < min[0]) { min[0] = parseFloat(point[0]); }
-                                                if (parseFloat(point[1]) < min[1]) { min[1] = parseFloat(point[1]); }
-                                                if (parseFloat(point[0]) > max[0]) { max[0] = parseFloat(point[0]); }
-                                                if (parseFloat(point[1]) > max[1]) { max[1] = parseFloat(point[1]); }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (valid == coord.length) {
-                                    configProps.aoiType= "drawPolygon";
-                                    configProps.aoi = coord;
-                                    cExt = [sumx / (valid-1), sumy / (valid-1)];
-                                    cZoom = coreUtils.getZoomLevel(min[0] - max[0], min[1] - max[1]);
-                                }
-                            }
-                        } else {
-                            let points = PAR.split(',');
-                            if (points.length == 4) {
-                                if (coreUtils.checkValidLatLon(points[0], false) && coreUtils.checkValidLatLon(points[2], false) &&
-                                    coreUtils.checkValidLatLon(points[1], true) && coreUtils.checkValidLatLon(points[3], true)) {
-                                    configProps.aoiType= "classicBox";
-                                    configProps.aoi = points;
-                                    let sumx = parseFloat(points[0]) + parseFloat(points[2]);
-                                    let sumy = parseFloat(points[1]) + parseFloat(points[3]);
-                                    let difx = parseFloat(points[0]) - parseFloat(points[2]);
-                                    let dify = parseFloat(points[1]) - parseFloat(points[3]);
-                                    cZoom = coreUtils.getZoomLevel(difx, dify);
-                                    cExt = [sumx / 2, sumy / 2];
-                                }
-                            }
-                        }
-                        break;
-                        
-                }
-            }
-        }
-        if (!zoomSet) {
-            configProps.center = cExt;   
-            configProps.zoom = cZoom;
-        }
-    }
-
     public static updateFromHash () {
         //coreUtils.parseUrlHash();
         hash.parse();
@@ -309,7 +205,7 @@ export class coreUtils {
     }
 
     public static setAOI () {
-        let lys = ['classicBox','drawPolygon'];
+        let lys = ['drawClassic','drawPolygon'];
         let lo = null;
         for (let i=0; i<lys.length; i++) {
             lo = mapUtils.getLayerById(lys[i]);
@@ -318,7 +214,7 @@ export class coreUtils {
         if (configProps.aoiType && configProps.aoi) {
             switch (configProps.aoiType) {
                 case 'classicBox':
-                    lo = mapUtils.getLayerById('classicBox');
+                    lo = mapUtils.getLayerById('drawClassic');
                     if (lo) {
                         let points = configProps.aoi;
                         let coord = new Coord(points[0], points[1], points[2], points[3]);

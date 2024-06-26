@@ -588,6 +588,7 @@ export class hash {
                                     configProps.aoi = coord;
                                     cExt = [sumx / (valid-1), sumy / (valid-1)];
                                     cZoom = coreUtils.getZoomLevel(min[0] - max[0], min[1] - max[1]);
+                                    zoomSet = false;
                                 }
                             }
                         } else {
@@ -603,6 +604,7 @@ export class hash {
                                     let dify = parseFloat(points[1]) - parseFloat(points[3]);
                                     cZoom = coreUtils.getZoomLevel(difx, dify);
                                     cExt = [sumx / 2, sumy / 2];
+                                    zoomSet = false;
                                 }
                             }
                         }

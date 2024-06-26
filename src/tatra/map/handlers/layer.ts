@@ -1,6 +1,6 @@
 import { Layer, LayerSource } from "../obj/Layer";
 import { props } from "../props";
-import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, TileImage, GeoTIFF, Source, Vector } from "ol/source";
+import { Vector as VectorSrc, TileWMS, ImageStatic, ImageWMS, WMTS as WMTSSrc, GeoTIFF, Vector } from "ol/source";
 import TileEventType from "ol/source/TileEventType";
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
@@ -18,12 +18,12 @@ import { mapUtils } from "../mapUtils";
 import RasterSource from "ol/source/Raster";
 //import { GeoTIFFImage } from "geotiff";
 import WebGLTile from 'ol/layer/WebGLTile';
-import { WebGLPoints } from 'ol/layer';
 import { GeoTIFF as GeoTIFFImage, fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
 import { vectorLayers } from "./vectorLayers";
 import { tileUrlHandler } from "./tileUrlHandler";
-import VectorSource from "ol/source/Vector";
 import { WebGLStyle } from "ol/style/webgl";
+import { Point } from "ol/geom";
+import WebGLPointsLayer from "ol/layer/WebGLPoints";
 
 export class layer {
         
@@ -573,7 +573,7 @@ export class layer {
     }
 
     public static addWebGLPointsLayer (lo : Layer) {
-         lo._layer = new WebGLPoints({
+         lo._layer = new WebGLPointsLayer({
             source: new Vector({
                 loader :  function(extent, resolution, projection) {
                     // call json handler 
@@ -581,11 +581,23 @@ export class layer {
                         lo.csvHandler(lo);
                     }
                 },
-                format: new GeoJSON(),
                 wrapX: true,
             }),
             style: lo.styleJSON as WebGLStyle
         });
+    }
+    public static createFeature(lat : number, lon: number, props : any) : Feature {
+        props["geometry"] = new Point([lon, lat]);
+        return new Feature(props);
+    }
+    public static processWebGLPointsLayer(lo : Layer, points:Array<Feature>) {
+        if (lo._layer) {
+            let src = lo._layer.getSource();
+            if (src) {
+                (src as Vector).addFeatures(points);
+                
+            }   
+        }
     }
 
     public static processGeoJsonString(lo:Layer, geojson : string) {
