@@ -406,13 +406,23 @@ export class Module {
         if (legends.length == 0) { return null; }
         let str = '';
         for (let i=0; i<legends.length; i++) {
-            let icon = mapUtils.renderLayerIcon(legends[i].lo);
-            str += `
-                <div class="kioskLegendItem">
-                    <div>${icon}</div>
-                    <div>${legends[i].label}</div>
-                </div>
-            `;
+            let lo = legends[i].lo;
+            let icon = mapUtils.renderLayerIcon(lo);
+            if (lo.kioskLegendHander) {
+                let leg = lo.kioskLegendHander(lo, legends[i].label);
+                str += `
+                    <div class="kioskLegendCustom">
+                        ${leg}
+                    </div>
+                `;
+            } else {
+                str += `
+                    <div class="kioskLegendItem">
+                        <div>${icon}</div>
+                        <div>${legends[i].label}</div>
+                    </div>
+                `;
+            }
         }
         return str;
     }

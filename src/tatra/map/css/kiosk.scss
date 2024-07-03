@@ -54,15 +54,16 @@
     border-radius: 2rem 2rem 0rem 0rem;
 }
 .kioskLegendItem {
-    margin-left: 1.5rem;
     position: relative;
-    padding: 0.2rem 0;
+    margin: 0 1.5rem;
+    padding: .5rem 0.3rem;
 }
 .kioskLegendItem > div {
     display:inline-block;
 }
 .kioskLegendItem > div:last-child {
     vertical-align: super;
+    margin-left: .5rem;
 }
 .kioskLegendItem img {
     max-width: 3rem;
@@ -81,17 +82,26 @@
     top: -12px;
     background: #555;
 }
+.kioskLegendCustom > div:first-child {
+    margin: .5rem 1rem 0;
+    line-height: 2.5rem;
+}
+.kioskLegendCustom > div:last-child {
+    margin: 0 1rem;
+}
 #kioskDate {
     font-size: 3rem;
     line-height: 3.5rem;
     display: inline-block;
 }
+#kioskLabelWrap {
+    display: inline-block;
+}
 #kioskLabel {
+    margin-left: 1.5rem;
     font-size: 2.2rem;
     line-height: 3rem;
     text-transform: uppercase;
-    display: inline-block;
-    margin-left: 1.5rem;
 }
 .kiosk .mapMaxLabel {
 	display:block;

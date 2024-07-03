@@ -748,6 +748,10 @@ export class mapUtils {
         utils.html('kioskLabel', str);
         utils.html('lmvFeatureInfo1', str);
     }
+    public static showInfoLabel(show:boolean) {
+        if (show) { utils.show('kioskLabel'); }
+        else { utils.hide('kioskLabel'); }
+    }
     public static setInfoDate(str : string) {
         utils.html('kioskDate', str);
     }

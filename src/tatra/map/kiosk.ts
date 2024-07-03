@@ -12,7 +12,7 @@ export class kiosk {
         document.addEventListener(events.EVENT_KIOSK_LEGEND, ()=> this.renderKioskLegend());
         let str = `
             <div id="kioskDate"></div>
-            <div id="kioskLabel"></div>
+            <div id="kioskLabelWrap"><div id="kioskLabel"></div></div>
         `;
         utils.html('lmvKioskWrapper', str);
         str = `
@@ -51,7 +51,6 @@ export class kiosk {
         let str = '';
         for (let key in props.menuModules) {
             if (props.menuModules[key].isActive()) {
-                console.log("legend", key);
                 let legend = props.menuModules[key].renderKioskLegend();
                 if (legend) {
                     str += legend;
