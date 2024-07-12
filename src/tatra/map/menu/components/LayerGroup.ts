@@ -5,7 +5,6 @@ import { Layer } from "../../obj/Layer";
 import { utils } from "../../../utils";
 import { mapUtils } from "../../mapUtils";
 import { events } from "../../events";
-import { opacity } from "../../components/opacity";
 import { IMenuModuleLayers, IMenuModule } from "../../defs/ConfigDef";
 
 export enum MenuLayerGroup {

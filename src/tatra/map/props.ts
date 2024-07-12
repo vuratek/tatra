@@ -40,6 +40,8 @@ export class props  {
     public static scaleLineControlMI    : ScaleLine | null = null;
 //    public static scaleUnits            : string = "metric";
 
+    public static showLabelPrefix       : boolean = true;       // if application prefix is to be shown in Navigation bar
+
     public static analytics             : boolean = false;
     public static analyticsToolEvent    = null;
 

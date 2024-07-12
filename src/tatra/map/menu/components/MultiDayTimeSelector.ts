@@ -487,10 +487,12 @@ export class MultiDayTimeSelector extends Module {
     }
 
     public updateInfoLabel() {
-		let prefix = (navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
-        let range = (this.currentDayMode == 'daily') ? utils.getSelectText('mdsDateRange') : utils.getSelectText('mdsSubDateRange') + ' [hours:mins]';
-        mapUtils.setInfoLabel((prefix + range).toUpperCase());
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+        let range = (this.currentDayMode == 'daily') ? utils.getSelectText('mdsDateRange') : utils.getSelectValue('mdsSubDateRange').replace('m','') + ' mins';
         let format = (props.time.rangeMins > 0) ? 'Y-m-d H:i' : 'Y-m-d';
+        let t = flatpickr.formatDate(props.time.date, format);
+        let str = `${t} (${range})`;
+        mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + range).toUpperCase());
         mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, format));
 	}
 }

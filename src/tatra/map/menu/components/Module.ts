@@ -26,6 +26,7 @@ export class Module {
     public _isActive : boolean = false;
     public _hasGroup : boolean = true;
     public systemDateUpdateHandler : (evt: Event) => void;
+    public labelHandler : (evt: Event) => void;
     public disabledUpdateHandler : (evt: Event) => void;
     public lastRefreshUrl : ILastRefreshUrl = {};
     public overrideOpened : boolean | null = null;
@@ -47,6 +48,7 @@ export class Module {
         this.setLayerRefs();
         this.systemDateUpdateHandler = () => this.onSystemDateUpdate();
         this.disabledUpdateHandler = () => this.updateDisabled();
+        this.labelHandler = () => this.updateInfoLabel();
     }
 
     // create initial div component; customization done in a child class
@@ -80,6 +82,7 @@ export class Module {
     public activate() {
         this._isActive = true;
         document.addEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        document.addEventListener(events.EVENT_LABEL_UPDATE, this.labelHandler);
         this.lastRefreshUrl = {};
     }
 
@@ -106,6 +109,7 @@ export class Module {
             this.props.opened = GroupContent.isOpened(this.props.id);
         }
         document.removeEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        document.removeEventListener(events.EVENT_LABEL_UPDATE, this.labelHandler);
     }
 
     public presetLayers() {
@@ -426,5 +430,7 @@ export class Module {
         }
         return str;
     }
+
+    public updateInfoLabel() {}
 
 }

@@ -10,6 +10,7 @@ import { BasicMenuDates, BasicMenuDateValues } from "../../defs/Times";
 import { timelineController } from "../../../timeline/timelineController";
 import { mapUtils } from "../../mapUtils";
 import { navProps } from "../../../page/navProps";
+import flatpickr from "flatpickr";
 
 export class MultiDaySelector extends MultiDaySelectorSimple {
 	public currentSelection			: BasicMenuDates = BasicMenuDates.CUSTOM;
@@ -196,13 +197,15 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	
 	public updateInfoLabel() {
 		super.updateInfoLabel();
-		let prefix = (navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
 		let dates = '';
 		if (this.currentSelection !=  BasicMenuDates.CUSTOM && this.currentSelection!= BasicMenuDates.DAY_7) {
 			dates = this.currentSelection;
 		} else {
 			dates = utils.getSelectText('mdsDateRange');
 		}
-		mapUtils.setInfoLabel((prefix + dates).toUpperCase());
+		let str = `${flatpickr.formatDate(props.time.date, 'Y-m-d')} (${dates})`;
+		mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + dates).toUpperCase());
 	}
 }

@@ -15,6 +15,7 @@ export class events {
     public static readonly EVENT_INFO_CLICK             : string = "info_click";
     public static readonly EVENT_KIOSK_EXIT             : string = "kiosk_exit";
     public static readonly EVENT_KIOSK_LEGEND           : string = "kiosk_legend";
+    public static readonly EVENT_LABEL_UPDATE           : string = "label_update";
     public static readonly EVENT_LAYER_DATE_UPDATE      : string = "layerDateUpdate";
     public static readonly EVENT_LAYER_HIDDEN           : string = "layerHidden";
     public static readonly EVENT_LAYER_RANGE_UPDATE     : string = "layerRangeUpdate";
@@ -130,6 +131,16 @@ export class events {
             detail: {
                 id: id,
             },
+        }));
+    }
+
+    public static mapExtentChange (lat : number, lon : number, zoom : number) {
+        document.dispatchEvent(new CustomEvent(events.EVENT_MAP_EXTENT_CHANGE, {
+            detail: {
+                lat: lat,
+                lon : lon,
+                zoom : zoom
+            }
         }));
     }
         

@@ -744,9 +744,9 @@ export class mapUtils {
     
     }
 
-    public static setInfoLabel(str : string) {
-        utils.html('kioskLabel', str);
-        utils.html('lmvFeatureInfo1', str);
+    public static setInfoLabel(topBar : string, kiosk : string) {
+        utils.html('kioskLabel', kiosk);
+        utils.html('lmvFeatureInfo1', topBar);
     }
     public static showInfoLabel(show:boolean) {
         if (show) { utils.show('kioskLabel'); }
