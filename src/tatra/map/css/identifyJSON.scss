@@ -55,6 +55,19 @@
     height: 1.8rem;
     margin-right: 1rem;
 }
+.identifyJSONLabel .faLbl .iconList {
+    display:inline-block;
+    position:relative;
+    width:2.5rem; 
+    height:2.5rem;
+    transform: scale(.35);
+    margin-right:.7rem;
+}
+.identifyJSONLabel .faLbl .iconList div {
+    position:absolute;
+    width:64px; 
+    height:64px;
+}
 .identifyJSONLabel .fa-noaa-logo {
     position: absolute;
     bottom: 0;

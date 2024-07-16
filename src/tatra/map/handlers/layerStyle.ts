@@ -598,6 +598,45 @@ export class layerStyle {
         `;
     }
 
+    public static _powerPlants_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getLayerSymbol(feature, resolution, "name", true, [-10,30]);
+    }
+
+    public static _powerPlants_info (feature : Feature) : string {
+        console.log(feature);
+        let name = feature.get('id');
+        let lat = feature.get('lat');
+        let lon = feature.get('lon');
+        let fuel = feature.get('type');
+        let offset = 500;
+        let lbl = 'Other';
+        switch (fuel) {
+            case "G": offset = 0; lbl='Gas'; break;
+            case "B": offset = 100; lbl='Biomass'; break;
+            case "T": offset = 200; lbl='Geothermal'; break;
+            case "H": offset = 300; lbl='Hydro'; break;
+            case "L": offset = 400; lbl='Oil'; break;
+            case "S": offset = 600; lbl='Solar'; break;
+            case "R": offset = 700; lbl='Storage'; break;
+            case "I": offset = 800; lbl='Wave & Tidal'; break;
+            case "W": offset = 900; lbl='Wind'; break;
+            case "C": offset = 1000; lbl='Coal'; break;
+        }
+        return `
+            <span class="faLbl">
+                <div class="iconList">
+                    <div style="background: url(/images/wri_icons.png) -${offset}px 0px;"></div>
+                </div>
+                ${name}</span><br/>
+            <div class="faSize">
+                <table>
+                    <tr><td>Latitude, Longitude</td><td>${lat}, ${lon}</td></tr>
+                    <tr><td>Primary Fuel</td><td>${lbl}</td></tr>
+                </table>
+            </div>
+        `;
+    }
+
     public static eisColors(diff : number) : string {
 //        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
         let colors = ["#ff3333", "#fff534", "#62ba35"];
