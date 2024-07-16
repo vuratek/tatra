@@ -97,6 +97,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 			range = 0;
 		} else if (this.currentSelection == BasicMenuDates.DAY_7) {
 			range = 6;
+			props.time.imageryDate = utils.addDay(utils.getGMTTime(new Date()), -1);
 		}
 		if (previousSelection == BasicMenuDates.HRS_24 && this.currentSelection ==  BasicMenuDates.CUSTOM) {
 			range = 0;
@@ -106,7 +107,7 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 			this.calendar.setDate(date);
 			utils.setSelectValue(`mdsDateRange`, range.toString());
 		}
-		this.setDates();
+		this.setDates(); 
 		events.menuOpen(`module-mds-${this.currentSelection}`);
 	}
 //	private bookmark() {
@@ -185,7 +186,13 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	}
 	public timelineUpdate () {
 		super.timelineUpdate();
-		this.setQuickLinks();
+		if (this.currentSelection == BasicMenuDates.DAY_7 
+			&& (flatpickr.formatDate(props.time.date, 'Y-m-d') != flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d') ||
+			(flatpickr.formatDate(props.time.imageryDate, 'Y-m-d') != flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -1), 'Y-m-d')))) {
+			this.setTab(BasicMenuDates.CUSTOM);
+		} else {
+			this.setQuickLinks();
+		}
 	}
 	public timelineBtnClick (evt : CustomEvent) {
 		if (evt.detail.id == "timeline") {

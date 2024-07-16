@@ -792,6 +792,7 @@ export class Timeline {
                 Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
             } else if (timelineController.type == TimelineType.RANGE_TIED ) {
                 Timeline.items.update({id: 'range', start: utils.addDay(time, - range), end: utils.addDay(time)});
+                Timeline.items.update({id: 'single', start: sliderTime, end: utils.addDay(sliderTime)});
             } else if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED) {
                 if (endDay > timelineController.maxDate) { 
                     endDay = timelineController.maxDate; 
