@@ -722,6 +722,15 @@ export class mapUtils {
 		}
     }
 
+    public static getMapExtent() : Array<number> | null {
+        let z = props.map.getView().getZoom();
+        let c = props.map.getView().getCenter();
+        if (z && c) {
+            return [c[0], c[1], z]; // lon, lat, zoom_level
+        }
+        return null;
+    }
+
     public static getBaseLog( x : number, y : number ) {
         return Math.log(y+1) / Math.log(x+1);
     }

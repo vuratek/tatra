@@ -134,16 +134,6 @@ export class events {
         }));
     }
 
-    public static mapExtentChange (lat : number, lon : number, zoom : number) {
-        document.dispatchEvent(new CustomEvent(events.EVENT_MAP_EXTENT_CHANGE, {
-            detail: {
-                lat: lat,
-                lon : lon,
-                zoom : zoom
-            }
-        }));
-    }
-        
     public static selectionUpdate (id: string, internal : boolean = false) {
         document.dispatchEvent(new CustomEvent(events.EVENT_SELECTION_UPDATE, {
             detail: {
