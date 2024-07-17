@@ -574,8 +574,8 @@ export class layer {
 
     public static addWebGLPointsLayer (lo : Layer) {
          lo._layer = new WebGLPointsLayer({
-            minZoom:lo.minLevel,
-            source: new Vector({
+            minZoom : lo.minLevel,
+            source : new Vector({
                 loader :  function(extent, resolution, projection) {
                     // call json handler 
                     if (lo.csvHandler) {

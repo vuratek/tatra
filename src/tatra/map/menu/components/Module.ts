@@ -113,6 +113,8 @@ export class Module {
     }
 
     public presetLayers() {
+        return;
+        /* rethink this?
         if (!this.props.tag || this.props.tag == layerCategories.BASEMAP) {
             return;
         }
@@ -120,9 +122,9 @@ export class Module {
         for (let i =arr.length-1; i>=0; i--) {
             let lo = mapUtils.getLayerById(arr[i].id);
             if (lo) {
-                arr[i].visible = lo.visible;
+//                arr[i].visible = lo.visible;
             }
-        }
+        }*/
     }
 
     // set layer_refs either from config or from layer_refs (validate layer exists)
