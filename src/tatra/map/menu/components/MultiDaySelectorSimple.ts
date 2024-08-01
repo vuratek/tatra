@@ -14,6 +14,7 @@ import { TimelineType, timelineController } from '../../../timeline/timelineCont
 import { timeline } from '../../components/timeline'; 
 import { singleDatePicker } from '../../../timeline/singleDatePicker2';
 import { mapUtils } from '../../mapUtils';
+import { navProps } from '../../../page/navProps';
 
 export class MultiDaySelectorSimple extends Module {
 
@@ -204,6 +205,9 @@ export class MultiDaySelectorSimple extends Module {
 
 	public updateInfoLabel() {
 		mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, 'Y-m-d'));
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+		let str = flatpickr.formatDate(props.time.date, 'Y-m-d');
+		mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + str).toUpperCase());
 	}
 
 	public timelineBtnClick (evt : CustomEvent) {}

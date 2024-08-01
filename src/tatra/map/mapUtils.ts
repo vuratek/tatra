@@ -783,8 +783,9 @@ export class mapUtils {
                 icon = `<div class="lmvControlsIconDiv lmvControlsOrbitIconDiv">${utils.renderOrbitIcon(arr[1],arr[2])}</div>`;
             }
         } else if (lo.iconMatrix && lo.iconMatrix.length == 2) {
-			let x = lo.iconMatrix[0] * 70 + 9;
-			let y = lo.iconMatrix[1] * 70 + 9;
+            let [size_x, size_y] = (lo.iconSize) ? [lo.iconSize[0], lo.iconSize[1]] : [70, 70];
+			let x = lo.iconMatrix[0] * size_x + 9;
+			let y = lo.iconMatrix[1] * size_y + 9;
 			icon = `<div class="lmvControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
 		} else {
 			icon = `<img src="${lo.icon}" ${iconStyle}>`;

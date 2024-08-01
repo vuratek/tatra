@@ -149,8 +149,9 @@ export class layerInfo {
                 el.innerHTML = utils.renderOrbitIcon(arr[1],arr[2]);
             }
         } else if (lo.icon && lo.iconMatrix && lo.iconMatrix.length == 2) {
-            x = lo.iconMatrix[0] * 70;
-            y = lo.iconMatrix[1] * 70;
+            let [size_x, size_y] = (lo.iconSize) ? [lo.iconSize[0], lo.iconSize[1]] : [70, 70];
+			x = lo.iconMatrix[0] * size_x;
+			y = lo.iconMatrix[1] * size_y;
             el.style.background = 'url('+lo.icon+') -' + x + 'px -' + y + 'px';
         } else {
             el.style.background = 'url('+lo.icon+')'

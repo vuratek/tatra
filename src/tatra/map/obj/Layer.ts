@@ -116,6 +116,7 @@ export class Layer {
     public iconHasBorder    : boolean = true;
     public iconLabel        : string | null = null;
     public iconMatrix       : Array <number> | null = null;
+    public iconSize         : Array <number> | null = null;
     public id               : string = "";
     public identifyGroup    : Array <string> | null = null; // used by firms_cache that performs identify on multiple layers
     public identifyHandler  : string | null = null;

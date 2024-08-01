@@ -31,6 +31,15 @@ export class tileUrlFunctions {
             str = str.replace('{START_Y-M-D}',flatpickr.formatDate(start, 'Y-m-d'))
                     .replace('{END_Y-M-D}',flatpickr.formatDate(utils.addDay(utils.sanitizeDate(props.time.date),1), 'Y-m-d'));
         }
+        if (lo.replace) {
+            
+            for (let i=0; i<lo.replace.length; i++) {
+                let seek = lo.replace[i];
+                i++;
+                let val = lo.replace[i];
+                str = str.replace(`#${seek}#`, val);
+            }
+        }
         str = str
             .replace('#id#', lo.id)
             .replace('{z}', (tileCoord[0] - off).toString())

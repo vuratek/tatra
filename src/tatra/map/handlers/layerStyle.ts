@@ -637,6 +637,73 @@ export class layerStyle {
         `;
     }
 
+    public static _supportPersistentLayer_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.getLayerSymbol(feature, resolution, "owner", true, [-10,30]);
+    }
+
+    public static _supportPersistentLayers_info (feature : Feature) : string {
+        let category = feature.get('category');
+        let id = feature.get('id');
+        let lo = mapUtils.getLayerById(category);
+        let title = id;
+        let icon = '';
+        if (lo) {
+            title = lo.title;
+            if (lo.icon) {
+                icon = lo.icon;
+            }
+        }
+        let lat = feature.get('lat');
+        let lon = feature.get('lon');
+        let status = feature.get('status');
+        let owner = feature.get('owner') as string;
+        let offset = 230;
+
+        let extra = '';
+        if (category == 'petro_chemical') {
+            let type = feature.get('type');
+            extra = `<td>Type</td><td>${type}</td>`;
+        } else if (category == 'cement_plants') {
+            let type = feature.get('production');
+            extra = `<td>Production</td><td>${type}</td>`;
+        }
+        let o = owner.split(' ');
+        let len = 0;
+        let str = '';
+        for (let i=0; i<o.length; i++) {
+            len = len + o[i].length + 1;
+            if (len > 30 && i>0) {
+                str += '<br/>';
+                len = 0;
+            }
+            str += o[i] + ' ';
+        }
+        owner = str;
+
+        switch (category) {
+            case "cement_plants": offset = 100; break;
+            case "gi_steel_plants": offset = 400; break;
+            case "nonferrous_metal": offset = 0; break;
+            case "petro_chemical": offset = 200; break;
+            case "steel_plants": offset = 300; break;
+        }
+        return `
+            <span class="faLbl">
+                <div class="iconList">
+                    <div style="background: url(${icon}) -${offset}px 0px;"></div>
+                </div>
+                ${title}</span><br/>
+            <div class="faSize">
+                <table>
+                    <tr><td>Name / Owner</td><td>${owner}</td></tr>
+                    <tr><td>Status</td><td>${status}</td></tr>
+                    ${extra}
+                    <tr><td>Latitude, Longitude</td><td>${lat}, ${lon}</td></tr>
+                </table>
+            </div>
+        `;
+    }
+
     public static eisColors(diff : number) : string {
 //        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
         let colors = ["#ff3333", "#fff534", "#62ba35"];
@@ -650,6 +717,7 @@ export class layerStyle {
     }
 
     public static _firePerimeterEIS ( feature : Feature, resolution: number) : Style | null {
+        console.log(feature);
         let key = "perimeter-eis";
         let flag = "default";
         let p = feature.getProperties();
