@@ -48,6 +48,27 @@ export interface IValidationSite {
     [key:string]    : string;
 }
 
+// industrial plant layers
+export interface ISupportPlantLayer {
+    title           : string;   // title used in the window top
+    icon            : string;
+    id              : string;
+    icon_offset     : number;
+    category        : string;   // power plant, gas flares, ...
+    lat             : string;
+    lon             : string;
+    isLoading       : boolean;  // whether it calls for additional data
+    name?           : string;   // name of the plant
+    type?           : string;   // type of plant
+    commodity?      : string;   // nonferrous plants
+    production?     : string;   // cement plants
+    status?         : string;   // status related to plants (operational, ...)
+    fuel?           : string;   // power plants
+    fuelLabel?      : string;   // power plants
+    _url?           : string;   // identify url
+    _data?          : {};       // return from identify
+}
+
 export class layerStyle {
     public static symbols       : ISymbolsStyles = {};
     public static icons         : IIconStyles = {};
@@ -598,19 +619,13 @@ export class layerStyle {
         `;
     }
 
-    public static _powerPlants_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getLayerSymbol(feature, resolution, "name", true, [-10,30]);
-    }
-
-    public static _powerPlants_info (feature : Feature) : string {
-        console.log(feature);
-        let name = feature.get('id');
-        let lat = feature.get('lat');
-        let lon = feature.get('lon');
-        let fuel = feature.get('type');
+    public static setPowerPlantsLayer(lo : Layer | null, rec : ISupportPlantLayer) : ISupportPlantLayer {
+        if (lo && lo.styleJSON && lo.styleJSON['icon-src']) {
+            rec.icon = lo.styleJSON['icon-src'];
+        }
         let offset = 500;
         let lbl = 'Other';
-        switch (fuel) {
+        switch (rec.fuel) {
             case "G": offset = 0; lbl='Gas'; break;
             case "B": offset = 100; lbl='Biomass'; break;
             case "T": offset = 200; lbl='Geothermal'; break;
@@ -622,28 +637,58 @@ export class layerStyle {
             case "W": offset = 900; lbl='Wind'; break;
             case "C": offset = 1000; lbl='Coal'; break;
         }
-        return `
-            <span class="faLbl">
-                <div class="iconList">
-                    <div style="background: url(/images/wri_icons.png) -${offset}px 0px;"></div>
-                </div>
-                ${name}</span><br/>
-            <div class="faSize">
-                <table>
-                    <tr><td>Latitude, Longitude</td><td>${lat}, ${lon}</td></tr>
-                    <tr><td>Primary Fuel</td><td>${lbl}</td></tr>
-                </table>
-            </div>
-        `;
+        rec.icon_offset = offset;
+        rec.fuelLabel = lbl;
+
+        return rec;
+    }
+
+    public static setOtherPlantsLayer(rec : ISupportPlantLayer) : ISupportPlantLayer {
+        let offset = 230;   // set it wrong so it is obvious something failed
+        switch (rec.category) {
+            case "nonferrous_metal": offset = 0; break;
+            case "cement_plants": offset = 100; break;
+            case "petro_chemical": offset = 200; break;
+            case "steel_plants": offset = 300; break;
+            case "gi_steel_plants": offset = 400; break;
+            case "gas_flares": offset = 500; break;
+        }
+        rec.icon_offset = offset;
+        return rec;
+    }
+
+    public static setLabelLength(lbl : string, max_chars : number) : string {
+        let o = lbl.split(' ');
+        let len = 0;
+        let str = '';
+        for (let i=0; i<o.length; i++) {
+            len = len + o[i].length + 1;
+            if (len > max_chars && i>0) {
+                str += '<br/>';
+                len = 0;
+            }
+            str += o[i] + ' ';
+        }
+        return str;
     }
 
     public static _supportPersistentLayer_select (feature : Feature, resolution: number) : Style | null {
-        return layerStyle.getLayerSymbol(feature, resolution, "owner", true, [-10,30]);
+        let field = "owner";
+        let category = feature.get('category');
+        if (category == 'gas_flares') {
+            field = "id";
+        }
+        if (category == 'power_plants') {
+            field = "name";
+        }
+        return layerStyle.getLayerSymbol(feature, resolution, field, true, [-10,30]);
     }
-
+   
     public static _supportPersistentLayers_info (feature : Feature) : string {
         let category = feature.get('category');
         let id = feature.get('id');
+        let lat = feature.get('lat');
+        let lon = feature.get('lon');
         let lo = mapUtils.getLayerById(category);
         let title = id;
         let icon = '';
@@ -653,52 +698,100 @@ export class layerStyle {
                 icon = lo.icon;
             }
         }
-        let lat = feature.get('lat');
-        let lon = feature.get('lon');
-        let status = feature.get('status');
-        let owner = feature.get('owner') as string;
-        let offset = 230;
+        let rec:ISupportPlantLayer = {
+            title : title, 
+            icon : icon, 
+            id : id,
+            category : category, 
+            lat : lat, 
+            lon : lon, 
+            icon_offset : 0, 
+            isLoading : false
+        };
 
-        let extra = '';
-        if (category == 'petro_chemical') {
+        if (lo && lo.identifyAuxUrl) {
+            rec.isLoading = true;
+            rec._url = lo.identifyAuxUrl.replace('#id#', lo.id).replace('#item#', rec.id);
+        }
+        
+        if (category == 'power_plants') {
+            rec.fuel = feature.get('type');
+            rec = layerStyle.setPowerPlantsLayer(lo, rec);
+        } else {
+            rec = layerStyle.setOtherPlantsLayer(rec);
+            let status = feature.get('status');
             let type = feature.get('type');
-            extra = `<td>Type</td><td>${type}</td>`;
-        } else if (category == 'cement_plants') {
-            let type = feature.get('production');
-            extra = `<td>Production</td><td>${type}</td>`;
-        }
-        let o = owner.split(' ');
-        let len = 0;
-        let str = '';
-        for (let i=0; i<o.length; i++) {
-            len = len + o[i].length + 1;
-            if (len > 30 && i>0) {
-                str += '<br/>';
-                len = 0;
-            }
-            str += o[i] + ' ';
-        }
-        owner = str;
+            let name = feature.get('owner');
+            let production = feature.get('production');
 
-        switch (category) {
-            case "cement_plants": offset = 100; break;
-            case "gi_steel_plants": offset = 400; break;
-            case "nonferrous_metal": offset = 0; break;
-            case "petro_chemical": offset = 200; break;
-            case "steel_plants": offset = 300; break;
+            if (status) { rec.status = status; }
+            if (name) { rec.name = feature.get('owner') as string;}
+            if (production) { rec.production = production; }
+            if (type) { rec.type = type;}
+        }
+
+        // break name as it can be long
+        if (rec.name) {
+            rec.name = this.setLabelLength(rec.name, 30);
+        }        
+        if (rec.isLoading) {
+            this.identifyPlant(rec);
+        }
+        return `<div id="rec_supp_lyr_${rec.id}">${this.renderSuportPlantLayer(rec)}</div>`;
+    }
+
+    public static identifyPlant(rec : ISupportPlantLayer) {
+        if (! rec._url) { return; } 
+        fetch(rec._url)
+        .then(response => {
+            if (response.status != 200) {
+                return '';
+            }
+            return response.json();
+        })
+        .then (data => {
+            rec._data = data;
+            let el = document.getElementById(`rec_supp_lyr_${rec.id}`) as HTMLDivElement;
+            if (el) {
+                el.innerHTML = layerStyle.renderSuportPlantLayer(rec);
+            }
+        })
+        .catch(error => {
+            console.error("Error processing ", rec._url);
+        });
+    }
+
+    public static renderSuportPlantLayer ( rec : ISupportPlantLayer ) {
+        let id = `<tr><td>ID</td><td>${rec.id}</td></tr>`;
+        if (rec.isLoading) { id = '';}
+        let status = (rec.status) ? `<tr><td>Status</td><td>${rec.status}</td></tr>` : '';
+        let name = (rec.name) ? `<tr><td>Name / Owner</td><td>${rec.name}</td></tr>` : '';
+        let production = (rec.production) ? `<tr><td>Production</td><td>${rec.production}</td><tr/>` : '';
+        let type = (rec.type) ? `<tr><td>Type</td><td>${rec.type}</td></tr>` : '';
+        let prim_fuel = (rec.fuelLabel) ? `<tr><td>Primary Fuel</td><td>${rec.fuelLabel}</td></tr>` : '';
+        let custom = '';
+        if (rec._data) {
+            for (let key in rec._data) {
+                let val = rec._data[key];
+                custom += `<tr><td>${key}</td><td>${val}</td></tr>`;
+            }
         }
         return `
             <span class="faLbl">
                 <div class="iconList">
-                    <div style="background: url(${icon}) -${offset}px 0px;"></div>
+                    <div style="background: url(${rec.icon}) -${rec.icon_offset}px 0px;"></div>
                 </div>
-                ${title}</span><br/>
+                ${rec.title}</span><br/>
             <div class="faSize">
                 <table>
-                    <tr><td>Name / Owner</td><td>${owner}</td></tr>
-                    <tr><td>Status</td><td>${status}</td></tr>
-                    ${extra}
-                    <tr><td>Latitude, Longitude</td><td>${lat}, ${lon}</td></tr>
+                    ${name}
+                    ${prim_fuel}
+                    ${production}
+                    ${custom}
+                    ${type}
+                    ${status}
+                    ${id}
+                    <tr><td>Latitude, Longitude</td><td>${rec.lat}, ${rec.lon}</td></tr>
                 </table>
             </div>
         `;

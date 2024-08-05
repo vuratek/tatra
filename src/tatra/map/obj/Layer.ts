@@ -121,6 +121,7 @@ export class Layer {
     public identifyGroup    : Array <string> | null = null; // used by firms_cache that performs identify on multiple layers
     public identifyHandler  : string | null = null;
     public identifyUrl      : string | null = null;
+    public identifyAuxUrl   : string | null = null;     // other type of identify
     public info             : string | null = null;     // info-id for layerInfo modal if different from id
     public initData         : string | null = null;
     public initVisibility   : boolean = false;

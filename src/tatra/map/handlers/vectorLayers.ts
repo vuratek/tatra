@@ -58,7 +58,7 @@ export class vectorLayers {
             }),
             style : style
         });
-        if (lo._layer && lo.id == "eis-fire-tile") {
+        if (lo._layer && lo.cloneId == "eis-fire-tile") {
             let vectorSource = (lo._layer as VectorTileLayer).getSource();
             if (vectorSource) {
                 vectorSource.on('tileloadend', function(evt) {
