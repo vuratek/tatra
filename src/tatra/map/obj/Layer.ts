@@ -168,6 +168,7 @@ export class Layer {
     public trackLoading     : boolean = false;
     public type             : string = "wmts"; // WMTS, WMS, XYZ
     public variableRange    : IVariableRange = {};
+    public visibilityHandler : Function | null = null;  // type function to visibility (virtual layer)
     public zoomTo           : string | null = null; // lon, lat, zoom level
  
     public addFeature (coord : Coord) {
@@ -354,6 +355,9 @@ export class Layer {
     public notify(vis:boolean) {
         let evt = (vis) ? events.EVENT_LAYER_VISIBLE : events.EVENT_LAYER_HIDDEN;
         events.dispatchLayer(evt, this.id);   
+        if (this.visibilityHandler) {
+            this.visibilityHandler(this.id);
+        }
     }
 
     public get visible() {

@@ -78,6 +78,7 @@ export class layer {
             this.addBoxLayer(lo);
             break;
         case "label":       // non-layer that is used for displaying information
+        case "virtual":     // non-layer that is used for controlling multiple layers
             return;
         default:
             console.log("ERROR : Unrecognized layer type " + lo.type);
