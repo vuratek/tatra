@@ -67,6 +67,7 @@ export class vectorLayers {
                     for (let i=0; i<features.length; i++) {
                         let p = features[i].getProperties();
                         p[lo.id] = true;
+                        p['_lid'] = lo.id;
                     }
                 });
             }

@@ -10,7 +10,7 @@ import { mapUtils } from "../mapUtils";
 import { utils } from "../../utils";
 import { colorPaletteArray } from "../colorPaletteArray";
 import { Vector } from "ol/source";
-
+import { eisData } from "./eisData"; 
 
 class AreaLabels {
     public km       : string = '';
@@ -106,7 +106,7 @@ export class layerStyle {
     public static parseLonLatTxt (data : string, lo : Layer) {
         if (!data) {
             console.log("parseLonLatTxt received empty data.");
-            return;
+            return; 
         }
         let arr = data.split("\n");
         let temp = [];
@@ -673,15 +673,7 @@ export class layerStyle {
     }
 
     public static _supportPersistentLayer_select (feature : Feature, resolution: number) : Style | null {
-        let field = "owner";
-        let category = feature.get('category');
-        if (category == 'gas_flares') {
-            field = "id";
-        }
-        if (category == 'power_plants') {
-            field = "name";
-        }
-        return layerStyle.getLayerSymbol(feature, resolution, field, true, [-10,30]);
+        return layerStyle.getLayerSymbol(feature, resolution, "id", true, [-10,30]);
     }
    
     public static _supportPersistentLayers_info (feature : Feature) : string {
@@ -797,12 +789,11 @@ export class layerStyle {
         `;
     }
 
-    public static eisColors(diff : number) : string {
+    public static eisColors(diff : number, range : number) : string {
 //        let colors = ["#78281F11", "#4A235A11", "#15436011", "#0B534511", "#186A3B11", "#7E510911", "#62656711", "#42494911", "#1B263111", "#00000011"];
         let colors = ["#ff3333", "#fff534", "#62ba35"];
-        let cols = colorPaletteArray.generate(colors, props.time.range + 1);
-        let p = props.time.range;
-        let d = diff -1;
+        let cols = colorPaletteArray.generate(colors, range + 1);
+        let d = diff;
         if (d >= cols.length) {
             d = cols.length;
         } 
@@ -810,17 +801,22 @@ export class layerStyle {
     }
 
     public static _firePerimeterEIS ( feature : Feature, resolution: number) : Style | null {
-        console.log(feature);
         let key = "perimeter-eis";
         let flag = "default";
         let p = feature.getProperties();
-        let at = p.t.split(' ');
-        let t = flatpickr.parseDate(at[0], 'Y-m-d');
-        let color = "#00000055";
-        if (t) {
-            let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
-            flag = "color" + diff + '-' + props.time.range;
-            color = layerStyle.eisColors(diff);
+        let color = "rgb(220,220,220)";
+        let ext = mapUtils.getMapExtent();
+        let z = 0; 
+        if (ext) { z = ext[2];}
+        if (z > 8) {
+            let eis_rec = eisData.getRecord(p['_lid'], p['fireid']);
+            if (eis_rec.ready) {
+                //let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
+                let index = Math.floor(p.duration);
+                let duration = Math.floor(eis_rec.duration)
+                flag = "color" + index + '-' + duration;
+                color = layerStyle.eisColors(index, duration);
+            }
         }
         
         if (!layerStyle.symbols[key]) {
@@ -847,13 +843,24 @@ export class layerStyle {
         let duration = feature.get('duration');
         let fireid = feature.get('fireid');
         let date = feature.get('t');
+        let eis_rec = eisData.getRecord(feature.get('_lid'), feature.get('fireid'));
+        let post_duration = '';
+        let range = '';
+        if (eis_rec.ready) {
+            post_duration = ` / ${eis_rec.duration}`;
+            range = `                    
+                <tr><td colspan="2">Range</td></tr>
+                <tr><td colspan="2">${eis_rec.start_date} - ${eis_rec.end_date}</td></tr>
+            `;
+        }
         return `
             <span class="faLbl">EIS Fire Perimeter</span><br/>
             <div class="faSize">
                 <table>
                     <tr><td>Fire ID</td><td>${fireid}</td></tr>
-                    <tr><td>Duration</td><td>${duration}</td></tr>
+                    <tr><td>Duration</td><td>${duration}${post_duration}</td></tr>
                     <tr><td>Date</td><td>${date}</td></tr>
+                    ${range}
                 </table>
             </div>
         `;
@@ -991,7 +998,6 @@ export class layerStyle {
     
     public static populateSymbols (id : string) {
         if (props && props.config && props.config.symbols) {
-            console.log("Check populate Symbols");
             for (let i = 0; i < props.config.symbols.length; i++) {
                 let sym = props.config.symbols[i];
                 if (sym.id == id) {

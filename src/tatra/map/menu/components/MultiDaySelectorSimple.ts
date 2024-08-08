@@ -207,7 +207,8 @@ export class MultiDaySelectorSimple extends Module {
 		mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, 'Y-m-d'));
 		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
 		let str = flatpickr.formatDate(props.time.date, 'Y-m-d');
-		mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + str).toUpperCase());
+		let range = ` (${utils.getSelectText('mdsDateRange')})`; 
+		mapUtils.setInfoLabel((prefix + str + range).toUpperCase(), (prefix + str + range).toUpperCase());
 	}
 
 	public timelineBtnClick (evt : CustomEvent) {}
