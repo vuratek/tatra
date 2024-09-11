@@ -116,13 +116,13 @@ export class basePicker {
         for (let i=0; i<options.length; i++) {
             if (custom) {
                 if (custom < options[i]) {
-                    select += `<option value="m${custom.toString()}">${utils.getMinHourValue(custom)}</option>`;
+                    select += `<option value="m${custom.toString()}">${utils.getMinHourValue(custom)} (HH:MM)</option>`;
                     custom = null;
                 } else if (custom == options[i]) {
                     custom = null;
                 }
             }
-            select += `<option value="m${options[i].toString()}">${utils.getMinHourValue(options[i])}</option>`;
+            select += `<option value="m${options[i].toString()}">${utils.getMinHourValue(options[i])} (HH:MM)</option>`;
         }
         return select;
     }

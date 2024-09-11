@@ -54,6 +54,12 @@ export class postLoad {
             }
         }
     }
+    public static updateUrlRedirect(url:string) : string {
+        if (window.URL_REDIRECT && window.URL_REDIRECT != '' && window.URL_REDIRECT != '#URL_REDIRECT#') {
+            url = window.URL_REDIRECT + url;
+        }
+        return url;
+    }
 
     private static updateBgImage(response:any, el : HTMLDivElement) {
         el.style.background = `url('${response}') no-repeat center`;
