@@ -72,7 +72,7 @@ export class animationUtils {
             zoom = 4;
         }
         this.savedSettings = {center : center, time : time, zoom : zoom};
-        console.log("Saved", this.savedSettings);
+        //console.log("Saved", this.savedSettings);
     }
 
     // restore map viewer to original state
@@ -212,7 +212,7 @@ export class animationUtils {
             utils.addClass('anim_btn-sub-daily', 'active');
             utils.removeClass('anim_btn-daily', 'active');
         }
-        console.log(this.getStartDate(props.time.date,"From"), props.time.date);
+        //console.log(this.getStartDate(props.time.date,"From"), props.time.date);
         this.initDatePicker(this.getStartDate(props.time.date, "From"), "From");
         this.initDatePicker(props.time.date, "To");
     }
@@ -244,7 +244,7 @@ export class animationUtils {
             minDate = videoProps.calendarFrom.selectedDates[0];
 //            d = utils.addDay(minDate, videoProps.props.defaultFrames-1);
             d = this.getStartDate(props.time.date, "To")
-            console.log("TO:", minDate, d);
+            //console.log("TO:", minDate, d);
             let maxDate2 = utils.addDay(minDate, videoProps.props.maxFrames-1);
             if (videoProps.renderMode == RENDER_MODE.SUBDAILY) {
                 maxDate = utils.addMinutes(minDate, (videoProps.props.maxFrames-1)*10);
@@ -266,7 +266,7 @@ export class animationUtils {
         if (calendar) {
             calendar.destroy();
         }
-        console.log("default", d);
+        //console.log("default", d);
         calendar = flatpickr("#animation_date" + type, {
             dateFormat : df,
             enableTime : hasTime,

@@ -167,11 +167,12 @@ export class MultiDaySelectorSimple extends Module {
 		if (! obj || (!obj["range"] && !this.isSingle)) { return; }
 		let pastImageryDate = props.time.imageryDate;
         //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-        props.time.imageryDate = obj["single"].start;
+		props.time.imageryDate = obj["single"].start;
 //		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		
 		if (this.isSingle) {
 			props.time.date = props.time.imageryDate;
+			this.calendar.setDate(props.time.date);
 			props.time.range = 0;
 
 		} else {
@@ -207,7 +208,8 @@ export class MultiDaySelectorSimple extends Module {
 		mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, 'Y-m-d'));
 		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
 		let str = flatpickr.formatDate(props.time.date, 'Y-m-d');
-		let range = ` (${utils.getSelectText('mdsDateRange')})`; 
+//		let range = ` (${utils.getSelectText('mdsDateRange')})`; 
+		let range = '';
 		mapUtils.setInfoLabel((prefix + str + range).toUpperCase(), (prefix + str + range).toUpperCase());
 	}
 
