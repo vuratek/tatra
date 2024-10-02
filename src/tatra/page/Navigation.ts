@@ -1,7 +1,7 @@
 import { navProps } from './navProps';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { navConfigDef, NavigationModes, INavConfigMenu } from './navConfigDef';
+import { navConfigDef, NavigationModes, INavConfigMenu, INavConfigMenuItems } from './navConfigDef';
 import { LeftMenu } from '../sideMenu/LeftMenu';
 import { TopMenu } from '../topMenu/TopMenu';
 import { utils } from '../utils';
@@ -112,30 +112,33 @@ export class Navigation {
         }
         if (window.URL_REDIRECT.indexOf('http')>=0) { return; }
         navProps.PREFIX = window.URL_REDIRECT;
-        this.addPrefix(navProps.settings.topMenu);
-        this.addPrefix(navProps.settings.sideMenu);
-        if ( navProps.settings.footer ) {
-            this.addPrefix(navProps.settings.footer);
-        }
+        if (navProps.settings.topMenu) { this.addPrefix(navProps.settings.topMenu); }
+        if (navProps.settings.sideMenu) { this.addPrefix(navProps.settings.sideMenu); }
+        if ( navProps.settings.footer ) { this.addPrefix(navProps.settings.footer); }
         this.setAppPrefix("mainIcon");
         this.setAppPrefix("screenShotIcon");
         this.setAppPrefix("timelineURL");
     }
     private static addPrefix( menu:INavConfigMenu) {
         for (let i=0; i< menu.items.length; i++) {
-            let item = menu.items[i];
-            if (item.url && item.url[0] == '/') {
-                item.url = navProps.PREFIX + item.url;
-            }
+            let item = this.getPrefixUrl(menu.items[i]);
             if (item.subMenu) {
                 for (let j=0; j< item.subMenu.length; j++) {
-                    let sub = item.subMenu[j];
-                    if (sub.url && sub.url[0] == '/') {
-                        sub.url = navProps.PREFIX + sub.url;
+                    let sub = this.getPrefixUrl(item.subMenu[j]);
+                    if (sub.subMenu) {
+                        for (let k=0; k< sub.subMenu.length; k++) {
+                            sub.subMenu[k] = this.getPrefixUrl(sub.subMenu[k]);
+                        }
                     }
                 }
             }
         }
+    }
+    private static getPrefixUrl(item:INavConfigMenuItems) : INavConfigMenuItems {
+        if (item.url && item.url[0] == '/') {
+            item.url = navProps.PREFIX + item.url;
+        }
+        return item;
     }
     private static setAppPrefix( item : string) {
         if (navProps.settings.app[item]) {navProps.settings.app[item] = navProps.PREFIX + navProps.settings.app[item];}

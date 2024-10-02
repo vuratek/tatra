@@ -11,6 +11,7 @@ export interface ITopMenuItemObj {
     icon            : string;
     color?          : string;
     isBreak?        : boolean;
+    isGap?          : boolean;
     iconOnly?       : boolean;
     showOnLoad?     : boolean;
     image?          : string;
@@ -72,7 +73,7 @@ export abstract class TopMenuItem {
         let lcol = document.getElementById("topMenuLColumn") as HTMLDivElement;
         if (lcol) {
             if (item.image) {
-                lcol.style.backgroundImage = `url('${item.image}')`;
+                lcol.style.backgroundImage = `url('${navProps.PREFIX}${item.image}')`;
                 lcol.style.backgroundPosition = "center";
                 lcol.style.backgroundRepeat = "no-repeat";
                 if (item.smallImage && item.smallImage === true) {}
@@ -84,6 +85,7 @@ export abstract class TopMenuItem {
             lcol.innerHTML = descr;
         }
         let rcol = document.getElementById("topMenuRColumn") as HTMLDivElement;
+        let handlers = [];
         if (rcol) {
             let lbl = `<div class="topMenuContentLabel">${item.label}</div>`;
             let options = ''; //style="width:40%;float:left;"
@@ -95,7 +97,21 @@ export abstract class TopMenuItem {
                     extra = `style="width:40%;float:left;"`;
                     continue;
                 }
-                if (sub.url) {
+                if (sub.isGap === true) {
+                    options += `<li id="topbar_${sub.id}">&nbsp;</li>`;
+                    continue;
+                }
+                if (sub.subMenu) {
+                    options += `<li id="topbar_${sub.id}_on" class="subMenu">+ ${sub.label}</li>`;
+                    handlers.push(sub.id);
+                    options += `<li id="topbar_${sub.id}_list"><span class="subMenu" id="topbar_${sub.id}_off">- ${sub.label}</span></br>`;
+                    options += `<ul id="topbar_${sub.id}_grp">`;
+                    for (let k=0; k<sub.subMenu.length; k++) {
+                        let sub2 = sub.subMenu[k];
+                        options += `<li id="topbar_${sub2.id}"><a href="${sub2.url}">${sub2.label}</a></li>`;
+                    }
+                    options += `</ul></li>`;
+                } else if (sub.url) {
                     options += `<li id="topbar_${sub.id}"><a href="${sub.url}">${sub.label}</a></li>`;
                 } else {
                     options += `<li id="topbar_${sub.id}"><span class="topMenuEmptyLabel">${sub.label}</span></li>`;
@@ -103,8 +119,26 @@ export abstract class TopMenuItem {
             }
             options = `<ul ${extra}>${options}</ul>`;
             rcol.innerHTML = lbl + options;
+            if (handlers.length >0) {
+                for (let i=0; i<handlers.length; i++) {
+                    let id = handlers[i];
+                    utils.setClick(`topbar_${id}_on`, ()=>this.manageGroup(id, true));
+                    utils.setClick(`topbar_${id}_off`, ()=>this.manageGroup(id, false));
+                    utils.hide(`topbar_${id}_list`);
+                }
+            }
         }
         document.dispatchEvent(new CustomEvent(authentication.EVENT_AUTHENTICATION_UPDATE));
+    }
+
+    public static manageGroup(id:string, open:boolean) {
+        if (open) {
+            utils.show(`topbar_${id}_list`);
+            utils.hide(`topbar_${id}_on`);
+        } else {
+            utils.show(`topbar_${id}_on`);
+            utils.hide(`topbar_${id}_list`);
+        }
     }
 
     public static renderMin(pEl : HTMLDivElement) {
@@ -182,7 +216,7 @@ export abstract class TopMenuItem {
         for (let i = 0; i<obj.subMenu.length; i++) {
             let item = obj.subMenu[i];
 
-            if (item.isBreak === true) { continue; }
+            if (item.isBreak === true || item.isGap === true) { continue; }
             if (!item.url) {
                 txt += `<li class="header" id="${this.prefix}_${item.id}">${item.label}</li>`;
                 continue;

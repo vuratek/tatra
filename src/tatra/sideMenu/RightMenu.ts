@@ -3,6 +3,7 @@
 import { utils } from '../utils';
 import { RightMenuBar } from './RightMenuBar';
 import { SideMenuCommon } from './SideMenuCommon';
+import { model } from './model';
 
 export class RightMenu {
 
@@ -11,6 +12,7 @@ export class RightMenu {
     
     public static init () {
         utils.addClass("body", "hasMobileMenu", false);
+        SideMenuCommon.initialize(false);
         this.div = 'rightNavBar';
         let wrap = document.getElementById('rightNavBarWrap') as HTMLDivElement;
         wrap.addEventListener("click", () => this.close());

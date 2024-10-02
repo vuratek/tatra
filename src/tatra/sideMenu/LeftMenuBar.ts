@@ -22,11 +22,11 @@ export class LeftMenuBar {
         `;
         for (let i =0 ; i<navProps.settings.sideMenu.items.length; i++) {
             let element = navProps.settings.sideMenu.items[i];
-            SideMenuItem.render('leftNavBarMenu', element, false, true);
+            SideMenuItem.render('leftNavBarMenu', element, false, true, false);
             if (element.subMenu) {
                 for (let j=0; j < element.subMenu.length; j ++) {
                     let subElement = element.subMenu[j];
-                    SideMenuItem.render('leftNavBarMenu', subElement, true, true);
+                    SideMenuItem.render('leftNavBarMenu', subElement, true, true, false);
                 }
             }
         }

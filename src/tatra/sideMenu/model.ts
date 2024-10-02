@@ -11,10 +11,7 @@ export class model {
     public static state         : LEFTBAR_STATE = LEFTBAR_STATE.CLOSED;
 
 
-    public static init () {
-        SideMenuCommon.initialize(true);
-        SideMenuCommon.initialize(false);
-    }
+    public static init () {}
 
     public static close() {
         this.state = LEFTBAR_STATE.CLOSED;

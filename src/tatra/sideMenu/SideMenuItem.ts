@@ -7,7 +7,7 @@ import { authentication } from '../aux/authentication';
 
 export abstract class SideMenuItem {
 
-    public static render (id : string, obj:INavConfigMenuItems, isChild : boolean, isLeft : boolean) {
+    public static render (id : string, obj:INavConfigMenuItems, isChild : boolean, isLeft : boolean, isSubChild : boolean) {
 
         let parent = document.getElementById(id) as HTMLUListElement;
         let title = (obj.title) ? obj.title : "";
@@ -18,15 +18,20 @@ export abstract class SideMenuItem {
         el.setAttribute("id", `sidebar_${myid}`);
         let active = '';
         if (obj.active && obj.active === true) { active = ' active'; }
+        let lblgrp = '';
+        if (! obj.subMenu && ! obj.url) {
+            lblgrp = ' leftNavBarLblGrp';
+        }
         let cls = (isLeft) ? 'leftNavBarMain' : 'rightNavBarMain';
-        if (isChild) { el.setAttribute("class", 'leftNavBarChild' + active ); }
-        else { el.setAttribute("class", cls + active );}
+        let subChild = (isSubChild) ? ' leftNavBarSubChild' : '';
+        if (isChild) { el.setAttribute("class", 'leftNavBarChild' + active + lblgrp + subChild); }
+        else { el.setAttribute("class", cls + active + lblgrp);}
         el.setAttribute("title", title);
 
         let caret = (obj.subMenu) ? `<span id="sidebarCaret_${myid}" class="sidebarCaret"><i class="fas fa-caret-up"></i></span>` : '';
         let external = (obj.external) ? ' <span><i class="fa fa-external-link-alt leftSpacing"></i></span>' : '';
 
-        if (! obj.subMenu) {
+        if (! obj.subMenu && obj.url) {
             parent.appendChild(elA);
             elA.appendChild(el);
         } else {

@@ -7,7 +7,9 @@
     top:0;
     right:2rem;
     display: table-cell;
-
+}
+.blockOverflow {
+    overflow : hidden;
 }
 .isMinMenu .topNavBar {
     right: 0;
@@ -253,10 +255,10 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: #FFF;
+    background: #555;
     z-index: 999;
     display: none;
-    opacity: 0.4;
+    opacity: 0.7;
 }
 .topMenuContentIconClose {
 	position:absolute;
@@ -271,7 +273,13 @@
 }
 #topMenuContent ul {
 	list-style:none;
-	line-height:2.2em;
+	line-height: 3.2rem;
+}
+#topMenuContent ul > li > ul {
+    font-size:1.8rem;
+}
+#topMenuContent .subMenu {
+    color:#d35f0c;
 }
 #topMenuContent ul > li > a {
 	color:#62c2ff
@@ -378,14 +386,16 @@
     font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .topMenuEmptyLabel {
-    color:#ddd;
+    color:#bbb;
+    text-transform: uppercase;
 }
 #topMenuRColumn {
 	position:absolute;
 	left:33%;
 	height:100%;
 	width:67%;
-	padding:2.5rem 5rem;
+    padding:2.5rem 5rem;
+    overflow: auto;
 }
 .topMenuContentLabel {
 	font-size: 3rem;

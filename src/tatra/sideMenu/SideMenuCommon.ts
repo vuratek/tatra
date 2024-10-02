@@ -36,6 +36,13 @@ export class SideMenuCommon {
                 for (let j=0; j < element.subMenu.length; j ++) {
                     let subElement = element.subMenu[j];
                     SideMenuItem.update(subElement, true, element.collapsed as boolean, isLeft);
+                    if (subElement.subMenu) {
+                        SideMenuItem.update(subElement, false, subElement.collapsed as boolean, isLeft);
+                        for (let k=0; k < subElement.subMenu.length; k++) {
+                            let subElement2 = subElement.subMenu[k];
+                            SideMenuItem.update(subElement2, true, subElement.collapsed as boolean, isLeft);
+                        }
+                    }
                 }
             }
         }
@@ -49,10 +56,22 @@ export class SideMenuCommon {
             element.collapsed = true;
             if (element.subMenu) {                
                 for (let j = 0; j < element.subMenu.length; j ++) {
-                    if (element.subMenu[j].url == url ) {
-                        element.subMenu[j].active = true;
+                    let subElement = element.subMenu[j];
+                    if (subElement.url == url ) {
+                        subElement.active = true;
                         element.collapsed = false;
                         break;
+                    }
+                    subElement.collapsed = true;
+                    if (subElement.subMenu) {
+                        for (let k=0; k < subElement.subMenu.length; k++) {
+                            let subElement2 = subElement.subMenu[k];
+                            if (subElement2.url == url ) {
+                                subElement2.active = true;
+                                subElement.collapsed = false;
+                                break;
+                            }
+                        }
                     }
                 }
                 if (element.isOpened) {
