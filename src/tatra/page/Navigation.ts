@@ -202,6 +202,7 @@ export class Navigation {
             str += `
                 <div id="map" class="map"></div>
                 <div id="map3d" class="map3d" style="display:none;"></div>
+                <div id="map3dCtrl" class="map3dCtrl" style="display:none;"></div>
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
                 <div id="lmvKioskWrapper"></div>

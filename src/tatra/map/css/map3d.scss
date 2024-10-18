@@ -1,0 +1,45 @@
+.is3d header {
+    display:none;
+}
+.is3d #lmvMenus {
+    top : 0;
+}
+.is3d .bottomBarMenuItem {
+    background: #3a7f84cc;
+    border: .1rem solid #777;
+}
+.is3d .bottomBarMenuTool:hover, .is3d .bottomBarMenuWind:hover, .is3d .bottomBarMenuItemSelected, .is3d .bottomBarMenuItemSelected:hover {
+    color: #eee;
+    background: #ec6111;
+}
+.is3d .timeline {
+    background:none;
+    box-shadow: 0 0 .2rem .1rem #35b7b3;
+}
+.is3d .vis-time-axis .vis-text {
+    color: #35b7b3;
+}
+.is3d .vis-time-slider-range {
+    background: #35b7b377;
+}
+.is3d .vis-panel.vis-top {
+    border:none;
+}
+.is3d .vis-january div, .is3d .vis-february div, .is3d .vis-march div, .is3d .vis-april div, 
+.is3d .vis-may div, .is3d .vis-june div, .is3d .vis-july div, .is3d .vis-august div, 
+.is3d .vis-september div, .is3d .vis-october div, .is3d .vis-november div, .is3d .vis-december div, 
+.is3d .vis-text.vis-major.vis-even, .is3d .vis-text.vis-major.vis-odd {
+    background: none;
+    color: #35b7b3;
+} 
+.is3d .mapMenuBtns:hover, .is3d #leftNavBarMapResize:hover, .is3d .mapCircleBtn:hover  {
+    color: #eee;
+    background: #418e8b;
+}
+.is3d .mapMenuBtns, .is3d .mapCircleBtn {
+    color: #35b7b3;
+}
+.is3d .timelineRangePicker input, .is3d .timelineRangePicker select {
+    background:none;
+    color: #35b7b3;
+}

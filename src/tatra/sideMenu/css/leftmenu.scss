@@ -28,6 +28,10 @@
 .isMap .leftNavBarSmall {
     height: 5.4rem;
 }
+.is3d .leftNavBarSmall {
+    border-radius: 3rem;
+    top: .5rem;
+}
 .leftNavBarActive {
     width:100%;
     height: 100%;

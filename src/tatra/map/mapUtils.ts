@@ -723,6 +723,7 @@ export class mapUtils {
     }
 
     public static getMapExtent() : Array<number> | null {
+        if (!props.map) { return null; }
         let z = props.map.getView().getZoom();
         let c = props.map.getView().getCenter();
         if (z && c) {

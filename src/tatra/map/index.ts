@@ -13,7 +13,6 @@ import { IConfigDef } from "./defs/ConfigDef";
 import { components } from "./support/components";
 import { layerStyle } from './handlers/layerStyle';
 import { menu } from './menu';
-import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
@@ -87,7 +86,6 @@ export class map {
         props.map.on('rendercomplete', function(e) {
             events.dispatch(events.EVENT_RENDER_COMPLETE);
         });  
-
     }
 
     // in some instances javascript reads json directly, otherwise parse is needed

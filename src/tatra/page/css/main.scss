@@ -146,6 +146,32 @@ body .leftNavBarMenuWrap {
         font-size:9px;
     }
 }
+@media screen and (max-width: 700px), screen and (max-height: 500px) {
+    #lmvInfoBar {
+		padding-left: 0.5rem;
+		padding-top: 0;
+		border:none;
+		text-shadow:0 0 0.5rem #000;
+		background: none;
+		color:#FFF;
+		height: 2rem;
+		margin: 0;
+		left:2.5rem;
+	}
+	#lmvFeatureInfo1 {
+		top: 0;
+		left: 0;
+		padding-top:0;
+	}
+	#lmvFeatureInfo2 {
+		left: 50%;
+		padding-top:0;
+    }
+    .lmvMousePosition {
+		top: 2rem;
+		left: 0;
+	}
+}
 @media screen and (max-width: 550px) {
     #lmvInfoBar {
         width:70%;

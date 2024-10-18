@@ -292,14 +292,14 @@ export class layer {
             if (! f[feature].get("__id")) {
                 f[feature].setProperties({"__id" : f[feature].getId()});
             }
-            if (lo.jsonSubsetHandler) {
-                lo.jsonSubsetHandler(lo, f[feature]);
-            }
 
             f[feature].setId(lo.id + '--' + counter);
             if (lo.icon && lo.icon.indexOf('color:') < 0) {
                 f[feature].setProperties({"_icon" : lo.icon});
                 f[feature].setProperties({"_scale" : lo.jsonIconRatio});
+            }
+            if (lo.jsonSubsetHandler) {
+                lo.jsonSubsetHandler(lo, f[feature]);
             }
             counter ++;
         }

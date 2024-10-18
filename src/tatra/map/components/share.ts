@@ -65,7 +65,7 @@ export class share extends baseComponent {
                     <i title="Facebook" class="fab fa-facebook" aria-hidden="true"></i>
                 </div>
                 <div id="lmvCtrlShare_twitter" class="lmvControls_shareContentBtn">
-                    <i title="Twitter" class="fab fa-twitter" aria-hidden="true"></i>
+                    <i title="Twitter" class="fab fa-x-twitter" aria-hidden="true"></i>
                 </div>
                 <div id="lmvCtrlShare_reddit" class="lmvControls_shareContentBtn">
                     <i title="Reddit" class="fab fa-reddit-alien" aria-hidden="true"></i>

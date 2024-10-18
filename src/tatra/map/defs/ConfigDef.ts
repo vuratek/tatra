@@ -60,6 +60,8 @@ export interface IGroupBreaker {
     opened          : boolean;
     menuDescription? : string;
     highlight?      : string;
+    type?           : string;
+    refLayers       : Array<IMenuModuleLayers> | null;
 }
 
 export interface IDateModuleOptions {

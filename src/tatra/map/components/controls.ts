@@ -179,7 +179,7 @@ export class controls  {
                     if (! item.handler) { item.handler = viewMode;}
                     break;
                 case "view3d" :
-                    if (! item.type) { item.type = ControlTypes.FLAG; }
+                    if (! item.type) { item.type = ControlTypes.HIDDEN; }
                     if (! item.handler) { item.handler = view3d;}
                     break;
                 case "resize": 

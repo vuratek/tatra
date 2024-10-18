@@ -29,6 +29,12 @@
 	position:fixed;
 	background:radial-gradient(#000, #010f35);
 }
+.map3dCtrl {
+	position:fixed;
+	top:0;
+	left:0;
+	height:100%;
+}
 .map_size {
 	width:4096px;
 	height:2048px;
@@ -425,7 +431,7 @@ body::-webkit-scrollbar {
     background: #ec6111;
 }
 .bottomBarBtnLabel {
-	font-size: 2.7rem;
+	font-size: 2.2rem;
 	padding:0.3rem 0 0.1rem 0;
 }
 .bottomBarMenuItem>p {
@@ -689,7 +695,7 @@ body::-webkit-scrollbar {
 		display:none;
 	}
 	.bottomBarBtnLabel {
-		font-size: 2.5rem;
+		font-size: 2.0rem;
 		padding:0.7rem 0 0;
 	}
 	.bottomBarBtnLabelTxt {
@@ -841,36 +847,15 @@ body::-webkit-scrollbar {
 	.ol-locator {
 		top: 12.5rem;
 	}
+	.ol-view3d {
+		top: 16.5rem;
+	}
 	.ol-scale-line {
 		font-size:1rem;
 		height:1.5rem;
 	}
 	.ol-scale-line-inner {
 		margin-top: -0.3rem;
-	}
-	#lmvInfoBar {
-		padding-left: 0.5rem;
-		padding-top: 0;
-		border:none;
-		text-shadow:0 0 0.5rem #000;
-		background: none;
-		color:#FFF;
-		height: 2rem;
-		margin: 0;
-		left:2.5rem;
-	}
-	#lmvFeatureInfo1 {
-		top: 0;
-		left: 0;
-		padding-top:0;
-	}
-	#lmvFeatureInfo2 {
-		left: 50%;
-		padding-top:0;
-	}
-	.lmvMousePosition {
-//		top: 2rem;
-//		left: 0;
 	}
 }
 

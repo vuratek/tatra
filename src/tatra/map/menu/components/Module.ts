@@ -363,7 +363,7 @@ export class Module {
     public setLayerLegendField (parentId: string, lo : Layer) {
 		let el = document.getElementById(parentId) as HTMLDivElement;
 		if (! el) { return; }
-		el.innerHTML =`<i class="fa fa-th-list" aria-hidden="true"></i>`;
+		el.innerHTML =`<i class="fa fa-list" aria-hidden="true"></i>`;
 		let info = (lo.info) ? lo.info : lo.id;
 		utils.setClick(parentId, () => events.legendClicked(info));
     }

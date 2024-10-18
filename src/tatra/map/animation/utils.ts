@@ -312,7 +312,7 @@ export class animationUtils {
         base.appendChild(el);
         el.innerHTML = `
             <div id="videoFramesList_cmd_ctrl" class="vidFrameCtrlPanel">
-                <div id="vidFrameChkAll" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+                <div id="vidFrameChkAll" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div>
                 <div class="vidFrameChkAll-lbl">Select All</div>
                 <div id="vidFrame-reload-all" class="vidFrameCtlrPanelBtn"><span><i class="fa fa-redo"></i></span> Reload</div>
                 <div id="vidFrame-remove-all" class="vidFrameCtlrPanelBtn"><span><i class="fa fa-trash"></i></span> Delete</div>

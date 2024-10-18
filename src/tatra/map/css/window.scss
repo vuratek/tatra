@@ -213,6 +213,9 @@
 .fmmSupportIcons:hover {
 	position: relative;
 }
+.fmmSupportIcons2:hover {
+	position:absolute;
+}
 .fmmSupportIcons:hover::after, .lmvControlsLayerInfoBtns:hover::after, .fmm_ba_opacity:hover::after, .fmm_ba_opacity2:hover::after,
 .navGCInfo:hover::after,.navGCCtrl:hover::after, .fmmSupportIcons:hover::after, .mapMenuIcons #mapGraduationCap:hover::after, 
 .fmmGroupBreakerCtrl_info:hover::after, .fire_option_opacity:hover::after {
@@ -270,7 +273,7 @@
 	top: 0.3rem;
 }
 .layerMenuLegend {
-	width:100%;
+	width:96%;
 	position:relative;
 	height:1.8rem;
 /*	padding:0.2rem 1rem;*/ 
@@ -533,6 +536,9 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	overflow: hidden;
 	padding: 1rem 0 0.5rem 0;
 	line-height: 1.5rem;
+}
+.lmvControlsWindowContent {
+	max-height: none;
 }
 #lmvControls_time_info_Content {
 	overflow:auto;

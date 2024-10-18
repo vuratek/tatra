@@ -4,12 +4,12 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'*/
 
 import { faComments, faBookmark, faEnvelopeOpen, faSquare as faSquareEmpty, faEye } from '@fortawesome/free-regular-svg-icons';
-import { faRedditAlien, faTwitter, faFacebook, faGripfire } from '@fortawesome/free-brands-svg-icons';
+import { faRedditAlien, faXTwitter, faFacebook, faGripfire } from '@fortawesome/free-brands-svg-icons';
 import { faHome, faUserCircle, faSearch, faSearchPlus, faFastBackward, faFastForward, faStepBackward, faStepForward, faUpload,
         faCaretLeft, faCaretUp, faExternalLinkAlt, faBars, faTimes, faPlusCircle, faMinusCircle, faInfoCircle, faHandPaper,
         faMapMarkerAlt, faRuler, faVectorSquare, faQuestion, faClone, faSlidersH, faShareAlt, faCamera, faAdjust, faCheck,
         faCompressArrowsAlt, faExpandArrowsAlt, faMinus, faPlus, faArrowCircleLeft, faRulerHorizontal, faTrash, faCrosshairs,
-        faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faCheckSquare,
+        faGlobe, faFireFlameCurved, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faCheckSquare,
         faListOl, faDatabase, faFile, faMicrochip, faSun, faAlignLeft, faAngleRight, faAngleLeft, faDownload, faBlog, faQuoteRight,
         faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faExclamationTriangle, faCodeBranch, faLayerGroup,
         faChevronCircleRight, faFileCsv, faFileAlt, faFileCode, faLeaf, faThList, faEllipsisV, faPause, faPlay, faStop, faCloud, faAngleDoubleDown,
@@ -35,11 +35,11 @@ export class fontAwesome {
             faTimesCircle, faFlag, faTh, faCircle, faEdit, faPencilAlt, faEnvelope, faThList, faDrawPolygon, faImage, faCrosshairs,
             faCog, faSync);
         // corporate icons    
-        library.add(faRedditAlien, faTwitter, faFacebook);
+        library.add(faRedditAlien, faXTwitter, faFacebook);
         // timeline 
         library.add(faFastBackward, faFastForward, faStepBackward, faStepForward, faClock);
         // firms
-        library.add(faGlobe, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog, faQuoteRight,
+        library.add(faGlobe, faFireFlameCurved, faFire, faBell, faArchive, faDesktop, faBook, faCube, faMap, faCalendarAlt, faCalendarMinus, faBlog, faQuoteRight,
             faExclamationTriangle, faLeaf, faBookmark, faEnvelopeOpen, faCodeBranch, faMapMarkedAlt, faPowerOff, faCloud, faTv, faTabletAlt);
         // swaths
         library.add(faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faCaretDown);

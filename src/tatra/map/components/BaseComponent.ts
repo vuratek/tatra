@@ -117,6 +117,9 @@ export class baseComponent {
     public static defaultPosition(isTool : boolean = false) {
         let offsetY = 350;
         let ctrl = (this.isWithinModal) ? 'modalWrap' : 'map';
+        if (props.is3DMode) {
+            ctrl = 'map3d';
+        }
         let mh = (document.getElementById(ctrl) as HTMLDivElement).clientHeight;
         let mw = (document.getElementById(ctrl) as HTMLDivElement).clientWidth;
         let el = document.getElementById(`lmvControls_${this.id}`) as HTMLDivElement;

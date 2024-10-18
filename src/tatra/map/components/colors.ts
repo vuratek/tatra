@@ -62,9 +62,8 @@ export class colors extends baseComponent {
 	    let _w = window.innerWidth;
 	    let left = _w - 480 - 300;
 	    if (left < 0) { left = 0; }
-	    let top = 35;
-	    if (_h - 500 < 0) { top = 0; }
-		else if (_h > 700) { top = 100;}
+	    let top = 0;
+		if (_h > 700) { top = 100;}
 		this.position(left, top);
 		this.openColorPicker();
 	}

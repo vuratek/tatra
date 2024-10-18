@@ -85,15 +85,15 @@ export class animation extends baseComponent {
                 <div id="videoAddons">
                     <table>
                         <tr>
-                            <td id="td_vaIntro"><div id="videoAddonsIntro" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Intro</span></td>
-                            <td id="td_vaTopBanner"><div id="videoAddonsTopBanner" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Top Label</span></td>
+                            <td id="td_vaIntro"><div id="videoAddonsIntro" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div><span>Intro</span></td>
+                            <td id="td_vaTopBanner"><div id="videoAddonsTopBanner" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div><span>Top Label</span></td>
                         </tr>
                         <tr>
-                            <td id="td_vaCredits"><div id="videoAddonsCredits" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Credits</span></td>
-                            <td id="td_vaLogo"><div id="videoAddonsLogo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Bottom Logo</span></td>
+                            <td id="td_vaCredits"><div id="videoAddonsCredits" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div><span>Credits</span></td>
+                            <td id="td_vaLogo"><div id="videoAddonsLogo" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div><span>Bottom Logo</span></td>
                         </tr>
                         <tr>
-                            <td id="td_vaInfo"><div id="videoAddonsInfo" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div><span>Data Info</span></td>
+                            <td id="td_vaInfo"><div id="videoAddonsInfo" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div><span>Data Info</span></td>
                             <td>&nbsp;</td>
                         </tr>
                     </table>

@@ -54,7 +54,7 @@ export class animationFrames {
                     </div>
                 </div>
                 <div class="vfl_info_state" id="vfl_state_${i.toString()}"></div>
-                <div id="vfl_chk-${i.toString()}" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+                <div id="vfl_chk-${i.toString()}" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div>
             `;
             let can = document.getElementById(fid) as HTMLCanvasElement;
             can.width = w;

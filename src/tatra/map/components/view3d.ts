@@ -4,16 +4,17 @@ import { controls } from "./controls";
 import { props } from "../props";
 import { library } from '../../library';
 import { events as vv_events } from 'vuravura/control/events';
-import { props as vv_props } from 'vuravura/control/props';
+import { props as vv_props, DISPLAY_TYPE } from 'vuravura/control/props';
 import { utils } from "../../utils";
 import { events } from "../events";
 import "vuravura/css/vv.scss";
 import { imageUtils } from "../imageUtils";
+import { View3d } from "../mapTools/View3d";
 
 export class view3d extends baseComponent {
     public static id		    : string = 'view3d';
     public static clandestine   : boolean = true;
-//    public static tool          : View3d = new View3d(view3d.id);
+    public static tool          : View3d = new View3d(view3d.id);
 
     private static zoom : number | undefined = undefined;
     private static center : Array<number> | undefined = undefined;
@@ -21,9 +22,10 @@ export class view3d extends baseComponent {
     private static isActive : boolean = false;
 
     public static init() {
-//        tools.register(this.tool);
+        tools.register(this.tool);
+        this.renderControls();
         super.init();
-        //props.map.addControl(this.tool.control);
+        props.map.addControl(this.tool.control);
         document.addEventListener(vv_events.VV_LOADED, (evt) => this.initVV(evt as CustomEvent));
         document.addEventListener(events.EVENT_RENDER_COMPLETE, (evt) => this.updateTexture());
     }
@@ -32,12 +34,13 @@ export class view3d extends baseComponent {
         this.setIgnoreResize(false);
         super.open();
 //        tools.activate(this.id);
-        controls.set3dMode(true);
+        //controls.set3dMode(true);
         this.isActive = true;
         this.setViewMode();
         this.loadLibrary();
         this.initVV(null);
     }
+
     private static loadLibrary() {
         if (vv_props.engine) { return; }
         if (! this.loading) {
@@ -59,6 +62,7 @@ export class view3d extends baseComponent {
     }
     public static close() {
         this.isActive = false;
+        props.is3DMode = false;
         if (vv_props.engine) {
             vv_props.engine.stop();
         }
@@ -82,14 +86,18 @@ export class view3d extends baseComponent {
     
             map.style.visibility = "hidden";
             utils.show('map3d');
+            utils.addClass('html', 'is3d', false);
             utils.hide('lmvInfoBar');
+            utils.show('map3dCtrl');
             events.dispatch(events.EVENT_VIEW3D);
 
         } else {
             utils.hide('map3d');
             utils.removeClass('map', 'map_size');
+            utils.removeClass('html', 'is3d', false);
             props.map.updateSize();
             utils.show('lmvInfoBar');
+            utils.hide('map3dCtrl');
             map.style.visibility = "visible";
             if (this.zoom) {
                 props.map.getView().setZoom(this.zoom);
@@ -101,18 +109,42 @@ export class view3d extends baseComponent {
         }
     }
     public static initVV(evt : CustomEvent | null) {
+        if (evt && evt.detail && evt.detail.engine) {
+            vv_props.engine = evt.detail.engine;
+            vv_props.loaded = evt.detail.loaded;
+        }
         if (vv_props.loaded && vv_props.engine && this.isActive) {
+            props.is3DMode = true;
             vv_props.engine.init('map3d');
             vv_props.engine.start();
+            this.renderControls();
         }
     }
     public static updateTexture() {
         if (vv_props.engine && this.isActive) {
             let obj = imageUtils.renderScreenshot();
             if (obj && obj.image && obj.context) {
-                vv_props.engine.updateTexture(obj.image, obj.context);
+                vv_props.updateTexture(obj.image, obj.context, 'FIRES ' + Math.round(Math.random() * 100), DISPLAY_TYPE.SINGLE);
+//                vv_props.engine.updateTexture(obj.image, obj.context);
             }
         }
+    }
+
+    private static renderControls() {
+        let str = `
+            <div id="map3dReturn">
+                <i class="fa fa-map fa-lg bottomBarBtnLabel"></i>
+            </div>
+        `;
+        /*let str = `
+            <div id="map3dReturn">
+                <i class="fa fa-map fa-lg bottomBarBtnLabel"></i>
+            </div>
+            <div class="barPannel">
+            </div>
+        `;*/
+        utils.html('map3dCtrl', str);
+        utils.setClick('map3dCtrl', ()=> this.close());
     }
     
 }

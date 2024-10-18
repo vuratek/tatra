@@ -20,7 +20,7 @@ export class viewMode extends baseComponent {
 		let el = document.getElementById(`lmvControls_${this.id}_Content`) as HTMLDivElement;
         if (! el) { return; }
         let str3d = '';
-        if (props.config && props.config.properties.map3DLibrary) {
+/*        if (props.config && props.config.properties.map3DLibrary) {
             str3d = `
                 <div class="lmvControlsLayer lmvVM3D">
                     <div>
@@ -32,7 +32,7 @@ export class viewMode extends baseComponent {
                     </div>
                 </div>
             `;
-        }
+        }*/
         el.innerHTML = `
             <div class="lmvViewMode">
                 <div id="lmvVM_${VIEW_MODES.NORMAL}" class="lmvControlsLayer">

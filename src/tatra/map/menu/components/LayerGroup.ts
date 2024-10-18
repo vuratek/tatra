@@ -182,7 +182,7 @@ export class LayerGroup extends Module {
 				${iconLabel}	
 				<div class="bottomBarSubMenuItemLabel">
 					${lo.title} 
-					<div id="${lo.id}-layerONOFFIcon" class="layerOnOffButton"><i class="fa fa-check aria-hidden="true"></i></div>
+					<div id="${lo.id}-layerONOFFIcon" class="layerOnOffButton"><i class="fa fa-check" aria-hidden="true"></i></div>
 				</div>		
 			</div>
 			${extraBtn}

@@ -27,6 +27,7 @@ export class props  {
     public static version               : string = '1.0.0';
     public static mapMenuOpened         : boolean = false;
     public static viewMode              : VIEW_MODES = VIEW_MODES.NORMAL; 
+    public static is3DMode              : boolean = false;
     public static identifyEnabled       : boolean = true;       // kiosk mode may not allow identify
     
     public static layers                : Array <Layer> = [];
