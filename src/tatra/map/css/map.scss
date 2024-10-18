@@ -658,6 +658,13 @@ body::-webkit-scrollbar {
 	width: 5rem;
 	height:4.2rem;
 }
+@media screen and (max-width: 1440px) {
+	.map_size {
+		width:2048px;
+		height:1024px;
+	}
+	
+}
 @media screen and (max-width: 1180px) {
 	#mapControlBar {
 		left:15%;

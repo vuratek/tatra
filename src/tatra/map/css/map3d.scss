@@ -43,3 +43,12 @@
     background:none;
     color: #35b7b3;
 }
+.is3d #map3dLoader {
+    position: fixed;
+    margin: 45vh auto;
+    width: 100%;
+}
+#map3dLoader .loading-label {
+    color: #35b7b3;
+    font-size: 2.1rem;
+}

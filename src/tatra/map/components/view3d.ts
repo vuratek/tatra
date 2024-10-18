@@ -23,7 +23,7 @@ export class view3d extends baseComponent {
 
     public static init() {
         tools.register(this.tool);
-        this.renderControls();
+        this.renderControls(true);
         super.init();
         props.map.addControl(this.tool.control);
         document.addEventListener(vv_events.VV_LOADED, (evt) => this.initVV(evt as CustomEvent));
@@ -117,25 +117,37 @@ export class view3d extends baseComponent {
             props.is3DMode = true;
             vv_props.engine.init('map3d');
             vv_props.engine.start();
-            this.renderControls();
+            this.renderControls(false);
         }
     }
     public static updateTexture() {
         if (vv_props.engine && this.isActive) {
             let obj = imageUtils.renderScreenshot();
             if (obj && obj.image && obj.context) {
-                vv_props.updateTexture(obj.image, obj.context, 'FIRES ' + Math.round(Math.random() * 100), DISPLAY_TYPE.SINGLE);
+                vv_props.engine.updateTexture(obj.image, obj.context, 'FIRES ' + Math.round(Math.random() * 100), DISPLAY_TYPE.SINGLE);
 //                vv_props.engine.updateTexture(obj.image, obj.context);
             }
         }
     }
 
-    private static renderControls() {
+    private static renderControls(hasLoader:boolean) {
         let str = `
             <div id="map3dReturn">
                 <i class="fa fa-map fa-lg bottomBarBtnLabel"></i>
             </div>
         `;
+        if (hasLoader) {
+            str += `
+                <div id="map3dLoader">
+                    <div class="dot-wrap">
+                        <div class="dot-position">
+                            <div class="dot-flashing"></div>
+                            <div class="loading-label">loading</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
         /*let str = `
             <div id="map3dReturn">
                 <i class="fa fa-map fa-lg bottomBarBtnLabel"></i>
