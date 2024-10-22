@@ -23,8 +23,6 @@ export class View3d extends BaseTool {
             element: el
         });
         btn.addEventListener("click", ()=> this.onClick());
-        this.isVisible = false;
-        this.showButton();
         this.mapExtentHandler();
         document.addEventListener(events.EVENT_MAP_EXTENT_CHANGE, ()=>this.mapExtentHandler());
     }
@@ -36,25 +34,24 @@ export class View3d extends BaseTool {
     
     private mapExtentHandler() {
         let info = mapUtils.getMapExtent();
+        if (! info) { return; }
         // only set this for Global map
         let show = false; 
         if (info && info[2] < 4.0) {
             show = true;
-        } else {
-            show = false;
         }
-        if (show != this.isVisible) {
-            this.isVisible = show;
-            this.showButton();
-        }
+        this.showButton(show);
     }
-    private showButton() {
-        let el = document.querySelector('.ol-view3d') as HTMLDivElement;
+    private showButton(show : boolean) {
+        let el = document.querySelector('#map .ol-view3d') as HTMLDivElement;
         if (el) {
-            if (this.isVisible) {
-                el.style.display = 'block';
-            } else {
-                el.style.display = 'none';
+            if (this.isVisible != show) {
+                this.isVisible = show;
+                if (this.isVisible) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
             }
         }
     }

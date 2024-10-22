@@ -28,12 +28,16 @@ export class mapEvent {
 
     private static checkSize() {
         if (props.is3DMode) {
-            let z = mapUtils.getMapExtent()[2];
-            let w = props.map.getSize()[0];
-            if (w == 1024 && z != 2) {
-                props.map.getView().setZoom(2);
-            } else if (w == 2048 && z != 3) {
-                props.map.getView().setZoom(3);
+            let ext = mapUtils.getMapExtent();
+            let size = props.map.getSize();
+            if (ext && size) {
+                let z = ext[2];
+                let w = size[0];
+                if (w == 1024 && z != 2) {
+                    props.map.getView().setZoom(2);
+                } else if (w == 2048 && z != 3) {
+                    props.map.getView().setZoom(3);
+                }
             }
         }
     }
