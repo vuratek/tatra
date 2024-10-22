@@ -737,6 +737,10 @@ body::-webkit-scrollbar {
 		font-size:1.4rem;
 		margin-top:0;
 	}	
+	.map_size {
+		width:1024px;
+		height:512px;
+	}
 }
 
 @media screen and (max-width: 700px), screen and (max-height: 500px) {

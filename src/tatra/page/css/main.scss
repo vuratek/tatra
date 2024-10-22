@@ -170,7 +170,12 @@ body .leftNavBarMenuWrap {
     .lmvMousePosition {
 		top: 2rem;
 		left: 0;
-	}
+    }
+    #feedback-container {
+        overflow: auto;
+        height: 100%;
+        width: 100%;
+    }
 }
 @media screen and (max-width: 550px) {
     #lmvInfoBar {

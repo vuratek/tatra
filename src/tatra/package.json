@@ -1,6 +1,6 @@
 {
   "name": "tatra",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Transcending Application Tool for Research and Analysis",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -34,7 +34,7 @@
     "nouislider": "^15.8.1",
     "ol": "^10.2.1",
     "ol-mapbox-style": "^12.3.5",
-    "vuravura": "^1.1.0"
+    "vuravura": "^1.1.1"
   },
   "devDependencies": {
     "cssnano": "^7.0.6",

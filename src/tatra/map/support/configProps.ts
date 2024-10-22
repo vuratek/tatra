@@ -21,7 +21,7 @@ export class configProps {
     public static maxZoom               : number = 10;
     public static measureAreaUnits      : UNITS = UNITS.KM;
     public static measureDistanceUnits  : UNITS = UNITS.KM;
-    public static minZoom               : number = 2;
+    public static minZoom               : number = 1;
     public static showLocation          : boolean = false;
     public static tab                   : string | null = null;
     public static zoom                  : number = 3;

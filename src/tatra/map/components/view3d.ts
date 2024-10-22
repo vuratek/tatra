@@ -82,7 +82,7 @@ export class view3d extends baseComponent {
                 this.center = props.map.getView().getCenter();
             }
             props.map.getView().setCenter([0,0]);
-            props.map.getView().setZoom(3);
+            props.map.getView().setZoom(1);
     
             map.style.visibility = "hidden";
             utils.show('map3d');
@@ -118,6 +118,7 @@ export class view3d extends baseComponent {
             vv_props.engine.init('map3d');
             vv_props.engine.start();
             this.renderControls(false);
+//            this.updateTexture();
         }
     }
     public static updateTexture() {
