@@ -237,7 +237,7 @@
 }
 #topMenuContentWrap {
 	position:absolute;
-	top:5.5rem;
+	top:6.6rem;
 	left:0;
 	right:0;
 	min-height:42rem;
@@ -248,6 +248,9 @@
 	display:none;
     font-size:1.2em;
     cursor: default;
+}
+.isMap #topMenuContentWrap {
+    top:5.5rem;
 }
 .topMenuCloak {
     position: fixed;

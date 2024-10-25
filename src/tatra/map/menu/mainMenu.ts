@@ -52,6 +52,7 @@ export class mainMenu {
         document.addEventListener(events.EVENT_MENU_CLOSE, ()=> this.closeMenu());
         if (cfg.menuOptions.length < 2){
             utils.hide('mapMenuOptionBar');
+            utils.addClass('mapMenuTitle', 'mapMenuTitleOne');
         }
     }
 
