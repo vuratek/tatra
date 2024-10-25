@@ -2,10 +2,12 @@ import { configProps } from "../support/configProps";
 import { Layer } from "../obj/Layer";
 import { Tool } from "../obj/Tool";
 import { Module } from "../menu/components/Module";
+import { ISymbolsStyles } from "../handlers/layerStyle";
 
 export interface IConfigDef {
     components          : IComponents;
     modules             : Array <IMenuModule> | null;
+    symbols             : ISymbolsStyles;
     layers              : Array <Layer>;
     mapControls         : IMapControls;
     menuOptions         : Array <IMenuOption> | null;
@@ -58,6 +60,8 @@ export interface IGroupBreaker {
     opened          : boolean;
     menuDescription? : string;
     highlight?      : string;
+    type?           : string;
+    refLayers       : Array<IMenuModuleLayers> | null;
 }
 
 export interface IDateModuleOptions {

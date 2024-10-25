@@ -11,6 +11,9 @@ import { time_info, tio } from "../features/time_info";
 import { hash } from "../../hash";
 import { hashHandler } from "../hashHandler";
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
+import { Instance } from "flatpickr/dist/types/instance";
+import { navProps } from "../../../page/navProps";
+import { mapUtils } from "../../mapUtils";
 
 export class MultiDayTimeSelector extends Module {
 
@@ -32,7 +35,9 @@ export class MultiDayTimeSelector extends Module {
         super.render(par);
 
         let dates = hash.getDates();
-        hashHandler.processDateTime(dates);		
+        if (dates) {
+            hashHandler.processDateTime(dates);		
+        }
         this.lastRangeDays = props.time.range;
         
         controls.createControlItem('time_info', time_info);
@@ -121,6 +126,9 @@ export class MultiDayTimeSelector extends Module {
             this.onDailySubDaily('daily');
         }
         document.dispatchEvent(new CustomEvent(events.EVENT_MENU_RESIZE));
+    }
+    public isSubDaily() : boolean {
+        return true;
     }
     public onDailySubDaily(option:string) {
         if (this.currentDayMode == option) { return; }
@@ -319,12 +327,13 @@ export class MultiDayTimeSelector extends Module {
 		let option = this;
 		if (this.calendar) {
 			this.calendar.destroy();
-		}
+        }
+        let [minDate, maxDate] = utils.getTimelineDateRange();
         this.calendar = flatpickr("#mds_date", {
             dateFormat : this.df,
             defaultDate : d,
-            minDate : new Date(2000,11-1, 11),
-            maxDate : utils.getGMTTime(new Date()),
+            minDate : minDate,
+            maxDate : maxDate,
             onChange : function () {
                 option.setDates();
             }
@@ -464,14 +473,26 @@ export class MultiDayTimeSelector extends Module {
         if (pastImageryDate != props.time.imageryDate) {
             _refresh = true;
         }
+        this.updateInfoLabel();
 		if (!_refresh) {
             return;
         }
         this.setQuickLinks();
-		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+        events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+
     }
     private displayTimeInfoDetail() {
 		controls.activateControlItem('time_info');
         time_info.open();
+    }
+
+    public updateInfoLabel() {
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+        let range = (this.currentDayMode == 'daily') ? utils.getSelectText('mdsDateRange') : utils.getSelectValue('mdsSubDateRange').replace('m','') + ' mins';
+        let format = (props.time.rangeMins > 0) ? 'Y-m-d H:i' : 'Y-m-d';
+        let t = flatpickr.formatDate(props.time.date, format);
+        let str = `${t} (${range})`;
+        mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + range).toUpperCase());
+        mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, format));
 	}
 }

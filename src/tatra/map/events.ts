@@ -13,6 +13,9 @@ export class events {
     public static readonly EVENT_HASH_UPDATE            : string = "hash_update";
     public static readonly EVENT_EXTERNAL_HASH_UPDATE   : string = "external_hash_update";  // user altered hash
     public static readonly EVENT_INFO_CLICK             : string = "info_click";
+    public static readonly EVENT_KIOSK_EXIT             : string = "kiosk_exit";
+    public static readonly EVENT_KIOSK_LEGEND           : string = "kiosk_legend";
+    public static readonly EVENT_LABEL_UPDATE           : string = "label_update";
     public static readonly EVENT_LAYER_DATE_UPDATE      : string = "layerDateUpdate";
     public static readonly EVENT_LAYER_HIDDEN           : string = "layerHidden";
     public static readonly EVENT_LAYER_RANGE_UPDATE     : string = "layerRangeUpdate";
@@ -33,6 +36,7 @@ export class events {
     public static readonly EVENT_SYSTEM_DATE_UPDATE     : string = "system_date_update";
     public static readonly EVENT_TOOL_RESULT_UPDATE     : string = "tool_result_update";
     public static readonly EVENT_UI_LAYER_UPDATE        : string = "ui_layer_update"; 
+    public static readonly EVENT_VIDEO_FRAME_LOADED     : string = "video_frame_loaded";
     public static readonly EVENT_VIEW2D                 : string = "view2d"; 
     public static readonly EVENT_VIEW3D                 : string = "view3d"; 
     
@@ -129,7 +133,7 @@ export class events {
             },
         }));
     }
-        
+
     public static selectionUpdate (id: string, internal : boolean = false) {
         document.dispatchEvent(new CustomEvent(events.EVENT_SELECTION_UPDATE, {
             detail: {

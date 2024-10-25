@@ -1,5 +1,5 @@
 import { library } from "../library";
-import { Timeline } from "./Timeline";
+import { Timeline } from "./Timeline2";
 import { navProps } from "../page/navProps";
 
 export class loadHandler {

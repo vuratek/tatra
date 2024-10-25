@@ -209,18 +209,7 @@ export class support_layers extends baseComponent{
 //			let cl = 'bottomBarSubMenuItemLabel';	
 		let long = (lo.iconLabel && lo.iconLabel.length > 5) ? 'lmvControlsIconLabelLong' : '';
 		let iconLabel = (lo.iconLabel) ? `<div class="lmvControlsIconLabel ${long}">${lo.iconLabel}</div>` : '';
-		let iconStyle = (lo.iconHasBorder) ? '' : ' style="border:none;"';
-		let icon = '';
-		if (lo.icon && lo.icon.indexOf('color:') == 0) {
-			let color = lo.icon.replace('color:', '');
-			icon =`<div class="lmControlsIconDiv" style="background: ${color}"></div>`;
-		} else if (lo.iconMatrix && lo.iconMatrix.length == 2) {
-			let x = lo.iconMatrix[0] * 70 + 9;
-			let y = lo.iconMatrix[1] * 70 + 9;
-			icon = `<div class="lmControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
-		} else {
-			icon = `<img src="${lo.icon}" ${iconStyle}>`;
-		}
+		let icon = mapUtils.renderLayerIcon(lo);
 		let legIcon = '';
 		if (lo.category != "basemap") {
 			if (lo.needsLegendIcon) {
@@ -399,7 +388,7 @@ export class support_layers extends baseComponent{
 	public static setLayerLegendField (parentId: string, lo : Layer) {
 		let el = document.getElementById(parentId) as HTMLDivElement;
 		if (! el) { return; }
-		el.innerHTML =`<i class="fa fa-th-list" aria-hidden="true"></i>`;
+		el.innerHTML =`<i class="fa fa-list" aria-hidden="true"></i>`;
 		let info = (lo.info) ? lo.info : lo.id;
 		utils.setClick(parentId, () => events.legendClicked(info));
 	}
@@ -459,7 +448,7 @@ export class support_layers extends baseComponent{
 				this.setExtraBtn(menu, lo);
                 if (lo.visible) {
 					utils.addClass(el.id, 'lmvControlsLayerSelected');
-					utils.addClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+					utils.addClass(el.id + ` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 					
 					if (el2) {
 						el2.style.display = "block";
@@ -467,7 +456,7 @@ export class support_layers extends baseComponent{
 					
                 } else {
 					utils.removeClass(el.id, 'lmvControlsLayerSelected');
-					utils.removeClass(el.id+' #layerONOFFIcon', 'layerOnOffButtonActive');
+					utils.removeClass(el.id + ` #${lo.id}-layerONOFFIcon`, 'layerOnOffButtonActive');
 					if (el2) {
 						el2.style.display = "none";
 					}

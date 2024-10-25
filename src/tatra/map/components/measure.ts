@@ -7,11 +7,11 @@ import { events } from "../events";
 import { utils } from "../../utils";
 import { GroupContent } from "../../aux/GroupContent";
 import { IMeasure } from "../mapTools/_Measure";
-import { Group } from "ol/layer";
 import { UNITS } from "../mapTools/utils";
 import { Vector } from "ol/source";
 import { controls } from "./controls";
 import { mapUtils } from "../mapUtils";
+import { Feature } from "ol";
 
 export enum TOOLS {
     CLEAR       = 'clear',
@@ -238,7 +238,9 @@ export class measure extends baseComponent {
         if (!lo || !lo._layer) { return; }
         let src = (lo._layer.getSource() as Vector);
         let feature = src.getFeatureById(id);
-        src.removeFeature(feature);
+        if (feature) {
+            src.removeFeature(feature as Feature);
+        }
         let el = document.getElementById(`tooltip_${id}`) as HTMLDivElement;
         if (el && el.parentNode) {
             el.parentNode.removeChild(el);
@@ -257,7 +259,7 @@ export class measure extends baseComponent {
         for (let i = Number(arr[1])+1; i<= max; i++) {
             feature = src.getFeatureById(`${arr[0]}-${i}`);
             if (feature) {
-                feature.setId(`${arr[0]}-${i-1}`);
+                (feature as Feature).setId(`${arr[0]}-${i-1}`);
             }
             el = document.getElementById(`tooltip_${arr[0]}-${i}`) as HTMLDivElement;
             if (el) {

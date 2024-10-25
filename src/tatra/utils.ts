@@ -1,3 +1,6 @@
+import { navProps } from "./page/navProps";
+import flatpickr from "flatpickr";
+
 export class utils {
 
     public static setChange (divId : string, action : any) {
@@ -410,6 +413,50 @@ export class utils {
 			}
 		}
 		return false;
-	}
+    }
+    
+    public static getTimelineDateRange() : Array<Date> {
+        let minDate = utils.sanitizeDate(new Date(2000,11-1, 11));
+        let maxDate = utils.getGMTTime(new Date());
+        if (navProps.settings) {
+            if (navProps.settings.app.timelineMinDate) {
+                let _minDate = flatpickr.parseDate(navProps.settings.app.timelineMinDate, 'Y-m-d');
+                if (_minDate) {
+                    minDate = utils.sanitizeDate(_minDate);
+                }
+            }
+            if (navProps.settings.app.timelineMaxDate) {
+                let _maxDate = flatpickr.parseDate(navProps.settings.app.timelineMaxDate, 'Y-m-d');
+                if (_maxDate) { maxDate = _maxDate; }
+            }
+        } 
+        return [minDate, maxDate];
+    }
 
+    public static getReleaseVersion() : string | null {
+        if (navProps.settings && navProps.settings.app.releaseVersion) {
+            let v = navProps.settings.app.releaseVersion;
+            if (v == '' || v.indexOf('RELEASE_VERSION') >=0) {
+                return 'local';
+            }
+            let arr = v.split('.');
+            if (arr.length > 3) {
+                return arr.slice(0, 3).join('.');
+            }
+            return v;
+        }
+        return null;
+    }
+    
+    public static renderOrbitIcon(direction : string, color : string, ) : string {
+        return `
+            <div class="orbitIcon orbitIcon_${direction}">
+                <div class="orbIcon_line" style="background:${color};">
+                    <div class="orbIcon_circle"></div>
+                    <div class="orbIcon_circle"></div>
+                    <div class="orbIcon_circle"></div>
+                </div>
+            </div>
+        `;
+    }
 }

@@ -1,0 +1,348 @@
+#modal_video {
+    background: #222;
+}
+#modal_video_close {
+    display: none;
+}
+#videoLibraryClose {
+    top:0;
+}
+.anim_btn_load_video {
+    margin: 0.5rem auto;
+    display: block;
+    padding: 0.3rem 1rem;
+    background: #207cb3;
+    color: white;
+    border-radius: 1rem;
+    text-align: center;
+    width: 17rem;
+    cursor: pointer;
+    opacity:0.7;
+}
+.anim_btn_load_video:hover {
+    opacity: 1;
+}
+#anim_btn_view_video {
+    background: #104363;
+}
+.videoFramesList {
+    font-size: 1.4rem;
+    max-height: 50vh;
+    position: relative;
+    min-height: 10rem;
+    overflow: auto;
+}
+#videoLibraryList {
+    margin: 1rem 0 0 0;
+}
+#videoBackgroundLogoHolder {
+    display:none;
+}
+#vidFrameCtrl {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    padding: 0.3rem 0 0;
+    background: rgba(20,20,20,0.5);
+}
+.vidFrameChkAll-lbl {
+    margin-left: 3rem;
+}
+.vidFrameCtrlPanel {
+    position: fixed;
+}
+.vidFrameCtrlSubPanel {
+    margin-left:3rem;
+}
+.vidFrameCtrlSubPanel select {
+    width: 10rem;
+}
+#videoAddons {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+#videoAddons table {
+    background:#068884;
+}
+#videoAddons table td {
+    position: relative;
+    cursor: pointer;
+}
+#videoAddons table tr {
+    background: none;
+}
+#videoAddons table td span {
+    margin-left: 3rem;
+}
+.vidFrameCtlrPanelBtn {
+    margin: 0 0 0 2rem;
+    background: linear-gradient(180deg, white, #505050);
+    margin: 0 0 0 2rem;
+    border-radius: 2rem;
+    padding: 0 1.5rem;
+    color: #222;
+    opacity: 0.8;
+    cursor: pointer;
+}
+.vidFrameCtlrPanelBtn:hover {
+    opacity: 1;
+}
+.vidFrameCtlrPanelBtnDisabled, .vidFrameCtlrPanelBtnDisabled:hover {
+    opacity: 0.4;
+    cursor: default;
+}
+#videoFramesList_cmd_ctrl {
+    color: #eee;
+    text-transform: uppercase;
+    z-index: 20;
+    width: 100%;
+    font-size: 1.2rem;
+    position: relative;
+    min-height: 3.3rem;
+}
+#videoFramesList_cmd_none {
+    text-align: center;
+    padding: 1rem;
+    margin: 0 0 2rem 0;
+}
+.vidFrameCtrlPanel div {
+    display: inline-block;
+    margin-top: 0.3rem;
+}
+#videoLibrary {
+    max-width: 50rem;
+    margin: 1rem auto;
+    border: .1rem solid #777;
+    background: rgba(10,100,100,0.5);
+    position: relative;
+    border-radius: 1rem;
+
+/*    animation-name: example;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;    
+    animation-play-state: running;*/
+
+}
+.vfl_info {
+    position: absolute;
+    top: 1rem;
+    right: .3rem;
+    width:21rem;
+}
+#videoBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom : 0;
+/*    animation-name: example;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;    
+    animation-play-state: running;*/
+}
+@-webkit-keyframes example {
+    0%   {    background: #113938; opacity:0.3;}
+    50%  {    background: red; opacity : 0.1;}
+    75%  {    background:  yellow; opacity:0.2;}
+    100% {    background:  #113938; opacity : 0.3;}
+}
+
+@keyframes example {
+    0%   {    background: #113938; opacity:1.0;}
+    50%  {    background: red; opacity : 0;}
+    75%  {    background:  yellow; opacity:0.5;}
+    100% {    background:  #113938; opacity : 1.0;}
+}
+#videLibraryClose {
+    top:0;
+}
+#videoLibraryTitle {
+    color: #b3c5c4;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+}
+#videoControlsWrap {
+    position:fixed;
+    bottom: 2.5rem;
+    width:100%;
+}
+#videoControlsClose {
+    position: fixed;
+    top:2rem;
+    right:2rem;
+    color:#eee;
+    font-size:2.4rem;
+    border-radius: 3rem;
+    padding: .3rem .5rem;
+    opacity:0.6;
+    cursor: pointer;
+}
+#videoControlsClose:hover {
+    opacity:1;
+}
+#videoControls {
+    background: linear-gradient(0, black, #ddd);
+    opacity: 0.7;
+    border: 0.1rem solid #AAA;
+    border-radius: 3rem;
+    width: 30rem;
+    padding: 1rem;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+#videoStageInfo {
+    position: absolute;
+    top:10px;
+    left:1rem;
+    font-size: 2rem;
+    color:#CCC;
+    font-family: monospace;
+    text-shadow: 1px 1px 1px #333, -1px 1px 1px #333, -1px -1px 0 #333, 1px -1px 0 #333;
+}
+#videoStageLogo {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+.video_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*width:100%;*/
+
+}
+.vcBtn {
+    margin: 0 2rem;
+    font-size: 3.5rem;
+    color: #171717;
+    display:inline-block;
+    cursor: pointer;
+}
+.vcBtn:hover {
+    color: #ce5511;
+}
+.vcBtnSelected, .vcBtnSelected:hover {
+    color:#999;
+}
+#videoLoading {
+    background:linear-gradient(90deg, rgba(0, 0, 0, 0), #058884, #058884, rgba(0, 0, 0, 0));
+    text-transform: uppercase;
+    margin: 2rem 0;
+    color:white;
+    padding:.5rem;
+    text-align: center;
+}
+.videoLaunch {
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: linear-gradient(#fff, #505050);
+    border-radius: 2rem;
+    width: 15rem;
+    margin: 2rem auto;
+    padding: 0;
+    font-size: 1.4rem;
+}
+#videoLaunch3d {
+    display: none;
+}
+.vidFrmList {
+    list-style: none;
+    margin: .7rem 0 0 0;
+    padding: 0;
+}
+.vidFrmList li {
+    padding: 1rem;
+    border-bottom: 0.1rem solid #AAA;
+    position: relative;
+}
+/*.vidFrmList li:last-child {
+    border-bottom: none;
+}*/
+.vidFrmList li canvas {
+    max-width: 25rem;
+    max-height: 25rem;
+}
+.vfl_info_date {
+    font-size: 1.4rem;
+    color:#ddd;
+}
+.vfl_info_state {
+    background: linear-gradient(90deg, transparent, #173c7a, #173c7a, transparent);
+    color: white;
+    text-align: center;
+    position: absolute;
+    margin: 2rem auto;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    height:2.2rem;
+    width: 15rem;
+    top: 2rem;
+    left:5rem;
+}
+.vfl_info_ready {
+    display: none;
+}
+.vfl_info_loading {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0), #058884, #058884, rgba(0, 0, 0, 0));
+}
+.vfl_partition_btn {
+    color: #eee;
+    opacity: .4;
+    background: #333;
+    border-radius: 1rem;
+    font-size: 1rem;
+    position: absolute;
+    padding: 0 .5rem;
+    top: -1rem;
+    right: 1rem;
+    width:7rem;
+    text-align: center;
+    cursor: pointer;
+}
+.vfl_partition_btn:hover {
+    opacity: .9;
+    background: #058884;
+    font-size: 1.2rem;
+}
+.vfl_partition_btn_selected {
+    opacity:1;
+    background: #058884;
+    border:.1rem solid #eee;
+    width:15rem;
+}
+.vfl_partition_btn_selected:hover {
+    opacity:1;
+}
+.vfl_partition_option {
+    width: 12rem;
+    margin: 0 auto .2rem;
+    text-transform: uppercase;
+    text-align: center;
+    background: #444;
+    cursor: pointer;
+}
+.vfl_partition_option:hover {
+    background:#111;
+}
+.vfl_partition_close {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    font-size: 1.8rem;
+    opacity: .5;
+}
+.vfl_partition_close:hover {
+    opacity: 1;
+}
+#vidFrameCtrl {
+    color:#eee;
+}
+#vidFrameCtrl select {
+    margin-right: 1rem;
+}
+#vidFrameCtrl span {
+    margin-right: 1rem;
+}

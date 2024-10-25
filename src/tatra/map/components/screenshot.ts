@@ -5,6 +5,7 @@ import { hash } from "../hash";
 import GIFEncoder from '../../gif-encoder';
 import { writeArrayBuffer } from 'geotiff';
 import { navProps } from "../../page/navProps";
+import { imageUtils } from "../imageUtils";
 export class screenshot extends baseComponent {
 	public static id		: string = 'screenshot';
 	public static label		: string = 'Capture';
@@ -58,33 +59,12 @@ export class screenshot extends baseComponent {
         let showHeader = (document.getElementById(`lmvCtrlBtns_${this.id}_header`) as HTMLInputElement).checked;
         let showTimestamp = (document.getElementById(`lmvCtrlBtns_${this.id}_timestamp`) as HTMLInputElement).checked;
         let showScaleline = (document.getElementById(`lmvCtrlBtns_${this.id}_scalebar`) as HTMLInputElement).checked;
-        let canvases = document.querySelectorAll('.ol-layer canvas');
-        if (canvases.length == 0) {
-            console.log("Error obtaining map canvas");
-            return;
-        }
-        let image = document.createElement('canvas');
-        let size = props.map.getSize();
-        image.width = size[0];
-        image.height = size[1];
-        let context = image.getContext('2d');
-        for (let i=0; i<canvases.length; i++) {
-            let canvas = canvases[i] as HTMLCanvasElement;
-            if (canvas.width > 0) {
-                let opacity = (canvas.parentNode as HTMLElement).style.opacity;
-                context.globalAlpha = opacity === '' ? 1 : Number(opacity);
-                let transform = canvas.style.transform;
-                // Get the transform parameters from the style's transform matrix
-                let matrix = transform
-                  .match(/^matrix\(([^\(]*)\)$/)[1]
-                  .split(',')
-                  .map(Number);
-                // Apply the transform to the export map context
-                CanvasRenderingContext2D.prototype.setTransform.apply(context, matrix);
-                context.drawImage(canvas, 0, 0);
-            }
-        }
-        CanvasRenderingContext2D.prototype.setTransform.apply(context, [1, 0, 0, 1, 0, 0]);
+
+        let iObj = imageUtils.renderScreenshot();
+        if (! iObj || ! props.config || ! iObj.image || !iObj.context) { return; }
+        let image = iObj.image;
+        let context = iObj.context;
+        
         if (showScaleline) { this.drawScaleline(image); }
         if (showTimestamp) { this.addTimestamp(image, (new Date().toString()));}
         if (showHeader) { this.addLogo(image); }

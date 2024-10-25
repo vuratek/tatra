@@ -4,6 +4,7 @@ import { utils } from "../../utils";
 import { mapUtils } from "../mapUtils";
 import { hash } from "../hash";
 import { events } from "../events";
+import { videoProps } from "../animation/props";
 
 export class mainMenu {
 
@@ -184,8 +185,10 @@ export class mainMenu {
             return; 
         }
         if (this.currentTab != '') {
+            events.menuClose(this.currentTab);
             utils.removeClass(`MapMenuItem_${this.currentTab}`, 'selected');
             utils.removeClass(`${this.id}`, `tab_${this.currentTab}`);
+            videoProps.reset();
             for (let key in props.menuModules) {
                 if (props.menuModules[key].props.usePresetLayers) {
                     props.menuModules[key].presetLayers();
@@ -334,6 +337,27 @@ export class mainMenu {
 
     public static getCurrentTab() : string {
         return this.currentTab;
+    }
+
+    // determine if menu supports subdaily option; advanced mode does
+    public static isSubDaily() : boolean {
+        let cfg = (props.config as IConfigDef);
+        if (! cfg || !cfg.menuOptions ) { return false; }
+        for (let i=0; i<cfg.menuOptions.length; i++) {
+            let obj = cfg.menuOptions[i];
+            if (obj.id == this.currentTab) {
+                if (obj.modules) {
+                    for (let j=0; j<obj.modules.length; j++) {
+                        let key = obj.modules[j].id;
+                        let isSubDaily = props.menuModules[key].isSubDaily();
+                        if (isSubDaily) { 
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
     
 }

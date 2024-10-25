@@ -19,6 +19,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Streets",
+		"credit"	: "ESRI",
 		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/cc8072363d614d96b08b2361a09979a5/resources/styles/root.json?f=pjson",
 		"iconMatrix": [0,1],
@@ -29,6 +30,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Blue Marble",
+		"credit"	: "ESRI",
 		"altTitle1"	: "Blue Marble (no clouds)",
 		"iconMatrix": [0,0], 
 		"styleBackground" : "#333",
@@ -44,6 +46,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Firefly",
+		"credit"	: "ESRI",
 		"altTitle1"	: "Altered Blue Marble (no clouds)",
 		"iconMatrix": [0,6], 
 		"styleBackground" : "#000",
@@ -61,6 +64,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Topographic",
+		"credit"	: "ESRI",
 		"iconMatrix": [0,2], 
 		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/670c2a9ee3b949a8991b99df425abd0d/resources/styles/root.json?f=pjson",
@@ -72,6 +76,7 @@
 		"tag"		: "basemap",
 		"category"	: "basemap",
 		"title"		: "Topographic",
+		"credit"	: "ESRI",
 		"parent"	: "topo",
 		"props" 	: {
 			"projection"		: "EPSG:4326",
@@ -85,6 +90,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Dark Gray",
+		"credit"	: "ESRI",
 		"iconMatrix": [0,4], 
 		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/55253142ea534123882314f0d880ddab/resources/styles/root.json?f=pjson",
@@ -95,6 +101,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"parent"	: "dark_gray",
+		"credit"	: "ESRI",
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/b21e69e11f344697a13450b0970d9241/resources/styles/root.json?f=pjson"
 	},{
@@ -103,6 +110,7 @@
 		"category"	: "basemap",
 		"tag"		: "basemap",
 		"title"		: "Light Gray",
+		"credit"	: "ESRI",
 		"iconMatrix": [0,3], 
 		"exclusive" : "country-outline,countries",
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/fe92de877afe498fa62a5ae4c5b6c8ba/resources/styles/root.json?f=pjson",
@@ -114,6 +122,7 @@
 		"tag"		: "basemap",
 		"title"		: "Light Gray",
 		"parent"	: "light_gray",
+		"credit"	: "ESRI",
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/3f79b4dde3c34e1c8f8c9688be8733bb/resources/styles/root.json?f=pjson"
 	}, {
@@ -130,6 +139,7 @@
 		"tag"		: "overlay",
 		"title"		: "Countries, Regions and Roads",
 		"exclusive" : "country-outline",
+		"credit"	: "ESRI",
 		"iconMatrix": [1,0], 
 		"isLabel"	: true,
 		"style"		: "https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson",
@@ -142,6 +152,7 @@
 		"type"		: "wmts",
 		"handler"	: "imagery",
 		"tag"		: "imagery",
+		"credit"	: "NASA/GIBS",
 		"hasTime"	: true,
 		"replace"	: ["layer", "?"],
 		"clandestine": false,
@@ -166,6 +177,8 @@
 		"tag"		: "orbits",
 		"hasTime"	: true,
 		"clandestine": false,
+		"credit"	: "NASA/GIBS",
+		"kioskLegendLabel" : "#title",
 		"replace"	: ["layer", "?" ],
 		"props" 	: {
 			"maxZoom"			: 12,
@@ -180,6 +193,7 @@
 		"category"	: "overlay",
 		"tag"		: "overlay",
 		"title"		: "Protected Areas",
+		"credit"	: "WDPA",
 		"iconMatrix": [1,1], 
 		"alpha"		: 0.7,
 		"props" 	: {
@@ -196,6 +210,7 @@
 		"category"	: "overlay",
 		"tag"		: "overlay",
 		"title"		: "European Regional PAs",
+		"credit"	: "WDPA",
 		"iconMatrix": [1,2], 
 		"alpha"		: 0.7,
 		"props" 	: {

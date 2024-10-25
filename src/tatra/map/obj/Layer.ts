@@ -92,12 +92,15 @@ export class Layer {
     public altTitle2        : string | null = null;
     public boxSource        : Vector | null = null;
     public clandestine      : boolean = false;
+    public classifier       : string | null = null;
     public cloneFormat      : string = "image/png";
     public cloneId          : string = "";  // used for duplicate layers
     public cloneLevel       : number = 9;  // 6-13  -- only applies to imagery_template
     public cloneHasTime     : boolean = true;   // remove?
     public color            : Array <number> | null = null;
     public colorPaletteId   : string | null = null;
+    public csvHandler       : Function | null = null;
+    public credit           : string | null = null;
     public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
@@ -113,10 +116,12 @@ export class Layer {
     public iconHasBorder    : boolean = true;
     public iconLabel        : string | null = null;
     public iconMatrix       : Array <number> | null = null;
+    public iconSize         : Array <number> | null = null;
     public id               : string = "";
     public identifyGroup    : Array <string> | null = null; // used by firms_cache that performs identify on multiple layers
     public identifyHandler  : string | null = null;
     public identifyUrl      : string | null = null;
+    public identifyAuxUrl   : string | null = null;     // other type of identify
     public info             : string | null = null;     // info-id for layerInfo modal if different from id
     public initData         : string | null = null;
     public initVisibility   : boolean = false;
@@ -128,7 +133,10 @@ export class Layer {
     public isTileIdentify   : boolean = false;
     public jsonData         : Array <any> | null = null;
     public jsonHandler      : Function | null = null;
+    public jsonIconRatio    : number = 0.1;     // how much to resize geojson related icon
     public jsonSubsetHandler: Function | null = null;
+    public kioskLegendLabel : string | null = null;
+    public kioskLegendHander: Function | null = null;
     public limitExtent      : [number, number, number, number] | null = null;
     public listItemHandler  : Function | null = null;
     public maxDate          : string | null = null;
@@ -160,6 +168,7 @@ export class Layer {
     public trackLoading     : boolean = false;
     public type             : string = "wmts"; // WMTS, WMS, XYZ
     public variableRange    : IVariableRange = {};
+    public visibilityHandler : Function | null = null;  // type function to visibility (virtual layer)
     public zoomTo           : string | null = null; // lon, lat, zoom level
  
     public addFeature (coord : Coord) {
@@ -346,6 +355,9 @@ export class Layer {
     public notify(vis:boolean) {
         let evt = (vis) ? events.EVENT_LAYER_VISIBLE : events.EVENT_LAYER_HIDDEN;
         events.dispatchLayer(evt, this.id);   
+        if (this.visibilityHandler) {
+            this.visibilityHandler(this.id);
+        }
     }
 
     public get visible() {

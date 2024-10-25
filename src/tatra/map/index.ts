@@ -13,12 +13,12 @@ import { IConfigDef } from "./defs/ConfigDef";
 import { components } from "./support/components";
 import { layerStyle } from './handlers/layerStyle';
 import { menu } from './menu';
-import 'elm-pep';
 import noUiSlider from "nouislider";
 import { hash } from './hash';
 import { utils } from '../utils';
 import { layerInfo } from './layerInfo';
 import { tileUrlFunctions } from './handlers/tileUrlFunctions';
+import { kiosk } from './kiosk';
 
 interface Window {
     [key:string]: any; // Add index signature
@@ -72,18 +72,20 @@ export class map {
         coreUtils.loadLayers();
         mapUtils.setInfoBar();
         controls.init();
+        kiosk.init();
         coreUtils.setAOI();
         controls.setStartTool();
         events.dispatch(events.EVENT_MAPVIEWER_READY);
         menu.registerMenu(id);
         hash.init();
-        layerInfo.init(props.config.properties.layerInfoURL);
+        if (props.config) { layerInfo.init(props.config.properties.layerInfoURL); }
+
+        mapUtils.setViewMode();
 
         utils.clearLoader();
         props.map.on('rendercomplete', function(e) {
             events.dispatch(events.EVENT_RENDER_COMPLETE);
         });  
-
     }
 
     // in some instances javascript reads json directly, otherwise parse is needed

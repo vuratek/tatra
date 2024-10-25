@@ -51,6 +51,7 @@ export class Timeline {
         }
         if (! this.initialized) {
             this.initialized = true;
+            timelineController.refreshMinMaxDates();
             document.addEventListener(events.EVENT_CONTROL_BTN, (evt) => this._setTimeline(evt));
             document.addEventListener(events.EVENT_LAYER_VISIBLE, () => this.setSingleSlider());
             document.addEventListener(events.EVENT_LAYER_HIDDEN, () => this.setSingleSlider());
@@ -791,6 +792,7 @@ export class Timeline {
                 Timeline.items.update({id: 'single', start: time, end: utils.addDay(time)});
             } else if (timelineController.type == TimelineType.RANGE_TIED ) {
                 Timeline.items.update({id: 'range', start: utils.addDay(time, - range), end: utils.addDay(time)});
+                Timeline.items.update({id: 'single', start: sliderTime, end: utils.addDay(sliderTime)});
             } else if (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED) {
                 if (endDay > timelineController.maxDate) { 
                     endDay = timelineController.maxDate; 

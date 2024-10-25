@@ -8,9 +8,12 @@ import { time_info, tio } from "../features/time_info";
 import { MultiDaySelectorSimple } from "./MultiDaySelectorSimple";
 import { BasicMenuDates, BasicMenuDateValues } from "../../defs/Times";
 import { timelineController } from "../../../timeline/timelineController";
+import { mapUtils } from "../../mapUtils";
+import { navProps } from "../../../page/navProps";
+import flatpickr from "flatpickr";
 
 export class MultiDaySelector extends MultiDaySelectorSimple {
-	public currentSelection			: BasicMenuDates = BasicMenuDates.HRS_24;
+	public currentSelection			: BasicMenuDates = BasicMenuDates.CUSTOM;
 
 	public render(par : HTMLDivElement) {;
 		super.render(par);
@@ -87,19 +90,24 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 		if (tab && this.currentSelection == tab) {
 			return;
 		}
+		let previousSelection = this.currentSelection;
 		this.currentSelection = (tab) ? tab : BasicMenuDates.HRS_24;
 		let range = 1;
 		if (this.currentSelection == BasicMenuDates.TODAY) {
 			range = 0;
 		} else if (this.currentSelection == BasicMenuDates.DAY_7) {
 			range = 6;
+			props.time.imageryDate = utils.addDay(utils.getGMTTime(new Date()), -1);
 		}
-		if ((this.currentSelection != BasicMenuDates.CUSTOM)) {
+		if (previousSelection == BasicMenuDates.HRS_24 && this.currentSelection ==  BasicMenuDates.CUSTOM) {
+			range = 0;
+		}
+		if ((this.currentSelection != BasicMenuDates.CUSTOM) || (previousSelection == BasicMenuDates.HRS_24 && this.currentSelection == BasicMenuDates.CUSTOM)) {
 			let date = utils.sanitizeDate(utils.getGMTTime(new Date()));
 			this.calendar.setDate(date);
 			utils.setSelectValue(`mdsDateRange`, range.toString());
 		}
-		this.setDates();
+		this.setDates(); 
 		events.menuOpen(`module-mds-${this.currentSelection}`);
 	}
 //	private bookmark() {
@@ -178,7 +186,13 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 	}
 	public timelineUpdate () {
 		super.timelineUpdate();
-		this.setQuickLinks();
+		if (this.currentSelection == BasicMenuDates.DAY_7 
+			&& (flatpickr.formatDate(props.time.date, 'Y-m-d') != flatpickr.formatDate(utils.getGMTTime(new Date()), 'Y-m-d') ||
+			(flatpickr.formatDate(props.time.imageryDate, 'Y-m-d') != flatpickr.formatDate(utils.addDay(utils.getGMTTime(new Date()), -1), 'Y-m-d')))) {
+			this.setTab(BasicMenuDates.CUSTOM);
+		} else {
+			this.setQuickLinks();
+		}
 	}
 	public timelineBtnClick (evt : CustomEvent) {
 		if (evt.detail.id == "timeline") {
@@ -186,5 +200,19 @@ export class MultiDaySelector extends MultiDaySelectorSimple {
 				this.setTab(BasicMenuDates.CUSTOM);
 			}
 		}
+	}
+	
+	public updateInfoLabel() {
+		super.updateInfoLabel();
+
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+		let dates = '';
+		if (this.currentSelection !=  BasicMenuDates.CUSTOM && this.currentSelection!= BasicMenuDates.DAY_7) {
+			dates = this.currentSelection;
+		} else {
+			dates = utils.getSelectText('mdsDateRange');
+		}
+		let str = `${flatpickr.formatDate(props.time.date, 'Y-m-d')} (${dates})`;
+		mapUtils.setInfoLabel((prefix + str).toUpperCase(), (prefix + dates).toUpperCase());
 	}
 }

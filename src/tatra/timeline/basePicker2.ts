@@ -74,7 +74,9 @@ export class basePicker {
         let handler = () => this.setDates();
         let format = (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) ? 'M d Y H:i' : 'M d Y';
         let hasTime = (timelineController.type == TimelineType.RANGE_HOUR_MIN_TIED || timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) ? true : false;
-        let maxDate = utils.getGMTTime(new Date());
+
+        let [minDate, maxDate] = utils.getTimelineDateRange();
+
         if (timelineController.type == TimelineType.RANGE_SUBHOUR_TIED) {
             let mins = 10 - maxDate.getMinutes() % 10;
             maxDate = utils.addMinutes(maxDate, mins);
@@ -83,7 +85,7 @@ export class basePicker {
             enableTime: hasTime,
             dateFormat : format,
             defaultDate : d,
-            minDate : new Date(2000,11-1, 11),
+            minDate : minDate,
             maxDate : maxDate,
             onChange : handler
         }) as Instance;
@@ -114,13 +116,13 @@ export class basePicker {
         for (let i=0; i<options.length; i++) {
             if (custom) {
                 if (custom < options[i]) {
-                    select += `<option value="m${custom.toString()}">${utils.getMinHourValue(custom)}</option>`;
+                    select += `<option value="m${custom.toString()}">${utils.getMinHourValue(custom)} (HH:MM)</option>`;
                     custom = null;
                 } else if (custom == options[i]) {
                     custom = null;
                 }
             }
-            select += `<option value="m${options[i].toString()}">${utils.getMinHourValue(options[i])}</option>`;
+            select += `<option value="m${options[i].toString()}">${utils.getMinHourValue(options[i])} (HH:MM)</option>`;
         }
         return select;
     }

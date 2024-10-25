@@ -1,7 +1,7 @@
 import { navProps } from './navProps';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { navConfigDef, NavigationModes, INavConfigMenu } from './navConfigDef';
+import { navConfigDef, NavigationModes, INavConfigMenu, INavConfigMenuItems } from './navConfigDef';
 import { LeftMenu } from '../sideMenu/LeftMenu';
 import { TopMenu } from '../topMenu/TopMenu';
 import { utils } from '../utils';
@@ -19,6 +19,7 @@ import './css/layerInfo.scss';
 import './css/breadcrumb.scss';
 import './css/main.scss';
 import '../sideMenu/css/*.scss';
+import { events } from '../map/events';
 
 export class Navigation {
     
@@ -105,41 +106,39 @@ export class Navigation {
     }
 
     private static convertUrls() {
-        let arr = window.location.pathname.split('/');
-        let prefix = '';
-        if (arr.length > 1) {
-            if (arr[1] == 'internal' && arr.length > 4) {
-                prefix = arr.slice(0,5).join('/');
-            } else if (arr[1] == 'dev' && arr.length > 1) {
-                prefix = arr.slice(0,2).join('/');
-            }
+        // if redirect not defined or set to default do nothing
+        if (! window.URL_REDIRECT || window.URL_REDIRECT == '#URL_REDIRECT#' || window.URL_REDIRECT == '') {
+            return;
         }
-        if (prefix == '') { return; }
-        navProps.PREFIX = prefix;
-        this.addPrefix(navProps.settings.topMenu);
-        this.addPrefix(navProps.settings.sideMenu);
-        if ( navProps.settings.footer ) {
-            this.addPrefix(navProps.settings.footer);
-        }
+        if (window.URL_REDIRECT.indexOf('http')>=0) { return; }
+        navProps.PREFIX = window.URL_REDIRECT;
+        if (navProps.settings.topMenu) { this.addPrefix(navProps.settings.topMenu); }
+        if (navProps.settings.sideMenu) { this.addPrefix(navProps.settings.sideMenu); }
+        if ( navProps.settings.footer ) { this.addPrefix(navProps.settings.footer); }
         this.setAppPrefix("mainIcon");
         this.setAppPrefix("screenShotIcon");
         this.setAppPrefix("timelineURL");
     }
     private static addPrefix( menu:INavConfigMenu) {
         for (let i=0; i< menu.items.length; i++) {
-            let item = menu.items[i];
-            if (item.url && item.url[0] == '/') {
-                item.url = navProps.PREFIX + item.url;
-            }
+            let item = this.getPrefixUrl(menu.items[i]);
             if (item.subMenu) {
                 for (let j=0; j< item.subMenu.length; j++) {
-                    let sub = item.subMenu[j];
-                    if (sub.url && sub.url[0] == '/') {
-                        sub.url = navProps.PREFIX + sub.url;
+                    let sub = this.getPrefixUrl(item.subMenu[j]);
+                    if (sub.subMenu) {
+                        for (let k=0; k< sub.subMenu.length; k++) {
+                            sub.subMenu[k] = this.getPrefixUrl(sub.subMenu[k]);
+                        }
                     }
                 }
             }
         }
+    }
+    private static getPrefixUrl(item:INavConfigMenuItems) : INavConfigMenuItems {
+        if (item.url && item.url[0] == '/') {
+            item.url = navProps.PREFIX + item.url;
+        }
+        return item;
     }
     private static setAppPrefix( item : string) {
         if (navProps.settings.app[item]) {navProps.settings.app[item] = navProps.PREFIX + navProps.settings.app[item];}
@@ -203,9 +202,14 @@ export class Navigation {
             str += `
                 <div id="map" class="map"></div>
                 <div id="map3d" class="map3d" style="display:none;"></div>
+                <div id="map3dCtrl" class="map3dCtrl" style="display:none;"></div>
                 <div id="mapMaxLabel" class="mapMaxLabel">TEST</div>
                 <div id="lmvWrapper"></div>
-                <div id="timeline" class="timeline"></div>
+                <div id="lmvKioskWrapper"></div>
+                <div id="lmvKioskLegendWrapper"></div>
+                <div id="lmvTimelineWrapper">
+                    <div id="timeline" class="timeline"></div>
+                </div>
                 <div id="bottomLogo" class="lmvBottomLogo"></div>
             `;
         }
@@ -218,6 +222,7 @@ export class Navigation {
             }
             Header.setLogo('mapMaxLabel');
             utils.setClick('leftNavBarMapResize',()=>this.handleMapResize());
+            utils.setClick('mapMaxLabel', ()=>this.handleKiosk());
         }
 
 //        <div id="${menu.app.search}"></div>
@@ -228,5 +233,9 @@ export class Navigation {
         utils.show('leftNavBarShell');
         utils.hide('leftNavBarMapResize');
         HomeMenuButton.setState();
+    }
+
+    private static handleKiosk() {
+        events.dispatch(events.EVENT_KIOSK_EXIT);
     }
 }

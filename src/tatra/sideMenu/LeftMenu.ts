@@ -16,7 +16,7 @@ export class LeftMenu {
     
     public static init () {
         this.div = 'leftNavBar';
-        model.init();
+        SideMenuCommon.initialize(true);
         if (navProps.settings.app.useMap === true) {
             this.hasMap = true;
         }

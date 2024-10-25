@@ -1,4 +1,4 @@
-import { props } from "./props";
+import { props, VIEW_MODES } from "./props";
 import { DragPan } from 'ol/interaction';
 import { format } from 'ol/coordinate';
 import { MousePosition } from 'ol/control';
@@ -15,6 +15,8 @@ import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
 import { IMenuModuleLayers } from "./defs/ConfigDef";
 import { utils } from "../utils";
 import { ProductDates } from "./obj/ProductDates";
+import { hash } from "./hash";
+import { viewMode } from "./components/viewMode";
 
 export interface ICoordinates {
     xmin : number;
@@ -720,6 +722,16 @@ export class mapUtils {
 		}
     }
 
+    public static getMapExtent() : Array<number> | null {
+        if (!props.map) { return null; }
+        let z = props.map.getView().getZoom();
+        let c = props.map.getView().getCenter();
+        if (z && c) {
+            return [c[0], c[1], z]; // lon, lat, zoom_level
+        }
+        return null;
+    }
+
     public static getBaseLog( x : number, y : number ) {
         return Math.log(y+1) / Math.log(x+1);
     }
@@ -740,5 +752,45 @@ export class mapUtils {
         if (zoom > maxZoom) { zoom = maxZoom;}
         return { x : x, y : y, zoom : zoom};
     
+    }
+
+    public static setInfoLabel(topBar : string, kiosk : string) {
+        utils.html('kioskLabel', kiosk);
+        utils.html('lmvFeatureInfo1', topBar);
+    }
+    public static showInfoLabel(show:boolean) {
+        if (show) { utils.show('kioskLabel'); }
+        else { utils.hide('kioskLabel'); }
+    }
+    public static setInfoDate(str : string) {
+        utils.html('kioskDate', str);
+    }
+
+    public static setViewMode() {
+        let vm = hash.getViewMode();
+        if (!vm || !vm.type) { return; }
+        viewMode.updateViewMode(vm.type, false);
+    }
+    public static renderLayerIcon(lo:Layer) : string {
+        let iconStyle = (lo.iconHasBorder) ? '' : ' style="border:none;"';
+        let icon = '';
+		if (lo.icon && lo.icon.indexOf('color:') == 0) {
+			let color = lo.icon.replace('color:', '');
+			icon =`<div class="lmvControlsIconDiv" style="background: ${color}"></div>`;
+        } else if (lo.icon && lo.icon.indexOf('orbit') == 0) {
+            let arr = lo.icon.split('>');
+            if (arr.length != 3 || (arr[1] != 'left' && arr[1] != 'right')) { icon = `<div class="lmvControlsIconDiv" style="background: #AAA;"></div>`; }
+            else {
+                icon = `<div class="lmvControlsIconDiv lmvControlsOrbitIconDiv">${utils.renderOrbitIcon(arr[1],arr[2])}</div>`;
+            }
+        } else if (lo.iconMatrix && lo.iconMatrix.length == 2) {
+            let [size_x, size_y] = (lo.iconSize) ? [lo.iconSize[0], lo.iconSize[1]] : [70, 70];
+			let x = lo.iconMatrix[0] * size_x + 9;
+			let y = lo.iconMatrix[1] * size_y + 9;
+			icon = `<div class="lmvControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
+		} else {
+			icon = `<img src="${lo.icon}" ${iconStyle}>`;
+        }
+        return icon;
     }
 }

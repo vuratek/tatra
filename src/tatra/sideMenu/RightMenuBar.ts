@@ -19,14 +19,23 @@ export class RightMenuBar {
 
         for (let i =0 ; i<navProps.settings.topMenu.items.length; i++) {
             let element = navProps.settings.topMenu.items[i];
-            SideMenuItem.render('rightNavBarMenu', element, false, false);
+            SideMenuItem.render('rightNavBarMenu', element, false, false, false);
             if (element.subMenu) {
-                for (let j=0; j < element.subMenu.length; j ++) {
+                for (let j=0; j < element.subMenu.length; j++) {
                     let subElement = element.subMenu[j] as ITopMenuItemObj;
-                    if (subElement.isBreak || ! subElement.url) {
+                    if (subElement.isBreak || subElement.isGap) {
                         continue;
                     }
-                    SideMenuItem.render('rightNavBarMenu', subElement, true, false);
+                    SideMenuItem.render('rightNavBarMenu', subElement, true, false, false);
+                    if (subElement.subMenu) {
+                        for (let k=0; k < subElement.subMenu.length; k++) {
+                            let subElement2 = subElement.subMenu[k] as ITopMenuItemObj;
+                            if (subElement2.isBreak || subElement2.isGap) {
+                                continue;
+                            }
+                            SideMenuItem.render('rightNavBarMenu', subElement2, true, false, true);
+                        }
+                    }
                 }
             }
         }

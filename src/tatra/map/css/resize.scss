@@ -1,0 +1,51 @@
+.resize .map {
+	top:0;
+}
+.resize .mapMaxLabel {
+	display:block;
+}
+.resize .ol-zoom {
+	top: 6.5rem;
+}
+.resize .ol-locator {
+	top: 13.5rem;
+}
+.resize .ol-view3d {
+	top: 18.5rem;
+}
+.resize #leftNavBarShell {
+    display:none;
+}
+.kiosk #leftNavBarMapResize {
+    display: block;
+}
+@media screen and (max-height: 600px), screen and (max-width: 850px) {
+    .resize #lmvInfoBar {
+		padding-left: 0.5rem;
+		padding-top: 0;
+		border:none;
+		text-shadow:0 0 0.5rem #000;
+		background: none;
+		color:#FFF;
+		height: 2rem;
+		margin: 0;
+		left:2.5rem;
+	}
+	.resize #lmvInfoBar {
+		top: 5.3rem;
+    	left: 7rem;
+	}
+	.resize #lmvFeatureInfo1 {
+		top: 0;
+		left: 0;
+		padding-top:0;
+	}
+	.resize #lmvFeatureInfo2 {
+		left: 50%;
+		padding-top:0;
+	}
+	.resize .lmvMousePosition {
+		top: 2rem;
+		left: 0;
+	}
+}

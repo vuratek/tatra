@@ -61,6 +61,9 @@ export class TopMenu {
         utils.show("topMenuContentWrap");
         utils.show("topMenuCloak");
         TopMenuItem.setTopButton(id);
+        if (navProps.settings.app.navigationMode == NavigationModes.RICH) {
+            utils.addClass('body', 'blockOverflow', false);
+        }
     }
 
     public static closeMenu() {
@@ -75,6 +78,9 @@ export class TopMenu {
         if (this.timelineState) {
             utils.showCustom('timeline', this.timelineState);
             this.timelineState = null;
+        }
+        if (navProps.settings.app.navigationMode == NavigationModes.RICH) {
+            utils.removeClass('body', 'blockOverflow', false);
         }
 
         TopMenuItem.setTopButton(null);

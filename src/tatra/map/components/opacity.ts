@@ -218,6 +218,7 @@ export class opacity extends baseComponent {
 					'max': cp.values.length
 				}
 			});
+			console.log(vals[0], vals[1]);
 			slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
 			slider.noUiSlider.on("set", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
 //		}

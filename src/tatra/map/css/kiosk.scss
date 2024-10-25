@@ -1,0 +1,145 @@
+.kiosk header, .kiosk #lmvInfoBar, .kiosk #lmvTools, .kiosk #lmvMaxLabel, .kiosk #lmvControls, .kiosk #lmvMenus, 
+.kiosk #lmvTimelineWrapper, .kiosk #leftNavBarMapResize, .kiosk #leftNavBarShell, .kiosk .ol-overlaycontainer-stopevent,
+.kiosk.isMap #leftNavBarMapResize, .kiosk #bottomLogo, .kiosk #notifications {
+	display:none;
+}
+.kiosk-menu #lmvTimelineWrapper, .kiosk-menu #lmvMenus {
+    display:block;
+}
+.kiosk-menu #lmvMenus {
+    top:0;
+}
+#lmvKioskWrapper {
+    opacity: .7;
+    color: #fff;
+    background: #222;
+    display: none;
+    position: absolute;
+    bottom: .3rem;
+    left: .3rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+.kiosk #lmvKioskLegendWrapper {
+    display:block;
+}
+.kiosk-menu #lmvKioskLegendWrapper {
+    display:none;
+}
+#lmvKioskLegend {
+    color: #ccc;
+    background: rgba(20, 20, 20, 0.7);
+    border-radius: 1rem;
+    padding: 1rem;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    text-transform: uppercase;
+    display:none;
+}
+#lmvKioskLegend > div:not(:first-child) {
+    border-top: .1rem solid #777;
+}
+.kiosk #lmvKioskLegend {
+    display:block;
+}
+.kiosk-menu #lmvKioskLegend {
+    display:none;
+}
+.kiosk-menu #lmvKioskWrapper {
+    bottom: 7rem;
+}
+.kiosk #lmvKioskWrapper {
+    display:block;
+    border-radius: 2rem 2rem 0rem 0rem;
+}
+.kioskLegendItem {
+    position: relative;
+    margin: 0 1.5rem;
+    padding: .5rem 0.3rem;
+}
+.kioskLegendItem > div {
+    display:inline-block;
+}
+.kioskLegendItem > div:last-child {
+    vertical-align: super;
+    margin-left: .5rem;
+}
+.kioskLegendItem img {
+    max-width: 3rem;
+    max-height: 3rem;
+}
+.kioskLegendItem .lmvControlsIconDiv {
+    width:3rem;
+    height:3rem;
+    margin: 0;
+
+}
+.kioskLegendItem .orbitIcon {
+    width: 40px;
+    height: 40px;
+    left: -12px;
+    top: -12px;
+    background: #555;
+}
+.kioskLegendCustom > div:first-child {
+    margin: .5rem 1rem 0;
+    line-height: 2.5rem;
+}
+.kioskLegendCustom > div:last-child {
+    margin: 0 1rem;
+}
+#kioskDate {
+    font-size: 3rem;
+    line-height: 3.5rem;
+    display: inline-block;
+}
+#kioskLabelWrap {
+    display: inline-block;
+}
+#kioskLabel {
+    margin-left: 1.5rem;
+    font-size: 2.2rem;
+    line-height: 3rem;
+    text-transform: uppercase;
+}
+.kiosk .mapMaxLabel {
+	display:block;
+	background: black;
+    padding: .5rem 2rem;
+    border-radius: 1.5rem 7rem 2rem 5.5rem;
+	left: 1rem;
+	cursor:pointer;
+	opacity:0.9;
+}
+.kiosk .mapMaxLabel:hover {
+	opacity:1;
+}
+.kiosk_label {
+    padding: 2rem;
+    text-align: center;
+    font-size: 2rem
+}
+.kiosk_btn {
+    display: inline-block;
+    padding: .5rem 5rem;
+    background: green;
+    border-radius: 1rem;
+    position: relative;
+    width: 30%;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 9%;
+}
+#kiosk_btn_no {
+    background: darkred;
+}
+
+@media screen and (max-height: 600px) {
+    .kiosk .mapMenu {
+		top:0rem;
+    }
+    .kiosk .mapMenuCloseHolder {
+		top: 2rem;
+	}
+}

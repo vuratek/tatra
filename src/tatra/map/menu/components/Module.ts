@@ -26,6 +26,7 @@ export class Module {
     public _isActive : boolean = false;
     public _hasGroup : boolean = true;
     public systemDateUpdateHandler : (evt: Event) => void;
+    public labelHandler : (evt: Event) => void;
     public disabledUpdateHandler : (evt: Event) => void;
     public lastRefreshUrl : ILastRefreshUrl = {};
     public overrideOpened : boolean | null = null;
@@ -47,6 +48,7 @@ export class Module {
         this.setLayerRefs();
         this.systemDateUpdateHandler = () => this.onSystemDateUpdate();
         this.disabledUpdateHandler = () => this.updateDisabled();
+        this.labelHandler = () => this.updateInfoLabel();
     }
 
     // create initial div component; customization done in a child class
@@ -80,6 +82,7 @@ export class Module {
     public activate() {
         this._isActive = true;
         document.addEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        document.addEventListener(events.EVENT_LABEL_UPDATE, this.labelHandler);
         this.lastRefreshUrl = {};
     }
 
@@ -106,9 +109,12 @@ export class Module {
             this.props.opened = GroupContent.isOpened(this.props.id);
         }
         document.removeEventListener(events.EVENT_SYSTEM_DATE_UPDATE, this.systemDateUpdateHandler);
+        document.removeEventListener(events.EVENT_LABEL_UPDATE, this.labelHandler);
     }
 
     public presetLayers() {
+        return;
+        /* rethink this?
         if (!this.props.tag || this.props.tag == layerCategories.BASEMAP) {
             return;
         }
@@ -116,9 +122,9 @@ export class Module {
         for (let i =arr.length-1; i>=0; i--) {
             let lo = mapUtils.getLayerById(arr[i].id);
             if (lo) {
-                arr[i].visible = lo.visible;
+//                arr[i].visible = lo.visible;
             }
-        }
+        }*/
     }
 
     // set layer_refs either from config or from layer_refs (validate layer exists)
@@ -152,6 +158,10 @@ export class Module {
      */
     public setDateTime() { }
 
+    // whether module handles subdaily
+    public isSubDaily() : boolean {
+        return false;
+    }
 
     public showLayers() {
         let arr = this.props.layer_refs as Array<IMenuModuleLayers>;   
@@ -242,6 +252,9 @@ export class Module {
 
     public getLayerHashValue(lo : Layer) : string {
         //console.log(lo.id);
+        if (lo.classifier) {
+            return lo.id + '=' + lo.classifier;
+        }
         return lo.id;
     }
 
@@ -350,7 +363,7 @@ export class Module {
     public setLayerLegendField (parentId: string, lo : Layer) {
 		let el = document.getElementById(parentId) as HTMLDivElement;
 		if (! el) { return; }
-		el.innerHTML =`<i class="fa fa-th-list" aria-hidden="true"></i>`;
+		el.innerHTML =`<i class="fa fa-list" aria-hidden="true"></i>`;
 		let info = (lo.info) ? lo.info : lo.id;
 		utils.setClick(parentId, () => events.legendClicked(info));
     }
@@ -371,5 +384,55 @@ export class Module {
 //		if (! lo.visible) { lo.visible=true;}
 		opacity.setLayer(lo.id, lo.title);
     }
+
+    public renderKioskLegend() : string | null {
+        let legends : Array <{ icon: string | null, label : string, lo : Layer }> = [];
+        if (this.props.layer_refs) {
+			for (let i=0; i<this.props.layer_refs.length; i++) {
+                let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
+                if (lo && lo.visible && lo.kioskLegendLabel) {
+                    let found = false;
+                    let comp = lo.kioskLegendLabel;
+                    if (comp.indexOf('#') >= 0) {
+                        comp = lo[comp.replace('#','')];
+                    }
+                    for (let l = 0; l<legends.length; l++) {
+                        let leg = legends[l];
+                        if (leg.icon == lo.icon && leg.label == comp) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        legends.push( {icon : lo.icon, label : comp, lo : lo});
+                    }
+                }
+            }
+        }
+        if (legends.length == 0) { return null; }
+        let str = '';
+        for (let i=0; i<legends.length; i++) {
+            let lo = legends[i].lo;
+            let icon = mapUtils.renderLayerIcon(lo);
+            if (lo.kioskLegendHander) {
+                let leg = lo.kioskLegendHander(lo, legends[i].label);
+                str += `
+                    <div class="kioskLegendCustom">
+                        ${leg}
+                    </div>
+                `;
+            } else {
+                str += `
+                    <div class="kioskLegendItem">
+                        <div>${icon}</div>
+                        <div>${legends[i].label}</div>
+                    </div>
+                `;
+            }
+        }
+        return str;
+    }
+
+    public updateInfoLabel() {}
 
 }

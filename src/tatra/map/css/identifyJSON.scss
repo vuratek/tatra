@@ -1,6 +1,6 @@
 .identifyJSONLabel table {
     min-width: 28rem;
-    margin: 1rem 0 .7rem 0
+    font-size: 1.5rem;
 }
 .identifyJSONLabel table tr, .identifyJSONLabel table tr:nth-child(2n+2) {
     background:#244153;
@@ -40,9 +40,11 @@
 .identifyJSONLabel .faLbl, .identifyJSONLabel .faNoaaLbl {
     font-size: 1.8rem;
     font-weight: 600;
-    line-height: 2rem;  
-    padding-top: 1rem;
+    line-height: 3rem;  
     overflow: hidden;
+}
+.faSize a:link, .faSize a:visited {
+    color:#6cc8ff;
 }
 .identifyJSONLabel .faNoaaLbl {
     padding:.8rem;
@@ -52,6 +54,19 @@
 .identifyJSONLabel .faLbl img {
     height: 1.8rem;
     margin-right: 1rem;
+}
+.identifyJSONLabel .faLbl .iconList {
+    display:inline-block;
+    position:relative;
+    width:2.5rem; 
+    height:2.5rem;
+    transform: scale(.35);
+    margin-right:.7rem;
+}
+.identifyJSONLabel .faLbl .iconList div {
+    position:absolute;
+    width:64px; 
+    height:64px;
 }
 .identifyJSONLabel .fa-noaa-logo {
     position: absolute;
@@ -102,7 +117,7 @@
     background:#041b2e;
     position: relative;
     border-radius: 0.4rem;
-    padding: 1rem 0.5rem;
+    padding: 0 .5rem .5rem;
     opacity: 0.8;
     white-space: nowrap;
     font-size: 1.6rem;

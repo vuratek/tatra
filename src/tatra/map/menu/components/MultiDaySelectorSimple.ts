@@ -13,6 +13,8 @@ import { hashHandler } from '../hashHandler';
 import { TimelineType, timelineController } from '../../../timeline/timelineController';
 import { timeline } from '../../components/timeline'; 
 import { singleDatePicker } from '../../../timeline/singleDatePicker2';
+import { mapUtils } from '../../mapUtils';
+import { navProps } from '../../../page/navProps';
 
 export class MultiDaySelectorSimple extends Module {
 
@@ -128,11 +130,12 @@ export class MultiDaySelectorSimple extends Module {
 		if (this.calendar) {
 			this.calendar.destroy();
 		}
+		let [minDate, maxDate] = utils.getTimelineDateRange();
         this.calendar = flatpickr("#mds_date", {
             dateFormat : this.df,
             defaultDate : d,
-            minDate : new Date(2000,11-1, 11),
-            maxDate : utils.getGMTTime(new Date()),
+            minDate : minDate,
+            maxDate : maxDate,
             onChange : function () {
                 option.setDates();
             }
@@ -164,11 +167,12 @@ export class MultiDaySelectorSimple extends Module {
 		if (! obj || (!obj["range"] && !this.isSingle)) { return; }
 		let pastImageryDate = props.time.imageryDate;
         //props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
-        props.time.imageryDate = obj["single"].start;
+		props.time.imageryDate = obj["single"].start;
 //		props.time.imageryDate = utils.sanitizeDate(obj["single"].start, false);
 		
 		if (this.isSingle) {
 			props.time.date = props.time.imageryDate;
+			this.calendar.setDate(props.time.date);
 			props.time.range = 0;
 
 		} else {
@@ -196,6 +200,17 @@ export class MultiDaySelectorSimple extends Module {
 //		this.refreshLayers();
 		hashHandler.setDateTime();
 		events.dispatch(events.EVENT_SYSTEM_DATE_UPDATE);
+		this.updateInfoLabel();
+
+	}
+
+	public updateInfoLabel() {
+		mapUtils.setInfoDate(flatpickr.formatDate(props.time.date, 'Y-m-d'));
+		let prefix = (props.showLabelPrefix && navProps.settings.app.applicationLabel) ? navProps.settings.app.applicationLabel + ': ' : '';
+		let str = flatpickr.formatDate(props.time.date, 'Y-m-d');
+//		let range = ` (${utils.getSelectText('mdsDateRange')})`; 
+		let range = '';
+		mapUtils.setInfoLabel((prefix + str + range).toUpperCase(), (prefix + str + range).toUpperCase());
 	}
 
 	public timelineBtnClick (evt : CustomEvent) {}

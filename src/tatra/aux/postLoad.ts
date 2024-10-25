@@ -1,3 +1,5 @@
+import { navProps } from "../page/navProps";
+
 export class postLoad {
 
     public static update () {
@@ -36,6 +38,27 @@ export class postLoad {
                 }
             }
         }
+    }
+
+    public static setUrlRedirectPrefix () {
+        if (navProps.PREFIX == '') { return; }
+        let tags = [ { tag : "a", attr : "href"}, {tag : "img", attr: "src"}];
+        for (let t = 0; t<tags.length; t++) {
+            let els = document.querySelectorAll(tags[t].tag);
+            for (let i=0; i<els.length; i++) {
+                let el = els[i] as HTMLAnchorElement;
+                let att = el.getAttribute(tags[t].attr);
+                if (att && att.indexOf('/') == 0 && att.indexOf(navProps.PREFIX) < 0) {
+                    el.setAttribute(tags[t].attr, navProps.PREFIX + att);
+                }
+            }
+        }
+    }
+    public static updateUrlRedirect(url:string) : string {
+        if (window.URL_REDIRECT && window.URL_REDIRECT != '' && window.URL_REDIRECT != '#URL_REDIRECT#') {
+            url = window.URL_REDIRECT + url;
+        }
+        return url;
     }
 
     private static updateBgImage(response:any, el : HTMLDivElement) {

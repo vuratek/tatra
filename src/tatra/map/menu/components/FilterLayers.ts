@@ -83,18 +83,7 @@ export class FilterLayers extends Module {
                     if (! lo) { continue;}
                     let long = (lo.iconLabel && lo.iconLabel.length > 5) ? 'lmvControlsIconLabelLong' : '';
                     let iconLabel = (lo.iconLabel) ? `<div class="lmvControlsIconLabel ${long}">${lo.iconLabel}</div>` : '';
-		            let iconStyle = (lo.iconHasBorder) ? '' : ' style="border:none;"';
-                    let icon = '';
-                    if (lo.icon && lo.icon.indexOf('color:') == 0) {
-                        let color = lo.icon.replace('color:', '');
-                        icon =`<div class="lmControlsIconDiv" style="background: ${color}"></div>`;
-                    } else if (lo.iconMatrix && lo.iconMatrix.length == 2) {
-                        let x = lo.iconMatrix[0] * 70 + 9;
-                        let y = lo.iconMatrix[1] * 70 + 9;
-                        icon = `<div class="lmControlsIconDiv" style="background: url(${lo.icon}) ${-x}px ${-y}px;"></div>`;
-                    } else {
-                        icon = `<img src="${lo.icon}" ${iconStyle}>`;
-                    }
+		            let icon = mapUtils.renderLayerIcon(lo);
                     let classChecked = '';
                     let lchecked = '';
                     let ldetails = '';

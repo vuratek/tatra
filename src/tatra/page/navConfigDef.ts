@@ -3,6 +3,7 @@ export interface navConfigDef {
     topMenu         : INavConfigMenu;   // top navigation menu
     sideMenu        : INavConfigMenu;   // left side menu
     footer?         : INavConfigMenu;   // footer is optional; if not defined only the minimal standard footer is shown (NASA official, main NASA links)
+    subfooter?      : INavConfigMenu;   // subfooter is optional; if not defined only the minimal standard footer is shown (NASA official, main NASA links)
 }
 
 export enum NavigationModes {
@@ -11,6 +12,7 @@ export enum NavigationModes {
 }
 
 export interface INavConfigApp {
+    applicationLabel?   : string;       // used for labeling dates
     mainIcon            : string;       // icon used in left side menu and top banner
     mainIcon2?          : string;       // optional second icon used with mainIcon (two logos like NASA and USFS)
     screenShotIcon      : string;       // used for screenshot. If not defined, it uses mainIcon
@@ -22,11 +24,14 @@ export interface INavConfigApp {
     singleLabel?        : string;       // single line header
     singleShortLabel?   : string;       // single line header when resolution is small
     official?           : string;       // NASA official
+    releaseVersion?     : string;       // gitlab release version
     timelineURL?        : string;       // url link to timeline javascript library
     alternateHome?      : string;
     feedbackHeader?     : string;       // if tophat feedback is used, this the Subject header in the feedback form
     mobileMenu?         : boolean;      // create mobile version of top navigation
     useNavigationLinks? : boolean;      // if set, footer is a replica of top navigation links except HOME
+    timelineMinDate?    : string;       // set custom min date
+    timelineMaxDate?    : string;       // set custom max date
     navigationMode      : string;
     showFooterLinks?    : boolean;      // generate footer with links
     isBeta?             : boolean;      // if beta, BETA tag will be shown in the header
