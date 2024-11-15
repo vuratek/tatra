@@ -44,9 +44,9 @@ export class GroupContent {
         }
 		content.innerHTML = `
             <div id="navGCHeader_${id}" class="navGCHeader ${infoCls} ${bubbleClass}">
+                ${bubble}
                 ${info}
                 <div id="navGCCtrl_${id}" class="navGCCtrl"></div>
-                ${bubble}
  				<div id="navGCHdrLbl_${id}" class="navGCLbl">${options.label}</div>
 			</div>
 			<div id="navGCContent_${id}" class="navGCWrap">
