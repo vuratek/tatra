@@ -537,6 +537,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.d
 	padding: 1rem 0 0.5rem 0;
 	line-height: 1.5rem;
 }
+#lmvControls_attributes {
+	max-height: 85vh;
+    overflow: auto;
+}
 .lmvControlsWindowContent {
 	max-height: none;
 }

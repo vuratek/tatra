@@ -11,6 +11,8 @@ import { utils } from "../../utils";
 import { colorPaletteArray } from "../colorPaletteArray";
 import { Vector } from "ol/source";
 import { eisData } from "./eisData"; 
+import { controls } from "../components/controls";
+import { attributes } from "../menu/features/attributes";
 
 class AreaLabels {
     public km       : string = '';
@@ -807,16 +809,29 @@ export class layerStyle {
         let color = "rgb(220,220,220)";
         let ext = mapUtils.getMapExtent();
         let z = 0; 
+        let width = 1;
         if (ext) { z = ext[2];}
-        if (z > 8) {
+        let outline = "#222";
+        if (z > 7) {
             let eis_rec = eisData.getRecord(p['_lid'], p['fireid']);
             if (eis_rec.ready) {
                 //let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
                 let index = Math.floor(p.duration);
                 let duration = Math.floor(eis_rec.duration)
-                flag = "color" + index + '-' + duration;
+                flag = "color" + index + '-' + duration + '-reg';
+                if (index == duration) {
+                    outline = "#F00";
+                    width = 4;
+                    if (z < 10) {
+                        width = 3;
+                    }
+                }
+                
                 color = layerStyle.eisColors(index, duration);
             }
+        } else {
+            width = 9 - Math.round(z);
+            flag = "color" + 'EIS-' + width.toString();
         }
         
         if (!layerStyle.symbols[key]) {
@@ -828,8 +843,8 @@ export class layerStyle {
                     color: color
                 }),
                 stroke: new Stroke({
-                    color: "#222",
-                    width: 1
+                    color: outline,
+                    width: width
                 }),
                 zIndex: 1,
             });
@@ -843,7 +858,10 @@ export class layerStyle {
         let duration = feature.get('duration');
         let fireid = feature.get('fireid');
         let date = feature.get('t');
-        let eis_rec = eisData.getRecord(feature.get('_lid'), feature.get('fireid'));
+        let lid = feature.get('_lid');
+        console.log(feature);
+        let eis_rec = eisData.getRecord(lid, fireid);
+        eis_rec.attributes = feature.getProperties();
         let post_duration = '';
         let range = '';
         if (eis_rec.ready) {
@@ -853,6 +871,9 @@ export class layerStyle {
                 <tr><td colspan="2">${eis_rec.start_date} - ${eis_rec.end_date}</td></tr>
             `;
         }
+        if (! window.showEISInfo) {
+            window.showEISInfo = layerStyle.showEISInfo;
+        }
         return `
             <span class="faLbl">EIS Fire Perimeter</span><br/>
             <div class="faSize">
@@ -861,9 +882,30 @@ export class layerStyle {
                     <tr><td>Duration</td><td>${duration}${post_duration}</td></tr>
                     <tr><td>Date</td><td>${date}</td></tr>
                     ${range}
+                    <tr><td colspan="2"><a href="javascript:showEISInfo('${lid}','${fireid}');">View all attributes</a></td></tr>
                 </table>
             </div>
         `;
+    }
+
+    public static showEISInfo(lid:string, fireid:string) {
+        let eis_rec = eisData.getRecord(lid, fireid);
+        let lo = mapUtils.getLayerById(lid);
+        let txt = '';
+        if (lo) {
+            txt += `<p>${lo.title}</p>`;
+        }
+        txt += '<table>';
+        for (let key in eis_rec.attributes) {
+            if (key[0] != '_') {
+                txt += `<tr><td>${key}</td><td>${eis_rec.attributes[key]}</td></tr>`;
+            }
+        }
+        txt += '</table>';
+
+        attributes.setDescriptionText(txt);
+        controls.activateControlItem('attributes');
+        attributes.open();    
     }
 
     public static _geographicAreasUSA ( feature : Feature, resolution: number) : Style | null {

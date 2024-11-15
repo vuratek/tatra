@@ -24,6 +24,8 @@ import { tileUrlHandler } from "./tileUrlHandler";
 import { WebGLStyle } from "ol/style/webgl";
 import { Point } from "ol/geom";
 import WebGLPointsLayer from "ol/layer/WebGLPoints";
+import { controls } from "../components/controls";
+import { attributes } from "../menu/features/attributes";
 
 export class layer {
         
@@ -104,6 +106,7 @@ export class layer {
                 }
             }
         }
+        controls.createControlItem('attributes', attributes);
     }
     
     public static removeLayer (lo : Layer) {
