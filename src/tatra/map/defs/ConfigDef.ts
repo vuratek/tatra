@@ -89,6 +89,8 @@ export interface IMenuModule {
     menuDescription?    : string;              // description used in menu selection
     useLayerRefsOrder?  : boolean;           // should layers sort based on layer_refs or appearance in list layer
     skipMenuDisplay?    : boolean;
+    bubble?             : string;           // show header extra info in a bubble
+    bubbleClass?        : string;           // apply extra class to the header
     menuLabel?          : string | null;
     localRedirect?      : string | null;       // if set, this will added in front of layer source url (ex. fires: redirect/mapserver/...)
     options?            : IDateModuleOptions | null;  // additional settings if applicable

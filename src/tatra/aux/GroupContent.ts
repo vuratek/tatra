@@ -9,6 +9,8 @@ export interface IGroupContentItem {
 export interface IGroupContentOptions {
     id          : string;
     label       : string;
+    bubble?     : string;
+    bubbleClass?:string;
     text?       : string;
     parent      : HTMLDivElement;
     opened?     : boolean;
@@ -31,10 +33,20 @@ export class GroupContent {
         let infoIcon = (options.infoIcon) ? options.infoIcon : 'info-circle';
         let info = (options.info) ? `<div id="navGCInfo_${id}" class="navGCInfo"><i class="fa fa-${infoIcon}" aria-hidden="true"></i></div>` : '';
         let infoCls = (options.info) ? 'navGCHeaderInfo' : '';
+        let bubble = '';
+        let bubbleClass = '';
+        if (options.bubble) { 
+            bubble = `<div id="navGCBubble_${id}" class="navGCBubble_text">${options.bubble}</div>`;
+            bubbleClass = 'navGCBubble';
+        }
+        if (options.bubbleClass) {
+//            bubbleClass += ' ' + options.bubbleClass;
+        }
 		content.innerHTML = `
-            <div id="navGCHeader_${id}" class="navGCHeader ${infoCls}">
+            <div id="navGCHeader_${id}" class="navGCHeader ${infoCls} ${bubbleClass}">
                 ${info}
-				<div id="navGCCtrl_${id}" class="navGCCtrl"></div>
+                <div id="navGCCtrl_${id}" class="navGCCtrl"></div>
+                ${bubble}
  				<div id="navGCHdrLbl_${id}" class="navGCLbl">${options.label}</div>
 			</div>
 			<div id="navGCContent_${id}" class="navGCWrap">

@@ -24,6 +24,21 @@
 	top: 0;
 	padding:0.5rem;
 }
+.navGCBubble {
+	border-top: .1rem solid #eee;
+	background: repeating-linear-gradient(45deg, #1f5e83, #1d5275 25px, #0f425f 25px, #0f425f 50px);
+}
+.navGCBubble .navGCBubble_text {
+	color: #111;
+    text-transform: uppercase;
+    background: #aaa;
+    border-radius: 1rem;
+    padding: .1rem 0.5rem;
+    font-size: 1rem;
+    position: absolute;
+    top: .3rem;
+    right: 6rem;
+}
 .navGCLbl {
 	font-size:1.6rem;
 	padding: 0.1rem 0;

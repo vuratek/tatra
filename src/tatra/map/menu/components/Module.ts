@@ -69,6 +69,12 @@ export class Module {
                 options.infoIcon = 'clone';
                 options.info = () => this.infoHandler();
             }
+            if (this.props.bubble) {
+                options.bubble = this.props.bubble;
+            }
+            if (this.props.bubbleClass) {
+                options.bubbleClass = this.props.bubbleClass;
+            }
             GroupContent.create( options );
         }
         //this.activate();
