@@ -58,6 +58,23 @@ export class Footer {
                         txt += `<li><a href="javascript:void(0);">${item.label} ${v}</a></li>`;
                     }
                 }
+                if (item.label) {
+                    if (item.subMenu) {
+                        txt += `<li class="ftLabel ftLabelExp" id="ft_item_${item.id}_plus">${item.label} +</li>`;
+                        txt += `<li class="ftLabel ftLabelExp ftLabelNoShow" id="ft_item_${item.id}_minus">${item.label} -<br/><ul>`;
+                        for (let j=0; j<item.subMenu.length; j++) {
+                            let sub = item.subMenu[j];
+                            if (sub.url) { 
+                                let external = (item.external) ? 'target="_blank" rel="noopener" class="ext"' : '';
+                                txt += `<li><a ${external}href="${sub.url}">${sub.label}</a></li>`;
+                            }
+                        }
+                        txt += `</ul></li>`;
+                        
+                    } else {
+                        txt += `<li class="ftLabel">${item.label}</li>`;
+                    }
+                }
                 continue; 
             }
             let external = (item.external) ? 'target="_blank" rel="noopener" class="ext"' : '';
@@ -76,7 +93,6 @@ export class Footer {
         }
         return txt;
     }
-
 
     private static render() {
         if (! navProps.settings.footer && ! navProps.settings.app.useNavigationLinks) { return;}
@@ -100,6 +116,24 @@ export class Footer {
             }
         }
         txt += `</section>`;
-        utils.html('footerLinks', txt);                
+        utils.html('footerLinks', txt);         
+        utils.setClick('footerLinks', (evt:MouseEvent)=>this.ctrlExpansion(evt as MouseEvent));       
+    }
+    private static ctrlExpansion (evt : MouseEvent) {
+        let path = evt.path || (evt.composedPath && evt.composedPath());
+        let el = path[0] as HTMLElement;
+        if (el.tagName && el.tagName.toLowerCase() == 'li' && el.id.indexOf('ft_item_') == 0) {
+            let arr = el.id.split('_');
+            let last = arr[arr.length-1];
+            if (last == 'plus') {
+                let minus = el.id.replace('plus', 'minus');
+                utils.addClass(el.id, 'ftLabelNoShow');
+                utils.removeClass(minus, 'ftLabelNoShow');
+            } else if (last == 'minus') {
+                let plus = el.id.replace('minus', 'plus');
+                utils.addClass(el.id, 'ftLabelNoShow');
+                utils.removeClass(plus, 'ftLabelNoShow');
+            }
+        } 
     }
 }

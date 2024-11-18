@@ -19,7 +19,11 @@ footer ul {
     list-style: none;
     padding-left: 0;
 }
-
+footer ul ul {
+    margin-left: 1.5rem;
+    text-transform: none;
+    font-size: 1.4rem;
+}
 footer a:link, footer a:visited {
     color: #f0f0f0;
 }
@@ -101,4 +105,17 @@ a:hover {
     padding: 1rem 3%;
     min-width: 25rem;
     width:25%;
+}
+.ftLabel {
+    text-transform: uppercase;
+    color: #9b9b9b;
+    font-weight: 600;
+    text-decoration: underline;
+}
+.ftLabelExp {
+    cursor: pointer;
+    text-decoration: none;
+}
+.ftLabelNoShow {
+    display:none;
 }
