@@ -859,7 +859,6 @@ export class layerStyle {
         let fireid = feature.get('fireid');
         let date = feature.get('t');
         let lid = feature.get('_lid');
-        console.log(feature);
         let eis_rec = eisData.getRecord(lid, fireid);
         eis_rec.attributes = feature.getProperties();
         let post_duration = '';
