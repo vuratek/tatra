@@ -67,6 +67,9 @@
 	background:#575757;
 	color:#f0f0f0;
 } 
+.lmvControlsLayerGroup {
+	min-height:2rem;
+}
 .lmvControlsLayerMsg {
 	border:solid 0.2rem #dfa335;
 	border-bottom: none;
@@ -207,7 +210,7 @@
 }
 
 .fmmSupportIcons:hover, .lmvControlsLayerInfoBtns:hover, .fmm_ba_opacity:hover, .fmm_ba_opacity2:hover,
-.navGCInfo:hover,.navGCCtrl:hover, .fmmSupportIcons:hover, .fmmGroupBreakerCtrl_info:hover, .fire_option_opacity:hover {
+.navGCInfo:hover,.navGCCtrl:hover, .fmmSupportIcons:hover, .lmvGroupBreakerCtrl_info:hover, .fire_option_opacity:hover {
 	color: #57f173;
 }
 .fmmSupportIcons:hover {
@@ -218,7 +221,7 @@
 }
 .fmmSupportIcons:hover::after, .lmvControlsLayerInfoBtns:hover::after, .fmm_ba_opacity:hover::after, .fmm_ba_opacity2:hover::after,
 .navGCInfo:hover::after,.navGCCtrl:hover::after, .fmmSupportIcons:hover::after, .mapMenuIcons #mapGraduationCap:hover::after, 
-.fmmGroupBreakerCtrl_info:hover::after, .fire_option_opacity:hover::after {
+.lmvGroupBreakerCtrl_info:hover::after, .fire_option_opacity:hover::after {
 	position:absolute; 
 	display:block;
 	font:normal 1.4rem Titillium Web, sans-serif;
@@ -248,7 +251,7 @@
 .lmvControlsLayerMenu:hover::after, .fire_option_opacity:hover::after {
 	content: "Opacity";
 }
-.lmvControlsLayerInfo:hover::after, .fmmSupportIcons:hover::after, .fmmGroupBreakerCtrl_info:hover::after  {
+.lmvControlsLayerInfo:hover::after, .fmmSupportIcons:hover::after, .lmvGroupBreakerCtrl_info:hover::after  {
 	content: "Info";
 }
 .fmmLyrExpBtn:hover::after {

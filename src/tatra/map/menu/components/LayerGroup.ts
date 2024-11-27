@@ -6,6 +6,7 @@ import { utils } from "../../../utils";
 import { mapUtils } from "../../mapUtils";
 import { events } from "../../events";
 import { IMenuModuleLayers, IMenuModule } from "../../defs/ConfigDef";
+import { groupBreaker } from "../groupBreaker";
 
 export enum MenuLayerGroup {
 	TYPE_BASEMAPS	= "basemap",
@@ -35,48 +36,65 @@ export class LayerGroup extends Module {
 			this.appendDynamicLayerSelector(ul); 
 			this.props.isMultiLayerActive = false;
         }
-//		if (type == 'alerts') { this.appendActiveAlertsInfo(ul); }
-		// order by layerRef order (if defined in config), otherwise by location in the overall layer list; 
-		if (this.props.useLayerRefsOrder && this.props.useLayerRefsOrder === true) {
-			if (this.props.layer_refs) {
+
+		// populate layer list either based on layer_refs or search through all layers
+		if (this.props.layer_refs) {
+			// order by layerRef order (if defined in config), otherwise by location in the overall layer list; 
+			let list = [];
+			if (this.props.useLayerRefsOrder && this.props.useLayerRefsOrder === true) {
 				for (let i=0; i<this.props.layer_refs.length; i++) {
 					let lo = mapUtils.getLayerById(this.props.layer_refs[i].id) as Layer;
-					if (lo.parent) { continue;}
-					if (lo.type == "label") {
-						this.createLabel(lo, ul, baseId);
-					} else if (!lo.clandestine || this.type == MenuLayerGroup.TYPE_CUSTOM) {
-						if (this.checkLayerRef(lo, this.props.layer_refs, this.props.tag)) {
-							this.createLayer(lo, ul, baseId);
-						}
-					}
+					if (lo.parent || lo.clandestine) { continue;}
+					list.push(lo);
 				}
 			} else {
-				console.log("Layers are not defined for the custom module.");
-			}
-		} else {
-			for (let i = props.layers.length-1; i>=0; i--) {
-				let lo = props.layers[i];
-				if (lo.parent) { continue; }
-				let go = false;
-				if (! lo.clandestine && this.props.layer_refs) {                 
-					go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+				for (let i = props.layers.length-1; i>=0; i--) {
+					let lo = props.layers[i];
+					if (lo.parent || lo.clandestine) { continue;}
+					list.push(lo);
 				}
-				else if (this.type == MenuLayerGroup.TYPE_CUSTOM ) {
-					if (! this.props.layer_refs) {
-						console.log("Layers are not defined for the custom module.");
-						go = false;
+			}
+
+            let gb : { [key: string]: number; } = {};
+
+			for (let i=0; i<list.length; i++) {
+				let lo = list[i];
+				if (this.checkLayerRef(lo, this.props.layer_refs, this.props.tag)) {
+					if (lo.type == "label") {
+						this.createLabel(lo, ul, baseId);
 					} else {
-						go = this.checkLayerRef(lo, this.props.layer_refs, this.props.tag);
+						let hasGroup = '';
+						let comp = ul;
+						if (this.props.groupBreakers) {
+							for (let g = 0; g < this.props.groupBreakers.length; g++) {
+								// check if layer is defined in a group breaker (control on/off for all)
+								if (groupBreaker.isBreakerLayer(list[i].id, this.props.groupBreakers[g])) {
+									if (! gb[this.props.groupBreakers[g].id]) {
+										let opened = groupBreaker.checkGroupLayerVisibility(this.props.groupBreakers[g], this.props);
+										if (this.props.groupBreakers[g].opened && this.props.groupBreakers[g].opened === true) {
+											opened = true;
+										}
+										gb[this.props.groupBreakers[g].id] = 1;
+										this.props.groupBreakers[g].opened = opened;
+										groupBreaker.getGroupBreakerElement(ul, baseId, this.props.groupBreakers[g]);
+									}
+									let id = groupBreaker.getId(this.props.groupBreakers[g]);
+									comp = document.getElementById(`bb_gb_${id}`) as HTMLUListElement;
+									hasGroup = `lmvGroupBreaker lmvGroupBreaker_${id}`;
+									break;
+								}
+							}
+						}	
+						this.createLayer(lo, comp, baseId, hasGroup);
 					}
 				}
-				if (! go) { continue;}
-				if (lo.type == "label") {
-					this.createLabel(lo, ul, baseId);
-				} else {
-					this.createLayer(lo, ul, baseId);
-				}
 			}
-		}
+			if (this.props.groupBreakers) {
+				groupBreaker.setGroupBreakerHandlers(this.props.groupBreakers);
+			}	
+		} else {
+			console.log("Layers are not defined for the custom module.");
+		}		
 		
         this.updateLayers();
         if (this.props.hasMultiLayer) {
@@ -126,10 +144,10 @@ export class LayerGroup extends Module {
 	 * @param ul - parent UL element
 	 * @param baseId  - menu unique identifier string (ex. layer_info_help)
 	 */
-	public createLayer (lo : Layer, ul : HTMLUListElement, baseId:string) {
+	public createLayer (lo : Layer, ul : HTMLUListElement, baseId:string, hasGroup : string) {
 		let li = document.createElement("li");
 		li.setAttribute("id", `bb_${baseId}_${lo.id}`);
-		li.setAttribute("class", "lmvControlsLayer");
+		li.setAttribute("class", `lmvControlsLayer ${hasGroup}`);
 		ul.appendChild(li);
 //			let cl = 'bottomBarSubMenuItemLabel';	
 		let long = (lo.iconLabel && lo.iconLabel.length > 5) ? 'lmvControlsIconLabelLong' : '';
@@ -322,6 +340,9 @@ export class LayerGroup extends Module {
 					el2.style.display = "none";
 				}
 			}
+		}
+		if (this.props.groupBreakers) {
+			groupBreaker.updateGBCheckBox(this.props.groupBreakers);
 		}
         this.updateDisabled();
 	}

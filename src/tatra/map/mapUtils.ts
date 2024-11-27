@@ -12,7 +12,7 @@ import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
-import { IMenuModuleLayers } from "./defs/ConfigDef";
+import { IMenuModuleLayers, IGroupBreaker } from "./defs/ConfigDef";
 import { utils } from "../utils";
 import { ProductDates } from "./obj/ProductDates";
 import { hash } from "./hash";
@@ -793,4 +793,5 @@ export class mapUtils {
         }
         return icon;
     }
+
 }

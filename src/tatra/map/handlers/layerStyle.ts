@@ -7,7 +7,6 @@ import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
 import { flatpickr } from "../../aux/flatpickr";
 import { mapUtils } from "../mapUtils";
-import { utils } from "../../utils";
 import { colorPaletteArray } from "../colorPaletteArray";
 import { Vector } from "ol/source";
 import { eisData } from "./eisData"; 
@@ -708,7 +707,7 @@ export class layerStyle {
             rec._url = lo.identifyAuxUrl.replace('#id#', lo.id).replace('#item#', rec.id);
         }
         
-        if (category == 'power_plants') {
+        if (category.indexOf('power_') == 0 ) {
             rec.fuel = feature.get('type');
             rec = layerStyle.setPowerPlantsLayer(lo, rec);
         } else {

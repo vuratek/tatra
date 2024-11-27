@@ -1,0 +1,16 @@
+.lmvGroupBreakerItem {
+	text-transform: uppercase;
+	min-height: 2.7rem;
+	margin-bottom:.6rem;
+}
+.lmvGroupBreakerItem .checkmark {
+	width:2rem;
+	height:2rem;
+}
+.lmvGroupBreakerItem .llCheckbox .checkmark:after {
+    height: 1.4rem;
+    left: 0.5rem;
+}
+.lmvControlsLayer .lmvGBul {
+    padding-left:1rem;
+}

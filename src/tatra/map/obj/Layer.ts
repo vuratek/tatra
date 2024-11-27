@@ -123,6 +123,7 @@ export class Layer {
     public identifyUrl      : string | null = null;
     public identifyAuxUrl   : string | null = null;     // other type of identify
     public info             : string | null = null;     // info-id for layerInfo modal if different from id
+    public infoIcon         : string | null = null;     // layer info icon if it needs to be different than layer icon (a.k.a. power plants layer)
     public initData         : string | null = null;
     public initVisibility   : boolean = false;
     public isBasicIdentify  : boolean = false;

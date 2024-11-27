@@ -80,6 +80,11 @@ export class menu {
                 if (props.menuModules[m.id]) {
                     m.handler = props.menuModules[m.id];
                 }
+                if (m.groupBreakers) {
+                    for (let g = 0; g < m.groupBreakers.length; g++) {
+                        m.groupBreakers[g].moduleId = m.id;
+                    }
+                }
 			}
         }
     }

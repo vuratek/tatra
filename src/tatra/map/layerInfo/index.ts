@@ -139,7 +139,13 @@ export class layerInfo {
     public static setIcon (lo : Layer, el : HTMLDivElement) {
         var x = 0;
         var y = 0;
-        if (lo.icon && lo.icon.indexOf('color:') == 0) {
+        if (lo.infoIcon) {
+            el.style.background = 'url('+lo.infoIcon+')'
+            el.style.backgroundSize= 'contain';
+            if (! lo.iconHasBorder) {
+                el.style.border = 'none';
+            }
+        } else if (lo.icon && lo.icon.indexOf('color:') == 0) {
             let color = lo.icon.replace('color:', '');
             el.style.background = color;
         } else if (lo.icon && lo.icon.indexOf('orbit') == 0) {
