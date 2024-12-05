@@ -110,6 +110,9 @@ export class coreUtils {
                         lo[key] = value;
                 }
             }
+            if (lo.paletteGIBS) {
+                lo.paletteGIBS_default = lo.paletteGIBS;
+            }
             this.adjustImageryTemplate(lo);
             if (url != "") { 
                 if (! lo.source) { lo.source = new LayerSource();}

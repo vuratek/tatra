@@ -8,6 +8,8 @@ export class configProps {
     public static center                : Array <number> = [0, 0];
     public static dates                 : string | null = null;
     public static extent                : [number, number, number, number] | null = null;
+    public static GIBSPalettesConfig    : string = 'https://worldview.earthdata.nasa.gov/config/palettes/';
+    public static GIBSPalettesCustom    : string = 'palettes-custom.json';
     public static hasLocation           : boolean = true;
     public icons                        : string | null = null;
     public static initURL               : string = '';

@@ -12,7 +12,7 @@ import { Layer } from "./obj/Layer";
 import { ColorPalette } from "./obj/ColorPalette";
 import { WKT } from "ol/format";
 import { identifyGeoJSON } from "./handlers/identifyGeoJSON";
-import { IMenuModuleLayers, IGroupBreaker } from "./defs/ConfigDef";
+import { IMenuModuleLayers } from "./defs/ConfigDef";
 import { utils } from "../utils";
 import { ProductDates } from "./obj/ProductDates";
 import { hash } from "./hash";
@@ -623,8 +623,33 @@ export class mapUtils {
                 lo.variableRange["coloringSet"] = arr2;
             }
         }
+        if (!props.GIBSPalettes) {
+            let url = configProps.GIBSPalettesConfig.replace('/palettes', '') + configProps.GIBSPalettesCustom;
+            fetch(url)
+            .then(response => {
+                if (response.status == 404) {
+                    throw new TypeError("No palette list.");
+                }
+                return response.json();
+            })
+            .then (data => {
+                props.GIBSPalettes = data;
+                mapUtils.loadPallete(lo);
+            })
+            .catch(error => {});
+        } else {
+            this.loadPallete(lo);
+        }
+    }
+    
+    private static loadPallete(lo : Layer) {
+        if (lo.paletteGIBS && (! props.GIBSPalettes || !props.GIBSPalettes[lo.paletteGIBS])) {
+            console.log("Invalid GIBS palette.");
+            lo.paletteGIBS = null;
+        }
+
         if (lo.paletteUrl) {
-            fetch(lo.paletteUrl)
+            fetch(configProps.GIBSPalettesConfig + lo.paletteUrl)
             .then(response => {
                 if (response.status == 404) {
                     throw new TypeError("No palette.");
@@ -636,7 +661,7 @@ export class mapUtils {
             })
             .catch(error => {});
         }
-	}
+    }
 
 	private static processColorMap (lo : Layer, data : any) {
         let cp = new ColorPalette();
@@ -647,16 +672,17 @@ export class mapUtils {
         lo.colorPaletteId = cp.id;
         this.prepareColors(lo);
         events.dispatch(events.EVENT_COLOR_PALETTE_LOADED);
+        events.dispatch(events.EVENT_KIOSK_LEGEND);
     }
     
     public static prepareColors (lo : Layer) {
         if (! lo.colorPaletteId) { return; }
-        
+
         if (lo.variableRange) {
             if (lo.variableRange["coloring"]) {
                 this.setColoringRange(lo);
             }
-            else if (lo.variableRange["coloringSet"]) {
+            else if (lo.variableRange["coloringSet"] || lo.paletteGIBS || lo.paletteGIBS_default || lo.paletteGIBS_display) {
                 this.setColoringSet(lo);
             }
         }   
@@ -668,13 +694,25 @@ export class mapUtils {
         let cp = props.colorPalettes[lo.colorPaletteId];
         let start = (lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : 1;
         let end = (lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values.length;
+        let pal = null;
+        let pal_step = 1;
+        if (props.GIBSPalettes && lo.paletteGIBS) {
+            pal = props.GIBSPalettes[lo.paletteGIBS];
+            pal_step = pal.colors.length /cp.values.length;
+        }
+        let index = 0;
         for (let i=0; i < cp.values.length; i++) {
             if (cp.values[i].ref >= start && cp.values[i].ref <= end) {
                 let val = this.getColorCombination(cp.values[i].color);
-                if (i >= start && i <=end) {
-                // c2 = val;            // this will need to reference alternate color
+                if (pal) {
+                    props.colorLookup[lo.id][val] = this.getColorCombinationInt(pal.colors[index]);
+                } else {
+                    props.colorLookup[lo.id][val] = this.getColorCombinationInt(cp.values[i].color);
                 }
-                props.colorLookup[lo.id][val] = cp.values[i].ref;
+            }
+            index = Math.round(index + pal_step);
+            if (pal && index > pal.colors.length-1) { 
+                index = pal.colors.length-1;
             }
         }
     }
@@ -683,39 +721,82 @@ export class mapUtils {
         props.colorLookup[lo.id] = {};
         if (! lo.colorPaletteId) { return; }
         let cp = props.colorPalettes[lo.colorPaletteId];
-        for (let i=0; i < cp.values.length; i++) {
-            for (let j=0; j<lo.variableRange["coloringSet"].length; j++) {
-                if (cp.values[i].ref == lo.variableRange["coloringSet"][j]) {
-                    let val = this.getColorCombination(cp.values[i].color);
-                    props.colorLookup[lo.id][val] = cp.values[i].ref;
-                    break;
+
+        if ((lo.paletteGIBS  || lo.paletteGIBS_default || lo.paletteGIBS_display) && props.GIBSPalettes) {
+            let pal;
+            let pal_step = 1;
+            if (lo.paletteGIBS) {
+                pal = props.GIBSPalettes[lo.paletteGIBS];
+                pal_step = pal.colors.length /cp.values.length;
+            }               
+            lo.variableRange["coloring"] = new Array(2);
+            lo.variableRange["coloring"][0] = 1;
+            lo.variableRange["coloring"][1] = cp.values.length;
+            let index = 0;
+            for (let i=0; i < cp.values.length; i++) {
+                let val = this.getColorCombination(cp.values[i].color);
+                if (!pal) {
+                    props.colorLookup[lo.id][val] = this.getColorCombinationInt(cp.values[i].color);
+                } else {
+                    props.colorLookup[lo.id][val] = this.getColorCombinationInt(pal.colors[index]);
+                }
+                index = Math.round(index + pal_step);
+                if (pal && index > pal.colors.length-1) { 
+                    index = pal.colors.length-1;
+                }  
+            }  
+        } else {
+            for (let i=0; i < cp.values.length; i++) {
+                for (let j=0; j<lo.variableRange["coloringSet"].length; j++) {
+                    if (cp.values[i].ref == lo.variableRange["coloringSet"][j]) {
+                        let val = this.getColorCombination(cp.values[i].color);
+                        props.colorLookup[lo.id][val] = this.getColorCombinationInt(cp.values[i].color);
+                        break;
+                    }
                 }
             }
         }
     }
 
-    private static getColorCombination(color:string):string {
+    private static getColorCombinationInt(color:string) : Array <number> {
         let c1 = parseInt(color.substring(0,2), 16);
         let c2 = parseInt(color.substring(2,4), 16);
         let c3 = parseInt(color.substring(4,6), 16);
         let c4 = parseInt(color.substring(6,8), 16);
+        return [c1, c2, c3, c4];
+    }
+
+    private static getColorCombination(color:string):string {
+        let [c1, c2, c3, c4] = this.getColorCombinationInt(color);
         return `${c1},${c2},${c3},${c4}`;
     }
 
-    public static generateColorPaletteLegend(divId: string, cp : ColorPalette, width : number, height:number, min:number, max:number) {
+    public static generateColorPaletteLegend(divId: string, cp : ColorPalette, width : number, height:number, min:number, max:number, gibsPalette : string | null ) {
         let c = document.getElementById(divId) as HTMLCanvasElement;
+        let pal = null;
+        let pal_step = 1;
+        if (gibsPalette && props.GIBSPalettes && props.GIBSPalettes[gibsPalette]) {
+            pal = props.GIBSPalettes[gibsPalette].colors;
+            pal_step = pal.length /cp.values.length;
+        }
 		if (c) {
 			let ctx = c.getContext("2d");
 			if (ctx && cp.values.length > 0) {
                 let step = width / cp.values.length;
+                let index = 0;
 				for (let i=0; i<cp.values.length; i++) {
 					if (cp.values[i].ref >= min && cp.values[i].ref <= max) {
-						let c1 = parseInt(cp.values[i].color.substring(0,2), 16);
-						let c2 = parseInt(cp.values[i].color.substring(2,4), 16);
-						let c3 = parseInt(cp.values[i].color.substring(4,6), 16);
+                        let color = (pal) ? pal[index] : cp.values[i].color;
+						let c1 = parseInt(color.substring(0,2), 16);
+						let c2 = parseInt(color.substring(2,4), 16);
+						let c3 = parseInt(color.substring(4,6), 16);
 						ctx.beginPath();
 						ctx.fillStyle = `rgb(${c1},${c2},${c3})`;
-						ctx.fillRect(i*step, 0, step+1, height);
+                        ctx.fillRect(i*step, 0, step+1, height);
+                        index = Math.round(index + pal_step);
+                        if (pal && index > pal.length-1) { 
+                            index = pal.length-1;
+                        } 
                     }
 				}
 			}

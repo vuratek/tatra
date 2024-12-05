@@ -1,11 +1,19 @@
 import { utils } from "../../utils";
-import { ImageArcGISRest } from "ol/source";
 
 export class ColorPaletteValues {
     public min : number = 0;
     public max : number = 0;
     public ref : number = 0;
     public color : string = "";
+}
+
+export interface IGIBSPaletteItem {
+    colors  : Array<string>;
+    id      : string;
+    name    : string;
+}
+export interface IGIBSPalette {
+    [key:string] : IGIBSPaletteItem;
 }
 
 export class ColorPalette {

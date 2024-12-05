@@ -47,8 +47,10 @@ export class locator extends baseComponent {
         this.setIgnoreResize(false);
         super.open();
         tools.activate(this.id);
-        let mh = (document.getElementById('map') as HTMLDivElement).clientHeight - 400;
-        let mw = ((document.getElementById('map') as HTMLDivElement).clientWidth - 400) / 2 - 40;
+        let [mw, mh] = this.getSpaceSize();
+        mh = mh - 400;
+        mw = (mw - 400) / 2 - 40;
+        
         if (mh < 0) { mh = 0;}
         else { mh = 25;} // mh=50
         if (mw < 0) { mw = 0;}

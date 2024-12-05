@@ -75,12 +75,12 @@ export class view3d extends baseComponent {
         let map = document.getElementById('map') as HTMLDivElement;
         if (! map ) { return; }
         if (this.isActive) {
-            utils.addClass('map', 'map_size');
-            props.map.updateSize();
             this.zoom = props.map.getView().getZoom();
             if (this.zoom) {
                 this.center = props.map.getView().getCenter();
             }
+            utils.addClass('map', 'map_size');
+            props.map.updateSize();
             props.map.getView().setCenter([0,0]);
             props.map.getView().setZoom(1);
     
@@ -104,7 +104,8 @@ export class view3d extends baseComponent {
                 if (this.center) {
                     props.map.getView().setCenter(this.center);
                 }
-            }    
+            }
+
             events.dispatch(events.EVENT_VIEW2D);
         }
     }
@@ -136,6 +137,9 @@ export class view3d extends baseComponent {
             <div id="map3dReturn">
                 <i class="fa fa-map fa-lg bottomBarBtnLabel"></i>
             </div>
+            <div id="map3dControls">
+                <i class="fa fa-sliders fa-lg bottomBarBtnLabel"></i>
+            </div>
         `;
         if (hasLoader) {
             str += `
@@ -157,7 +161,12 @@ export class view3d extends baseComponent {
             </div>
         `;*/
         utils.html('map3dCtrl', str);
-        utils.setClick('map3dCtrl', ()=> this.close());
+        utils.setClick('map3dReturn', ()=> this.close());
+        utils.setClick('map3dControls', ()=> this.controls());
+    }
+
+    private static controls () {
+        console.log("Controls");
     }
     
 }

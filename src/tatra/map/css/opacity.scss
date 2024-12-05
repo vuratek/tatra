@@ -29,7 +29,12 @@
     border:.1rem solid #AAA;
     border-radius: .7rem;
 }
-
+.opacityMenuLegend:hover canvas {
+	border:.3rem solid #80ffea;
+}
+.lmvControlsWindowContent .opacityMenuLegend:hover canvas {
+	border:.1rem solid #AAA;
+}
 .opacityMenuVariableLegendLbl {
     position: absolute;
     top: 0.7rem;
@@ -45,13 +50,43 @@
     margin-left: 1.5rem;
     display: inline-block;
 }
-.opacityMenuLegend {
+.opacityMenuLegend, .opacityColorLegend {
     width: 100%;
     position: relative;
     font-size: 1.1rem;
     color: #FFF;
     margin-top: 0.7rem;
     display:-webkit-inline-box;
+}
+.opacityColorLegend {
+	display: block;
+	max-height: 17rem;
+	overflow: auto;
+}
+.opacityColorLegend>div {
+    text-align: center;
+    border: .1rem solid #777;
+    border-radius: .7rem;
+	text-transform: uppercase;
+	margin: .6rem 1rem;
+    padding: .2rem;
+	font-size: 1.3rem;
+	cursor: pointer;
+}
+.opacityColorLegend>div:hover {
+	border:.1rem solid #80ffea;
+	background:#222;
+}
+.opacityColorLegend .opacityColorLegendSelected, .opacityColorLegend .opacityColorLegendSelected:hover {
+	border: .3rem solid #eee;
+	position: relative;
+}
+.opacityColorLegendSelected .layerOnOffButtonActive {
+	top: -.5rem;
+    left: -.5rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
 }
 .opacityValueRangeLbl {
 	background:none;

@@ -134,16 +134,6 @@ export class time_info extends baseComponent {
 
     public static open() {
         super.open();
-		let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-		let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
-		let posy = 0;
-		let posx = 0;
-		if (mh > 500) {
-			posy = 70;
-		}
-		if (mw > 600) {
-			posx = mw - 570;
-		}		
-        this.position(posx, posy);
+        this.basicPosition(570, 70);
 	}
 }

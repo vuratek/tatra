@@ -16,17 +16,6 @@ export class lg_info extends baseComponent {
     
     public static open() {
 		super.open();
-		let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-		let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
-		let posy = 0;
-		let posx = 0;
-		if (mh > 500) {
-			posy = 30;
-		}
-		if (mw > 600) {
-			posx = mw - 675;
-		}		
-        this.position(posx, posy);
+		this.basicPosition(675, 30);
 	}
-
 }

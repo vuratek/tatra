@@ -147,6 +147,9 @@ export class Layer {
     public mode             : string | null = null;     // set value if custom layer modifiers in place so url hash updates correctly
     public needsLegendIcon  : boolean = false;
     public noDateRefresh    : boolean = false; //remove ???
+    public paletteGIBS_default : string | null = null;     // GIBS palette color originally in the config
+    public paletteGIBS      : string | null = null;     // GIBS palette color
+    public paletteGIBS_display : boolean = false;
     public paletteUrl       : string | null = null;
     public paletteColorDef  : string | null = null;
     public parent           : string | null = null;

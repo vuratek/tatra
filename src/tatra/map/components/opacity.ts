@@ -6,6 +6,7 @@ import { Slider } from "../../aux/Slider";
 import { props } from "../props";
 import { noUiSlider } from "../../aux/nouislider";
 import { mapUtils } from "../mapUtils";
+import { utils } from "../../utils";
 
 export class opacity extends baseComponent {
 	public static id		: string = 'opacity';
@@ -13,6 +14,7 @@ export class opacity extends baseComponent {
 	public static draggable : boolean = true;
 	public static className : string = 'transparentWindow';
 	public static showHeader : boolean = false;
+	public static sliderRange : Array<number> = [1,100];
 
 	public static currentLayers : Array<Layer> | null = null; // lmv LayerObject 
 	private static currentLayerTitle : string = '';
@@ -146,16 +148,15 @@ export class opacity extends baseComponent {
 	}
 
 	public static open() {
-		super.open();
-		let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-		let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
+		super.open(); 
+		let [mw, mh] = this.getSpaceSize();
 		let posy = 0;
 		let posx = 0;
 		if (mh > 500) {
-			posy = 100;
+			posy = 40;
 		}
 		if (mw > 400 && mw < 800) {
-			posx = 50;
+			posx = 20;
 		} else if (mw > 800) {
 			posx = mw - 750;
 		}		
@@ -204,6 +205,11 @@ export class opacity extends baseComponent {
 			<div class="opacitySliderWrap" ${ff_hide}>
 				<div class="opacityValueRangeSlider" id="lmvControls_${this.id}_SliderMenuRange"></div>
 			</div>
+			<div class="opacityLabel">
+				Color Palette				
+			</div>
+			<div id="lmvControls_${this.id}_ColorLegends" class="opacityColorLegend">
+			</div>
 			${ff_error}
 		`;
 		let vals = [1, cp.values.length];
@@ -218,26 +224,57 @@ export class opacity extends baseComponent {
 					'max': cp.values.length
 				}
 			});
-			console.log(vals[0], vals[1]);
 			slider.noUiSlider.on("slide", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, false));
 			slider.noUiSlider.on("set", ( vals : Array <number> ) => this.formatVROutput(lo.id, vals, true));
 //		}
 		this.formatVROutput(lo.id, vals, false);
+		utils.setClick(`lmvControls_${this.id}_ColorLegends`, (evt : Event) => this.onLegendSelect(evt as MouseEvent));
 		
 	}
 
 	private static formatVROutput (id : string, values : Array <number> | undefined, update : boolean) {
 		if (values === undefined) { return; }
+		this.sliderRange = values;
 		let cEl = document.getElementById(`lmvControls_${this.id}_SliderMenuLegendBar`) as HTMLDivElement;
 		let width = cEl.offsetWidth;
 		cEl.innerHTML = `<canvas id="lmvControls_${this.id}_SliderMenuLegendCanvas" width="${width}" height="25"></canvas>`;
+		
 		let lo = mapUtils.getLayerById(id);
 		if (! lo || ! lo.colorPaletteId) { return; }
 		let cp = props.colorPalettes[lo.colorPaletteId as string];
 	 	let val1 = Math.round(values[0]);
 		let val2 = Math.round(values[1]);
 		if (val2 >= cp.values.length) { val2 = cp.values.length; }
-		mapUtils.generateColorPaletteLegend(`lmvControls_${this.id}_SliderMenuLegendCanvas`, cp, width, 25, val1, val2);
+		let gibsPalette = (lo.paletteGIBS) ? lo.paletteGIBS : null;
+		mapUtils.generateColorPaletteLegend(`lmvControls_${this.id}_SliderMenuLegendCanvas`, cp, width, 25, val1, val2, gibsPalette);
+
+		let colEl = document.getElementById(`lmvControls_${this.id}_ColorLegends`) as HTMLDivElement;
+		let str = '';
+		if (props.GIBSPalettes) {
+			str += `<div id="lmvControls_${this.id}_ColorWrap_default">
+						<canvas id="lmvControls_${this.id}_ColorCanvas_default" width="${width-20}" height="25"></canvas>
+						<div>DEFAULT</div>
+					</div>`;
+			for (let key in props.GIBSPalettes) {
+				let pal = props.GIBSPalettes[key];
+				if (pal.colors.length < 3) { 
+					continue;
+				}
+				str += `<div id="lmvControls_${this.id}_ColorWrap_${pal.id}">
+							<canvas id="lmvControls_${this.id}_ColorCanvas_${pal.id}" width="${width-20}" height="25"></canvas>
+							<div>${pal.name}</div>
+						</div>`;
+			}
+			colEl.innerHTML = str;
+			mapUtils.generateColorPaletteLegend(`lmvControls_${this.id}_ColorCanvas_default`, cp, width, 25, val1, val2, null);
+			for (let key in props.GIBSPalettes) {
+				let pal = props.GIBSPalettes[key];
+				if (pal.colors.length < 3) { continue;}
+				mapUtils.generateColorPaletteLegend(`lmvControls_${this.id}_ColorCanvas_${pal.id}`, cp, width, 25, val1, val2, pal.id);
+			}
+			this.setSelectedPalette();
+		}
+
 		if (update) {
 		    if (!lo.variableRange) { lo.variableRange = {}; }
 			lo.variableRange["coloring"] = [val1, val2];
@@ -257,5 +294,62 @@ export class opacity extends baseComponent {
 		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange1`) as HTMLDivElement).innerHTML=leg1;
 		(document.getElementById(`lmvControls_${this.id}_SliderMenuRange2`) as HTMLDivElement).innerHTML=leg2;
 //		menuCommon.updateHash();
+	}
+
+	private static setSelectedPalette() {
+		utils.removeClass(`lmvControls_${this.id}_ColorWrap_default`, 'opacityColorLegendSelected');
+		for (let key in props.GIBSPalettes) {
+			let pal = props.GIBSPalettes[key];
+			utils.removeClass(`lmvControls_${this.id}_ColorWrap_${pal.id}`, 'opacityColorLegendSelected');
+		}
+		let check = document.getElementById(`lmvControls_${this.id}_ColorCheck`) as HTMLDivElement;
+		if (check) {
+			check.remove();
+		}
+		if (this.currentLayers) {
+			for (let i=0; i<this.currentLayers.length; i++) {
+				let lo = this.currentLayers[i];
+				let id = (lo.paletteGIBS) ? lo.paletteGIBS : 'default';
+				utils.addClass(`lmvControls_${this.id}_ColorWrap_${id}`, 'opacityColorLegendSelected');
+				this.createCheckMark(`lmvControls_${this.id}_ColorWrap_${id}`);
+			}
+		}
+	}
+	private static createCheckMark(parentDiv:string) {
+		let divEl = document.getElementById(parentDiv) as HTMLDivElement;
+		if (! divEl) { return; }
+
+		let el = document.createElement("div");
+		el.id = `lmvControls_${this.id}_ColorCheck`;
+		el.className = 'layerOnOffButton layerOnOffButtonActive';
+		divEl.appendChild(el);
+		el.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i>`;
+	}
+	private static onLegendSelect(evt : MouseEvent) {
+		let path = evt.path || (evt.composedPath && evt.composedPath());
+		let max = (path.length > 5) ? 5 :path.length;
+		let id : string | null = null;
+        for (let i=0; i<max; i++) {
+            let el = path[i] as HTMLElement;
+            if (el.tagName && el.tagName.toLowerCase() == 'div') {
+				if (el.id && el.id.indexOf(`lmvControls_${this.id}_ColorWrap_`) == 0) {
+					id = el.id.replace(`lmvControls_${this.id}_ColorWrap_`, '');
+					break;	
+				}
+            }
+		}
+		if (id && this.currentLayers) {
+			for (let i=0; i<this.currentLayers.length; i++) {
+				let lo = this.currentLayers[i];
+				lo.paletteGIBS = (id == 'default') ? null : id; 
+				mapUtils.prepareColors(lo);
+				lo.refresh();	
+				let cp = props.colorPalettes[lo.colorPaletteId as string];
+				this.formatVROutput(lo.id, this.sliderRange, true);
+			}
+			this.setSelectedPalette();
+			events.dispatch(events.EVENT_LAYER_RANGE_UPDATE);
+		}
+
 	}
 }

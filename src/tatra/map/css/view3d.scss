@@ -8,10 +8,12 @@
     color: #FFF;
     cursor: pointer;
 }
-#map3dReturn {
+#map3dReturn, #map3dControls {
 	position: absolute;
 	top: 7rem;
-	left: .5rem;
+    left: .5rem;
+    width:4.5rem;
+    height:4.5rem;
 	padding: 1rem;
 	border-radius: 3rem;
 	border: .1rem solid #35b7b3;
@@ -19,10 +21,16 @@
 	color: #35b7b3;
 	opacity:0.5;
 }
-#map3dReturn:hover {
+#map3dReturn:hover, #map3dControls:hover {
     opacity:0.9;
     background: #35b7b3;
     color:#eee;
+}
+#map3dReturn .bottomBarBtnLabel, #map3dControls .bottomBarBtnLabel {
+    padding: .1rem 0;
+}
+#map3dControls {
+    top: 12rem;
 }
 .barPannel {
     width: 8rem;

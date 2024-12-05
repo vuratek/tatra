@@ -167,7 +167,7 @@ export class layer {
         input["imageSmoothing"] = false;
 
 //        if (navigator.userAgent.indexOf("Firefox") == -1 && lo.paletteUrl || lo.paletteColorDef) {        
-        if (lo.paletteUrl || lo.paletteColorDef) {        
+        if (lo.paletteUrl || lo.paletteColorDef) { 
             let lyr = new RasterSource({
                 sources: [
                     new TileLayer({
@@ -178,7 +178,7 @@ export class layer {
                     if (data["colors"]) {
                         let lookup = `${pixel[0]},${pixel[1]},${pixel[2]},${pixel[3]}`;
                         if (data["colors"][lookup]) {
-                            return pixel;
+                            return data["colors"][lookup];
                         } else {
                             pixel[3]=0;
                         }

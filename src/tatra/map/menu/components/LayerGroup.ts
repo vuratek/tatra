@@ -357,6 +357,7 @@ export class LayerGroup extends Module {
 			return;
 		}
 		let cp = props.colorPalettes[lo.colorPaletteId as string];
+		
 		utils.show(`layerMenu_${menu}_${lo.id}`);
 		let val1 = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][0] : cp.values[0].ref;
 		let val2 = (lo.variableRange && lo.variableRange["coloring"]) ? lo.variableRange["coloring"][1] : cp.values[cp.values.length-1].ref;
@@ -380,7 +381,8 @@ export class LayerGroup extends Module {
 		let width = cEl.offsetWidth;
 		cEl.innerHTML = `<canvas id="lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas" width="${width}" height="20"></canvas>`;
 
-		mapUtils.generateColorPaletteLegend(`lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas`, cp, width, 20, val1, val2);
+		let gibsPalette = (lo.paletteGIBS) ? lo.paletteGIBS : null;
+		mapUtils.generateColorPaletteLegend(`lmvControls_${menu}_${lo.id}_SliderMenuLegendCanvas`, cp, width, 20, val1, val2, gibsPalette);
 		utils.setClick(`lmvControls_${menu}_${lo.id}_SliderClickable`, ()=>this.showExtraOption(lo.id));
 
 	}

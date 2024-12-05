@@ -217,6 +217,14 @@ export class Module {
             if (isActiveModule && hashLayers.length > 0) {
                 arr[j].visible = this.isHashLayer(arr[j].id, hashLayers);
                 let info = this.getHashLayerId(arr[j].id, hashLayers);
+                if (info && info.indexOf('pal-') == 0) {
+                    let lo = mapUtils.getLayerById(arr[j].id);
+                    if (lo) {
+                        let ai = info.replace('pal-', '').split(',');
+                        lo.paletteGIBS = ai[0];
+                    }
+                    info = null;
+                }
                 if (arr[j].visible && info) {
                     this.setAdditionalLayerInfo(arr[j], info);
                 }
@@ -257,9 +265,11 @@ export class Module {
     }
 
     public getLayerHashValue(lo : Layer) : string {
-        //console.log(lo.id);
         if (lo.classifier) {
             return lo.id + '=' + lo.classifier;
+        } else if (lo.paletteGIBS != lo.paletteGIBS_default) {
+            let pal = (lo.paletteGIBS) ? lo.paletteGIBS : 'default';
+            return lo.id + '=pal-' + pal;
         }
         return lo.id;
     }
@@ -391,7 +401,7 @@ export class Module {
 		opacity.setLayer(lo.id, lo.title);
     }
 
-    public renderKioskLegend() : string | null {
+    public renderKioskLegend(parent : HTMLDivElement) {
         let legends : Array <{ icon: string | null, label : string, lo : Layer }> = [];
         if (this.props.layer_refs) {
 			for (let i=0; i<this.props.layer_refs.length; i++) {
@@ -427,6 +437,13 @@ export class Module {
                         ${leg}
                     </div>
                 `;
+            }  else if (lo.paletteGIBS_display) {
+                str += `
+                    <div class="kioskLegendCustom">
+                        <div>${legends[i].label}</div>
+                        <div><canvas id="lmvControls_kiosk_leg_${lo.id}" width="220" height="25"></canvas></div>
+                    </div>
+            `;
             } else {
                 str += `
                     <div class="kioskLegendItem">
@@ -436,7 +453,23 @@ export class Module {
                 `;
             }
         }
-        return str;
+        if (str != '') {
+            let el = document.createElement("div");
+            parent.appendChild(el);
+            el.innerHTML = str;
+            for (let i=0; i<legends.length; i++) {
+                let lo = legends[i].lo;
+                let cp = props.colorPalettes[lo.colorPaletteId as string];
+                if (props.GIBSPalettes && lo.paletteGIBS_display) {
+                    if (lo.paletteGIBS) {
+                        let pal = props.GIBSPalettes[lo.paletteGIBS];
+                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, 220, 25, 1, pal.colors.length, pal.id);
+                    } else {
+                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, 220, 25, 1, cp.values.length, null);
+                    }
+                }
+            }
+        }
     }
 
     public updateInfoLabel() {}

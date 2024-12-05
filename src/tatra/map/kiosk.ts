@@ -48,22 +48,21 @@ export class kiosk {
     }
     private static renderKioskLegend() {
         if (props.viewMode != VIEW_MODES.KIOSK) { return; }
-        let str = '';
+        let str = `
+            <div id="lmvKioskLegend">
+            </div>
+        `;
+        utils.html('lmvKioskLegendWrapper', str);
+        let el = document.getElementById('lmvKioskLegend') as HTMLDivElement;
         for (let key in props.menuModules) {
             if (props.menuModules[key].isActive()) {
-                let legend = props.menuModules[key].renderKioskLegend();
-                if (legend) {
-                    str += legend;
-                }
+                props.menuModules[key].renderKioskLegend(el);
             }
         }
-        if (str != '') {
-            str = `
-                <div id="lmvKioskLegend">
-                    ${str}
-                </div>
-            `;
+        if (el.childElementCount == 0) {
+            utils.hide('lmvKioskLegendWrapper');
+        } else {
+            utils.show('lmvKioskLegendWrapper');
         }
-        utils.html('lmvKioskLegendWrapper', str);
     }
 }

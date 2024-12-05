@@ -2,7 +2,7 @@ import { Map } from 'ol';
 import { Layer } from './obj/Layer';
 import { IConfigDef } from './defs/ConfigDef';
 import { ScaleLine } from "ol/control";
-import { ColorPalette } from './obj/ColorPalette';
+import { ColorPalette, IGIBSPalette } from './obj/ColorPalette';
 import { ProductDates } from './obj/ProductDates';
 import { Module } from './menu/components/Module';
 import { MapTime } from "./obj/MapTime";
@@ -53,6 +53,7 @@ export class props  {
 
     public static colorPalettes         : IColorPalettes = {};
     public static colorLookup           : IColorLookup = {};    // colorLookup["layer_id"] = ["color1" : "color_lookup1", ...]
+    public static GIBSPalettes          : IGIBSPalette | null = null;
     public static defaultBasemap        : string = 'earth';
     public static locatorSubset         : string | null = null;
     public static tileLoadActive        : ITileLoadTracker = {};
@@ -82,7 +83,7 @@ export interface IColorLookup {
     [layer_id : string] : IColorLookupItem;
 }
 export interface IColorLookupItem {
-    [color : string] : number;
+    [color : string] : Array<number>;
 }
 export interface ITileLoadTracker {
     [layer_id:string] : number;

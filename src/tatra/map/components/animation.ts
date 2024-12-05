@@ -39,9 +39,8 @@ export class animation extends baseComponent {
     }
 
 	public static open() {
-		super.open();
-		let mh = (document.getElementById('map') as HTMLDivElement).clientHeight;
-		let mw = (document.getElementById('map') as HTMLDivElement).clientWidth;
+        super.open();
+        let [mw, mh] = this.getSpaceSize();
 		let posy = 0;
 		let posx = 0;
 		if (mh > 500) {

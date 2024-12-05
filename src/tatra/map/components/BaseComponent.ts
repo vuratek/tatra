@@ -109,6 +109,26 @@ export class baseComponent {
         //controls.setItem(this.id, true);
     }
 
+    public static getSpaceSize() : [number, number] {
+        let id = (props.is3DMode) ? 'map3d' : 'map';
+		let mh = (document.getElementById(id) as HTMLDivElement).clientHeight;
+		let mw = (document.getElementById(id) as HTMLDivElement).clientWidth;
+        return [mw, mh];
+    }
+
+    public static basicPosition(x:number, y:number) {
+        let [mw, mh] = this.getSpaceSize();
+		let posy = 0;
+		let posx = 0;
+		if (mh > 500) {
+			posy = y;
+		}
+		if (mw > 600) {
+			posx = mw - x;
+		}		
+        this.position(posx, posy);
+    }
+
     public static setIgnoreResize(ignore : boolean) {
         this.ignoreResize = ignore;
         props.ignoreResize = ignore;
