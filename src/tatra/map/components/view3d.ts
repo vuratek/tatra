@@ -88,7 +88,6 @@ export class view3d extends baseComponent {
             utils.show('map3d');
             utils.addClass('html', 'is3d', false);
             utils.hide('lmvInfoBar');
-            utils.show('map3dCtrl');
             events.dispatch(events.EVENT_VIEW3D);
 
         } else {
@@ -97,7 +96,6 @@ export class view3d extends baseComponent {
             utils.removeClass('html', 'is3d', false);
             props.map.updateSize();
             utils.show('lmvInfoBar');
-            utils.hide('map3dCtrl');
             map.style.visibility = "visible";
             if (this.zoom) {
                 props.map.getView().setZoom(this.zoom);

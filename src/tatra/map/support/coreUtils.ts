@@ -142,6 +142,15 @@ export class coreUtils {
             } else if (visible) {
                 lo.initVisibility = visible;
             }
+//            if (lo.impactImage &&  lo.impactImage.isTool && lo.impactImage.isTool === true) {
+            if (lo.impactImage) {
+                if (lo.impactImage.expression) {
+                    lo.title =  `<div class="item_expression"><div>${lo.title}</div><span>${decodeURIComponent(lo.impactImage.expression)}</span></div>`;
+                }
+                if (lo.impactImage.isTool && lo.impactImage.isTool === true) {
+                    lo.hasLegend = true;
+                }
+            }
         }
         if (configProps.allowHashProps) {
 //            hash.parse(); -- seems duplicate

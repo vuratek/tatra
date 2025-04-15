@@ -76,6 +76,7 @@ export interface IMenuModule {
     description?        : string | null;        // module description
     module              : string;
     opened?             : boolean;
+    openedOnVisible?    : boolean;              // check if layer is visible in the group, then open
     tag                 : string | null;        // used for matching layers in the config
     defaultLayers       : Array<string> | null; // default layers that should load unless URL overrides it
     noGroup?            : boolean;              // if set, doesn't show +/- for expansion; default is false

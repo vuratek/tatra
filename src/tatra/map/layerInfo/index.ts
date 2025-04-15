@@ -17,6 +17,7 @@ export class LayerInfo {
     public GIBS_id          : string | null = null;
     public GIBS_imageId     : string | null = null;
     public GIBS_text        : string | null = null;
+    public GIBS_custom_text : string | null = null;
     public GIBS_hasDate     : boolean = true;
     public Local_id         : string | null = null;
     public Local_imageId    : string | null = null;
@@ -34,6 +35,7 @@ export class LayerInfo {
             if (obj.id) { this.id = obj.id; }
             if (obj.label) { this.label = obj.label; }
             if (obj.GIBS_id) { this.GIBS_id = obj.GIBS_id; }
+            if (obj.GIBS_custom_text) { this.GIBS_custom_text = obj.GIBS_custom_text; }
             if (obj.GIBS_imageId && obj.GIBS_imageId != '' ) { this.GIBS_imageId = obj.GIBS_imageId; }
             else if (obj.GIBS_id && ! obj.GIBS_imageId ) {
                 let arr = obj.GIBS_id.split('/');
@@ -359,8 +361,13 @@ export class layerInfo {
                     </h4>
                 `;
             }
+            let customText = '';
+            if (li.GIBS_custom_text) {
+                customText = `<p>${li.GIBS_custom_text}</p>`;
+            }
             el.innerHTML = `
                 ${dateInfo}
+                ${customText}
                 ${li.GIBS_text}
             `;
         }

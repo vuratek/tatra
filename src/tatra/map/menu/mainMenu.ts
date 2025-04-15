@@ -350,6 +350,7 @@ export class mainMenu {
                 if (obj.modules) {
                     for (let j=0; j<obj.modules.length; j++) {
                         let key = obj.modules[j].id;
+                        if (! props.menuModules[key]) { return false; }
                         let isSubDaily = props.menuModules[key].isSubDaily();
                         if (isSubDaily) { 
                             return true;

@@ -89,6 +89,14 @@
 .kioskLegendCustom > div:last-child {
     margin: 0 1rem;
 }
+.kioskLegendCustom .label {
+    position: absolute;
+    top: .5rem;
+    left: 1.5rem;
+    color:white;
+    text-transform: lowercase;
+    text-shadow: 0 0 .7rem #000, 0 0 .2rem #000;
+}
 #kioskDate {
     font-size: 3rem;
     line-height: 3.5rem;

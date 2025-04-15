@@ -59,6 +59,16 @@ export class Module {
             div.appendChild(el);
         } else {
             let opened = (this.overrideOpened != null) ? this.overrideOpened : this.props.opened;
+            if (this.props.openedOnVisible && this.props.openedOnVisible === true) {
+                if (this.props.layer_refs) {
+                    for (let i=0; i<this.props.layer_refs.length; i++) {
+                        if (this.props.layer_refs[i].visible) {
+                            opened = true;
+                            break;
+                        }
+                    }
+                }
+            }
             let options:IGroupContentOptions =  {
                 id : this.props.id,
                 label : this.props.label, 
@@ -427,6 +437,7 @@ export class Module {
         }
         if (legends.length == 0) { return null; }
         let str = '';
+        let width = 250;
         for (let i=0; i<legends.length; i++) {
             let lo = legends[i].lo;
             let icon = mapUtils.renderLayerIcon(lo);
@@ -438,10 +449,19 @@ export class Module {
                     </div>
                 `;
             }  else if (lo.paletteGIBS_display) {
+                let el = document.getElementById('lmvKioskLegend') as HTMLDivElement;
+                if (el.clientWidth > width + 40) {
+                    width = el.clientWidth - 40;
+
+                }
                 str += `
                     <div class="kioskLegendCustom">
                         <div>${legends[i].label}</div>
-                        <div><canvas id="lmvControls_kiosk_leg_${lo.id}" width="220" height="25"></canvas></div>
+                        <div style="position:relative;">
+                            <canvas id="lmvControls_kiosk_leg_${lo.id}" width="${width.toString()}" height="25"></canvas>
+                            <div class="label">low</div>
+                            <div class="label" style="left:${(width-40).toString()}px">high</div>
+                        </div>
                     </div>
             `;
             } else {
@@ -463,9 +483,9 @@ export class Module {
                 if (props.GIBSPalettes && lo.paletteGIBS_display) {
                     if (lo.paletteGIBS) {
                         let pal = props.GIBSPalettes[lo.paletteGIBS];
-                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, 220, 25, 1, pal.colors.length, pal.id);
+                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, width, 25, 1, pal.colors.length, pal.id);
                     } else {
-                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, 220, 25, 1, cp.values.length, null);
+                        mapUtils.generateColorPaletteLegend(`lmvControls_kiosk_leg_${lo.id}`, cp, width, 25, 1, cp.values.length, null);
                     }
                 }
             }

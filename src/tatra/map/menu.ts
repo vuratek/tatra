@@ -68,7 +68,7 @@ export class menu {
         let cfg = (props.config as IConfigDef);
         if (cfg.modules) {
 			for (let i=0; i<cfg.modules.length; i++) {
-				let m = cfg.modules[i];
+                let m = cfg.modules[i];
 				switch (m.module) {
 					case "basemaps" : props.menuModules[m.id] = new Basemaps(m); break;
                     case "basic" : props.menuModules[m.id] = new Basic(m); break;

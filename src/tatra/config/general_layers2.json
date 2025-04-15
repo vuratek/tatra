@@ -21,7 +21,7 @@
 		"title"		: "Streets",
 		"credit"	: "ESRI",
 		"exclusive" : "country-outline,countries",
-		"style"		: "https://www.arcgis.com/sharing/rest/content/items/cc8072363d614d96b08b2361a09979a5/resources/styles/root.json?f=pjson",
+		"style"		: "https://www.arcgis.com/sharing/rest/content/items/d1f18efb253141059b1594914dc027e8/resources/styles/root.json?f=pjson",
 		"iconMatrix": [0,1],
 		"styleBackground" : "#1c2325"
 	},{
@@ -67,7 +67,7 @@
 		"credit"	: "ESRI",
 		"iconMatrix": [0,2], 
 		"exclusive" : "country-outline,countries",
-		"style"		: "https://www.arcgis.com/sharing/rest/content/items/670c2a9ee3b949a8991b99df425abd0d/resources/styles/root.json?f=pjson",
+		"style"		: "https://www.arcgis.com/sharing/rest/content/items/0260a99f040c4f71882a0b51d56186d0/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#FFF",
 		"isLabel"	: true
 	},{
@@ -142,7 +142,7 @@
 		"credit"	: "ESRI",
 		"iconMatrix": [1,0], 
 		"isLabel"	: true,
-		"style"		: "https://www.arcgis.com/sharing/rest/content/items/a70340a048224752915ddbed9d2101a7/resources/styles/root.json?f=pjson",
+		"style"		: "https://www.arcgis.com/sharing/rest/content/items/f03ee5a31e2a4d7abd43fe50e3894d7a/resources/styles/root.json?f=pjson",
 		"styleBackground" : "#FFF"
 	},{
 		"id"		: "imagery_template",

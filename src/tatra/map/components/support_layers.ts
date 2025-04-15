@@ -329,7 +329,7 @@ export class support_layers extends baseComponent{
 	private static showExtraOption(id : string) {
 		let lo = mapUtils.getLayerById(id);
 		if (!lo) { return; }
-		if (lo.visible && opacity.isOpened && opacity.currentLayer && opacity.currentLayer.id == lo.id) {
+		if (lo.visible && opacity.isOpened && opacity.currentLayers && opacity.currentLayers[0].id == lo.id) {
 			opacity.close();
 			return;
 		}

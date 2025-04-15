@@ -28,7 +28,8 @@ export class MultiDayTimeSelector extends Module {
 
 	public constructor(props : IMenuModule) {
 		super(props);
-		this.timelineHandler = () => this.timelineUpdate();
+        this.timelineHandler = () => this.timelineUpdate();
+        hashHandler.allowAbbreviatedDates = true;
     }
     
     public render(par : HTMLDivElement) {

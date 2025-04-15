@@ -5,6 +5,7 @@ import flatpickr from 'flatpickr';
 import TileLayer from 'ol/layer/Tile';
 import { props } from '../props';
 import { utils } from '../../utils';
+import { ImpactImagery } from "./ImpactImagery";
 
 export class tileUrlFunctions {
 
@@ -13,6 +14,7 @@ export class tileUrlFunctions {
         tileUrlHandler.register("gibs", this._gibs);
         tileUrlHandler.register("orbit", this._orbit);
         tileUrlHandler.register("esri_vector", this._esri_vector);
+        tileUrlHandler.register("impact", this._impact);
     }
     /**
      * _basic - most basic tile service used for ESRI blue marble basemap
@@ -115,9 +117,32 @@ export class tileUrlFunctions {
 		url += `&geometry={"spatialReference":{"latestWkid":4326,"wkid":4326},"xmin":${minx},"ymin":${miny},"xmax":${maxx},"ymax":${maxy}}`;
 		url += `&maxRecordCountFactor=3&${outf}outSR=4326`;
 		url += `&resultType=tile&returnExceededLimitFeatures=false`;
-		url += `&spatialRel=esriSpatialRelIntersects&where=1=1&geometryType=esriGeometryEnvelope&inSR=4326`;
+        url += `&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryEnvelope&inSR=4326`;
+        if (url.indexOf('where=') == undefined) {
+            url += `&where=1=1`;
+        }
         url += `&geometryPrecision=${precision}`;
 		return url;
 	}
+
+    public static _impact  (id : string, tileCoord : Array <number>) : string {
+        let lo = mapUtils.getLayerById(id);
+        let tileUrl = '/images/empty_256.png';
+        if (!lo ) { return tileUrl; }
+        let level = props.map.getView().getZoom();
+        if (! level) { return ''; }
+        if (level < lo.minLevel || (lo.maxLevel != -1 && level > lo.maxLevel)) { return tileUrl; }
+        let date = flatpickr.formatDate(lo.time, lo.dateFormat);
+        if (! ImpactImagery.searchKeys[lo.id] || ! ImpactImagery.searchKeys[lo.id][date]) { return tileUrl; }
+        let key = ImpactImagery.searchKeys[lo.id][date];
+        if (! key || key == '0') { return ''; }
+        let url = key;
+
+        url = url
+                .replace('{z}', (tileCoord[0] - 1).toString())
+                .replace('{x}', tileCoord[1].toString())
+                .replace('{y}', (tileCoord[2]).toString());	 
+        return url;
+    }
 		
 }

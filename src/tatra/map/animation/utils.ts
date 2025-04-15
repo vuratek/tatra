@@ -442,7 +442,7 @@ export class animationUtils {
                 }
             }
             if (fc == fw) {
-//                utils.show('videoLaunch3d');
+                utils.show('videoLaunch3d');
             }
         } else {
             utils.hide('videoLaunch');

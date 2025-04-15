@@ -29,7 +29,11 @@
 	position:fixed;
 	background:radial-gradient(#000, #010f35);
 }
+.map3d {
+	display: none;
+}
 .map3dCtrl {
+	display:none;
 	position:fixed;
 	top:0;
 	left:0;
@@ -649,6 +653,23 @@ body::-webkit-scrollbar {
 .supp_lyrs_lyr_click_legend {
 	right:9rem;
 }
+.item_expression div {
+	margin-bottom: .3rem;
+}
+.item_expression span {
+	background: #102638;
+    padding: .3rem 1rem;
+    font-size: 1.4rem;
+    color: #ccc;
+    border-radius: 1rem;
+}
+.groupClass {
+	color: #eee;
+    cursor: auto;
+    background: linear-gradient(0deg, black, #713508);
+    padding: .5rem 1rem;
+    font-size: 1.4rem;
+}
 .lmvBottomLogo {
 	position:absolute;
 	bottom: .7rem;
@@ -659,12 +680,11 @@ body::-webkit-scrollbar {
 	width: 5rem;
 	height:4.2rem;
 }
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1940px) {
 	.map_size {
 		width:2048px;
 		height:1024px;
 	}
-	
 }
 @media screen and (max-width: 1180px) {
 	#mapControlBar {

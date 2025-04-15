@@ -13,6 +13,7 @@ export class EISRecord {
     end_date    : string | null = null;
     attributes  : any = {};
 }
+
 export interface IEISRecord {
     [fire_id:string]    : EISRecord;
 }
@@ -21,6 +22,21 @@ export class eisData {
     private static fires : IEISRecord = {};
     private static hasRefresh : boolean = false;
     private static refreshHandler : Function | null = null;
+
+    public static showValues = {
+        duration    : "days",
+        farea       : 'km<sup>2</sup>',
+        fireid      : '',
+        flinelen    : 'km',
+        fperim      : 'km',
+        meanfrp     : 'MW/(pixel area)',
+        n_newpixels : 'pixels',
+        n_pixels    : 'pixels',
+        pixden      : 'pixels/km<sup>2</sup>',
+        Primarykey  : '',
+        Region      : '',
+        t           : 'UTC'
+    }
     
     public static getRecord (layer_id : string, fire_id : string) : EISRecord {
         let rec = this.fires[fire_id];

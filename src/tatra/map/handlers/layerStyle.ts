@@ -1,7 +1,7 @@
 
 import { Layer } from "../obj/Layer";
 import { Feature } from 'ol';
-import { Point } from "ol/geom";
+import { Point, Polygon, MultiPolygon } from "ol/geom";
 import { props } from "../props";
 import { events } from "../events";
 import { Style, Stroke, Fill, Circle, Icon, Text } from "ol/style";
@@ -12,6 +12,7 @@ import { Vector } from "ol/source";
 import { eisData } from "./eisData"; 
 import { controls } from "../components/controls";
 import { attributes } from "../menu/features/attributes";
+import RenderFeature, { toGeometry } from "ol/render/Feature";
 
 class AreaLabels {
     public km       : string = '';
@@ -537,20 +538,27 @@ export class layerStyle {
     public static _fireAlertUSA_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "fire_name", true);
     }
-
     public static _firePerimeterUSA ( feature : Feature, resolution: number) : Style | null {
-        let key = "perimeter-usa";
+        return layerStyle.fpUSA(feature, resolution, 'current');
+    }
+    public static _firePerimeterUSAHist ( feature : Feature, resolution: number) : Style | null {
+        return layerStyle.fpUSA(feature, resolution, 'hist');
+    }
+    public static fpUSA ( feature : Feature, resolution: number, lyr:string) : Style | null {
+        let key = `perimeter-usa-${lyr}`;
         let flag = "default";
         if (!layerStyle.symbols[key]) {
             layerStyle.symbols[key] = { cache : {}};
         }
+        let fcol = (lyr == 'current') ? '#ff9dce88' : "#FFFFFF88";
+        let scol = (lyr == 'current') ? ' #8e2758' : '#222';
         if (!layerStyle.symbols[key].cache[flag]) {
             layerStyle.symbols[key].cache[flag] = new Style({
                 fill: new Fill({
-                    color: "#FFFFFF88"
+                    color: fcol
                 }),
                 stroke: new Stroke({
-                    color: "#222",
+                    color: scol,
                     width: 2
                 }),
                 zIndex: 1,
@@ -560,9 +568,21 @@ export class layerStyle {
     }
 
     public static _firePerimeterUSA_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.fpUSA_select(feature, resolution, 'current');
+    }
+    public static _firePerimeterUSAHist_select (feature : Feature, resolution: number) : Style | null {
+        return layerStyle.fpUSA_select(feature, resolution, 'hist');
+    }
+    public static fpUSA_select (feature : Feature, resolution: number, lyr:string) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "IncidentName", true);
     }
     public static _firePerimeterUSA_info(feature : Feature) : string {
+        return layerStyle.fpUSA_info(feature, 'current');
+    }
+    public static _firePerimeterUSAHist_info(feature : Feature) : string {
+        return layerStyle.fpUSA_info(feature, 'hist');
+    }
+    public static fpUSA_info(feature : Feature, lyr:string) : string {
         let test = feature.get('IrwinID');
         // test if it can be redirected to use Active Fires info instead
         if (test) {
@@ -571,12 +591,25 @@ export class layerStyle {
         let irwinid = feature.get('poly_IRWINID');
         let fireid = feature.get('attr_UniqueFireIdentifier');
         let name = feature.get('poly_IncidentName');
+        let extra = '';
+        if (lyr == 'hist') {
+            let accr = feature.get('attr_FinalAcres');
+            let outd = feature.get('attr_FireOutDateTime');
+            if (accr) {
+                extra += `<tr><td>Final Acres</td><td>${accr}</td></tr>`;
+            }
+            if (outd) {
+                let date = flatpickr.formatDate(new Date(outd), 'Y-m-d H:i');
+                extra += `<tr><td>Final Out Date</td><td>${date}</td></tr>`;
+            }
+        }
         return `
             <span class="faLbl"><img src="/images/US-flag.jpg">Fire Perimeter</span><br/>
             <div class="faSize">
                 <table>
                     <tr><td>Name</td><td>${name}</td></tr>
                     <tr><td>Fire ID</td><td>${fireid}</td></tr>
+                    ${extra}
                     <tr><td colspan="2">IRWIN ID<br/>${irwinid}</td></tr>
                 </table>
             </div>
@@ -652,6 +685,7 @@ export class layerStyle {
             case "petro_chemical": offset = 200; break;
             case "steel_plants": offset = 300; break;
             case "gi_steel_plants": offset = 400; break;
+            case "mineral_resources": offset = 600; break;
             case "gas_flares": offset = 500; break;
         }
         rec.icon_offset = offset;
@@ -800,7 +834,6 @@ export class layerStyle {
         } 
         return colorPaletteArray.toRGBString(cols[d]);
     }
-
     public static _firePerimeterEIS ( feature : Feature, resolution: number) : Style | null {
         let key = "perimeter-eis";
         let flag = "default";
@@ -811,7 +844,7 @@ export class layerStyle {
         let width = 1;
         if (ext) { z = ext[2];}
         let outline = "#222";
-        if (z > 7) {
+        if (z > 9) {
             let eis_rec = eisData.getRecord(p['_lid'], p['fireid']);
             if (eis_rec.ready) {
                 //let diff = utils.getDayDiff(t, utils.addDay(props.time.date, 1));
@@ -829,7 +862,9 @@ export class layerStyle {
                 color = layerStyle.eisColors(index, duration);
             }
         } else {
-            width = 9 - Math.round(z);
+            width = 12 - Math.round(z);
+            color = "rgb(106,205,50)";
+            outline = "#85f545";
             flag = "color" + 'EIS-' + width.toString();
         }
         
@@ -850,6 +885,39 @@ export class layerStyle {
         }
         return layerStyle.symbols[key].cache[flag] as Style;
     }
+    /*
+    // example if one wants to see icon at low res, but polygon at high res
+    layerStyle.symbols[key].cache[flag] = new Style({
+                geometry: function(feature) {
+                    let geometry = toGeometry(feature.getGeometry() as RenderFeature) as Polygon | MultiPolygon;
+                    let geometryType = geometry.getType();
+                    if (z > 7) {
+                        return geometry;
+                    }
+                    return (
+                        geometryType == 'Polygon' ? (geometry as Polygon).getInteriorPoint() :
+                        geometryType == 'MultiPolygon' ? (geometry as MultiPolygon).getInteriorPoints() :
+                        geometry
+                    );
+                  },
+                image : new Icon({
+                    scale: 0.5,
+                    opacity: 0.8,
+                    anchor: [0.5, 0.5],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',       //pixels
+                    src: '/images/fire_icon.png'
+                }),
+                fill: new Fill({
+                    color: color
+                }),
+                stroke: new Stroke({
+                    color: outline,
+                    width: width
+                }),
+                zIndex: 1,
+            });
+    */
     public static _firePerimeterEIS_select (feature : Feature, resolution: number) : Style | null {
         return layerStyle.getLayerSymbol(feature, resolution, "fireid", true);
     }
@@ -895,8 +963,13 @@ export class layerStyle {
         }
         txt += '<table>';
         for (let key in eis_rec.attributes) {
-            if (key[0] != '_') {
-                txt += `<tr><td>${key}</td><td>${eis_rec.attributes[key]}</td></tr>`;
+            let post = eisData.showValues[key] as string;
+            if (key[0] != '_' && post) {
+                let val = `${eis_rec.attributes[key]}`;
+                if (post.indexOf('km')>=0) {
+                    val = parseFloat(val).toFixed(2).toString();
+                }
+                txt += `<tr><td>${key}</td><td>${val} ${post}</td></tr>`;                
             }
         }
         txt += '</table>';

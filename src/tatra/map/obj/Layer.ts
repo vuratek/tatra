@@ -1,6 +1,7 @@
 import { Layer as olLayer, VectorTile } from 'ol/layer';
 import { Vector } from 'ol/source';
 import { Coord } from './Coord';
+import { IImpactRecord } from './ImpactRecord';
 import { Circle, Polygon} from 'ol/geom';
 import { Feature } from 'ol';
 import { layer } from '../handlers/layer';
@@ -101,6 +102,7 @@ export class Layer {
     public colorPaletteId   : string | null = null;
     public csvHandler       : Function | null = null;
     public credit           : string | null = null;
+    public cssClass         : string | null = null;     // used by Layer label class
     public data             : ILayerData = {};           // additional content related to layer (firms stores dates, satellite)
     public dateFormat       : string = 'Y-m-d';
     public defaultColor     : Array <number> = [0, 0, 0, 0, 0, 0];
@@ -122,6 +124,7 @@ export class Layer {
     public identifyHandler  : string | null = null;
     public identifyUrl      : string | null = null;
     public identifyAuxUrl   : string | null = null;     // other type of identify
+    public impactImage      : IImpactRecord | null = null;       // for HLS imagery
     public info             : string | null = null;     // info-id for layerInfo modal if different from id
     public infoIcon         : string | null = null;     // layer info icon if it needs to be different than layer icon (a.k.a. power plants layer)
     public initData         : string | null = null;

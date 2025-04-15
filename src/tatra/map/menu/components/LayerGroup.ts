@@ -133,7 +133,8 @@ export class LayerGroup extends Module {
 	public createLabel (lo : Layer, ul : HTMLUListElement, baseId:string) {
 		let li = document.createElement("li");
 		li.setAttribute("id", `bb_label_${baseId}_${lo.id}`);
-		li.setAttribute("class", "lmvControlsLabel");
+		let cls = (lo.cssClass) ? lo.cssClass : 'lmvControlsLabel';
+		li.setAttribute("class", cls);
 		ul.appendChild(li);
 		li.innerHTML = lo.title;
 	}
@@ -241,6 +242,9 @@ export class LayerGroup extends Module {
 
 		if (lo.needsLegendIcon) { 
 			this.setLayerLegendField(`layerLegend_${baseId}_${lo.id}`, lo);
+		}
+		if (lo.impactImage && lo.impactImage.isTool) {
+			
 		}
     }
     private refreshMissingTile(baseId : string, id: string) {

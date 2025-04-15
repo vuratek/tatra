@@ -26,6 +26,7 @@ import { Point } from "ol/geom";
 import WebGLPointsLayer from "ol/layer/WebGLPoints";
 import { controls } from "../components/controls";
 import { attributes } from "../menu/features/attributes";
+import { ImpactImagery } from "./ImpactImagery";
 
 export class layer {
         
@@ -411,6 +412,9 @@ export class layer {
     }
 
     public static addXYZLayer (lo : Layer) {
+        if (lo.impactImage) {
+            ImpactImagery.register(lo);
+        }
         layer.setXYZTypeLayer(lo, 'xyz');
         //(lo._layer.getSource() as XYZ).setTileUrlFunction(() => layer.test());
     }

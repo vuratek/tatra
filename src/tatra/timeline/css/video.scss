@@ -1,14 +1,14 @@
 .hasVideo .timelineWrap {
-    left:6rem;
+    left:7.2rem;
 }
 .timeline_video {
-    border-right: 0.1rem solid #777;
-    width: 5.5rem;
-    height: 5rem;
-    top: 0;
-    line-height: 0.3rem;
     text-align: center;
+    border-right: .1rem solid #777;
+    width: 6.5rem;
+    height: 5rem;
+    line-height: .3rem;
     position: absolute;
+    top: 0;
 }
 #timelineVideoWrap {
     font-size: 2.5rem;

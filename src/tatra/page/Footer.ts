@@ -57,6 +57,7 @@ export class Footer {
                     if (v) {
                         txt += `<li><a href="javascript:void(0);">${item.label} ${v}</a></li>`;
                     }
+                    continue;
                 }
                 if (item.label) {
                     if (item.subMenu) {

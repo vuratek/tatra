@@ -4,10 +4,11 @@ import { utils } from "../../utils";
 import { props } from "../props";
 import { events } from "../events";
 import { Modal } from "../../aux/Modal";
-import { imageUtils } from "../imageUtils";
+import { imageUtils, IImageObj } from "../imageUtils";
 import { animationUtils } from "../animation/utils";
 import { animationFrames } from "../animation/frames";
 import { videoProps, VIDEO_TRANSITION, VIDEO_FRAME_TYPE, IVideoFrame, RENDER_MODE } from "../animation/props";
+import { props as vv_props, DISPLAY_TYPE } from 'vuravura/control/props';
 
 export class animation extends baseComponent {
 	public static id		            : string = 'animation';
@@ -311,7 +312,7 @@ export class animation extends baseComponent {
     }
 
     private static updateTimer() {
-        if (videoProps.video.ignoreCounter) { return; }
+        if (videoProps.video.ignoreCounter || ! videoProps.video.frames[videoProps.props.frameLoaderCounter-1]) { return; }
         if (videoProps.video.timerCounter < videoProps.video.frames[videoProps.props.frameLoaderCounter-1].waitCycles) {
             videoProps.video.timerCounter ++;
         }
@@ -336,16 +337,21 @@ export class animation extends baseComponent {
         if (btn == "stop") {
             utils.hide('videoStage');
             utils.show('videoLibrary');
+            utils.removeClass('html', 'animationRun', false);
             utils.removeClass('mapMaxLabel', 'vidTopLabel');
+            if (vv_props.engine) {vv_props.engine.animationStop();}
             videoProps.props.videoPlaying = false;
             videoProps.props.framePlayCounter = 0;           // reset frames to 0 so they start from beginning
             videoProps.props.framePlayDurationCounter = 0;      // reset duration counter
             animationFrames.removeIntroCreditsFrame();
             videoProps.readyToPlay = false;
         } else if (btn == "play") {
+            utils.addClass('html', 'animationRun', false);
             utils.showCustom('vcPause', "inline-block");
-            utils.hide('videoControlsWrap');        // hide control bar while playing
-            utils.hide('videoControlsClose');
+            if (! props.is3DMode) {
+                utils.hide('videoControlsWrap');        // hide control bar while playing
+                utils.hide('videoControlsClose');
+            }
             utils.hide('vcPlay');
             utils.show('videoStage');
             if (videoProps.video.showTopBanner) {
@@ -353,6 +359,7 @@ export class animation extends baseComponent {
             }
             utils.hide('videoLibrary');    
             videoProps.props.videoPlaying = true;
+            if (vv_props.engine) {vv_props.engine.animationStart();}
             this.playAnimation();
         } else if (btn == "pause") {
             videoProps.props.videoPlaying = false;
@@ -387,12 +394,17 @@ export class animation extends baseComponent {
         }
         if (p.framePlayDurationCounter == 0) {
             // load images
-            this.loadAnimationFrame(counter, "top");
-            this.loadAnimationFrame(counter + 1, "bottom");
-            if (v.frames.length == 1) {
-                p.videoPlaying = false;
-                // set background frame to the same as top
-                this.loadAnimationFrame(counter, "bottom");
+            if (props.is3DMode) {
+                let obj = this.getFrameObject(counter, "top");
+                vv_props.engine.updateTexture(obj.image, obj.context, 'FIRES ' + Math.round(Math.random() * 100), DISPLAY_TYPE.SINGLE);
+            } else {
+                this.loadAnimationFrame(counter, "top");
+                this.loadAnimationFrame(counter + 1, "bottom");
+                if (v.frames.length == 1) {
+                    p.videoPlaying = false;
+                    // set background frame to the same as top
+                    this.loadAnimationFrame(counter, "bottom");
+                }
             }
         }
         utils.removeClass('mapMaxLabel', 'vidTopLabel');
@@ -407,32 +419,35 @@ export class animation extends baseComponent {
         let transition = v.frames[counter].transition;
         let duration = v.frames[counter].duration;
         let opacity = 1;
-        if (transition == VIDEO_TRANSITION.SOFT) {
-            if (p.framePlayDurationCounter >= duration - p.transitionSoftDelay) {
-                opacity = Math.round((duration - p.framePlayDurationCounter) / p.transitionSoftDelay * 100) / 100.0;
-            }
-        } else if (transition == VIDEO_TRANSITION.CONTINUOUS) {
-            opacity = 1.0 - Math.round(p.framePlayDurationCounter / duration * 100) / 100;
-        }
-        if (opacity > 1) { opacity = 1.0;}
-        if (opacity < 0) { opacity = 0;}
-        let canvas = document.getElementById(`video_canvas_top`) as HTMLCanvasElement;
-        if (canvas) {
-            canvas.style.opacity = opacity.toString();
-        }
+        if (!props.is3DMode) {
 
-        // position logo and info
-        let w = v.frames[p.framePlayCounter].width;
-        let h = v.frames[p.framePlayCounter].height;
-        let el = document.getElementById('videoStageLogo') as HTMLDivElement;
-        if (el && el.clientHeight > 0) {
-            el.style.left =  ( w - el.clientWidth - 5).toString() + "px";
-            el.style.top = ( h - el.clientHeight - 5).toString() + "px";
-        }
-        el = document.getElementById('videoStageInfo') as HTMLDivElement;
-        if (el && el.clientHeight > 0) {
-            el.style.left =  "10px";
-            el.style.top = ( h - el.clientHeight - 10).toString() + "px";
+            if (transition == VIDEO_TRANSITION.SOFT) {
+                if (p.framePlayDurationCounter >= duration - p.transitionSoftDelay) {
+                    opacity = Math.round((duration - p.framePlayDurationCounter) / p.transitionSoftDelay * 100) / 100.0;
+                }
+            } else if (transition == VIDEO_TRANSITION.CONTINUOUS) {
+                opacity = 1.0 - Math.round(p.framePlayDurationCounter / duration * 100) / 100;
+            }
+            if (opacity > 1) { opacity = 1.0;}
+            if (opacity < 0) { opacity = 0;}
+            let canvas = document.getElementById(`video_canvas_top`) as HTMLCanvasElement;
+            if (canvas) {
+                canvas.style.opacity = opacity.toString();
+            }
+
+            // position logo and info
+            let w = v.frames[p.framePlayCounter].width;
+            let h = v.frames[p.framePlayCounter].height;
+            let el = document.getElementById('videoStageLogo') as HTMLDivElement;
+            if (el && el.clientHeight > 0) {
+                el.style.left =  ( w - el.clientWidth - 5).toString() + "px";
+                el.style.top = ( h - el.clientHeight - 5).toString() + "px";
+            }
+            el = document.getElementById('videoStageInfo') as HTMLDivElement;
+            if (el && el.clientHeight > 0) {
+                el.style.left =  "10px";
+                el.style.top = ( h - el.clientHeight - 10).toString() + "px";
+            }
         }
         
 
@@ -443,19 +458,30 @@ export class animation extends baseComponent {
         }
     }
 
-    private static loadAnimationFrame(pos:number, type : string) {
+    private static getFrameObject(pos:number, type : string) : IImageObj{
         let frame = animationUtils.getVideoFrame(pos);
         if (! frame) { return; }
         let canvas = document.getElementById(`video_canvas_${type}`) as HTMLCanvasElement;
         canvas.width = frame.width;
         canvas.height = frame.height;
         canvas.style.opacity = "1";
+        let obj:IImageObj = {image : frame.imageObj.image, context : null};
         if (canvas) {
-            let context = canvas.getContext('2d');
+            let context = canvas.getContext('2d', { willReadFrequently : true });
             if (context && frame.imageObj && frame.imageObj.image) {
                 context.drawImage(frame.imageObj.image, 0, 0);
+                obj.context = context;
             }
         }
+        return obj;
+    }
+
+    private static loadAnimationFrame(pos:number, type : string) {
+        let obj = this.getFrameObject(pos, type);
+
+        let frame = animationUtils.getVideoFrame(pos);
+        if (! frame) { return; }
+
         if (type == "top") {
             let lbl = flatpickr.formatDate(frame.date,' Y-m-d');
             if (frame.range > 0) {

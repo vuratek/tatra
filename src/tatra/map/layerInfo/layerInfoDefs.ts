@@ -3,6 +3,7 @@ export interface ILayerInfo {
     label?           : string;
     GIBS_id?         : string;
     GIBS_imageId?    : string;
+    GIBS_custom_text?: string;
     GIBS_hasDate?    : boolean;
     Local_id?        : string;
     Local_imageId?   : string;

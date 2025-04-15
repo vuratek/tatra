@@ -1,5 +1,20 @@
-.is3d header {
-    display:none;
+.is3d .map3dCtrl, .is3d .map3d{
+    display:block;
+}
+.is3d header, .is3d.animationRun #lmvInfoBar, .is3d.animationRun #lmvTools, .is3d.animationRun #lmvControls, .is3d.animationRun #lmvMenus, 
+.is3d.animationRun #lmvTimelineWrapper, .is3d.animationRun #leftNavBarMapResize, .is3d.animationRun #leftNavBarShell, .is3d.animationRun .ol-overlaycontainer-stopevent,
+.is3d.animationRun.isMap #leftNavBarMapResize, .is3d.animationRun #notifications, .is3d.animationRun #videoCanvas, .is3d.animationRun .map3dCtrl {
+	display:none;
+}
+.is3d.animationRun #modal_video {
+    background:none;
+}
+.is3d.animationRun #bottomLogo {
+    bottom:2rem;
+}
+.is3d.animationRun #bottomLogo img {
+    width:8rem;
+    height:6.5rem;
 }
 .is3d .bottomBarMenuItem {
     background: none;
